@@ -25,171 +25,163 @@
     />
     <!--styles-->
     <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/css/dark-hc.css" />
   </head>
-  <body>
+  <body class= "dark-high-contrast">
     <!--NAVBAR-->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-          <img src="/images/logo3.png" alt="Logo" width="60" height="60" />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Sobre nosotros</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Tienda
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Catalogo</a></li>
-                <li><a class="dropdown-item" href="#">Descuentos</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item" href="#">Black Friday</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link disabled"
-                href="#"
-                tabindex="-1"
-                aria-disabled="true"
-                >Comprar online</a
-              >
-            </li>
-          </ul>
-          <form class="d-flex">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Oro, plata, diamantes..."
-              aria-label="Search"
-              name="search"
-            />
-            <button class="btn btn-outline-success" type="submit">
-              Buscar
-            </button>
-          </form>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light navBarExtra">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img src="/images/logo3.png" alt="Logo" width="60" height="60" />
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"> Tienda </a>
+              </li>
+              <!-- solo en la tienda, por ahora dejar comentado
+              <li class="nav-item">
+                <a
+                  class="nav-link disabled"
+                  href="#"
+                  tabindex="-1"
+                  aria-disabled="true"
+                  >Comprar online</a
+                >
+              </li> -->
+            </ul>
+            <form class="d-flex">
+              <input
+                class="form-control me-2"
+                type="search"
+                placeholder="tacos, tacos y mas tacos..."
+                aria-label="Search"
+                name="search"
+              />
+              <button class="btn btn-dark"  type="submit">
+                Buscar
+              </button>
+            </form>
+          </div>
+        </div>
+      </nav>
+      <!-- FINAL NAVBAR-->
+    </header>
+    
+    <section class="carousel-section">
+
+      <!--CAROUSEL-->
+      <div
+        id="carouselExampleIndicators"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <!--CAROUSEL BOTONES INFERIORES-->
+        <div class="container" >
+          <div class="carousel-indicators" >
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="0"
+              class="active"
+              aria-current="true"
+              aria-label="Slide 1"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="1"
+              aria-label="Slide 2"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="2"
+              aria-label="Slide 3"
+            ></button>
+          </div>
+          <div class="dark-high-contrast">
+            <div class="carousel-inner " >
+              <!--CAROUSEL ITEM 1-->
+              <div class="carousel-item active">
+                <div class="container bg-primary-container">
+                  <div class="row align-items-center">
+                    <div class="col-md-4 text-center">
+                      <h5>Tacos</h5>
+                      <p>Descubre Una comida deliciosa</p>
+                    </div>
+                    <div class="col-md-8">
+                      <img
+                        src="images/taco1.webp"
+                        class="d-block h-100 img-fluid"
+                        alt="Slide 1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--CAROUSEL ITEM 2-->
+              <div class="carousel-item">
+                <div class="container bg-primary-container">
+                  <div class="row align-items-center ">
+                    <div class="col-md-8">
+                      <img
+                        src="images/taco3.webp"
+                        class="d-block w-100"
+                        alt="Slide 2"
+                      />
+                    </div>
+                    <div class="col-md-4 text-center ">
+                      <h5 class="text-primary-container">Busca que es lo que quieres</h5>
+                      <p>Elegancia y distinción en cada trozo de taco puro.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--CAROUSEL ITEM 3-->
+              <div class="carousel-item ">
+                <div class="container bg-primary-container">
+                  <div class="row align-items-center ">
+                    <div class="col-md-4 text-center ">
+                      <h5>Distintos sabores</h5>
+                      <p>Recetas modernas a favor de lo delicioso.</p>
+                    </div>
+                    <div class="col-md-8">
+                      <img
+                        src="images/taco2.webp"
+                        class="d-block w-100"
+                        alt="Slide 3"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--FIN CAROUSEL ITEM 3-->
+            </div>
+            
+          </div>
+
         </div>
       </div>
-    </nav>
-    <!-- FINAL NAVBAR-->
-    <!--CAROUSEL-->
-    <div
-      id="carouselExampleIndicators"
-      class="carousel slide"
-      data-bs-ride="carousel"
-    >
-      <!--CAROUSEL BOTONES INFERIORES-->
-      <div class="container" >
-        <div class="carousel-indicators" >
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="0"
-            class="active"
-            aria-current="true"
-            aria-label="Slide 1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-          ></button>
-        </div>
-        <div class="carousel-inner">
-          <!--CAROUSEL ITEM 1-->
-          <div class="carousel-item active">
-            <div class="container">
-              <div class="row align-items-center">
-                <div class="col-md-4 text-center">
-                  <h5>Tacos</h5>
-                  <p>
-                    Descubre Una comida deliciosa
-                  </p>
-                </div>
-                <div class="col-md-8">
-                  <img
-                    src="images/taco1.webp"
-                    class="d-block h-100 img-fluid"
-                    alt="Slide 1"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--CAROUSEL ITEM 2-->
-          <div class="carousel-item">
-            <div class="container">
-              <div class="row align-items-center">
-                <div class="col-md-8">
-                  <img
-                    src="images/taco3.webp"
-                    class="d-block w-100"
-                    alt="Slide 2"
-                  />
-                </div>
-                <div class="col-md-4 text-center">
-                  <h5>Busca que es lo que quieres</h5>
-                  <p>Elegancia y distinción en cada trozo de taco puro.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--CAROUSEL ITEM 3-->
-          <div class="carousel-item">
-            <div class="container">
-              <div class="row align-items-center">
-                <div class="col-md-4 text-center">
-                  <h5>Distintos sabores</h5>
-                  <p>Recetas modernas a favor de lo delicioso.</p>
-                </div>
-                <div class="col-md-8">
-                  <img
-                    src="images/taco2.webp"
-                    class="d-block w-100"
-                    alt="Slide 3"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--FIN CAROUSEL ITEM 3-->
-        </div>
-      </div>
-    </div>
-    <!--FINAL CAROUSEL-->
+      <!--FINAL CAROUSEL-->
+
+    </section>
+    
     <!-- FOOTER -->
     <footer class="bg-dark text-white mt-5 pt-4 pb-3">
       <div class="container">
