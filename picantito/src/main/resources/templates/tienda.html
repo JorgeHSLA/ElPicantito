@@ -54,7 +54,6 @@
               <li class="nav-item">
                 <a class="nav-link" href="tienda"> Tienda </a>
               </li>
-              <!-- solo en la tienda, por ahora dejar comentado
               <li class="nav-item">
                 <a
                   class="nav-link disabled"
@@ -63,7 +62,7 @@
                   aria-disabled="true"
                   >Comprar online</a
                 >
-              </li> -->
+              </li> 
             </ul>
             <form class="d-flex">
               <input
@@ -83,105 +82,63 @@
       <!-- FINAL NAVBAR-->
     </header>
     
-    <section class="carousel-section">
-
-      <!--CAROUSEL-->
-      <div
-        id="carouselExampleIndicators"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <!--CAROUSEL BOTONES INFERIORES-->
-        <div class="container" >
-          <div class="carousel-indicators" >
-            <button
-              type="button"
-              data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="0"
-              class="active"
-              aria-current="true"
-              aria-label="Slide 1"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="1"
-              aria-label="Slide 2"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="2"
-              aria-label="Slide 3"
-            ></button>
-          </div>
-          <div class="dark-high-contrast">
-            <div class="carousel-inner " >
-              <!--CAROUSEL ITEM 1-->
-              <div class="carousel-item active">
-                <div class="container bg-primary-container">
-                  <div class="row align-items-center">
-                    <div class="col-md-4 text-center">
-                      <h5>Tacos</h5>
-                      <p>Descubre Una comida deliciosa</p>
-                    </div>
-                    <div class="col-md-8">
-                      <img
-                        src="images/taco1.webp"
-                        class="d-block h-100 img-fluid"
-                        alt="Slide 1"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!--CAROUSEL ITEM 2-->
-              <div class="carousel-item">
-                <div class="container bg-primary-container">
-                  <div class="row align-items-center ">
-                    <div class="col-md-8">
-                      <img
-                        src="images/taco3.webp"
-                        class="d-block w-100"
-                        alt="Slide 2"
-                      />
-                    </div>
-                    <div class="col-md-4 text-center ">
-                      <h5 class="text-primary-container">Busca que es lo que quieres</h5>
-                      <p>Elegancia y distinción en cada trozo de taco puro.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!--CAROUSEL ITEM 3-->
-              <div class="carousel-item ">
-                <div class="container bg-primary-container">
-                  <div class="row align-items-center ">
-                    <div class="col-md-4 text-center ">
-                      <h5>Distintos sabores</h5>
-                      <p>Recetas modernas a favor de lo delicioso.</p>
-                    </div>
-                    <div class="col-md-8">
-                      <img
-                        src="images/taco2.webp"
-                        class="d-block w-100"
-                        alt="Slide 3"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!--FIN CAROUSEL ITEM 3-->
+   <!-- SECCIÓN DE PRODUCTOS -->
+    <main class="container my-5">
+    <h2 class="text-center mb-4">Nuestros Tacos</h2>
+    <div class="row g-4">
+        
+        <!-- Producto 1 -->
+        <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <img src="https://via.placeholder.com/400x250" class="card-img-top" alt="Taco al pastor">
+            <div class="card-body">
+            <h5 class="card-title">Taco al Pastor</h5>
+            <p class="card-text">Delicioso taco con carne marinada, piña y cebolla, servido en tortilla de maíz.</p>
+            <p class="fw-bold">$3.50</p>
             </div>
-            
-          </div>
-
         </div>
-      </div>
-      <!--FINAL CAROUSEL-->
+        </div>
 
-    </section>
-    
+        <!-- Producto 2 -->
+        <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <img src="https://via.placeholder.com/400x250" class="card-img-top" alt="Taco de asada">
+            <div class="card-body">
+            <h5 class="card-title">Taco de Asada</h5>
+            <p class="card-text">Jugosa carne de res a la parrilla, servida con cilantro y cebolla fresca.</p>
+            <p class="fw-bold">$4.00</p>
+            </div>
+        </div>
+        </div>
+
+        <!-- Producto 3 -->
+        <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <img src="https://via.placeholder.com/400x250" class="card-img-top" alt="Taco de carnitas">
+            <div class="card-body">
+            <h5 class="card-title">Taco de Carnitas</h5>
+            <p class="card-text">Carne de cerdo cocinada lentamente con especias, servida con salsa verde.</p>
+            <p class="fw-bold">$3.75</p>
+            </div>
+        </div>
+        </div>
+
+        <!-- Producto 4 -->
+        <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <img src="https://via.placeholder.com/400x250" class="card-img-top" alt="Taco de barbacoa">
+            <div class="card-body">
+            <h5 class="card-title">Taco de Barbacoa</h5>
+            <p class="card-text">Tierno y jugoso, cocinado al vapor con chiles y especias tradicionales.</p>
+            <p class="fw-bold">$4.25</p>
+            </div>
+        </div>
+        </div>
+
+    </div>
+    </main>
+
+    <!-- SECCIÓN DE PRODUCTOS FIN -->           
     <!-- FOOTER -->
     <footer class="bg-dark text-white mt-5 pt-4 pb-3">
       <div class="container">
