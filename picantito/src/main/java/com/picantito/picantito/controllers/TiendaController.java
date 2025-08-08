@@ -9,6 +9,6 @@ public class TiendaController {
 
     @GetMapping("/tienda")
     public String tienda() {
-        return "tienda";
+        return "html/tienda";
     }
 }
