@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!--Bootstrap-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+      crossorigin="anonymous"
+    />
+    <!--icons-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <!--Google fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <!--styles-->
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/css/dark-hc.css" />
+  </head>
+  <body class= "dark-high-contrast">
+    <!--NAVBAR-->
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light navBarExtra">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img src="/images/Logo2.png" alt="Logo" width="100" height="100" />
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="menu">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="tienda"> Tienda </a>
+              </li>
+              <!-- solo en la tienda, por ahora dejar comentado
+              <li class="nav-item">
+                <a
+                  class="nav-link disabled"
+                  href="#"
+                  tabindex="-1"
+                  aria-disabled="true"
+                  >Comprar online</a
+                >
+              </li> -->
+            </ul>
+            <form class="d-flex">
+              <input
+                class="form-control me-2"
+                type="search"
+                placeholder="tacos, tacos y mas tacos..."
+                aria-label="Search"
+                name="search"
+              />
+              <button class="btn btn-dark"  type="submit">
+                Buscar
+              </button>
+            </form>
+          </div>
+        </div>
+      </nav>
+      <!-- FINAL NAVBAR-->
+    </header>
+    
+    <section class="carousel-section">
+
+      <!--CAROUSEL-->
+      <div
+        id="carouselExampleIndicators"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <!--CAROUSEL BOTONES INFERIORES-->
+        <div class="container" >
+          <div class="carousel-indicators" >
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="0"
+              class="active"
+              aria-current="true"
+              aria-label="Slide 1"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="1"
+              aria-label="Slide 2"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="2"
+              aria-label="Slide 3"
+            ></button>
+          </div>
+          <div class="dark-high-contrast">
+            <div class="carousel-inner " >
+              <!--CAROUSEL ITEM 1-->
+              <div class="carousel-item active">
+                <div class="container bg-primary-container">
+                  <div class="row align-items-center">
+                    <div class="col-md-4 text-center">
+                      <h5>Tacos</h5>
+                      <p>Descubre Una comida deliciosa</p>
+                    </div>
+                    <div class="col-md-8">
+                      <img
+                        src="images/taco1.webp"
+                        class="d-block h-100 img-fluid"
+                        alt="Slide 1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--CAROUSEL ITEM 2-->
+              <div class="carousel-item">
+                <div class="container bg-primary-container">
+                  <div class="row align-items-center ">
+                    <div class="col-md-8">
+                      <img
+                        src="images/taco3.webp"
+                        class="d-block w-100"
+                        alt="Slide 2"
+                      />
+                    </div>
+                    <div class="col-md-4 text-center ">
+                      <h5 class="text-primary-container">Busca que es lo que quieres</h5>
+                      <p>Elegancia y distinción en cada trozo de taco puro.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--CAROUSEL ITEM 3-->
+              <div class="carousel-item ">
+                <div class="container bg-primary-container">
+                  <div class="row align-items-center ">
+                    <div class="col-md-4 text-center ">
+                      <h5>Distintos sabores</h5>
+                      <p>Recetas modernas a favor de lo delicioso.</p>
+                    </div>
+                    <div class="col-md-8">
+                      <img
+                        src="images/taco2.webp"
+                        class="d-block w-100"
+                        alt="Slide 3"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--FIN CAROUSEL ITEM 3-->
+            </div>
+            
+          </div>
+
+        </div>
+      </div>
+      <!--FINAL CAROUSEL-->
+
+    </section>
+    
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white mt-5 pt-4 pb-3">
+      <div class="container">
+        <div class="row">
+          <!-- Dirección -->
+          <div class="col-md-4 mb-3">
+            <h5 class="text-uppercase">Contacto</h5>
+            <p class="mb-1">
+              <i class="bi bi-geo-alt-fill"></i> Calle 123 #45-67, Bogotá,
+              Colombia
+            </p>
+            <p class="mb-1">
+              <i class="bi bi-telephone-fill"></i> +57 310 123 4567
+            </p>
+            <p>
+              <i class="bi bi-envelope-fill"></i> contacto@joyeriaejemplo.com
+            </p>
+          </div>
+
+          <!-- Enlaces útiles -->
+          <div class="col-md-4 mb-3">
+            <h5 class="text-uppercase">Enlaces</h5>
+            <ul class="list-unstyled">
+              <li>
+                <a href="#" class="text-white text-decoration-none">Inicio</a>
+              </li>
+              <li>
+                <a href="#" class="text-white text-decoration-none">Catálogo</a>
+              </li>
+              <li>
+                <a href="#" class="text-white text-decoration-none"
+                  >Promociones</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-white text-decoration-none"
+                  >Contáctanos</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Redes sociales -->
+          <div class="col-md-4 mb-3">
+            <h5 class="text-uppercase">Síguenos</h5>
+            <a href="#" class="text-white me-2"
+              ><i class="bi bi-facebook"></i
+            ></a>
+            <a href="#" class="text-white me-2"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="text-white me-2"
+              ><i class="bi bi-twitter-x"></i
+            ></a>
+            <a href="#" class="text-white"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="text-center pt-3 border-top mt-3">
+          <small
+            >&copy; 2025 Joyería Ejemplo. Todos los derechos reservados.</small
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Terminos y condiciones
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <!--Se inserta con js-->
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal FIN -->
+
+  <script src="/js/script.js"></script>
+  <!--Bootstrap-->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+    crossorigin="anonymous"
+  ></script>
+</html>
+
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</html>
