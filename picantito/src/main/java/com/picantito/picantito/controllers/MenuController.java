@@ -9,7 +9,9 @@ public class MenuController {
 
     @GetMapping("/home")
     public String menu() {
-        return "home";
+
+        return "html/menu";
+
     }
     
 }
