@@ -1,49 +1,57 @@
 body {
-  background-color: rgb(243, 252, 252);
-  font-family: "Roboto", sans-serif;
+    background-color: rgb(243, 252, 252);
+    font-family: "Roboto", sans-serif;
 }
 
+
 /*CAROUSEL*/
+
 .carousel-item {
-  background-color: #f7e7ce;
+    background-color: #f7e7ce;
 }
 
 .carousel-item h5 {
-  color: rgb(0, 0, 0);
-  font-weight: 500;
-  font-size: 50px;
-  margin-bottom: 20px;
-  font-weight: bold;
+    color: rgb(0, 0, 0);
+    font-weight: 500;
+    font-size: 50px;
+    margin-bottom: 20px;
+    font-weight: bold;
 }
 
 .carousel-item p {
-  color: rgb(0, 0, 0);
-  font-size: 30px;
+    color: rgb(0, 0, 0);
+    font-size: 30px;
 }
+
 
 /*NAV*/
+
 .nav-link {
-  color: rgb(0, 0, 0);
-  font-size: 30px;
-  font-weight: bold;
-}
-.nav-link:hover {
-  text-decoration: underline;
+    color: rgb(0, 0, 0);
+    font-size: 30px;
+    font-weight: bold;
 }
 
+.nav-link:hover {
+    text-decoration: underline;
+}
 
 
 /* styles.css */
+
 .btn-primary {
-  background-color: #1f4e96 !important; /* Color del fondo */
-  border-color: #1f4e96 !important; /* Color del borde */
+    background-color: #1f4e96 !important;
+    /* Color del fondo */
+    border-color: #1f4e96 !important;
+    /* Color del borde */
 }
 
 .modal-dialog {
-  max-width: 70%; /* Puedes cambiar el valor (porcentaje o px) según lo que necesites */
+    max-width: 70%;
+    /* Puedes cambiar el valor (porcentaje o px) según lo que necesites */
 }
 
 .carousel-section {
-  margin-top: 50px ;
-
+    margin-top: 50px;
+    margin-bottom: 50px;
 }

@@ -5,12 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Controller
-public class MenuController {
+public class HomeController {
 
     @GetMapping("/home")
     public String menu() {
 
-        return "html/menu";
+        return "html/home";
 
     }
     

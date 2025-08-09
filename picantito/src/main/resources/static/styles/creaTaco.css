@@ -1,0 +1,57 @@
+.build-your-taco {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background-color: var(--md-sys-color-primary);
+    padding: 3rem;
+    border: 40px
+}
+
+.taco-text {
+    flex: 1;
+    color: var(--md-sys-color-on-primary-container);
+}
+
+.taco-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.taco-text p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.taco-text ol {
+    padding-left: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.taco-text li {
+    margin-bottom: 0.8rem;
+}
+
+.btn-taco {
+    background-color: var(--md-sys-color-on-primary-container);
+    color: var(--md-sys-color-primary);
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-taco:hover {
+    background-color: var(--md-sys-color-primary-container);
+}
+
+.taco-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.taco-image img {
+    max-width: 100%;
+    border-radius: 20px;
+}
