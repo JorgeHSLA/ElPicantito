@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>El Picantito</title>
+    <title>El Picantito - Auténticos Tacos Mexicanos</title>
     <!--Bootstrap-->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
     <!--styles-->
@@ -28,16 +28,18 @@
     <link rel="stylesheet" href="/styles/css/dark-hc.css" />
     <link rel="stylesheet" href="/styles/creaTaco.css" />
   </head>
-  <body class= "dark-high-contrast">
-    <!--NAVBAR-->
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-light navBarExtra">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">
-            <img src="/images/LogoRetro.png" alt="Logo" width="100" height="100" />
+  <body class="dark-high-contrast">
+    <!--NAVBAR MEJORADO-->
+    <header class="position-sticky top-0 z-3">
+      <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-sm">
+        <div class="container">
+          <a class="navbar-brand d-flex align-items-center" href="home">
+            <img src="/images/LogoMinimalist.png" alt="El Picantito Logo" width="60" height="60" class="me-2" />
+            <span class="fw-bold fs-4 d-none d-md-inline">El Picantito</span>
           </a>
+          
           <button
-            class="navbar-toggler"
+            class="navbar-toggler border-0"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
@@ -47,281 +49,256 @@
           >
             <span class="navbar-toggler-icon"></span>
           </button>
+          
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="home">Home</a>
+                <a class="nav-link active fw-semibold px-3" aria-current="page" href="home">
+                  <i class="bi bi-house-door me-1"></i>Inicio
+                </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="tienda"> Tienda </a>
+                <a class="nav-link fw-semibold px-3" href="tienda">
+                  <i class="bi bi-shop me-1"></i>Tienda
+                </a>
               </li>
-              <!-- solo en la tienda, por ahora dejar comentado
-              <li class="nav-item">
-                <a
-                  class="nav-link disabled"
-                  href="#"
-                  tabindex="-1"
-                  aria-disabled="true"
-                  >Comprar online</a
-                >
-              </li> -->
             </ul>
+            
             <form class="d-flex">
-              <input
-                class="form-control me-2"
-                type="search"
-                placeholder="tacos, tacos y mas tacos..."
-                aria-label="Search"
-                name="search"
-              />
-              <button class="btn btn-dark"  type="submit">
-                Buscar
-              </button>
+              <div class="input-group">
+                <input
+                  class="form-control border-0 rounded-start-pill"
+                  type="search"
+                  placeholder="Buscar tacos..."
+                  aria-label="Search"
+                  name="search"
+                />
+                <button class="btn btn-dark rounded-end-pill px-3" type="submit">
+                  <i class="bi bi-search"></i>
+                </button>
+              </div>
             </form>
           </div>
         </div>
       </nav>
-      <!-- FINAL NAVBAR-->
     </header>
     
-    <section class="carousel-section">
-
-      <!--CAROUSEL-->
-      <div
-        id="carouselExampleIndicators"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <!--CAROUSEL BOTONES INFERIORES-->
-        <div class="container" >
-          <div class="carousel-indicators" >
-            <button
-              type="button"
-              data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="0"
-              class="active"
-              aria-current="true"
-              aria-label="Slide 1"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="1"
-              aria-label="Slide 2"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="2"
-              aria-label="Slide 3"
-            ></button>
-          </div>
-          <div class="dark-high-contrast">
-            <div class="carousel-inner " >
-              <!--CAROUSEL ITEM 1-->
-              <div class="carousel-item active">
-                <div class="container bg-primary-container">
-                  <div class="row align-items-center">
-                    <div class="col-md-4 text-center">
-                      <h5>Tacos</h5>
-                      <p>Descubre Una comida deliciosa</p>
-                    </div>
-                    <div class="col-md-8">
-                      <img
-                        src="images/taco1.webp"
-                        class="d-block h-100 img-fluid"
-                        alt="Slide 1"
-                      />
-                    </div>
-                  </div>
-                </div>
+    <!-- HERO SECTION MEJORADO -->
+    <section class="hero-section py-5">
+      <div class="container">
+        <div class="row align-items-center min-vh-75">
+          <div class="col-lg-6 mb-4 mb-lg-0">
+            <div class="hero-content">
+              <h1 class="display-4 fw-bold mb-4">
+                Auténticos Tacos 
+                <span class="text-warning">Mexicanos</span>
+              </h1>
+              <p class="lead mb-4 text-muted">
+                Descubre sabores únicos con ingredientes frescos y recetas tradicionales 
+                que han pasado de generación en generación.
+              </p>
+              <div class="d-flex gap-3 flex-wrap">
+                <a href="tienda" class="btn btn-warning btn-lg px-4 py-2 rounded-pill">
+                  <i class="bi bi-cart3 me-2"></i>Ver Menú
+                </a>
+                <button class="btn btn-outline-light btn-lg px-4 py-2 rounded-pill">
+                  <i class="bi bi-play-circle me-2"></i>Conoce más
+                </button>
               </div>
-              <!--CAROUSEL ITEM 2-->
-              <div class="carousel-item">
-                <div class="container bg-primary-container">
-                  <div class="row align-items-center ">
-                    <div class="col-md-8">
-                      <img
-                        src="images/taco3.webp"
-                        class="d-block w-100"
-                        alt="Slide 2"
-                      />
-                    </div>
-                    <div class="col-md-4 text-center ">
-                      <h5 class="text-primary-container">Busca que es lo que quieres</h5>
-                      <p>Elegancia y distinción en cada trozo de taco puro.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!--CAROUSEL ITEM 3-->
-              <div class="carousel-item ">
-                <div class="container bg-primary-container">
-                  <div class="row align-items-center ">
-                    <div class="col-md-4 text-center ">
-                      <h5>Distintos sabores</h5>
-                      <p>Recetas modernas a favor de lo delicioso.</p>
-                    </div>
-                    <div class="col-md-8">
-                      <img
-                        src="images/taco2.webp"
-                        class="d-block w-100"
-                        alt="Slide 3"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!--FIN CAROUSEL ITEM 3-->
             </div>
-            
           </div>
-
+          <div class="col-lg-6">
+            <div class="hero-image text-center">
+              <img src="../images/taco1.webp" 
+                   class="img-fluid rounded-4 shadow-lg" alt="Tacos deliciosos">
+            </div>
+          </div>
         </div>
       </div>
-      <!--FINAL CAROUSEL-->
-
     </section>
 
-    <!--CREAR TU TACO -->
-    <section class="build-your-taco">
-      <div class="taco-text">
-        <h2>Arma Tu Propio Taco</h2>
-        <p>
-          Elige tus ingredientes frescos, combina tus sabores favoritos y crea el taco perfecto para ti.
-        </p>
-        <ol>
-          <li>Elige tu tortilla: maíz o harina.</li>
-          <li>Selecciona tu proteína: carne, pollo, pescado o vegetariano.</li>
-          <li>Agrega salsas y guarniciones a tu gusto.</li>
-          <li>¡Disfruta tu taco hecho a medida!</li>
-        </ol>
-        <button class="btn-taco ">Comenzar Ahora</button>
+    <!-- CARACTERÍSTICAS -->
+    <section class="features-section py-5 bg-light">
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-md-4 mb-4">
+            <div class="feature-card h-100">
+              <div class="feature-icon mb-3">
+                <i class="bi bi-award-fill fs-1 text-warning"></i>
+              </div>
+              <h5 class="fw-bold">Ingredientes Frescos</h5>
+              <p class="text-muted">Seleccionamos los mejores ingredientes cada día para garantizar el sabor auténtico.</p>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="feature-card h-100">
+              <div class="feature-icon mb-3">
+                <i class="bi bi-clock-fill fs-1 text-warning"></i>
+              </div>
+              <h5 class="fw-bold">Preparación Rápida</h5>
+              <p class="text-muted">Tus tacos listos en minutos sin comprometer la calidad y el sabor tradicional.</p>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="feature-card h-100">
+              <div class="feature-icon mb-3">
+                <i class="bi bi-heart-fill fs-1 text-warning"></i>
+              </div>
+              <h5 class="fw-bold">Recetas Tradicionales</h5>
+              <p class="text-muted">Preparados con recetas familiares que mantienen el sabor auténtico mexicano.</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="taco-image">
-        <img src="images/CreateTaco.jpg" alt="Taco minimalista">
+    </section>
+
+    <!--CREAR TU TACO MEJORADO-->
+    <section class="build-your-taco-section py-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6 mb-4 mb-lg-0">
+            <div class="taco-content">
+              <span class="badge bg-warning text-dark mb-3 px-3 py-2">Personalización</span>
+              <h2 class="display-5 fw-bold mb-4">
+                Arma Tu Propio <span class="text-warning">Taco</span>
+              </h2>
+              <p class="lead mb-4">
+                Elige tus ingredientes favoritos y crea el taco perfecto para ti. 
+                Más de 20 ingredientes frescos para combinar.
+              </p>
+              
+              <div class="steps mb-4">
+                <div class="d-flex align-items-start mb-3">
+                  <span class="badge bg-warning text-dark rounded-circle me-3 mt-1">1</span>
+                  <div>
+                    <h6 class="fw-semibold mb-1">Elige tu tortilla</h6>
+                    <small class="text-muted">Maíz artesanal o harina suave</small>
+                  </div>
+                </div>
+                <div class="d-flex align-items-start mb-3">
+                  <span class="badge bg-warning text-dark rounded-circle me-3 mt-1">2</span>
+                  <div>
+                    <h6 class="fw-semibold mb-1">Selecciona tu proteína</h6>
+                    <small class="text-muted">Carne, pollo, pescado o vegetariano</small>
+                  </div>
+                </div>
+                <div class="d-flex align-items-start mb-3">
+                  <span class="badge bg-warning text-dark rounded-circle me-3 mt-1">3</span>
+                  <div>
+                    <h6 class="fw-semibold mb-1">Agrega tus extras</h6>
+                    <small class="text-muted">Salsas, guarniciones y especias</small>
+                  </div>
+                </div>
+                <div class="d-flex align-items-start">
+                  <span class="badge bg-warning text-dark rounded-circle me-3 mt-1">4</span>
+                  <div>
+                    <h6 class="fw-semibold mb-1">¡Disfruta!</h6>
+                    <small class="text-muted">Tu taco hecho a medida</small>
+                  </div>
+                </div>
+              </div>
+              
+              <button class="btn btn-warning btn-lg px-4 py-2 rounded-pill">
+                <i class="bi bi-plus-circle me-2"></i>Comenzar Ahora
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="taco-image text-center">
+              <img src="../images/taco2.webp" 
+                   class="img-fluid rounded-4 shadow-lg" alt="Crear tu taco">
+            </div>
+          </div>
+        </div>
       </div>
     </section>
     
-    <!--FINAL CREAR TACO-->
-
-    
-    <!-- FOOTER -->
-    <footer class="bg-dark text-white mt-5 pt-4 pb-3">
+    <!-- FOOTER MEJORADO -->
+    <footer class="bg-dark text-white py-5">
       <div class="container">
         <div class="row">
-          <!-- Dirección -->
-          <div class="col-md-4 mb-3">
-            <h5 class="text-uppercase">Contacto</h5>
-            <p class="mb-1">
-              <i class="bi bi-geo-alt-fill"></i> Calle 123 #45-67, Bogotá,
-              Colombia
+          <div class="col-lg-4 mb-4">
+            <div class="d-flex align-items-center mb-3">
+              <img src="/images/LogoMinimalist.png" alt="El Picantito" width="40" height="40" class="me-2">
+              <h5 class="mb-0 fw-bold">El Picantito</h5>
+            </div>
+            <p class="text-light opacity-75 mb-3">
+              Auténticos tacos mexicanos preparados con amor y los mejores ingredientes frescos.
             </p>
-            <p class="mb-1">
-              <i class="bi bi-telephone-fill"></i> +57 310 123 4567
-            </p>
-            <p>
-              <i class="bi bi-envelope-fill"></i> contacto@joyeriaejemplo.com
-            </p>
+            <div class="social-links">
+              <a href="#" class="text-white me-3 fs-5"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="text-white me-3 fs-5"><i class="bi bi-instagram"></i></a>
+              <a href="#" class="text-white me-3 fs-5"><i class="bi bi-twitter-x"></i></a>
+              <a href="#" class="text-white fs-5"><i class="bi bi-whatsapp"></i></a>
+            </div>
           </div>
 
-          <!-- Enlaces útiles -->
-          <div class="col-md-4 mb-3">
-            <h5 class="text-uppercase">Enlaces</h5>
+          <div class="col-lg-3 col-md-6 mb-4">
+            <h6 class="text-uppercase fw-bold mb-3">Contacto</h6>
+            <div class="contact-info">
+              <p class="mb-2">
+                <i class="bi bi-geo-alt-fill text-warning me-2"></i>
+                Calle 123 #45-67<br>
+                <span class="ms-4">Bogotá, Colombia</span>
+              </p>
+              <p class="mb-2">
+                <i class="bi bi-telephone-fill text-warning me-2"></i>
+                +57 310 123 4567
+              </p>
+              <p class="mb-0">
+                <i class="bi bi-envelope-fill text-warning me-2"></i>
+                hola@elpicantito.com
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 mb-4">
+            <h6 class="text-uppercase fw-bold mb-3">Enlaces</h6>
             <ul class="list-unstyled">
-              <li>
-                <a href="#" class="text-white text-decoration-none">Inicio</a>
-              </li>
-              <li>
-                <a href="#" class="text-white text-decoration-none">Catálogo</a>
-              </li>
-              <li>
-                <a href="#" class="text-white text-decoration-none"
-                  >Promociones</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-white text-decoration-none"
-                  >Contáctanos</a
-                >
-              </li>
+              <li class="mb-2"><a href="home" class="text-light text-decoration-none opacity-75">Inicio</a></li>
+              <li class="mb-2"><a href="tienda" class="text-light text-decoration-none opacity-75">Menú</a></li>
+              <li class="mb-2"><a href="#" class="text-light text-decoration-none opacity-75">Promociones</a></li>
+              <li class="mb-2"><a href="#" class="text-light text-decoration-none opacity-75">Nosotros</a></li>
             </ul>
           </div>
 
-          <!-- Redes sociales -->
-          <div class="col-md-4 mb-3">
-            <h5 class="text-uppercase">Síguenos</h5>
-            <a href="#" class="text-white me-2"
-              ><i class="bi bi-facebook"></i
-            ></a>
-            <a href="#" class="text-white me-2"
-              ><i class="bi bi-instagram"></i
-            ></a>
-            <a href="#" class="text-white me-2"
-              ><i class="bi bi-twitter-x"></i
-            ></a>
-            <a href="#" class="text-white"><i class="bi bi-whatsapp"></i></a>
+          <div class="col-lg-3 col-md-12 mb-4">
+            <h6 class="text-uppercase fw-bold mb-3">Newsletter</h6>
+            <p class="text-light opacity-75 mb-3">Recibe ofertas especiales y novedades</p>
+            <form class="newsletter-form">
+              <div class="input-group">
+                <input type="email" class="form-control" placeholder="Tu email">
+                <button class="btn btn-warning" type="submit">
+                  <i class="bi bi-arrow-right"></i>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-        <div class="text-center pt-3 border-top mt-3">
-          <small
-            >&copy; 2025 Joyería Ejemplo. Todos los derechos reservados.</small
-          >
+        
+        <hr class="my-4 opacity-25">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <small class="text-light opacity-50">
+              &copy; 2025 El Picantito. Todos los derechos reservados.
+            </small>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <small>
+              <a href="#" class="text-light text-decoration-none opacity-50 me-3">Términos</a>
+              <a href="#" class="text-light text-decoration-none opacity-50">Privacidad</a>
+            </small>
+          </div>
         </div>
       </div>
     </footer>
+
+    <!-- Scripts -->
+    <script src="/js/script.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+      crossorigin="anonymous"
+    ></script>
   </body>
-
-  <!-- Modal -->
-  <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">
-            Terminos y condiciones
-          </h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <!--Se inserta con js-->
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Modal FIN -->
-
-  <script src="/js/script.js"></script>
-  <!--Bootstrap-->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
-    crossorigin="anonymous"
-  ></script>
-</html>
-
-
-
-</body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
 </html>
