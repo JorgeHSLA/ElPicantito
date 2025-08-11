@@ -27,10 +27,10 @@ body {
 
 /* ESTILOS MEJORADOS PARA NAVEGACIÓN CON ICONOS */
 .icon-nav {
-    color: var(--md-sys-color-on-primary) !important;
-    padding: 10px !important;
-    border-radius: 50% !important;
-    transition: all 0.3s ease !important;
+    color: var(--md-sys-color-on-primary);
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
     position: relative;
     display: flex;
     align-items: center;
@@ -40,15 +40,15 @@ body {
 }
 
 .icon-nav:hover {
-    background-color: var(--md-sys-color-secondary-container) !important;
-    color: var(--md-sys-color-on-secondary-container) !important;
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
     transform: translateY(-2px) scale(1.05);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .icon-nav.active {
-    background-color: var(--md-sys-color-tertiary-container) !important;
-    color: var(--md-sys-color-on-tertiary-container) !important;
+    background-color: var(--md-sys-color-tertiary-container);
+    color: var(--md-sys-color-on-tertiary-container);
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
@@ -80,22 +80,22 @@ body {
 
 /* ESTILOS PARA NAVEGACIÓN CON ICONOS */
 .icon-nav {
-    color: var(--md-sys-color-on-primary) !important;
-    padding: 8px 12px !important;
-    border-radius: 50% !important;
-    transition: all 0.3s ease !important;
+    color: var(--md-sys-color-on-primary);
+    padding: 8px 12px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
     position: relative;
 }
 
 .icon-nav:hover {
-    background-color: var(--md-sys-color-secondary-container) !important;
-    color: var(--md-sys-color-on-secondary-container) !important;
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
     transform: translateY(-2px);
 }
 
 .icon-nav.active {
-    background-color: var(--md-sys-color-tertiary-container) !important;
-    color: var(--md-sys-color-on-tertiary-container) !important;
+    background-color: var(--md-sys-color-tertiary-container);
+    color: var(--md-sys-color-on-tertiary-container);
 }
 
 /* ESTILOS PARA EL CARRUSEL MINIMALISTA */
@@ -168,138 +168,4 @@ body {
 .promo-text .badge {
     font-size: 0.8rem;
     letter-spacing: 0.5px;
-}
-
-/* RESPONSIVE PARA MÓVILES */
-@media (max-width: 1199.98px) {
-    .navbar-brand span {
-        font-size: 1.1rem;
-    }
-    
-    .icon-nav {
-        width: 40px;
-        height: 40px;
-        padding: 8px !important;
-    }
-    
-    .icon-nav i {
-        font-size: 1.1rem !important;
-    }
-}
-
-@media (max-width: 991.98px) {
-    .navBarExtra {
-        padding: 0.5rem 0;
-        min-height: 60px;
-    }
-    
-    .navbar-brand img {
-        width: 45px;
-        height: 45px;
-    }
-    
-    .navbar-brand span {
-        font-size: 1rem;
-    }
-    
-    .icon-nav {
-        width: 38px;
-        height: 38px;
-        margin: 0 1px;
-    }
-    
-    .icon-nav i {
-        font-size: 1rem !important;
-    }
-}
-
-@media (max-width: 767.98px) {
-    .navbar-brand span {
-        display: none !important;
-    }
-    
-    .icon-nav {
-        width: 36px;
-        height: 36px;
-        padding: 6px !important;
-    }
-    
-    .icon-nav i {
-        font-size: 0.95rem !important;
-    }
-}
-
-/* EFECTOS HOVER PARA CARDS */
-.taco-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.taco-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
-}
-
-/* BOTONES DE FILTRO */
-.filter-buttons .btn {
-    transition: all 0.3s ease;
-}
-
-.filter-buttons .btn:hover {
-    transform: translateY(-2px);
-}
-
-/* ANIMACIONES SUAVES */
-.feature-card {
-    transition: transform 0.3s ease;
-}
-
-.feature-card:hover {
-    transform: translateY(-5px);
-}
-
-.feature-icon i {
-    transition: transform 0.3s ease;
-}
-
-.feature-card:hover .feature-icon i {
-    transform: scale(1.1);
-}
-
-/*CAROUSEL ORIGINAL*/
-.carousel-item {
-    background-color: #f7e7ce;
-}
-
-.carousel-item h5 {
-    color: rgb(0, 0, 0);
-    font-weight: 500;
-    font-size: 50px;
-    margin-bottom: 20px;
-    font-weight: bold;
-}
-
-.carousel-item p {
-    color: rgb(0, 0, 0);
-    font-size: 30px;
-}
-
-/*NAV*/
-.nav-link {
-    color: rgb(0, 0, 0);
-    font-size: 30px;
-    font-weight: bold;
-}
-
-.nav-link:hover {
-    text-decoration: underline;
-}
-
-/* styles.css */
-.btn-primary {
-    background-color: #1f4e96 !important;
-    border-color: #1f4e96 !important;
-}
-
-.modal-dialog {
-    max-width: 70%;
 }
