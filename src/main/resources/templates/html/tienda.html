@@ -32,43 +32,15 @@
     <header class="position-sticky top-0 z-3">
       <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-sm">
         <div class="container">
+          <!-- Logo -->
           <a class="navbar-brand d-flex align-items-center" href="home">
-            <img src="/images/LogoMinimalist.png" alt="El Picantito Logo" width="60" height="60" class="me-2" />
-            <span class="fw-bold fs-4 d-none d-md-inline">El Picantito</span>
+            <img src="/images/LogoMinimalist.png" alt="El Picantito Logo" width="80" height="80" class="me-2" />
+            <span class="fw-bold fs-5 d-none d-md-inline text-truncate">El Picantito</span>
           </a>
           
-          <button
-            class="navbar-toggler border-0"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link fw-semibold px-3" href="home">
-                  <i class="bi bi-house-door me-1"></i>Inicio
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active fw-semibold px-3" aria-current="page" href="tienda">
-                  <i class="bi bi-shop me-1"></i>Tienda
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link fw-semibold px-3" href="#">
-                  <i class="bi bi-cart3 me-1"></i>Carrito <span class="badge bg-warning text-dark ms-1">0</span>
-                </a>
-              </li>
-            </ul>
-            
-            <form class="d-flex">
+          <!-- Buscador Central -->
+          <div class="d-none d-lg-flex flex-grow-1 justify-content-center mx-3">
+            <form class="search-form-center w-100" style="max-width: 400px;">
               <div class="input-group">
                 <input
                   class="form-control border-0 rounded-start-pill"
@@ -82,6 +54,37 @@
                 </button>
               </div>
             </form>
+          </div>
+          
+          <!-- Navegación con iconos SOLAMENTE -->
+          <div class="d-flex align-items-center">
+            <ul class="navbar-nav flex-row">
+              <li class="nav-item me-2">
+                <a class="nav-link icon-nav" href="home" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Inicio">
+                  <i class="bi bi-house-door-fill fs-5"></i>
+                </a>
+              </li>
+              <li class="nav-item me-2">
+                <a class="nav-link icon-nav active" href="tienda" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Menú">
+                  <i class="bi bi-card-list fs-5"></i>
+                </a>
+              </li>
+              <li class="nav-item me-2">
+                <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sobre Nosotros">
+                  <i class="bi bi-people-fill fs-5"></i>
+                </a>
+              </li>
+              <li class="nav-item me-2">
+                <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sucursales">
+                  <i class="bi bi-geo-alt-fill fs-5"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Carrito">
+                  <i class="bi bi-cart3 fs-5"></i>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </nav>
@@ -424,5 +427,15 @@
       integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
       crossorigin="anonymous"
     ></script>
+    
+    <script>
+      // Inicializar tooltips
+      document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+      });
+    </script>
   </body>
 </html>
