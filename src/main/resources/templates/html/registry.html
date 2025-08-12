@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - El Picantito</title>
+
+  <!--Bootstrap-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!--Icons-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  <!--Google Fonts-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!--CSS externo-->
+  <link rel="stylesheet" href="/styles/css/dark-hc.css" /> <!-- paleta global -->
+  <link rel="stylesheet" href="auth.css" /> <!-- ajustes específicos -->
+
+</head>
+<body>
+
+  <div class="form-container">
+    <h1 class="text-warning mb-4 text-center">Regístrate</h1>
+    <form >
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" id="nombre" class="form-control" placeholder="Ingresa tu nombre">
+      </div>
+      <div class="mb-3">
+        <label for="telefono" class="form-label">Teléfono</label>
+        <input type="number" id="telefono" class="form-control" placeholder="Ej: +57 300 123 4567">
+      </div>
+      <div class="mb-4">
+        <label for="contrasenia" class="form-label">Contraseña</label>
+        <input type="password" id="contrasenia" class="form-control" placeholder="Crea tu contraseña">
+      </div>
+
+      <!-- Botón de crear cuenta -->
+      <button type="submit" class="btn btn-warning w-100 py-2 mb-2">
+        <i class="bi bi-person-plus me-2"></i>Crear Cuenta
+      </button>
+
+      <!-- Botón para ir a inicio de sesión -->
+      <a href="login" class="btn btn-coffee w-100 py-2">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+      </a>
+
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
