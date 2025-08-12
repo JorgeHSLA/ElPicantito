@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sobre Nosotros - El Picantito</title>
+    <!--Bootstrap-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+      crossorigin="anonymous"
+    />
+    <!--icons-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <!--Google fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!--styles-->
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/css/dark-hc.css" />
+  </head>
+  <body class="dark-high-contrast">
+    <!--NAVBAR-->
+    <header class="position-sticky top-0 z-3">
+      <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-sm">
+        <div class="container">
+          <!-- Logo -->
+          <a class="navbar-brand d-flex align-items-center" href="home">
+            <img src="/images/LogoMinimalist.png" alt="El Picantito Logo" width="50" height="50" class="me-2" />
+            <span class="fw-bold fs-5 d-none d-md-inline text-truncate">El Picantito</span>
+          </a>
+          
+          <!-- Buscador Central -->
+          <div class="d-none d-lg-flex flex-grow-1 justify-content-center mx-3">
+            <form class="search-form-center w-100" style="max-width: 400px;">
+              <div class="input-group">
+                <input
+                  class="form-control border-0 rounded-start-pill"
+                  type="search"
+                  placeholder="Buscar tacos..."
+                  aria-label="Search"
+                  name="search"
+                />
+                <button class="btn btn-dark rounded-end-pill px-3" type="submit">
+                  <i class="bi bi-search"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Navegación con iconos -->
+          <div class="d-flex align-items-center">
+            <ul class="navbar-nav flex-row">
+              <li class="nav-item me-2">
+                <a class="nav-link icon-nav" href="home" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Inicio">
+                  <i class="bi bi-house-door-fill fs-5"></i>
+                </a>
+              </li>
+              <li class="nav-item me-2">
+                <a class="nav-link icon-nav" href="tienda" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Menú">
+                  <i class="bi bi-card-list fs-5"></i>
+                </a>
+              </li>
+              <li class="nav-item me-2">
+                <a class="nav-link icon-nav active" href="sobre-nosotros" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sobre Nosotros">
+                  <i class="bi bi-people-fill fs-5"></i>
+                </a>
+              </li>
+              <li class="nav-item me-2">
+                <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sucursales">
+                  <i class="bi bi-geo-alt-fill fs-5"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Carrito">
+                  <i class="bi bi-cart3 fs-5"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    
+    <!-- HERO SECTION -->
+    <section class="about-hero py-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <span class="badge bg-warning text-dark mb-3 px-3 py-2">Nuestra Historia</span>
+            <h1 class="display-4 fw-bold mb-4">
+              Conoce a <span class="text-warning">El Picantito</span>
+            </h1>
+            <p class="lead mb-4">
+              Somos más que una taquería. Somos una familia colombiana apasionada por compartir 
+              la auténtica experiencia de la comida callejera mexicana.
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <div class="text-center">
+              <img src="../images/taco1.webp" class="img-fluid rounded-4 shadow-lg" alt="El Picantito Team">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NUESTRA HISTORIA -->
+    <section class="our-story py-5 bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="display-5 fw-bold mb-4">Nuestra <span class="text-warning">Historia</span></h2>
+            <p class="lead text-muted mb-5">
+              Todo comenzó con un viaje a México que cambió nuestras vidas para siempre...
+            </p>
+          </div>
+        </div>
+        
+        <div class="row g-4">
+          <div class="col-md-6 mb-4">
+            <div class="story-card h-100 p-4 bg-white rounded-4 shadow-sm">
+              <div class="story-icon mb-3">
+                <i class="bi bi-airplane fs-1 text-warning"></i>
+              </div>
+              <h5 class="fw-bold mb-3">El Viaje que lo Cambió Todo</h5>
+              <p class="text-muted mb-0">
+                En 2019, durante un intercambio académico en México, descubrimos los auténticos 
+                sabores de la comida callejera mexicana. Cada taco era una explosión de sabores 
+                que jamás habíamos experimentado en Colombia.
+              </p>
+            </div>
+          </div>
+          
+          <div class="col-md-6 mb-4">
+            <div class="story-card h-100 p-4 bg-white rounded-4 shadow-sm">
+              <div class="story-icon mb-3">
+                <i class="bi bi-heart-fill fs-1 text-warning"></i>
+              </div>
+              <h5 class="fw-bold mb-3">La Pasión por Compartir</h5>
+              <p class="text-muted mb-0">
+                Al regresar a Colombia, nos dimos cuenta de que estos sabores auténticos no 
+                existían aquí. Decidimos aprender las técnicas tradicionales y traer esa 
+                experiencia gastronómica a nuestro país.
+              </p>
+            </div>
+          </div>
+          
+          <div class="col-md-6 mb-4">
+            <div class="story-card h-100 p-4 bg-white rounded-4 shadow-sm">
+              <div class="story-icon mb-3">
+                <i class="bi bi-mortarboard-fill fs-1 text-warning"></i>
+              </div>
+              <h5 class="fw-bold mb-3">Aprendiendo de los Maestros</h5>
+              <p class="text-muted mb-0">
+                Pasamos meses estudiando con cocineros tradicionales mexicanos, aprendiendo 
+                los secretos de las marinadas, las técnicas de cocción y la preparación 
+                artesanal de tortillas.
+              </p>
+            </div>
+          </div>
+          
+          <div class="col-md-6 mb-4">
+            <div class="story-card h-100 p-4 bg-white rounded-4 shadow-sm">
+              <div class="story-icon mb-3">
+                <i class="bi bi-shop fs-1 text-warning"></i>
+              </div>
+              <h5 class="fw-bold mb-3">El Nacimiento de El Picantito</h5>
+              <p class="text-muted mb-0">
+                En 2023, abrimos las puertas de El Picantito con una misión clara: ofrecer 
+                auténticos tacos mexicanos en Colombia, manteniendo la tradición pero 
+                adaptándonos a los gustos locales.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NUESTROS VALORES -->
+    <section class="our-values py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center mb-5">
+            <h2 class="display-5 fw-bold mb-4">Nuestros <span class="text-warning">Valores</span></h2>
+            <p class="lead text-muted">
+              Estos son los principios que guían cada decisión que tomamos en El Picantito.
+            </p>
+          </div>
+        </div>
+        
+        <div class="row g-4">
+          <div class="col-lg-4 text-center">
+            <div class="value-card p-4">
+              <div class="value-icon mb-3">
+                <i class="bi bi-award-fill fs-1 text-warning"></i>
+              </div>
+              <h5 class="fw-bold mb-3">Autenticidad</h5>
+              <p class="text-muted">
+                Respetamos las recetas tradicionales y utilizamos técnicas auténticas 
+                transmitidas por generaciones de cocineros mexicanos.
+              </p>
+            </div>
+          </div>
+          
+          <div class="col-lg-4 text-center">
+            <div class="value-card p-4">
+              <div class="value-icon mb-3">
+                <i class="bi bi-leaf-fill fs-1 text-warning"></i>
+              </div>
+              <h5 class="fw-bold mb-3">Ingredientes Frescos</h5>
+              <p class="text-muted">
+                Seleccionamos cuidadosamente cada ingrediente, priorizando la frescura 
+                y la calidad por encima de todo.
+              </p>
+            </div>
+          </div>
+          
+          <div class="col-lg-4 text-center">
+            <div class="value-card p-4">
+              <div class="value-icon mb-3">
+                <i class="bi bi-people-fill fs-1 text-warning"></i>
+              </div>
+              <h5 class="fw-bold mb-3">Comunidad</h5>
+              <p class="text-muted">
+                Creemos en crear conexiones genuinas con nuestros clientes y en ser 
+                parte activa de la comunidad local.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EQUIPO -->
+    <section class="team py-5 bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center mb-5">
+            <h2 class="display-5 fw-bold mb-4">Nuestro <span class="text-warning">Equipo</span></h2>
+            <p class="lead text-muted">
+              Conoce a las personas apasionadas que hacen posible la experiencia El Picantito.
+            </p>
+          </div>
+        </div>
+        
+        <div class="row g-4">
+          <div class="col-lg-3 text-center">
+            <div class="team-card bg-white rounded-4 shadow-sm p-4">
+              <img src="../images/taco1.webp" class="rounded-circle mb-3" width="120" height="120" alt="Chef Principal">
+              <h5 class="fw-bold mb-2">María González</h5>
+              <p class="text-warning fw-semibold mb-3">Chef Principal</p>
+              <p class="text-muted small">
+                Especialista en cocina mexicana tradicional con más de 10 años de experiencia. 
+                Aprendió las técnicas auténticas directamente en Oaxaca, México.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 text-center">
+            <div class="team-card bg-white rounded-4 shadow-sm p-4">
+              <img src="../images/taco1.webp" class="rounded-circle mb-3" width="120" height="120" alt="Chef Principal">
+              <h5 class="fw-bold mb-2">María González</h5>
+              <p class="text-warning fw-semibold mb-3">Chef Principal</p>
+              <p class="text-muted small">
+                Especialista en cocina mexicana tradicional con más de 10 años de experiencia. 
+                Aprendió las técnicas auténticas directamente en Oaxaca, México.
+              </p>
+            </div>
+          </div>
+          
+          <div class="col-lg-3 text-center">
+            <div class="team-card bg-white rounded-4 shadow-sm p-4">
+              <img src="../images/taco1.webp" class="rounded-circle mb-3" width="120" height="120" alt="Fundador">
+              <h5 class="fw-bold mb-2">Carlos Rodríguez</h5>
+              <p class="text-warning fw-semibold mb-3">Fundador</p>
+              <p class="text-muted small">
+                Ingeniero de sistemas convertido en emprendedor gastronómico. Su pasión por 
+                la comida mexicana lo llevó a crear El Picantito.
+              </p>
+            </div>
+          </div>
+          
+          <div class="col-lg-3 text-center">
+            <div class="team-card bg-white rounded-4 shadow-sm p-4">
+              <img src="../images/taco1.webp" class="rounded-circle mb-3" width="120" height="120" alt="Gerente">
+              <h5 class="fw-bold mb-2">Ana Martínez</h5>
+              <p class="text-warning fw-semibold mb-3">Gerente General</p>
+              <p class="text-muted small">
+                Administradora de empresas especializada en experiencia del cliente. 
+                Se encarga de que cada visita sea memorable.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPROMISO -->
+    <section class="commitment py-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6 mb-4 mb-lg-0">
+            <h2 class="display-5 fw-bold mb-4">Nuestro <span class="text-warning">Compromiso</span></h2>
+            <p class="lead text-muted mb-4">
+              En El Picantito, no solo servimos comida. Creamos experiencias que conectan culturas 
+              y despiertan sonrisas.
+            </p>
+            
+            <ul class="list-unstyled text-muted mb-4">
+              <li class="mb-3">
+                <i class="bi bi-check-circle-fill text-warning me-3"></i>
+                <strong>Calidad Garantizada:</strong> Cada taco es preparado con los más altos estándares de calidad.
+              </li>
+              <li class="mb-3">
+                <i class="bi bi-check-circle-fill text-warning me-3"></i>
+                <strong>Innovación Constante:</strong> Siempre buscamos nuevas formas de mejorar tu experiencia.
+              </li>
+              <li class="mb-3">
+                <i class="bi bi-check-circle-fill text-warning me-3"></i>
+                <strong>Sustentabilidad:</strong> Trabajamos con proveedores locales y prácticas responsables.
+              </li>
+              <li class="mb-3">
+                <i class="bi bi-check-circle-fill text-warning me-3"></i>
+                <strong>Comunidad:</strong> Contribuimos al crecimiento y bienestar de nuestra comunidad local.
+              </li>
+            </ul>
+            
+            <a href="tienda" class="btn btn-warning btn-lg px-4 py-2 rounded-pill">
+              <i class="bi bi-arrow-right me-2"></i>Prueba Nuestros Tacos
+            </a>
+          </div>
+          <div class="col-lg-6">
+            <div class="text-center">
+              <img src="../images/CreateTaco.jpg" class="img-fluid rounded-4 shadow-lg" alt="Compromiso El Picantito">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="cta-section py-5 bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h3 class="display-6 fw-bold mb-4">¿Listo para vivir la experiencia <span class="text-warning">El Picantito</span>?</h3>
+            <p class="lead text-muted mb-4">
+              Ven y descubre por qué somos la taquería favorita de Colombia. 
+              Tu próximo taco favorito te está esperando.
+            </p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+              <a href="tienda" class="btn btn-warning btn-lg px-4 py-2 rounded-pill">
+                <i class="bi bi-shop me-2"></i>Ver Nuestro Menú
+              </a>
+              <a href="#" class="btn btn-outline-warning btn-lg px-4 py-2 rounded-pill">
+                <i class="bi bi-geo-alt me-2"></i>Encuentra Nuestra Ubicación
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 mb-4">
+            <div class="d-flex align-items-center mb-3">
+              <img src="/images/LogoMinimalist.png" alt="El Picantito" width="40" height="40" class="me-2">
+              <h5 class="mb-0 fw-bold">El Picantito</h5>
+            </div>
+            <p class="text-light opacity-75 mb-3">
+              Auténticos tacos mexicanos preparados con amor y los mejores ingredientes frescos.
+            </p>
+            <div class="social-links">
+              <a href="https://www.facebook.com/" target="_blank" class="text-white me-3 fs-5" aria-label="Facebook">
+                <i class="bi bi-facebook"></i>
+              </a>
+              <a href="https://www.instagram.com/" target="_blank" class="text-white me-3 fs-5" aria-label="Instagram">
+                <i class="bi bi-instagram"></i>
+              </a>
+              <a href="https://twitter.com/" target="_blank" class="text-white me-3 fs-5" aria-label="X (Twitter)">
+                <i class="bi bi-twitter-x"></i>
+              </a>
+              <a href="https://www.whatsapp.com/" target="_blank" class="text-white fs-5" aria-label="WhatsApp">
+                <i class="bi bi-whatsapp"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mb-4">
+            <h6 class="text-uppercase fw-bold mb-3">Contacto</h6>
+            <div class="contact-info">
+              <p class="mb-2">
+                <i class="bi bi-geo-alt-fill text-warning me-2"></i>
+                Calle 123 #45-67<br>
+                <span class="ms-4">Bogotá, Colombia</span>
+              </p>
+              <p class="mb-2">
+                <i class="bi bi-telephone-fill text-warning me-2"></i>
+                +57 300 365 8312
+              </p>
+              <p class="mb-0">
+                <i class="bi bi-envelope-fill text-warning me-2"></i>
+                hola@elpicantito.com
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 mb-4">
+            <h6 class="text-uppercase fw-bold mb-3">Enlaces</h6>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a href="home" class="text-light text-decoration-none opacity-75">Inicio</a></li>
+              <li class="mb-2"><a href="tienda" class="text-light text-decoration-none opacity-75">Menú</a></li>
+              <li class="mb-2"><a href="sobre-nosotros" class="text-light text-decoration-none opacity-75">Sobre Nosotros</a></li>
+              <li class="mb-2"><a href="#" class="text-light text-decoration-none opacity-75">Contacto</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-12 mb-4">
+            <h6 class="text-uppercase fw-bold mb-3">Newsletter</h6>
+            <p class="text-light opacity-75 mb-3">Recibe ofertas especiales y novedades</p>
+            <form class="newsletter-form">
+              <div class="input-group">
+                <input type="email" class="form-control" placeholder="Tu email">
+                <button class="btn btn-warning" type="submit">
+                  <i class="bi bi-arrow-right"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <hr class="my-4 opacity-25">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <small class="text-light opacity-50">
+              &copy; 2025 El Picantito. Todos los derechos reservados.
+            </small>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <small>
+              <a href="#" class="text-light text-decoration-none opacity-50 me-3">Términos</a>
+              <a href="#" class="text-light text-decoration-none opacity-50">Privacidad</a>
+            </small>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/script.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+      crossorigin="anonymous"
+    ></script>
+    
+    <script>
+      // Inicializar tooltips
+      document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+      });
+    </script>
+  </body>
+</html>
