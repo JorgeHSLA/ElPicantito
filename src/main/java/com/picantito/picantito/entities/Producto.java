@@ -17,8 +17,8 @@ public abstract class Producto {
     private Integer calificacion; // De 1 a 5 estrellas
     
     // Constructor sin id (para crear nuevos productos)
-    public Producto(String nombre, String descripcion, Double precio, String imagenUrl, 
-                   Boolean disponible, Integer calificacion) {
+    public Producto(String nombre, String descripcion, Double precio, String imagenUrl, Boolean disponible, Integer calificacion) {
+        this.id = null; // se necesita asi para las bases de datos, al ser null se le puede agregar un id facil en la bd
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
