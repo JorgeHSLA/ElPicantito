@@ -57,5 +57,11 @@ public class UserController {
     public String sobreNosotros() {
         return "html/user/sobre-nosotros";
     }
+
+    // Redirección para compatibilidad
+    @GetMapping("/")
+    public String index() {
+        return "redirect:/home";
+    }
     
 }
