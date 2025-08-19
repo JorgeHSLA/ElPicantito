@@ -24,7 +24,7 @@ public class Producto {
         this.imagen = imagen;
         this.disponible = disponible;
         this.calificacion = calificacion;
-        this.id = null;
+        this.id = null;  // SE PONE NULO PARA QUE SEA AUTOMATICO EN LA BASE DE DATOS
     }
 
 
