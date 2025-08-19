@@ -1,0 +1,50 @@
+package com.picantito.picantito.controllers;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.picantito.picantito.entities.Producto;
+import com.picantito.picantito.service.TiendaService;
+
+@Controller
+@RequestMapping("/productos")
+public class ProductoController {
+
+    @Autowired
+    private TiendaService tiendaService;
+
+    // Mostrar todas las productos en formato tabla: http://localhost:9998/productos/tabla
+    @GetMapping("/tabla")
+    public String mostrarproductosTabla(Model model) {
+        List<Producto> productos = tiendaService.getAllProductos();
+        model.addAttribute("productos", productos);
+        return "html/productos/tabla";
+    }
+
+    // Mostrar todas las productos en formato tarjetas: http://localhost:9998/productos/tarjetas
+    @GetMapping("/tarjetas")
+    public String mostrarproductosTarjetas(Model model) {
+        List<Producto> productos = tiendaService.getAllProductos();
+        model.addAttribute("productos", productos);
+        return "html/productos/tarjetas";
+    }
+
+    // Mostrar información de una producto específica: http://localhost:9998/productos/#id
+    @GetMapping("/{id}")
+    public String mostrarproducto(@PathVariable Integer id, Model model) {
+        Optional<Producto> producto = tiendaService.getProductoById(id);
+        if (producto.isPresent()) {
+            model.addAttribute("producto", producto.get());
+            return "html/productos/detalle";
+        } else {
+            return "redirect:/productos/tarjetas";
+        }
+    }
+}
