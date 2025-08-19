@@ -22,12 +22,12 @@ public class ProductRepository {
 
     private void inicializarProductos() {
         // Tacos
-        addProducto(new Producto("Taco al Pastor", "Deliciosa carne marinada con especias tradicionales, piña fresca y cebolla, servido en tortilla de maíz artesanal", 3.50, "https://via.placeholder.com/300x250/8B4D30/FFFFFF?text=Al+Pastor", true, 5));
-        addProducto(new Producto("Taco de Asada", "Jugosa carne de res a la parrilla, marinada perfectamente y servida con cilantro fresco y cebolla", 4.00, "https://via.placeholder.com/300x250/A0522D/FFFFFF?text=Asada", true, 4));
-        addProducto(new Producto("Taco de Carnitas", "Carne de cerdo cocinada lentamente con especias tradicionales, servida con salsa verde casera", 3.75, "https://via.placeholder.com/300x250/8B4513/FFFFFF?text=Carnitas", true, 4));
-        addProducto(new Producto("Taco de Barbacoa", "Tierno y jugoso, cocinado al vapor con chiles y especias tradicionales durante horas", 4.25, "https://via.placeholder.com/300x250/CD853F/FFFFFF?text=Barbacoa", true, 5));
-        addProducto(new Producto("Taco de Pollo", "Pollo marinado con especias mexicanas, servido con guacamole y pico de gallo", 3.25, "https://via.placeholder.com/300x250/DAA520/FFFFFF?text=Pollo", true, 4));
-        addProducto(new Producto("Taco Vegano", "Proteína de soya con vegetales frescos y salsa vegana especial", 3.00, "https://via.placeholder.com/300x250/228B22/FFFFFF?text=Vegano", true, 4));
+        addProducto(new Producto("Taco al Pastor", "Deliciosa carne marinada con especias tradicionales, piña fresca y cebolla, servido en tortilla de maíz artesanal", 3.50, "https://lastaquerias.com/wp-content/uploads/2022/11/tacos-pastor-gaacc26fa8_1920.jpg", true, 5));
+        addProducto(new Producto("Taco de Asada", "Jugosa carne de res a la parrilla, marinada perfectamente y servida con cilantro fresco y cebolla", 4.00, "https://www.goya.com/wp-content/uploads/2023/10/carne-asada-tacos1.jpg", true, 4));
+        addProducto(new Producto("Taco de Carnitas", "Carne de cerdo cocinada lentamente con especias tradicionales, servida con salsa verde casera", 3.75, "https://okdiario.com/img/2022/04/30/tacos.jpg", true, 4));
+        addProducto(new Producto("Taco de Barbacoa", "Tierno y jugoso, cocinado al vapor con chiles y especias tradicionales durante horas", 4.25, "https://images.ctfassets.net/n7hs0hadu6ro/21wyWFAA9XsAURXPsDxmfN/083e59f1c9b177aa4fb7e39ff7e11103/deliciosos-tacos-de-barbacoa.jpg", true, 5));
+        addProducto(new Producto("Taco de Pollo", "Pollo marinado con especias mexicanas, servido con guacamole y pico de gallo", 3.25, "https://i.ytimg.com/vi/QjNO3T9YgxA/maxresdefault.jpg", true, 4));
+        addProducto(new Producto("Taco Vegano", "Proteína de soya con vegetales frescos y salsa vegana especial", 3.00, "https://recetasveganas.net/wp-content/uploads/2020/07/recetas-tacos-sin-carne-vegetariano-alubias-aguacate-tomate-olivas2.jpg", true, 4));
         
         // Bebidas
         addProducto(new Producto("Agua de Horchata", "Bebida tradicional de arroz con canela y azúcar", 2.50, "https://via.placeholder.com/300x250/F5DEB3/8B4513?text=Horchata", true, 5));
