@@ -30,14 +30,14 @@ public class ProductRepository {
         addProducto(new Producto("Taco Vegano", "Proteína de soya con vegetales frescos y salsa vegana especial", 3.00, "https://recetasveganas.net/wp-content/uploads/2020/07/recetas-tacos-sin-carne-vegetariano-alubias-aguacate-tomate-olivas2.jpg", true, 4));
         
         // Bebidas
-        addProducto(new Producto("Agua de Horchata", "Bebida tradicional de arroz con canela y azúcar", 2.50, "https://via.placeholder.com/300x250/F5DEB3/8B4513?text=Horchata", true, 5));
-        addProducto(new Producto("Agua de Jamaica", "Bebida refrescante de flor de jamaica con un toque de limón", 2.25, "https://via.placeholder.com/300x250/DC143C/FFFFFF?text=Jamaica", true, 4));
-        addProducto(new Producto("Coca Cola", "Bebida gaseosa clásica", 2.00, "https://via.placeholder.com/300x250/B22222/FFFFFF?text=Coca+Cola", true, 4));
-        addProducto(new Producto("Agua Natural", "Agua purificada", 1.50, "https://via.placeholder.com/300x250/87CEEB/000000?text=Agua", true, 5));
+        addProducto(new Producto("Agua de Horchata", "Bebida tradicional de arroz con canela y azúcar", 2.50, "https://images.aws.nestle.recipes/original/8eaf50148ed521383df5d9793cba995f_whatsapp_image_2022-04-28_at_1.00.26_pm_(2).jpeg", true, 5));
+        addProducto(new Producto("Agua de Jamaica", "Bebida refrescante de flor de jamaica con un toque de limón", 2.25, "https://www.clarin.com/img/2020/07/21/7Pj44-Cyq_360x240__1.jpg", true, 4));
+        addProducto(new Producto("Coca Cola", "Bebida gaseosa clásica", 2.00, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0bAQ4Lp2psJbZnGz-59XV9HY3nAEd75f1SQ&s", true, 4));
+        addProducto(new Producto("Agua Natural", "Agua purificada", 1.50, "https://lacaretalicores.com/cdn/shop/files/AGUA_CRISTAL_BOTELLA_600ML.webp?v=1744139583", true, 5));
         
         // Extras
-        addProducto(new Producto("Guacamole", "Guacamole fresco hecho con aguacates, limón y especias", 1.75, "https://via.placeholder.com/300x250/6B8E23/FFFFFF?text=Guacamole", true, 5));
-        addProducto(new Producto("Pico de Gallo", "Mezcla fresca de tomate, cebolla, cilantro y chile", 1.50, "https://via.placeholder.com/300x250/FF6347/FFFFFF?text=Pico+Gallo", true, 4));
+        addProducto(new Producto("Guacamole", "Guacamole fresco hecho con aguacates, limón y especias", 1.75, "https://www.allrecipes.com/thmb/FOHqtfrZVg0WAMdkFE3bnp7SNO4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/AR-RM-14064-easy-guacamole-ddmfs-3x4-9e4a1eb1bb34421a99db675b53a29e53.jpg", true, 5));
+        addProducto(new Producto("Pico de Gallo", "Mezcla fresca de tomate, cebolla, cilantro y chile", 1.50, "https://recetasdecocina.elmundo.es/wp-content/uploads/2025/03/Pico-de-gallo.jpg", true, 4));
     }
 
     private void addProducto(Producto producto) {
