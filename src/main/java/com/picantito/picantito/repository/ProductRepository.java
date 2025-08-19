@@ -11,16 +11,16 @@ import org.springframework.stereotype.Repository;
 import com.picantito.picantito.entities.Producto;
 
 @Repository
-public class ComidaRepository {
+public class ProductRepository {
     
-    private Map<Integer, Producto> comidas = new HashMap<>();
+    private Map<Integer, Producto> productos = new HashMap<>();
     private int nextId = 1;
 
-    public ComidaRepository() {
-        inicializarComidas();
+    public ProductRepository() {
+        inicializarProductos();
     }
 
-    private void inicializarComidas() {
+    private void inicializarProductos() {
         // Tacos
         addComida(new Producto("Taco al Pastor", "Deliciosa carne marinada con especias tradicionales, piña fresca y cebolla, servido en tortilla de maíz artesanal", 3.50, "https://via.placeholder.com/300x250/8B4D30/FFFFFF?text=Al+Pastor", true, 5));
         addComida(new Producto("Taco de Asada", "Jugosa carne de res a la parrilla, marinada perfectamente y servida con cilantro fresco y cebolla", 4.00, "https://via.placeholder.com/300x250/A0522D/FFFFFF?text=Asada", true, 4));
@@ -42,16 +42,16 @@ public class ComidaRepository {
 
     private void addComida(Producto producto) {
         producto.setId(nextId);
-        comidas.put(nextId, producto);
+        productos.put(nextId, producto);
         nextId++;
     }
 
     public List<Producto> findAll() {
-        return new ArrayList<>(comidas.values());
+        return new ArrayList<>(productos.values());
     }
 
     public Optional<Producto> findById(Integer id) {
-        return Optional.ofNullable(comidas.get(id));
+        return Optional.ofNullable(productos.get(id));
     }
 
     public Producto save(Producto producto) {
@@ -59,11 +59,11 @@ public class ComidaRepository {
             producto.setId(nextId);
             nextId++;
         }
-        comidas.put(producto.getId(), producto);
+        productos.put(producto.getId(), producto);
         return producto;
     }
 
     public void deleteById(Integer id) {
-        comidas.remove(id);
+        productos.remove(id);
     }
 }
