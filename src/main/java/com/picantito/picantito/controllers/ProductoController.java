@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.service.TiendaService;
 
-import lombok.extern.java.Log;
-
 @Controller
 @RequestMapping("/productos")
 public class ProductoController {
@@ -49,7 +47,8 @@ public class ProductoController {
             model.addAttribute("producto", producto.get());
             return "html/productos/detalle";
         } else {
-            return "redirect:/productos/tarjetas";
+            // Redirigir al menú principal en lugar de tarjetas
+            return "redirect:/tienda";
         }
     }
 }

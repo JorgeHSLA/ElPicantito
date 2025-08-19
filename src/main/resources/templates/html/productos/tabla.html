@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comidas - Tabla | El Picantito</title>
+    <title>Productos - Tabla | El Picantito</title>
     
     <!--Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -22,8 +22,11 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h1 class="fw-bold">Nuestro <span class="text-warning">Menú</span></h1>
                     <div>
-                        <a href="/comidas/tarjetas" class="btn btn-outline-warning me-2">
+                        <a href="/productos/tarjetas" class="btn btn-outline-warning me-2">
                             <i class="bi bi-grid-3x3-gap me-1"></i>Ver Tarjetas
+                        </a>
+                        <a href="/tienda" class="btn btn-outline-warning me-2">
+                            <i class="bi bi-shop me-1"></i>Menú Principal
                         </a>
                         <a href="/home" class="btn btn-warning">
                             <i class="bi bi-house me-1"></i>Inicio
@@ -48,39 +51,41 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="comida : ${comidas}">
-                                        <td th:text="${comida.id}" class="fw-semibold"></td>
+                                    <tr th:each="producto : ${productos}">
+                                        <td th:text="${producto.id}" class="fw-semibold"></td>
                                         <td>
-                                            <img th:src="${comida.imagen}" 
-                                                 th:alt="${comida.nombre}" 
+                                            <img th:src="${producto.imagen}" 
+                                                 th:alt="${producto.nombre}" 
                                                  class="rounded"
                                                  style="width: 60px; height: 60px; object-fit: cover;">
                                         </td>
-                                        <td th:text="${comida.nombre}" class="fw-semibold"></td>
+                                        <td th:text="${producto.nombre}" class="fw-semibold"></td>
                                         <td>
-                                            <span th:text="${#strings.substring(comida.descripcion, 0, #strings.length(comida.descripcion) > 50 ? 50 : #strings.length(comida.descripcion))}"></span>
-                                            <span th:if="${#strings.length(comida.descripcion) > 50}">...</span>
+                                            <span th:text="${#strings.substring(producto.descripcion, 0, #strings.length(producto.descripcion) > 50 ? 50 : #strings.length(producto.descripcion))}"></span>
+                                            <span th:if="${#strings.length(producto.descripcion) > 50}">...</span>
                                         </td>
                                         <td class="text-success fw-bold">
-                                            $<span th:text="${#numbers.formatDecimal(comida.precio, 1, 2)}"></span>
+                                            $<span th:text="${#numbers.formatDecimal(producto.precio, 1, 2)}"></span>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <span th:each="i : ${#numbers.sequence(1, comida.calificacion)}">
+                                                <!-- Estrellas llenas -->
+                                                <th:block th:each="i : ${#numbers.sequence(1, producto.calificacion)}">
                                                     <i class="bi bi-star-fill text-warning"></i>
-                                                </span>
-                                                <span th:each="i : ${#numbers.sequence(comida.calificacion + 1, 5)}">
+                                                </th:block>
+                                                <!-- Estrellas vacías -->
+                                                <th:block th:if="${producto.calificacion < 5}" th:each="i : ${#numbers.sequence(producto.calificacion + 1, 5)}">
                                                     <i class="bi bi-star text-warning"></i>
-                                                </span>
-                                                <small class="text-muted ms-2" th:text="${comida.calificacion} + '/5'"></small>
+                                                </th:block>
+                                                <small class="text-muted ms-2" th:text="${producto.calificacion} + '/5'"></small>
                                             </div>
                                         </td>
                                         <td>
-                                            <span th:if="${comida.disponible}" class="badge bg-success">Disponible</span>
-                                            <span th:unless="${comida.disponible}" class="badge bg-danger">No disponible</span>
+                                            <span th:if="${producto.disponible}" class="badge bg-success">Disponible</span>
+                                            <span th:unless="${producto.disponible}" class="badge bg-danger">No disponible</span>
                                         </td>
                                         <td>
-                                            <a th:href="@{/comidas/{id}(id=${comida.id})}" 
+                                            <a th:href="@{/productos/{id}(id=${producto.id})}" 
                                                class="btn btn-sm btn-outline-primary">
                                                 <i class="bi bi-eye"></i>
                                             </a>
