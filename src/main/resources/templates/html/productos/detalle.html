@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${comida.nombre} + ' | El Picantito'"></title>
+    <title th:text="${producto.nombre} + ' | El Picantito'"></title>
     
     <!--Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -22,8 +22,8 @@
                 <nav aria-label="breadcrumb" class="mb-4">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/home" class="text-warning">Inicio</a></li>
-                        <li class="breadcrumb-item"><a href="/comidas/tarjetas" class="text-warning">Menú</a></li>
-                        <li class="breadcrumb-item active" aria-current="page" th:text="${comida.nombre}"></li>
+                        <li class="breadcrumb-item"><a href="/productos/tarjetas" class="text-warning">Menú</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="${producto.nombre}"></li>
                     </ol>
                 </nav>
             </div>
@@ -32,8 +32,8 @@
         <div class="row">
             <div class="col-lg-6 mb-4">
                 <div class="card border-0 shadow-sm">
-                    <img th:src="${comida.imagen}" 
-                         th:alt="${comida.nombre}"
+                    <img th:src="${producto.imagen}" 
+                         th:alt="${producto.nombre}"
                          class="card-img-top rounded"
                          style="height: 400px; object-fit: cover;">
                 </div>
@@ -43,32 +43,32 @@
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-start mb-3">
-                            <h1 class="fw-bold" th:text="${comida.nombre}"></h1>
-                            <span th:if="${comida.disponible}" class="badge bg-success fs-6 px-3 py-2">Disponible</span>
-                            <span th:unless="${comida.disponible}" class="badge bg-danger fs-6 px-3 py-2">No disponible</span>
+                            <h1 class="fw-bold" th:text="${producto.nombre}"></h1>
+                            <span th:if="${producto.disponible}" class="badge bg-success fs-6 px-3 py-2">Disponible</span>
+                            <span th:unless="${producto.disponible}" class="badge bg-danger fs-6 px-3 py-2">No disponible</span>
                         </div>
                         
                         <div class="mb-4">
                             <div class="d-flex align-items-center mb-2">
-                                <span th:each="i : ${#numbers.sequence(1, comida.calificacion)}">
+                                <span th:each="i : ${#numbers.sequence(1, producto.calificacion)}">
                                     <i class="bi bi-star-fill text-warning fs-5"></i>
                                 </span>
-                                <span th:each="i : ${#numbers.sequence(comida.calificacion + 1, 5)}">
+                                <span th:each="i : ${#numbers.sequence(producto.calificacion + 1, 5)}">
                                     <i class="bi bi-star text-warning fs-5"></i>
                                 </span>
-                                <span class="ms-3 text-muted">(<span th:text="${comida.calificacion}"></span>/5 estrellas)</span>
+                                <span class="ms-3 text-muted">(<span th:text="${producto.calificacion}"></span>/5 estrellas)</span>
                             </div>
                         </div>
                         
                         <div class="mb-4">
                             <h3 class="text-success fw-bold">
-                                $<span th:text="${#numbers.formatDecimal(comida.precio, 1, 2)}"></span>
+                                $<span th:text="${#numbers.formatDecimal(producto.precio, 1, 2)}"></span>
                             </h3>
                         </div>
                         
                         <div class="mb-4">
                             <h5 class="fw-semibold mb-3">Descripción:</h5>
-                            <p class="text-muted lead" th:text="${comida.descripcion}"></p>
+                            <p class="text-muted lead" th:text="${producto.descripcion}"></p>
                         </div>
                         
                         <div class="mb-4">
@@ -76,29 +76,29 @@
                             <ul class="list-unstyled">
                                 <li class="mb-2">
                                     <i class="bi bi-hash text-warning me-2"></i>
-                                    <strong>ID:</strong> <span th:text="${comida.id}"></span>
+                                    <strong>ID:</strong> <span th:text="${producto.id}"></span>
                                 </li>
                                 <li class="mb-2">
                                     <i class="bi bi-tag text-warning me-2"></i>
-                                    <strong>Precio:</strong> $<span th:text="${#numbers.formatDecimal(comida.precio, 1, 2)}"></span>
+                                    <strong>Precio:</strong> $<span th:text="${#numbers.formatDecimal(producto.precio, 1, 2)}"></span>
                                 </li>
                                 <li class="mb-2">
                                     <i class="bi bi-star text-warning me-2"></i>
-                                    <strong>Calificación:</strong> <span th:text="${comida.calificacion}"></span>/5
+                                    <strong>Calificación:</strong> <span th:text="${producto.calificacion}"></span>/5
                                 </li>
                             </ul>
                         </div>
                         
                         <div class="d-grid gap-2">
-                            <button th:if="${comida.disponible}" 
+                            <button th:if="${producto.disponible}" 
                                     class="btn btn-warning btn-lg">
                                 <i class="bi bi-cart-plus me-2"></i>Agregar al Carrito
                             </button>
-                            <button th:unless="${comida.disponible}" 
+                            <button th:unless="${producto.disponible}" 
                                     class="btn btn-secondary btn-lg" disabled>
                                 <i class="bi bi-x-circle me-2"></i>No Disponible
                             </button>
-                            <a href="/comidas/tarjetas" class="btn btn-outline-warning">
+                            <a href="/productos/tarjetas" class="btn btn-outline-warning">
                                 <i class="bi bi-arrow-left me-2"></i>Volver al Menú
                             </a>
                         </div>

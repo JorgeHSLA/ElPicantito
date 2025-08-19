@@ -1,19 +1,31 @@
 package com.picantito.picantito.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.entities.User;
+import com.picantito.picantito.service.TiendaService;
 
 // todas las seciones que no necesitan login
 
 @Controller
 public class UserController {
 
+    @Autowired
+    private TiendaService tiendaService;
+
     @GetMapping("/tienda")
-    public String tienda() {
+    public String tienda(Model model) {
+        // Obtener todos los productos de la base de datos
+        List<Producto> productos = tiendaService.getAllProductos();
+        model.addAttribute("productos", productos);
         return "html/user/tienda";
     }
 

@@ -2,6 +2,7 @@ package com.picantito.picantito.controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.service.TiendaService;
 
+import lombok.extern.java.Log;
+
 @Controller
 @RequestMapping("/productos")
 public class ProductoController {
@@ -22,7 +25,7 @@ public class ProductoController {
 
     // Mostrar todas las productos en formato tabla: http://localhost:9998/productos/tabla
     @GetMapping("/tabla")
-    public String mostrarproductosTabla(Model model) {
+    public String mostrarProductosTabla(Model model) {
         List<Producto> productos = tiendaService.getAllProductos();
         model.addAttribute("productos", productos);
         return "html/productos/tabla";
@@ -30,15 +33,17 @@ public class ProductoController {
 
     // Mostrar todas las productos en formato tarjetas: http://localhost:9998/productos/tarjetas
     @GetMapping("/tarjetas")
-    public String mostrarproductosTarjetas(Model model) {
+    public String mostrarProductosTarjetas(Model model) {
         List<Producto> productos = tiendaService.getAllProductos();
         model.addAttribute("productos", productos);
         return "html/productos/tarjetas";
     }
 
-    // Mostrar información de una producto específica: http://localhost:9998/productos/#id
+    // Mostrar información de una producto específica: http://localhost:9998/productos/{id}
     @GetMapping("/{id}")
-    public String mostrarproducto(@PathVariable Integer id, Model model) {
+    public String mostrarProducto(@PathVariable Integer id, Model model) {
+        Logger.getLogger(ProductoController.class.getName()).info("Mostrando producto con ID: " + id);
+
         Optional<Producto> producto = tiendaService.getProductoById(id);
         if (producto.isPresent()) {
             model.addAttribute("producto", producto.get());
