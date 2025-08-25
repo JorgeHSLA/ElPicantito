@@ -69,7 +69,13 @@ public class UserController {
             Optional<User> authenticatedUser = autentificacionService.findByNumero(user.getNumero());
             if (authenticatedUser.isPresent()) {
                 session.setAttribute("loggedUser", authenticatedUser.get());
-                return "redirect:/tienda";
+                
+                // Redirigir según el rol
+                if (authenticatedUser.get().isAdmin()) {
+                    return "redirect:/admin/dashboard";
+                } else {
+                    return "redirect:/tienda";
+                }
             }
         }
         

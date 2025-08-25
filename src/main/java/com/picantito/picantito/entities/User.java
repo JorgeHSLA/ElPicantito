@@ -27,6 +27,9 @@ public class User {
     @Column(nullable = false)
     private String password;
     
+    @Column(nullable = false)
+    private String role = "USER"; // USER o ADMIN
+    
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pedido> pedidos = new ArrayList<>();
     
@@ -35,5 +38,18 @@ public class User {
         this.name = name;
         this.numero = numero;
         this.password = password;
+        this.role = "USER";
+    }
+    
+    // Constructor con rol
+    public User(String name, Integer numero, String password, String role) {
+        this.name = name;
+        this.numero = numero;
+        this.password = password;
+        this.role = role;
+    }
+    
+    public boolean isAdmin() {
+        return "ADMIN".equals(this.role);
     }
 }

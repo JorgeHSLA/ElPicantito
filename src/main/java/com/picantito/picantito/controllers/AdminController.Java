@@ -1,45 +1,237 @@
 package com.picantito.picantito.controllers;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.picantito.picantito.entities.Adicional;
+import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.entities.User;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.picantito.picantito.service.AutentificacionService;
+import com.picantito.picantito.service.TiendaService;
 
-
-// todo lo que usa admin
+import jakarta.servlet.http.HttpSession;
 
 @Controller
-@GetMapping("/admin")
-public String getMethodName(@RequestParam String param) {
-    return new String();
-}
-
+@RequestMapping("/admin")
 public class AdminController {
 
-
-    @GetMapping("/menu")
-    public String admin() {
-        return "html/admin/adminMenu";
-    }
-
+    @Autowired
+    private TiendaService tiendaService;
     
-    @GetMapping("/estadistica")
-    public String estadistica() {
-        return new String();
-    }
-    
+    @Autowired
+    private AutentificacionService autentificacionService;
 
-    @GetMapping("/tienda")
-    public String modificarTienda() {
-        return new String();
+    // Verificar si el usuario es admin
+    private boolean isAdmin(HttpSession session) {
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        return loggedUser != null && loggedUser.isAdmin();
     }
 
-    @GetMapping("/operadores")
-    public String operadores() {
-        return new String();
+    // Dashboard principal
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session, Model model) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        model.addAttribute("totalProductos", tiendaService.getAllProductos().size());
+        model.addAttribute("totalUsuarios", autentificacionService.findAll().size());
+        model.addAttribute("totalAdicionales", tiendaService.getAllAdicionales().size());
+        
+        return "html/admin/dashboard";
     }
-    
+
+    // CRUD Productos
+    @GetMapping("/productos")
+    public String productos(HttpSession session, Model model) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        List<Producto> productos = tiendaService.getAllProductos();
+        model.addAttribute("productos", productos);
+        model.addAttribute("nuevoProducto", new Producto());
+        
+        return "html/admin/productos";
+    }
+
+    @PostMapping("/productos/save")
+    public String saveProducto(@ModelAttribute("nuevoProducto") Producto producto, 
+                              HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            tiendaService.saveProducto(producto);
+            redirectAttributes.addFlashAttribute("success", "Producto guardado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al guardar el producto");
+        }
+        
+        return "redirect:/admin/productos";
+    }
+
+    @GetMapping("/productos/edit/{id}")
+    public String editProducto(@PathVariable Integer id, HttpSession session, Model model) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        Optional<Producto> producto = tiendaService.getProductoById(id);
+        if (producto.isPresent()) {
+            model.addAttribute("producto", producto.get());
+            return "html/admin/edit-producto";
+        }
+        
+        return "redirect:/admin/productos";
+    }
+
+    @PostMapping("/productos/update")
+    public String updateProducto(@ModelAttribute("producto") Producto producto, 
+                                HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            tiendaService.saveProducto(producto);
+            redirectAttributes.addFlashAttribute("success", "Producto actualizado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el producto");
+        }
+        
+        return "redirect:/admin/productos";
+    }
+
+    @GetMapping("/productos/delete/{id}")
+    public String deleteProducto(@PathVariable Integer id, HttpSession session, 
+                                RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            tiendaService.deleteProducto(id);
+            redirectAttributes.addFlashAttribute("success", "Producto eliminado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar el producto");
+        }
+        
+        return "redirect:/admin/productos";
+    }
+
+    // CRUD Usuarios
+    @GetMapping("/usuarios")
+    public String usuarios(HttpSession session, Model model) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        List<User> usuarios = autentificacionService.findAll();
+        model.addAttribute("usuarios", usuarios);
+        model.addAttribute("nuevoUsuario", new User());
+        
+        return "html/admin/usuarios";
+    }
+
+    @PostMapping("/usuarios/save")
+    public String saveUsuario(@ModelAttribute("nuevoUsuario") User usuario, 
+                             HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            if (autentificacionService.existsByNumero(usuario.getNumero())) {
+                redirectAttributes.addFlashAttribute("error", "El número de teléfono ya está registrado");
+                return "redirect:/admin/usuarios";
+            }
+            
+            autentificacionService.save(usuario);
+            redirectAttributes.addFlashAttribute("success", "Usuario guardado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al guardar el usuario");
+        }
+        
+        return "redirect:/admin/usuarios";
+    }
+
+    @GetMapping("/usuarios/delete/{id}")
+    public String deleteUsuario(@PathVariable Integer id, HttpSession session, 
+                               RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            autentificacionService.deleteById(id);
+            redirectAttributes.addFlashAttribute("success", "Usuario eliminado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar el usuario");
+        }
+        
+        return "redirect:/admin/usuarios";
+    }
+
+    // CRUD Adicionales
+    @GetMapping("/adicionales")
+    public String adicionales(HttpSession session, Model model) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        List<Adicional> adicionales = tiendaService.getAllAdicionales();
+        List<Producto> productos = tiendaService.getAllProductos();
+        
+        model.addAttribute("adicionales", adicionales);
+        model.addAttribute("productos", productos);
+        model.addAttribute("nuevoAdicional", new Adicional());
+        
+        return "html/admin/adicionales";
+    }
+
+    @PostMapping("/adicionales/save")
+    public String saveAdicional(@ModelAttribute("nuevoAdicional") Adicional adicional, 
+                               HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            tiendaService.saveAdicional(adicional);
+            redirectAttributes.addFlashAttribute("success", "Adicional guardado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al guardar el adicional");
+        }
+        
+        return "redirect:/admin/adicionales";
+    }
+
+    @GetMapping("/adicionales/delete/{id}")
+    public String deleteAdicional(@PathVariable Integer id, HttpSession session, 
+                                 RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            tiendaService.deleteAdicional(id);
+            redirectAttributes.addFlashAttribute("success", "Adicional eliminado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar el adicional");
+        }
+        
+        return "redirect:/admin/adicionales";
+    }
 }

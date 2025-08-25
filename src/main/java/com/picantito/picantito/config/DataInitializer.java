@@ -55,11 +55,15 @@ public class DataInitializer implements CommandLineRunner {
     }
     
     private void initializeUsers() {
-        // Usuario de prueba
-        User testUser = new User("Carlos López", 123456789, "123");
+        // Usuario administrador
+        User admin = new User("Administrador", 999999999, "admin123", "ADMIN");
+        autentificacionService.save(admin);
+        
+        // Usuarios normales
+        User testUser = new User("Carlos López", 123456789, "password123");
         autentificacionService.save(testUser);
         
-        User testUser2 = new User("María García", 987654321, "456");
+        User testUser2 = new User("María García", 987654321, "password456");
         autentificacionService.save(testUser2);
     }
 }
