@@ -242,3 +242,33 @@ body {
   transform: scale(1.05);
   box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
 }
+
+/* ESTILOS PARA ADICIONALES */
+.adicional-card {
+    transition: all 0.3s ease;
+    border: 2px solid #ffc107;
+}
+
+.adicional-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+}
+
+.adicional-price {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 15px;
+    font-size: 0.875rem;
+}
+
+.adicional-card .card-body {
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+}
+
+.adicional-card .card-text {
+    flex-grow: 1;
+}

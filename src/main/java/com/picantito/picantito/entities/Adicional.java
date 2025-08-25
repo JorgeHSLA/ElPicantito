@@ -39,4 +39,16 @@ public class Adicional {
         this.disponible = disponible;
         this.producto = producto;
     }
+
+    @Override
+    public String toString() {
+        return "Adicional{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", precio=" + precio +
+                ", disponible=" + disponible +
+                ", producto=" + (producto != null ? "Producto ID: " + producto.getId() : "null") +
+                '}';
+    }
 }

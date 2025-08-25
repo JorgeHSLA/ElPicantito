@@ -19,10 +19,10 @@
     
     <!-- NAVBAR ADMIN -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
+        <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="/admin/dashboard">
                 <img src="/images/LogoMinimalist.png" alt="El Picantito" width="40" height="40" class="me-2">
-                <span class="fw-bold">Admin - El Picantito</span>
+                <span class="fw-bold text-nowrap">Admin - El Picantito</span>
             </a>
             
             <div class="navbar-nav ms-auto">
@@ -104,7 +104,7 @@
                                         <th>ID</th>
                                         <th>Nombre</th>
                                         <th>Número</th>
-                                        <th>Rol</th>
+                                        <th>Admin</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -114,10 +114,14 @@
                                         <td th:text="${usuario.name}"></td>
                                         <td th:text="${usuario.numero}"></td>
                                         <td>
-                                            <span th:if="${usuario.role == 'ADMIN'}" class="badge bg-danger">Admin</span>
-                                            <span th:unless="${usuario.role == 'ADMIN'}" class="badge bg-primary">Usuario</span>
+                                            <span th:if="${usuario.admin}" class="badge bg-danger">Sí</span>
+                                            <span th:unless="${usuario.admin}" class="badge bg-primary">No</span>
                                         </td>
                                         <td>
+                                            <a th:href="@{/admin/usuarios/edit/{id}(id=${usuario.id})}" 
+                                               class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
                                             <a th:href="@{/admin/usuarios/delete/{id}(id=${usuario.id})}" 
                                                class="btn btn-sm btn-outline-danger"
                                                onclick="return confirm('¿Estás seguro de eliminar este usuario?')">
@@ -163,11 +167,12 @@
                         </div>
                         
                         <div class="mb-3">
-                            <label for="role" class="form-label">Rol:</label>
-                            <select class="form-control" id="role" th:field="*{role}">
-                                <option value="USER">Usuario</option>
-                                <option value="ADMIN">Administrador</option>
-                            </select>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="admin" th:field="*{admin}">
+                                <label class="form-check-label" for="admin">
+                                    Usuario administrador
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
