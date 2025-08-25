@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.picantito.picantito.entities.Adicional;
 import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.service.TiendaService;
 
@@ -44,7 +45,9 @@ public class ProductoController {
 
         Optional<Producto> producto = tiendaService.getProductoById(id);
         if (producto.isPresent()) {
+            List<Adicional> adicionales = tiendaService.getAdicionalesByProductoId(id);
             model.addAttribute("producto", producto.get());
+            model.addAttribute("adicionales", adicionales);
             return "html/productos/detalle";
         } else {
             // Redirigir al menú principal en lugar de tarjetas

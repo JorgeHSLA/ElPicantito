@@ -5,15 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-@Table(name = "productos")
+@Table(name = "adicionales")
 @Data
 @AllArgsConstructor
-@NoArgsConstructor 
-public class Producto {
+@NoArgsConstructor
+public class Adicional {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,24 +24,19 @@ public class Producto {
     @Column(nullable = false)
     private Double precio;
     
-    private String imagen;
-    
     @Column(nullable = false)
     private Boolean disponible = true;
     
-    @Column(nullable = false)
-    private Integer calificacion = 5;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "producto_id")
+    private Producto producto;
     
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Adicional> adicionales = new ArrayList<>();
-
-    // Constructor sin ID (para nuevos productos)
-    public Producto(String nombre, String descripcion, Double precio, String imagen, Boolean disponible, Integer calificacion) {
+    // Constructor sin ID
+    public Adicional(String nombre, String descripcion, Double precio, Boolean disponible, Producto producto) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
-        this.imagen = imagen;
         this.disponible = disponible;
-        this.calificacion = calificacion;
+        this.producto = producto;
     }
 }

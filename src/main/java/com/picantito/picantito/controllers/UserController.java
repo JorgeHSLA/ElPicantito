@@ -1,6 +1,7 @@
 package com.picantito.picantito.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,61 +9,83 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.entities.User;
+import com.picantito.picantito.service.AutentificacionService;
 import com.picantito.picantito.service.TiendaService;
 
-// todas las seciones que no necesitan login
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
 
     @Autowired
     private TiendaService tiendaService;
+    
+    @Autowired
+    private AutentificacionService autentificacionService;
 
     @GetMapping("/tienda")
     public String tienda(Model model) {
-        // Obtener todos los productos de la base de datos
         List<Producto> productos = tiendaService.getAllProductos();
         model.addAttribute("productos", productos);
         return "html/user/tienda";
     }
 
     @GetMapping("/registry")
-    public String autentificacion() {
-        User user = new User();
-        user.setId(null);
-        // pasar al frontend
+    public String autentificacion(Model model) {
+        model.addAttribute("user", new User());
         return "html/user/registry";
     }
-
     
     @PostMapping("/registry")
-    public String postAutentificacion(@ModelAttribute("User") User user ) {
-        
-        
-        return "html/user/tienda";
+    public String postAutentificacion(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+        try {
+            if (autentificacionService.existsByNumero(user.getNumero())) {
+                redirectAttributes.addFlashAttribute("error", "El número de teléfono ya está registrado");
+                return "redirect:/registry";
+            }
+            
+            autentificacionService.save(user);
+            redirectAttributes.addFlashAttribute("success", "Usuario registrado exitosamente");
+            return "redirect:/login";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al registrar usuario");
+            return "redirect:/registry";
+        }
     }
 
     @GetMapping("/login")
-    public String logIn() {
-        return "html/user/login";
+    public String logIn(Model model) {
+        model.addAttribute("user", new User());
+        return "html/user/logIn";
     }
+    
     @PostMapping("/login")
-    public String postLogin(@ModelAttribute("User") User user ) {
-        //TODO: process POST request
+    public String postLogin(@ModelAttribute("user") User user, HttpSession session, RedirectAttributes redirectAttributes) {
+        if (autentificacionService.authenticate(user.getNumero(), user.getPassword())) {
+            Optional<User> authenticatedUser = autentificacionService.findByNumero(user.getNumero());
+            if (authenticatedUser.isPresent()) {
+                session.setAttribute("loggedUser", authenticatedUser.get());
+                return "redirect:/tienda";
+            }
+        }
         
-        return "html/user/tienda";
+        redirectAttributes.addFlashAttribute("error", "Credenciales incorrectas");
+        return "redirect:/login";
+    }
+    
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/home";
     }
 
-
-    //http://localhost:9998/home
     @GetMapping("/home")
     public String menu() {
-
         return "html/user/home";
-
     }
 
     @GetMapping("/sobre-nosotros")
@@ -70,10 +93,8 @@ public class UserController {
         return "html/user/sobre-nosotros";
     }
 
-    // Redirección para compatibilidad
     @GetMapping("/")
     public String index() {
         return "redirect:/home";
     }
-    
 }

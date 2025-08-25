@@ -1,17 +1,20 @@
 package com.picantito.picantito.service;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import com.picantito.picantito.entities.User;
 
 public interface AutentificacionService {
 
-    public User findById(Integer id) ;
-
-    public Collection<User> findAll(Integer id) ;
-
-    public void save(User user) ;
-
-    public Boolean exists(Integer telefono);
+    // CRUD Usuarios
+    List<User> findAll();
+    Optional<User> findById(Integer id);
+    User save(User user);
+    void deleteById(Integer id);
     
+    // Autenticación
+    Optional<User> findByNumero(Integer numero);
+    boolean existsByNumero(Integer numero);
+    boolean authenticate(Integer numero, String password);
 }

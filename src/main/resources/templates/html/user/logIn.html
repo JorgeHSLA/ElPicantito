@@ -25,16 +25,16 @@
 
   <div class="form-container">
     <h1 class="text-warning mb-4 text-center">Inicia Sesión</h1>
-    <form>
+    <form th:action="@{/login}" th:object="${user}" method="post">
       <div class="mb-3">
-        <label for="telefono" class="form-label">Teléfono</label>
-        <input type="number" id="telefono" class="form-control" placeholder="Ej: 300 123 4567">
+        <label for="numero" class="form-label">Número de teléfono:</label>
+        <input type="number" class="form-control" id="numero" th:field="*{numero}" required>
       </div>
-      <div class="mb-4">
-        <label for="contrasenia" class="form-label">Contraseña</label>
-        <input type="password" id="contrasenia" class="form-control" placeholder="Ingresa tu contraseña">
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña:</label>
+        <input type="password" class="form-control" id="password" th:field="*{password}" required>
       </div>
-      <button type="submit" class="btn btn-coffee w-100 py-2">
+      <button type="submit" class="btn btn-primary">
         <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
       </button>
     </form>
