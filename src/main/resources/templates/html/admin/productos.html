@@ -104,6 +104,7 @@
                                         <th>ID</th>
                                         <th>Imagen</th>
                                         <th>Nombre</th>
+                                        <th>Descripción</th>
                                         <th>Precio</th>
                                         <th>Calificación</th>
                                         <th>Disponible</th>
@@ -119,6 +120,10 @@
                                                  class="rounded">
                                         </td>
                                         <td th:text="${producto.nombre}"></td>
+                                        <td>
+                                            <span th:text="${#strings.substring(producto.descripcion, 0, #strings.length(producto.descripcion) > 50 ? 50 : #strings.length(producto.descripcion))}"></span>
+                                            <span th:if="${#strings.length(producto.descripcion) > 50}">...</span>
+                                        </td>
                                         <td>$<span th:text="${#numbers.formatDecimal(producto.precio, 1, 2)}"></span></td>
                                         <td>
                                             <span th:text="${producto.calificacion}"></span>/5
@@ -141,7 +146,7 @@
                                         </td>
                                     </tr>
                                     <tr th:if="${#lists.isEmpty(productos)}">
-                                        <td colspan="7" class="text-center text-muted">No hay productos registrados</td>
+                                        <td colspan="8" class="text-center text-muted">No hay productos registrados</td>
                                     </tr>
                                 </tbody>
                             </table>
