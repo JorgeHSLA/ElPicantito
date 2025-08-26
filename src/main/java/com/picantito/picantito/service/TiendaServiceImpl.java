@@ -32,11 +32,6 @@ public class TiendaServiceImpl implements TiendaService {
     }
 
     @Override
-    public Optional<Producto> findProductoById(Integer id) {
-        return productoRepository.findById(id);
-    }
-
-    @Override
     public Producto saveProducto(Producto producto) {
         return productoRepository.save(producto);
     }
@@ -59,11 +54,6 @@ public class TiendaServiceImpl implements TiendaService {
 
     @Override
     public Optional<Adicional> getAdicionalById(Integer id) {
-        return adicionalRepository.findById(id);
-    }
-
-    @Override
-    public Optional<Adicional> findAdicionalById(Integer id) {
         return adicionalRepository.findById(id);
     }
 

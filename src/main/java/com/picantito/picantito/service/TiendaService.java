@@ -10,7 +10,6 @@ public interface TiendaService {
     // CRUD Productos
     List<Producto> getAllProductos();
     Optional<Producto> getProductoById(Integer id);
-    Optional<Producto> findProductoById(Integer id);
     Producto saveProducto(Producto producto);
     void deleteProducto(Integer id);
     List<Producto> getProductosDisponibles();
@@ -18,7 +17,6 @@ public interface TiendaService {
     // CRUD Adicionales
     List<Adicional> getAllAdicionales();
     Optional<Adicional> getAdicionalById(Integer id);
-    Optional<Adicional> findAdicionalById(Integer id);
     Adicional saveAdicional(Adicional adicional);
     void deleteAdicional(Integer id);
     List<Adicional> getAdicionalesByProductoId(Integer productoId);
