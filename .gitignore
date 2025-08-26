@@ -35,3 +35,28 @@ build/
 .vscode/launch.json
 .vscode/extensions.json
 .history/
+
+# Archivos de base de datos H2
+*.mv.db
+*.trace.db
+*.lock.db
+
+# Archivos de compilación
+target/
+*.class
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.iml
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
