@@ -21,8 +21,20 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        initializeProductos();
-        initializeUsers();
+        // Solo inicializar si no hay datos
+        if (tiendaService.getAllProductos().isEmpty()) {
+            System.out.println("🍴 Inicializando productos...");
+            initializeProductos();
+        } else {
+            System.out.println("ℹ️ Productos ya existen en la BD");
+        }
+        
+        if (autentificacionService.findAll().isEmpty()) {
+            System.out.println("👥 Inicializando usuarios...");
+            initializeUsers();
+        } else {
+            System.out.println("ℹ️ Usuarios ya existen en la BD");
+        }
     }
 
     private void initializeProductos() {
@@ -55,15 +67,31 @@ public class DataInitializer implements CommandLineRunner {
     }
     
     private void initializeUsers() {
-        // Usuario administrador
-        User admin = new User("Administrador", 999999999, "admin123", "ADMIN");
-        autentificacionService.save(admin);
-        
-        // Usuarios normales
-        User testUser = new User("Carlos López", 123456789, "password123");
-        autentificacionService.save(testUser);
-        
-        User testUser2 = new User("María García", 987654321, "password456");
-        autentificacionService.save(testUser2);
+        try {
+            // Verificar si el admin ya existe
+            if (!autentificacionService.existsByNumero(999999999)) {
+                User admin = new User("Administrador", 999999999, "admin123", "ADMIN");
+                autentificacionService.save(admin);
+                System.out.println("✅ Usuario admin creado exitosamente");
+            } else {
+                System.out.println("ℹ️ Usuario admin ya existe");
+            }
+            
+            // Usuarios de prueba
+            if (!autentificacionService.existsByNumero(123456789)) {
+                User testUser = new User("Carlos López", 123456789, "password123");
+                autentificacionService.save(testUser);
+                System.out.println("✅ Usuario de prueba Carlos creado");
+            }
+            
+            if (!autentificacionService.existsByNumero(987654321)) {
+                User testUser2 = new User("María García", 987654321, "password456");
+                autentificacionService.save(testUser2);
+                System.out.println("✅ Usuario de prueba María creado");
+            }
+        } catch (Exception e) {
+            System.out.println("❌ Error al inicializar usuarios: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

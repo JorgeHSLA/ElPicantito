@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.picantito.picantito.entities.Adicional;
@@ -184,6 +185,45 @@ public class AdminController {
         return "redirect:/admin/usuarios";
     }
 
+    @GetMapping("/usuarios/edit/{id}")
+    public String editUsuario(@PathVariable Integer id, HttpSession session, Model model) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        Optional<User> usuario = autentificacionService.findById(id);
+        if (usuario.isPresent()) {
+            model.addAttribute("usuario", usuario.get());
+            return "html/admin/edit-usuario";
+        }
+        
+        return "redirect:/admin/usuarios";
+    }
+
+    @PostMapping("/usuarios/update")
+    public String updateUsuario(@ModelAttribute("usuario") User usuario, 
+                               HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            // Verificar si el número ya existe para otro usuario
+            Optional<User> existingUser = autentificacionService.findByNumero(usuario.getNumero());
+            if (existingUser.isPresent() && !existingUser.get().getId().equals(usuario.getId())) {
+                redirectAttributes.addFlashAttribute("error", "El número de teléfono ya está registrado por otro usuario");
+                return "redirect:/admin/usuarios";
+            }
+            
+            autentificacionService.save(usuario);
+            redirectAttributes.addFlashAttribute("success", "Usuario actualizado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el usuario");
+        }
+        
+        return "redirect:/admin/usuarios";
+    }
+
     // CRUD Adicionales
     @GetMapping("/adicionales")
     public String adicionales(HttpSession session, Model model) {
@@ -213,6 +253,51 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("success", "Adicional guardado exitosamente");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al guardar el adicional");
+        }
+        
+        return "redirect:/admin/adicionales";
+    }
+
+    @GetMapping("/adicionales/edit/{id}")
+    public String editAdicional(@PathVariable Integer id, HttpSession session, Model model) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        Optional<Adicional> adicional = tiendaService.getAdicionalById(id);
+        if (adicional.isPresent()) {
+            List<Producto> productos = tiendaService.getAllProductos();
+            model.addAttribute("adicional", adicional.get());
+            model.addAttribute("productos", productos);
+            return "html/admin/edit-adicional";
+        }
+        
+        return "redirect:/admin/adicionales";
+    }
+
+    @PostMapping("/adicionales/update")
+    public String updateAdicional(@ModelAttribute("adicional") Adicional adicional, 
+                                 @RequestParam(value = "producto.id", required = false) Integer productoId,
+                                 HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            // Establecer el producto si se seleccionó uno
+            if (productoId != null && productoId > 0) {
+                Optional<Producto> producto = tiendaService.getProductoById(productoId);
+                if (producto.isPresent()) {
+                    adicional.setProducto(producto.get());
+                }
+            } else {
+                adicional.setProducto(null);
+            }
+            
+            tiendaService.saveAdicional(adicional);
+            redirectAttributes.addFlashAttribute("success", "Adicional actualizado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el adicional: " + e.getMessage());
         }
         
         return "redirect:/admin/adicionales";

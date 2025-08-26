@@ -118,6 +118,10 @@
                                             <span th:unless="${usuario.role == 'ADMIN'}" class="badge bg-primary">Usuario</span>
                                         </td>
                                         <td>
+                                            <a th:href="@{/admin/usuarios/edit/{id}(id=${usuario.id})}" 
+                                               class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
                                             <a th:href="@{/admin/usuarios/delete/{id}(id=${usuario.id})}" 
                                                class="btn btn-sm btn-outline-danger"
                                                onclick="return confirm('¿Estás seguro de eliminar este usuario?')">

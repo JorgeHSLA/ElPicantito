@@ -47,4 +47,16 @@ public class Producto {
         this.disponible = disponible;
         this.calificacion = calificacion;
     }
+
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", precio=" + precio +
+                ", disponible=" + disponible +
+                ", calificacion=" + calificacion +
+                // NO incluir adicionales aquí para evitar referencia circular
+                '}';
+    }
 }

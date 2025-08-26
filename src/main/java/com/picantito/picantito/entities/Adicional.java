@@ -39,4 +39,15 @@ public class Adicional {
         this.disponible = disponible;
         this.producto = producto;
     }
+
+    @Override
+    public String toString() {
+        return "Adicional{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", precio=" + precio +
+                ", disponible=" + disponible +
+                // NO incluir producto aquí para evitar referencia circular
+                '}';
+    }
 }
