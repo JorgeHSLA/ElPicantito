@@ -105,6 +105,107 @@ public class UserController {
         return "html/user/sobre-nosotros";
     }
 
+    // PERFIL DE USUARIO
+    @GetMapping("/mi-perfil")
+    public String miPerfil(HttpSession session, Model model) {
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        if (loggedUser == null) {
+            return "redirect:/login";
+        }
+        
+        // Obtener datos actualizados del usuario
+        Optional<User> usuario = autentificacionService.findById(loggedUser.getId());
+        if (usuario.isPresent()) {
+            model.addAttribute("usuario", usuario.get());
+            return "html/user/mi-perfil";
+        }
+        
+        return "redirect:/logout";
+    }
+
+    @PostMapping("/mi-perfil/update")
+    public String updatePerfil(@ModelAttribute("usuario") User usuario, 
+                              HttpSession session, RedirectAttributes redirectAttributes) {
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        if (loggedUser == null) {
+            return "redirect:/login";
+        }
+        
+        try {
+            // Verificar que el usuario solo edite su propio perfil
+            if (!loggedUser.getId().equals(usuario.getId())) {
+                redirectAttributes.addFlashAttribute("error", "No tienes permisos para editar este perfil");
+                return "redirect:/mi-perfil";
+            }
+            
+            // Verificar duplicados para otros usuarios
+            Optional<User> existingUserByUsername = autentificacionService.findByNombreUsuario(usuario.getNombreUsuario());
+            if (existingUserByUsername.isPresent() && !existingUserByUsername.get().getId().equals(usuario.getId())) {
+                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado por otro usuario");
+                return "redirect:/mi-perfil";
+            }
+            
+            Optional<User> existingUserByEmail = autentificacionService.findByCorreo(usuario.getCorreo());
+            if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(usuario.getId())) {
+                redirectAttributes.addFlashAttribute("error", "El correo ya está registrado por otro usuario");
+                return "redirect:/mi-perfil";
+            }
+            
+            // Si la contraseña está vacía, mantener la actual
+            if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
+                Optional<User> currentUser = autentificacionService.findById(usuario.getId());
+                if (currentUser.isPresent()) {
+                    usuario.setPassword(currentUser.get().getPassword());
+                }
+            }
+            
+            // Mantener el rol actual
+            usuario.setRole(loggedUser.getRole());
+            
+            // Guardar cambios
+            User updatedUser = autentificacionService.save(usuario);
+            
+            // Actualizar la sesión
+            session.setAttribute("loggedUser", updatedUser);
+            
+            redirectAttributes.addFlashAttribute("success", "Perfil actualizado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el perfil");
+        }
+        
+        return "redirect:/mi-perfil";
+    }
+
+    @PostMapping("/mi-perfil/delete")
+    public String deletePerfil(HttpSession session, RedirectAttributes redirectAttributes) {
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        if (loggedUser == null) {
+            return "redirect:/login";
+        }
+        
+        try {
+            // No permitir que admins eliminen su cuenta si son el único admin
+            if (loggedUser.isAdmin()) {
+                long adminCount = autentificacionService.findAll().stream()
+                    .filter(User::isAdmin)
+                    .count();
+                
+                if (adminCount <= 1) {
+                    redirectAttributes.addFlashAttribute("error", "No puedes eliminar la única cuenta de administrador");
+                    return "redirect:/mi-perfil";
+                }
+            }
+            
+            autentificacionService.deleteById(loggedUser.getId());
+            session.invalidate();
+            redirectAttributes.addFlashAttribute("success", "Cuenta eliminada exitosamente");
+            return "redirect:/home";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar la cuenta");
+            return "redirect:/mi-perfil";
+        }
+    }
+
     @GetMapping("/")
     public String index() {
         return "redirect:/home";
