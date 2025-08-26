@@ -21,8 +21,14 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        initializeProductos();
-        initializeUsers();
+        // Solo inicializar si no hay datos
+        if (tiendaService.getAllProductos().isEmpty()) {
+            initializeProductos();
+        }
+        
+        if (autentificacionService.findAll().isEmpty()) {
+            initializeUsers();
+        }
     }
 
     private void initializeProductos() {
@@ -55,9 +61,11 @@ public class DataInitializer implements CommandLineRunner {
     }
     
     private void initializeUsers() {
-        // Usuario administrador
-        User admin = new User("Administrador", 999999999, "admin123", "ADMIN");
-        autentificacionService.save(admin);
+        // Solo crear si no existe un usuario con ese número
+        if (autentificacionService.findByNumero((int) 999999999L) == null) {
+            User admin = new User("Administrador", 999999999, "admin123", "ADMIN");
+            autentificacionService.save(admin);
+        }
         
         // Usuarios normales
         User testUser = new User("Carlos López", 123456789, "password123");
