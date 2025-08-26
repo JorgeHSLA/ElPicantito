@@ -102,8 +102,10 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Nombre</th>
-                                        <th>Número</th>
+                                        <th>Nombre Completo</th>
+                                        <th>Usuario</th>
+                                        <th>Teléfono</th>
+                                        <th>Correo</th>
                                         <th>Rol</th>
                                         <th>Acciones</th>
                                     </tr>
@@ -111,8 +113,10 @@
                                 <tbody>
                                     <tr th:each="usuario : ${usuarios}">
                                         <td th:text="${usuario.id}"></td>
-                                        <td th:text="${usuario.name}"></td>
-                                        <td th:text="${usuario.numero}"></td>
+                                        <td th:text="${usuario.nombreCompleto}"></td>
+                                        <td th:text="${usuario.nombreUsuario}"></td>
+                                        <td th:text="${usuario.telefono}"></td>
+                                        <td th:text="${usuario.correo}"></td>
                                         <td>
                                             <span th:if="${usuario.role == 'ADMIN'}" class="badge bg-danger">Admin</span>
                                             <span th:unless="${usuario.role == 'ADMIN'}" class="badge bg-primary">Usuario</span>
@@ -130,7 +134,7 @@
                                         </td>
                                     </tr>
                                     <tr th:if="${#lists.isEmpty(usuarios)}">
-                                        <td colspan="5" class="text-center text-muted">No hay usuarios registrados</td>
+                                        <td colspan="7" class="text-center text-muted">No hay usuarios registrados</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -149,16 +153,27 @@
                     <h5 class="modal-title">Nuevo Usuario</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
+                <!-- Modal para nuevo usuario -->
                 <form th:action="@{/admin/usuarios/save}" th:object="${nuevoUsuario}" method="post">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nombre:</label>
-                            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                            <label for="nombreCompleto" class="form-label">Nombre Completo:</label>
+                            <input type="text" class="form-control" id="nombreCompleto" th:field="*{nombreCompleto}" required>
                         </div>
                         
                         <div class="mb-3">
-                            <label for="numero" class="form-label">Número de Teléfono:</label>
-                            <input type="number" class="form-control" id="numero" th:field="*{numero}" required>
+                            <label for="nombreUsuario" class="form-label">Nombre de Usuario:</label>
+                            <input type="text" class="form-control" id="nombreUsuario" th:field="*{nombreUsuario}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono:</label>
+                            <input type="tel" class="form-control" id="telefono" th:field="*{telefono}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="correo" class="form-label">Correo Electrónico:</label>
+                            <input type="email" class="form-control" id="correo" th:field="*{correo}" required>
                         </div>
                         
                         <div class="mb-3">

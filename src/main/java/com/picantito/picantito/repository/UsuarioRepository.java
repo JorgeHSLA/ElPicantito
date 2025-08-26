@@ -1,17 +1,18 @@
 package com.picantito.picantito.repository;
 
-import com.picantito.picantito.entities.User;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.picantito.picantito.entities.User;
 
-@Repository 
+@Repository
 public interface UsuarioRepository extends JpaRepository<User, Integer> {
-    
-    Optional<User> findByNumero(Integer numero);
-    
-    boolean existsByNumero(Integer numero);
+    Optional<User> findByNombreUsuario(String nombreUsuario);
+    boolean existsByNombreUsuario(String nombreUsuario);
+    boolean existsByCorreo(String correo);
+    Optional<User> findByCorreo(String correo);
 }
 
 

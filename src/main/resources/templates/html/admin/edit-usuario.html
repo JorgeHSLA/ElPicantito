@@ -89,20 +89,34 @@
                             </div>
                             <div class="card-body">
                                 <form th:action="@{/admin/usuarios/update}" th:object="${usuario}" method="post">
-                                    <!-- Campo oculto para el ID -->
                                     <input type="hidden" th:field="*{id}">
                                     
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label for="name" class="form-label">Nombre:</label>
-                                                <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                                                <label for="nombreCompleto" class="form-label">Nombre Completo:</label>
+                                                <input type="text" class="form-control" id="nombreCompleto" th:field="*{nombreCompleto}" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label for="numero" class="form-label">Número de Teléfono:</label>
-                                                <input type="number" class="form-control" id="numero" th:field="*{numero}" required>
+                                                <label for="nombreUsuario" class="form-label">Nombre de Usuario:</label>
+                                                <input type="text" class="form-control" id="nombreUsuario" th:field="*{nombreUsuario}" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="telefono" class="form-label">Teléfono:</label>
+                                                <input type="tel" class="form-control" id="telefono" th:field="*{telefono}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="correo" class="form-label">Correo Electrónico:</label>
+                                                <input type="email" class="form-control" id="correo" th:field="*{correo}" required>
                                             </div>
                                         </div>
                                     </div>

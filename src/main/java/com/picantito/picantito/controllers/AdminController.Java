@@ -154,8 +154,14 @@ public class AdminController {
         }
         
         try {
-            if (autentificacionService.existsByNumero(usuario.getNumero())) {
-                redirectAttributes.addFlashAttribute("error", "El número de teléfono ya está registrado");
+            // Verificar duplicados
+            if (autentificacionService.existsByNombreUsuario(usuario.getNombreUsuario())) {
+                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado");
+                return "redirect:/admin/usuarios";
+            }
+            
+            if (autentificacionService.existsByCorreo(usuario.getCorreo())) {
+                redirectAttributes.addFlashAttribute("error", "El correo electrónico ya está registrado");
                 return "redirect:/admin/usuarios";
             }
             
@@ -208,10 +214,16 @@ public class AdminController {
         }
         
         try {
-            // Verificar si el número ya existe para otro usuario
-            Optional<User> existingUser = autentificacionService.findByNumero(usuario.getNumero());
-            if (existingUser.isPresent() && !existingUser.get().getId().equals(usuario.getId())) {
-                redirectAttributes.addFlashAttribute("error", "El número de teléfono ya está registrado por otro usuario");
+            // Verificar duplicados para otros usuarios
+            Optional<User> existingUserByUsername = autentificacionService.findByNombreUsuario(usuario.getNombreUsuario());
+            if (existingUserByUsername.isPresent() && !existingUserByUsername.get().getId().equals(usuario.getId())) {
+                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado por otro usuario");
+                return "redirect:/admin/usuarios";
+            }
+            
+            Optional<User> existingUserByEmail = autentificacionService.findByCorreo(usuario.getCorreo());
+            if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(usuario.getId())) {
+                redirectAttributes.addFlashAttribute("error", "El correo ya está registrado por otro usuario");
                 return "redirect:/admin/usuarios";
             }
             

@@ -27,7 +27,6 @@ public class AutenticacionServiceImpl implements AutentificacionService {
 
     @Override
     public User save(User user) {
-        // Guardar password sin encriptar para simplicidad
         return usuarioRepository.save(user);
     }
 
@@ -37,18 +36,28 @@ public class AutenticacionServiceImpl implements AutentificacionService {
     }
 
     @Override
-    public Optional<User> findByNumero(Integer numero) {
-        return usuarioRepository.findByNumero(numero);
+    public Optional<User> findByNombreUsuario(String nombreUsuario) {
+        return usuarioRepository.findByNombreUsuario(nombreUsuario);
     }
 
     @Override
-    public boolean existsByNumero(Integer numero) {
-        return usuarioRepository.existsByNumero(numero);
+    public Optional<User> findByCorreo(String correo) {
+        return usuarioRepository.findByCorreo(correo);
     }
 
     @Override
-    public boolean authenticate(Integer numero, String password) {
-        Optional<User> user = findByNumero(numero);
+    public boolean existsByNombreUsuario(String nombreUsuario) {
+        return usuarioRepository.existsByNombreUsuario(nombreUsuario);
+    }
+
+    @Override
+    public boolean existsByCorreo(String correo) {
+        return usuarioRepository.existsByCorreo(correo);
+    }
+
+    @Override
+    public boolean authenticate(String nombreUsuario, String password) {
+        Optional<User> user = findByNombreUsuario(nombreUsuario);
         if (user.isPresent()) {
             return user.get().getPassword().equals(password);
         }

@@ -43,8 +43,15 @@ public class UserController {
     @PostMapping("/registry")
     public String postAutentificacion(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         try {
-            if (autentificacionService.existsByNumero(user.getNumero())) {
-                redirectAttributes.addFlashAttribute("error", "El número de teléfono ya está registrado");
+            // Verificar si el nombre de usuario ya existe
+            if (autentificacionService.existsByNombreUsuario(user.getNombreUsuario())) {
+                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado");
+                return "redirect:/registry";
+            }
+            
+            // Verificar si el correo ya existe
+            if (autentificacionService.existsByCorreo(user.getCorreo())) {
+                redirectAttributes.addFlashAttribute("error", "El correo electrónico ya está registrado");
                 return "redirect:/registry";
             }
             
@@ -65,8 +72,8 @@ public class UserController {
     
     @PostMapping("/login")
     public String postLogin(@ModelAttribute("user") User user, HttpSession session, RedirectAttributes redirectAttributes) {
-        if (autentificacionService.authenticate(user.getNumero(), user.getPassword())) {
-            Optional<User> authenticatedUser = autentificacionService.findByNumero(user.getNumero());
+        if (autentificacionService.authenticate(user.getNombreUsuario(), user.getPassword())) {
+            Optional<User> authenticatedUser = autentificacionService.findByNombreUsuario(user.getNombreUsuario());
             if (authenticatedUser.isPresent()) {
                 session.setAttribute("loggedUser", authenticatedUser.get());
                 

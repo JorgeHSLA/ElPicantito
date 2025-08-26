@@ -27,8 +27,8 @@
     <h1 class="text-warning mb-4 text-center">Inicia Sesión</h1>
     <form th:action="@{/login}" th:object="${user}" method="post">
       <div class="mb-3">
-        <label for="numero" class="form-label">Número de teléfono:</label>
-        <input type="number" class="form-control" id="numero" th:field="*{numero}" required>
+        <label for="nombreUsuario" class="form-label">Nombre de Usuario:</label>
+        <input type="text" class="form-control" id="nombreUsuario" th:field="*{nombreUsuario}" required>
       </div>
       <div class="mb-3">
         <label for="password" class="form-label">Contraseña:</label>

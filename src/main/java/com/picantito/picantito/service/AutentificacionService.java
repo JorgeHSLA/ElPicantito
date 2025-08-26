@@ -14,7 +14,9 @@ public interface AutentificacionService {
     void deleteById(Integer id);
     
     // Autenticación
-    Optional<User> findByNumero(Integer numero);
-    boolean existsByNumero(Integer numero);
-    boolean authenticate(Integer numero, String password);
+    Optional<User> findByNombreUsuario(String nombreUsuario);
+    Optional<User> findByCorreo(String correo);
+    boolean existsByNombreUsuario(String nombreUsuario);
+    boolean existsByCorreo(String correo);
+    boolean authenticate(String nombreUsuario, String password);
 }

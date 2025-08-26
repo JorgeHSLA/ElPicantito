@@ -69,8 +69,8 @@ public class DataInitializer implements CommandLineRunner {
     private void initializeUsers() {
         try {
             // Verificar si el admin ya existe
-            if (!autentificacionService.existsByNumero(999999999)) {
-                User admin = new User("Administrador", 999999999, "admin123", "ADMIN");
+            if (!autentificacionService.existsByNombreUsuario("admin")) {
+                User admin = new User("Administrador Principal", "admin", "3001234567", "admin@elpicantito.com", "admin123", "ADMIN");
                 autentificacionService.save(admin);
                 System.out.println("✅ Usuario admin creado exitosamente");
             } else {
@@ -78,14 +78,14 @@ public class DataInitializer implements CommandLineRunner {
             }
             
             // Usuarios de prueba
-            if (!autentificacionService.existsByNumero(123456789)) {
-                User testUser = new User("Carlos López", 123456789, "password123");
+            if (!autentificacionService.existsByNombreUsuario("carlos.lopez")) {
+                User testUser = new User("Carlos López García", "carlos.lopez", "3009876543", "carlos@email.com", "password123");
                 autentificacionService.save(testUser);
                 System.out.println("✅ Usuario de prueba Carlos creado");
             }
             
-            if (!autentificacionService.existsByNumero(987654321)) {
-                User testUser2 = new User("María García", 987654321, "password456");
+            if (!autentificacionService.existsByNombreUsuario("maria.garcia")) {
+                User testUser2 = new User("María García Rodríguez", "maria.garcia", "3001357924", "maria@email.com", "password456");
                 autentificacionService.save(testUser2);
                 System.out.println("✅ Usuario de prueba María creado");
             }
