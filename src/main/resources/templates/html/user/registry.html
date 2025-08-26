@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,30 +25,18 @@
 
   <div class="form-container">
     <h1 class="text-warning mb-4 text-center">Regístrate</h1>
-    
-    <!-- Alert messages -->
-    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-      <span th:text="${success}"></span>
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    
-    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-      <span th:text="${error}"></span>
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    
-    <form th:action="@{/registry}" th:object="${user}" method="post">
+    <form >
       <div class="mb-3">
-        <label for="name" class="form-label">Nombre</label>
-        <input type="text" id="name" class="form-control" th:field="*{name}" placeholder="Ingresa tu nombre" required>
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" id="nombre" class="form-control" placeholder="Ingresa tu nombre">
       </div>
       <div class="mb-3">
-        <label for="numero" class="form-label">Teléfono</label>
-        <input type="number" id="numero" class="form-control" th:field="*{numero}" placeholder="Ej: 3001234567" required>
+        <label for="telefono" class="form-label">Teléfono</label>
+        <input type="number" id="telefono" class="form-control" placeholder="Ej: +57 300 123 4567">
       </div>
       <div class="mb-4">
-        <label for="password" class="form-label">Contraseña</label>
-        <input type="password" id="password" class="form-control" th:field="*{password}" placeholder="Crea tu contraseña" required>
+        <label for="contrasenia" class="form-label">Contraseña</label>
+        <input type="password" id="contrasenia" class="form-control" placeholder="Crea tu contraseña">
       </div>
 
       <!-- Botón de crear cuenta -->
