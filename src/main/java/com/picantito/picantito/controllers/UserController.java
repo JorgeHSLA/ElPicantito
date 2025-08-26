@@ -77,7 +77,6 @@ public class UserController {
             if (authenticatedUser.isPresent()) {
                 session.setAttribute("loggedUser", authenticatedUser.get());
                 
-                // Redirigir según el rol
                 if (authenticatedUser.get().isAdmin()) {
                     return "redirect:/admin/dashboard";
                 } else {

@@ -13,7 +13,7 @@ public interface AutentificacionService {
     User save(User user);
     void deleteById(Integer id);
     
-    // Autenticación
+    // Autenticacion
     Optional<User> findByNombreUsuario(String nombreUsuario);
     Optional<User> findByCorreo(String correo);
     boolean existsByNombreUsuario(String nombreUsuario);

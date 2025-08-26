@@ -296,7 +296,7 @@ public class AdminController {
         }
         
         try {
-            // Establecer el producto si se seleccionó uno
+            // Establecer el producto si se selecciono uno
             if (productoId != null && productoId > 0) {
                 Optional<Producto> producto = tiendaService.getProductoById(productoId);
                 if (producto.isPresent()) {

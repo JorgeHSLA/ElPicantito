@@ -21,19 +21,12 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Solo inicializar si no hay datos
+        // Inicializa si no hay datos en la bd
         if (tiendaService.getAllProductos().isEmpty()) {
-            System.out.println("🍴 Inicializando productos...");
             initializeProductos();
-        } else {
-            System.out.println("ℹ️ Productos ya existen en la BD");
         }
-        
         if (autentificacionService.findAll().isEmpty()) {
-            System.out.println("👥 Inicializando usuarios...");
             initializeUsers();
-        } else {
-            System.out.println("ℹ️ Usuarios ya existen en la BD");
         }
     }
 
@@ -68,29 +61,24 @@ public class DataInitializer implements CommandLineRunner {
     
     private void initializeUsers() {
         try {
-            // Verificar si el admin ya existe
+            // Verifica si el admin ya existe
             if (!autentificacionService.existsByNombreUsuario("admin")) {
                 User admin = new User("Administrador Principal", "admin", "3001234567", "admin@elpicantito.com", "admin123", "ADMIN");
                 autentificacionService.save(admin);
-                System.out.println("✅ Usuario admin creado exitosamente");
-            } else {
-                System.out.println("ℹ️ Usuario admin ya existe");
             }
             
             // Usuarios de prueba
             if (!autentificacionService.existsByNombreUsuario("carlos.lopez")) {
                 User testUser = new User("Carlos López García", "carlos.lopez", "3009876543", "carlos@email.com", "password123");
                 autentificacionService.save(testUser);
-                System.out.println("✅ Usuario de prueba Carlos creado");
             }
             
             if (!autentificacionService.existsByNombreUsuario("maria.garcia")) {
                 User testUser2 = new User("María García Rodríguez", "maria.garcia", "3001357924", "maria@email.com", "password456");
                 autentificacionService.save(testUser2);
-                System.out.println("✅ Usuario de prueba María creado");
             }
         } catch (Exception e) {
-            System.out.println("❌ Error al inicializar usuarios: " + e.getMessage());
+            System.out.println("Error al inicializar usuarios: " + e.getMessage());
             e.printStackTrace();
         }
     }
