@@ -1,70 +1,62 @@
+/* =========================
+   TEMA OSCURO DE ALTO CONTRASTE - PICANTE ELEGANTE
+   ========================= */
 .dark-high-contrast {
-  --md-sys-color-primary: rgb(255 236 229);
-  --md-sys-color-surface-tint: rgb(255 181 151);
-  --md-sys-color-on-primary: rgb(0 0 0);
-  --md-sys-color-primary-container: rgb(255 176 143);
-  --md-sys-color-on-primary-container: rgb(27 5 0);
-  --md-sys-color-secondary: rgb(255 236 229);
-  --md-sys-color-on-secondary: rgb(0 0 0);
-  --md-sys-color-secondary-container: rgb(226 186 170);
-  --md-sys-color-on-secondary-container: rgb(24 6 2);
-  --md-sys-color-tertiary: rgb(253 241 181);
-  --md-sys-color-on-tertiary: rgb(0 0 0);
-  --md-sys-color-tertiary-container: rgb(255, 243, 210);
-  --md-sys-color-on-tertiary-container: rgb(14 11 0);
-  --md-sys-color-error: rgb(255 236 233);
-  --md-sys-color-on-error: rgb(0 0 0);
-  --md-sys-color-error-container: rgb(255 174 164);
-  --md-sys-color-on-error-container: rgb(34 0 1);
-  --md-sys-color-background: rgb(26 17 14);
-  --md-sys-color-on-background: rgb(241 223 217);
-  --md-sys-color-surface: rgb(26 17 14);
-  --md-sys-color-on-surface: rgb(255 255 255);
-  --md-sys-color-surface-variant: rgb(83 68 62);
-  --md-sys-color-on-surface-variant: rgb(255 255 255);
-  --md-sys-color-outline: rgb(255 236 229);
-  --md-sys-color-outline-variant: rgb(212 190 182);
-  --md-sys-color-shadow: rgb(0 0 0);
-  --md-sys-color-scrim: rgb(0 0 0);
-  --md-sys-color-inverse-surface: rgb(241 223 217);
-  --md-sys-color-inverse-on-surface: rgb(0 0 0);
-  --md-sys-color-inverse-primary: rgb(255, 255, 255);
-  --md-sys-color-primary-fixed: rgb(255 219 205);
-  --md-sys-color-on-primary-fixed: rgb(0 0 0);
-  --md-sys-color-primary-fixed-dim: rgb(255 181 151);
-  --md-sys-color-on-primary-fixed-variant: rgb(37 8 0);
-  --md-sys-color-secondary-fixed: rgb(255 219 205);
-  --md-sys-color-on-secondary-fixed: rgb(0 0 0);
-  --md-sys-color-secondary-fixed-dim: rgb(231 190 174);
-  --md-sys-color-on-secondary-fixed-variant: rgb(32 12 4);
-  --md-sys-color-tertiary-fixed: rgb(239 227 168);
-  --md-sys-color-on-tertiary-fixed: rgb(0 0 0);
-  --md-sys-color-tertiary-fixed-dim: rgb(211 199 143);
-  --md-sys-color-on-tertiary-fixed-variant: rgb(21 17 0);
-  --md-sys-color-surface-dim: rgb(26 17 14);
-  --md-sys-color-surface-bright: rgb(89 78 73);
-  --md-sys-color-surface-container-lowest: rgb(0 0 0);
-  --md-sys-color-surface-container-low: rgb(39 30 26);
-  --md-sys-color-surface-container: rgb(56 46 42);
-  --md-sys-color-surface-container-high: rgb(68 57 53);
-  --md-sys-color-surface-container-highest: rgb(80 68 64);
+    /* COLOR PRINCIPAL - Naranja picante (marca) */
+    --md-sys-color-primary: rgb(255 138 101);        /* #FF8A65 - Tu identidad */
+    --md-sys-color-surface-tint: rgb(255 138 101);
+    --md-sys-color-on-primary: rgb(0 0 0);
+    --md-sys-color-primary-container: rgb(255 138 101);
+    --md-sys-color-on-primary-container: rgb(0 0 0);
+    
+    /* COLOR SECUNDARIO - Tonos del naranja para acentos */
+    --md-sys-color-secondary: rgb(255 180 150);      /* Naranja más claro para variedad */
+    --md-sys-color-on-secondary: rgb(0 0 0);
+    --md-sys-color-secondary-container: rgb(255 112 67);  /* Naranja más oscuro */
+    --md-sys-color-on-secondary-container: rgb(255 255 255);
+    
+    /* COLOR DE APOYO - Solo para errores/alertas */
+    --md-sys-color-tertiary: rgb(244 67 54);         /* Rojo para errores únicamente */
+    --md-sys-color-on-tertiary: rgb(255 255 255);
+    --md-sys-color-tertiary-container: rgb(183 28 28);
+    --md-sys-color-on-tertiary-container: rgb(255 255 255);
+    
+    /* NEUTROS - La base de todo */
+    --md-sys-color-background: rgb(18 18 18);        /* Negro suave */
+    --md-sys-color-on-background: rgb(255 255 255);
+    --md-sys-color-surface: rgb(24 24 24);           /* Gris muy oscuro */
+    --md-sys-color-on-surface: rgb(255 255 255);
+    --md-sys-color-surface-variant: rgb(42 42 42);   /* Gris medio */
+    --md-sys-color-on-surface-variant: rgb(200 200 200);
+    --md-sys-color-surface-bright: rgb(48 48 48);
+    --md-sys-color-surface-container: rgb(32 32 32);
+    --md-sys-color-surface-container-high: rgb(48 48 48);
+    
+    /* BORDES Y CONTORNOS */
+    --md-sys-color-outline: rgb(120 120 120);
+    --md-sys-color-outline-variant: rgb(80 80 80);
+    
+    /* ERRORES */
+    --md-sys-color-error: rgb(244 67 54);
+    --md-sys-color-on-error: rgb(255 255 255);
+    --md-sys-color-error-container: rgb(244 67 54);
+    --md-sys-color-on-error-container: rgb(255 255 255);
 }
 
-
+/* Aplicación específica para navbar */
 .bg-primary-container {
-  background-color: var( --md-sys-color-primary);
-  color: var(--md-sys-color-primary);
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
 }
 
 .navBarExtra {
-  background-color: var(--md-sys-color-primary);
-  color: var(--md-sys-color-primary);
-  height: 100px;
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    height: 100px;
 }
 
-
 .btn-dark:hover {
-  background-color: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-primary);
-  border-color: var(--md-sys-color-tertiary-container);
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    border-color: var(--md-sys-color-secondary-container);
 }
