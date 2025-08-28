@@ -105,7 +105,6 @@ public class UserController {
         return "html/user/sobre-nosotros";
     }
 
-    // PERFIL DE USUARIO
     @GetMapping("/mi-perfil")
     public String miPerfil(HttpSession session, Model model) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -113,7 +112,6 @@ public class UserController {
             return "redirect:/login";
         }
         
-        // Obtener datos actualizados del usuario
         Optional<User> usuario = autentificacionService.findById(loggedUser.getId());
         if (usuario.isPresent()) {
             model.addAttribute("usuario", usuario.get());
@@ -132,13 +130,11 @@ public class UserController {
         }
         
         try {
-            // Verificar que el usuario solo edite su propio perfil
             if (!loggedUser.getId().equals(usuario.getId())) {
                 redirectAttributes.addFlashAttribute("error", "No tienes permisos para editar este perfil");
                 return "redirect:/mi-perfil";
             }
             
-            // Verificar duplicados para otros usuarios
             Optional<User> existingUserByUsername = autentificacionService.findByNombreUsuario(usuario.getNombreUsuario());
             if (existingUserByUsername.isPresent() && !existingUserByUsername.get().getId().equals(usuario.getId())) {
                 redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado por otro usuario");
@@ -151,7 +147,6 @@ public class UserController {
                 return "redirect:/mi-perfil";
             }
             
-            // Si la contraseña está vacía, mantener la actual
             if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
                 Optional<User> currentUser = autentificacionService.findById(usuario.getId());
                 if (currentUser.isPresent()) {
@@ -159,16 +154,11 @@ public class UserController {
                 }
             }
             
-            // Mantener el rol actual
             usuario.setRole(loggedUser.getRole());
-            
-            // Guardar cambios
             User updatedUser = autentificacionService.save(usuario);
-            
-            // Actualizar la sesión
             session.setAttribute("loggedUser", updatedUser);
-            
             redirectAttributes.addFlashAttribute("success", "Perfil actualizado exitosamente");
+
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al actualizar el perfil");
         }
@@ -184,7 +174,6 @@ public class UserController {
         }
         
         try {
-            // No permitir que admins eliminen su cuenta si son el único admin
             if (loggedUser.isAdmin()) {
                 long adminCount = autentificacionService.findAll().stream()
                     .filter(User::isAdmin)
