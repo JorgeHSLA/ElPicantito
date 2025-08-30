@@ -80,34 +80,62 @@
                 </a>
               </li>
               
-              <!-- Opciones de usuario -->
+              <!-- Opciones de usuario - Usuario no logueado -->
               <li class="nav-item dropdown" th:if="${session.loggedUser == null}">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-person fs-5 me-1"></i>
-                  <span>Mi Cuenta</span>
+                <a class="nav-link icon-nav dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-person fs-5"></i>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                  <li><a class="dropdown-item" href="/login"><i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión</a></li>
-                  <li><a class="dropdown-item" href="/registry"><i class="bi bi-person-plus me-2"></i>Registrarse</a></li>
+                <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="userDropdown">
+                  <li class="dropdown-header">
+                    <i class="bi bi-person-circle me-2"></i>Mi Cuenta
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <a class="dropdown-item user-dropdown-item" href="/login">
+                      <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item user-dropdown-item" href="/registry">
+                      <i class="bi bi-person-plus me-2"></i>Registrarse
+                    </a>
+                  </li>
                 </ul>
               </li>
-              
+              <!-- Opciones de usuario - Usuario logueado -->
               <li class="nav-item dropdown" th:if="${session.loggedUser != null}">
-                <a class="nav-link dropdown-toggle" href="#" id="loggedUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-person-check fs-5 me-1"></i>
-                  <span th:text="${session.loggedUser.name}">Usuario</span>
+                <a class="nav-link icon-nav dropdown-toggle" href="#" id="loggedUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-person-check fs-5"></i>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end modern-dropdown" aria-labelledby="loggedUserDropdown">
-                  <li><a class="dropdown-item" href="/mi-perfil"><i class="bi bi-person me-2"></i>Mi Perfil</a></li>
-                  <li><a class="dropdown-item" href="#"><i class="bi bi-bag me-2"></i>Mis Pedidos</a></li>
+                <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="loggedUserDropdown">
+                  <li class="dropdown-header">
+                    <img src="/images/LogoMinimalistGrey.png" alt="Logo" style="width:45px;height:45px;object-fit:contain;margin-right:8px;">
+                    <span th:text="${session.loggedUser.nombreUsuario}">Usuario</span>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <a class="dropdown-item user-dropdown-item" href="/mi-perfil">
+                      <i class="bi bi-person me-2"></i>Mi Perfil
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item user-dropdown-item" href="#">
+                      <i class="bi bi-bag me-2"></i>Mis Pedidos
+                    </a>
+                  </li>
                   <li th:if="${session.loggedUser.admin}"><hr class="dropdown-divider"></li>
                   <li th:if="${session.loggedUser.admin}">
-                    <a class="dropdown-item" href="/admin/dashboard">
+                    <a class="dropdown-item user-dropdown-item admin-item" href="/admin/dashboard">
                       <i class="bi bi-gear me-2"></i>Panel Administrativo
                     </a>
                   </li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</a></li>
+                  <li>
+                    <a class="dropdown-item user-dropdown-item logout-item" href="/logout">
+                      <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
                 </ul>
               </li>
             </ul>

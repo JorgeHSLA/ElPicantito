@@ -188,6 +188,11 @@ body {
     margin-bottom: 0;
 }
 
+.carousel-section .carousel {
+    position: relative;
+    overflow: hidden;
+}
+
 .carousel-content {
     background: linear-gradient(135deg, var(--neutral-bg) 0%, var(--neutral-border) 100%);
     padding: 3rem 0;
@@ -223,6 +228,16 @@ body {
     background-color: var(--primary-color);
     opacity: 1;
     transform: scale(1.2);
+}
+
+.carousel-control-prev {
+    left: 0;
+    transform: translateX(-30%);
+}
+
+.carousel-control-next {
+    right: 0;
+    transform: translateX(30%);
 }
 
 .carousel-control-prev-icon,
@@ -383,4 +398,142 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-hover);
+}
+
+/* =========================
+   DROPDOWN DE USUARIO
+   ========================= */
+
+/* Icono de usuario con mismas características que otros iconos */
+.dropdown-toggle-custom {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.dropdown-toggle-custom::after {
+    display: none; /* Ocultar la flecha por defecto */
+}
+
+/* Dropdown menu del usuario */
+
+.user-dropdown-menu {
+    background-color: var(--neutral-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-heavy);
+    min-width: 220px;
+    padding: 0.5rem 0;
+    margin-top: 8px;
+    
+    /* Animación de entrada */
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+
+.user-dropdown-menu.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    padding: 0;
+}
+
+/* Header del dropdown */
+.user-dropdown-menu .dropdown-header {
+    /* Degradado entre naranja y amarillo */
+    background: linear-gradient(135deg, var(--primary-light), var(--accent-color));
+    color: var(--neutral-text);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.2rem 1rem 0.2rem 1rem;
+    margin: 0 0 0.25rem 0;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    align-items: center;
+    text-transform: none;
+    gap: 0.5rem;
+}
+
+/* Items del dropdown */
+.user-dropdown-item {
+    color: var(--neutral-text);
+    padding: 0.6rem 0rem 0.6rem 1rem;
+    font-size: 0.9rem; /* reducido */
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+    border-radius: 0;
+    margin: 0 0.25rem;
+    border-radius: 8px;
+    /* Reducir el ancho máximo del contenido */
+    max-width: 200px;
+}
+
+.user-dropdown-item:hover {
+    background: linear-gradient(135deg, var(--primary-light), rgba(255, 86, 48, 0.1));
+    color: var(--primary-color);
+    transform: translateX(4px);
+    font-weight: 500;
+}
+
+.user-dropdown-item i {
+    width: 20px;
+    transition: all 0.2s ease;
+}
+
+.user-dropdown-item:hover i {
+    transform: scale(1.1);
+}
+
+/* Estilos especiales para items específicos */
+.admin-item:hover {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 179, 0, 0.1));
+    color: var(--accent-color);
+}
+
+.logout-item:hover {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.1), rgba(22, 32, 50, 0.05));
+    color: var(--error-color);
+}
+
+/* Dividers */
+.user-dropdown-menu .dropdown-divider {
+    margin: 0.25rem 0.5rem;
+    border-color: var(--neutral-border);
+    opacity: 0.3;
+}
+
+/* Animación de rebote para el icono cuando se abre */
+.dropdown-toggle-custom[aria-expanded="true"] {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px) scale(1.05);
+}
+
+.dropdown-toggle-custom[aria-expanded="true"] i {
+    animation: userIconBounce 0.4s ease;
+}
+
+@keyframes userIconBounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2) rotate(5deg); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .user-dropdown-menu {
+        min-width: 200px;
+        margin-top: 5px;
+    }
+    
+    .user-dropdown-item {
+        padding: 0.7rem 1rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* Hover effect para el contenedor del dropdown */
+.nav-item.dropdown:hover .icon-nav {
+    background-color: rgba(255, 255, 255, 0.15);
 }
