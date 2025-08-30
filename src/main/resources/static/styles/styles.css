@@ -2,25 +2,22 @@
    VARIABLES GLOBALES - PICANTE ELEGANTE
    ========================= */
 :root {
-    /* SISTEMA DE 3 COLORES + NEUTROS */
-    --primary-color: #FF8A65;              /* PRINCIPAL - Tu marca naranja */
-    --primary-hover: #FF7043;              /* Variante más oscura */
+    --primary-color: #FF5630;              /* Rojo/anaranjado principal */
+    --primary-hover: #E04A2A;              /* Variante más oscura */
     --primary-light: #FFB4A0;              /* Variante más clara */
-    
-    --accent-color: #FFC107;               /* SECUNDARIO - Solo botones importantes */
+
+    --accent-color: #FFC107;               /* Amarillo secundario */
     --accent-hover: #FFB300;
-    
-    --error-color: #F44336;                /* APOYO - Solo errores */
-    --error-hover: #D32F2F;
-    
-    /* NEUTROS - La base de todo */
-    --neutral-bg: #FAFAFA;
-    --neutral-surface: #FFFFFF;
+
+    --error-color: #1E293B;                /* Azul oscuro para contraste/error */
+    --error-hover: #162032;
+
+    --neutral-bg: #FFFFFF;                 /* Fondo blanco */
+    --neutral-surface: #F5F5F5;            /* Gris claro */
     --neutral-border: #E0E0E0;
-    --neutral-text: #212121;
+    --neutral-text: #333333;               /* Gris oscuro para texto */
     --neutral-text-light: #757575;
-    
-    /* Variables de diseño */
+
     --shadow-light: 0 2px 8px rgba(0,0,0,0.1);
     --shadow-medium: 0 4px 12px rgba(0,0,0,0.15);
     --shadow-heavy: 0 8px 25px rgba(0,0,0,0.15);
