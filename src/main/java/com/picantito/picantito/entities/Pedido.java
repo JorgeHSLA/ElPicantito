@@ -20,7 +20,7 @@ public class Pedido {
     private Integer id;
     
     @Column(nullable = false)
-    private String nombre;
+    private String nombreDomiciliario;
     
     @Column(nullable = false)
     private Double precio;
