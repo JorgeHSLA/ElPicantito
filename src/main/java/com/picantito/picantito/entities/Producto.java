@@ -26,7 +26,11 @@ public class Producto {
     
     @Column(nullable = false)
     private Double precio;
-    
+
+    @Column(nullable = false)
+    private Double precioDeAdquision;
+
+    //@Column(length = 1000) pongo essto para que javi lo vea, si solo pone column puede que la uri se corte porque max son 255 chars, por eso se pasa a 1000
     private String imagen;
     
     @Column(nullable = false)

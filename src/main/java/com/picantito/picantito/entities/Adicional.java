@@ -23,6 +23,9 @@ public class Adicional {
     
     @Column(nullable = false)
     private Double precio;
+
+    @Column(nullable = false)
+    private Double precioDeAdquision;
     
     @Column(nullable = false)
     private Boolean disponible = true;
