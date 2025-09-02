@@ -14,4 +14,6 @@ public interface AdicionalRepository extends JpaRepository<Adicional, Integer> {
     List<Adicional> findByDisponibleTrue();
     
     List<Adicional> findByProductoIdAndDisponibleTrue(Integer productoId);
+
+    List<Adicional> findByDisponibleTrueAndProductoIsNull();
 }

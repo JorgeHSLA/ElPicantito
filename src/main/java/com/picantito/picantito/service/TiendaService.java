@@ -21,4 +21,5 @@ public interface TiendaService {
     void deleteAdicional(Integer id);
     List<Adicional> getAdicionalesByProductoId(Integer productoId);
     List<Adicional> getAdicionalesDisponibles();
+    List<Adicional> getAdicionalesSinAsignar();
 }
