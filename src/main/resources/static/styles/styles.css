@@ -942,3 +942,77 @@ body {
 .modal.show .modal-dialog {
     transform: scale(1) translateY(0);
 }
+
+/* Estilo para el scroll de adicionales */
+.adicionales-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.adicionales-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.adicionales-scroll::-webkit-scrollbar-track {
+    background: var(--neutral-border);
+    border-radius: 10px;
+}
+
+.adicionales-scroll::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+.adicionales-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}
+
+/* Mejorar las tarjetas de adicionales */
+.adicionales-scroll .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.adicionales-scroll .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Scroll horizontal para adicionales */
+.scroll-container-horizontal {
+    position: relative;
+}
+
+.scroll-content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--neutral-border);
+}
+
+.scroll-content::-webkit-scrollbar {
+    height: 8px;
+}
+
+.scroll-content::-webkit-scrollbar-track {
+    background: var(--neutral-border);
+    border-radius: 10px;
+}
+
+.scroll-content::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+.scroll-content::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}
+
+/* Efectos para las tarjetas de adicionales */
+.scroll-content .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    min-height: 180px;
+}
+
+.scroll-content .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}

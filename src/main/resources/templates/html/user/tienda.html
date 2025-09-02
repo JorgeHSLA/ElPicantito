@@ -197,28 +197,27 @@
     <!-- SECCIÓN DE PRODUCTOS DINÁMICOS -->
     <main class="container py-5">
       <div class="row g-4">
-        
         <!-- Producto dinámico con Thymeleaf -->
-        <div class="col-lg-6" th:each="producto : ${productos}">
+        <div class="col-lg-4 col-md-6" th:each="producto : ${productos}">
           <div class="card taco-card h-100 border-0 shadow-sm overflow-hidden">
             <div class="row g-0 h-100">
-              <div class="col-5">
-                <div class="card-img-container h-100 position-relative">
+              <div class="col-12">
+                <div class="card-img-container position-relative" style="height: 200px;">
                   <img th:src="${producto.imagen}" 
                        th:alt="${producto.nombre}"
-                       class="card-img h-100 object-fit-cover">
+                       class="card-img-top h-100 object-fit-cover">
                   <div class="position-absolute top-0 end-0 m-2">
                     <span th:if="${producto.disponible}" class="badge bg-success">Disponible</span>
                     <span th:unless="${producto.disponible}" class="badge bg-danger">Agotado</span>
                   </div>
                 </div>
               </div>
-              <div class="col-7">
-                <div class="card-body h-100 d-flex flex-column p-4">
+              <div class="col-12">
+                <div class="card-body h-100 d-flex flex-column p-3">
                   <div class="d-flex justify-content-between align-items-start mb-2">
                     <h5 class="card-title fw-bold mb-0" th:text="${producto.nombre}">Nombre del Producto</h5>
                     <div class="rating">
-                      <!-- Estrellas dinámicas corregidas -->
+                      <!-- Estrellas dinámicas -->
                       <th:block th:each="i : ${#numbers.sequence(1, producto.calificacion)}">
                         <i class="bi bi-star-fill text-warning"></i>
                       </th:block>
@@ -227,9 +226,6 @@
                       </th:block>
                     </div>
                   </div>
-                  <p class="card-text text-muted small mb-3" th:text="${producto.descripcion}">
-                    Descripción del producto
-                  </p>
                   <div class="mt-auto">
                     <div class="d-flex justify-content-between align-items-center">
                       <div class="price">

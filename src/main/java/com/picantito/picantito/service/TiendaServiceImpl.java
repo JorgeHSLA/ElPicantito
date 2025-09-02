@@ -76,4 +76,9 @@ public class TiendaServiceImpl implements TiendaService {
     public List<Adicional> getAdicionalesDisponibles() {
         return adicionalRepository.findByDisponibleTrue();
     }
+    
+    @Override
+    public List<Adicional> getAdicionalesSinAsignar() {
+        return adicionalRepository.findByDisponibleTrueAndProductoIsNull();
+    }
 }
