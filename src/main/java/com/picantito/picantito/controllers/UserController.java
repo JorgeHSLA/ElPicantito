@@ -52,7 +52,7 @@ public class UserController {
             autentificacionService.save(user);
             redirectAttributes.addFlashAttribute("success", "Usuario registrado exitosamente");
             return "redirect:/login";
-            
+
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al registrar usuario");
             return "redirect:/registry";
@@ -126,28 +126,12 @@ public class UserController {
         }
         
         try {
-            if (!loggedUser.getId().equals(usuario.getId())) {
-                redirectAttributes.addFlashAttribute("error", "No tienes permisos para editar este perfil");
+
+            String flag = autentificacionService.edicionPerfil(loggedUser, usuario);
+
+            if (!flag.equals("1")) {
+                redirectAttributes.addFlashAttribute("error", flag);
                 return "redirect:/mi-perfil";
-            }
-            
-            Optional<User> existingUserByUsername = autentificacionService.findByNombreUsuario(usuario.getNombreUsuario());
-            if (existingUserByUsername.isPresent() && !existingUserByUsername.get().getId().equals(usuario.getId())) {
-                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado por otro usuario");
-                return "redirect:/mi-perfil";
-            }
-            
-            Optional<User> existingUserByEmail = autentificacionService.findByCorreo(usuario.getCorreo());
-            if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(usuario.getId())) {
-                redirectAttributes.addFlashAttribute("error", "El correo ya está registrado por otro usuario");
-                return "redirect:/mi-perfil";
-            }
-            
-            if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
-                Optional<User> currentUser = autentificacionService.findById(usuario.getId());
-                if (currentUser.isPresent()) {
-                    usuario.setPassword(currentUser.get().getPassword());
-                }
             }
             
             usuario.setRole(loggedUser.getRole());
