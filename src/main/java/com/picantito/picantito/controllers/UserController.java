@@ -154,15 +154,9 @@ public class UserController {
         }
         
         try {
-            if (loggedUser.isAdmin()) {
-                long adminCount = autentificacionService.findAll().stream()
-                    .filter(User::isAdmin)
-                    .count();
-                
-                if (adminCount <= 1) {
-                    redirectAttributes.addFlashAttribute("error", "No puedes eliminar la única cuenta de administrador");
-                    return "redirect:/mi-perfil";
-                }
+            if (autentificacionService.ultimoAdmin(loggedUser) ) {
+                redirectAttributes.addFlashAttribute("error", "No puedes eliminar la única cuenta de administrador");
+                return "redirect:/mi-perfil";
             }
             
             autentificacionService.deleteById(loggedUser.getId());

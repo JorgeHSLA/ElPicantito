@@ -20,5 +20,6 @@ public interface AutentificacionService {
     boolean existsByCorreo(String correo);
     boolean authenticate(String nombreUsuario, String password);
     boolean verificacion(User user);
-    public String edicionPerfil(User loggedUser, User usuario);
+    String edicionPerfil(User loggedUser, User usuario);
+    boolean ultimoAdmin(User loggedUser);
 }

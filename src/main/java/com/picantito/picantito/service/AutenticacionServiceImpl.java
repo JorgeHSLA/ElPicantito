@@ -98,4 +98,17 @@ public class AutenticacionServiceImpl implements AutentificacionService {
 
         return "1";
     }
+
+    public boolean ultimoAdmin(User loggedUser){
+        if (loggedUser.isAdmin()) {
+            long adminCount = this.findAll().stream()
+                .filter(User::isAdmin)
+                .count();
+
+            if (adminCount <= 1) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
