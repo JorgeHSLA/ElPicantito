@@ -43,21 +43,16 @@ public class UserController {
     @PostMapping("/registry")
     public String postAutentificacion(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         try {
-            // Verificar si el nombre de usuario ya existe
-            if (autentificacionService.existsByNombreUsuario(user.getNombreUsuario())) {
-                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado");
-                return "redirect:/registry";
-            }
-            
-            // Verificar si el correo ya existe
-            if (autentificacionService.existsByCorreo(user.getCorreo())) {
-                redirectAttributes.addFlashAttribute("error", "El correo electrónico ya está registrado");
+
+            if (autentificacionService.verificacion(user)){
+                redirectAttributes.addFlashAttribute("error", "El nombre o correo de usuario ya está registrado");
                 return "redirect:/registry";
             }
             
             autentificacionService.save(user);
             redirectAttributes.addFlashAttribute("success", "Usuario registrado exitosamente");
             return "redirect:/login";
+            
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al registrar usuario");
             return "redirect:/registry";
@@ -72,6 +67,7 @@ public class UserController {
     
     @PostMapping("/login")
     public String postLogin(@ModelAttribute("user") User user, HttpSession session, RedirectAttributes redirectAttributes) {
+        
         if (autentificacionService.authenticate(user.getNombreUsuario(), user.getPassword())) {
             Optional<User> authenticatedUser = autentificacionService.findByNombreUsuario(user.getNombreUsuario());
             if (authenticatedUser.isPresent()) {
@@ -80,7 +76,7 @@ public class UserController {
                 if (authenticatedUser.get().isAdmin()) {
                     return "redirect:/admin/dashboard";
                 } else {
-                    return "redirect:/tienda";
+                    return "redirect:/home";
                 }
             }
         }

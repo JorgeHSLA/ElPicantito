@@ -5,9 +5,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.picantito.picantito.entities.User;
 import com.picantito.picantito.repository.UsuarioRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class AutenticacionServiceImpl implements AutentificacionService {
@@ -60,6 +63,32 @@ public class AutenticacionServiceImpl implements AutentificacionService {
         Optional<User> user = findByNombreUsuario(nombreUsuario);
         if (user.isPresent()) {
             return user.get().getPassword().equals(password);
+        }
+        return false;
+    }
+
+    public String verification(User user, HttpSession session,  RedirectAttributes redirectAttributes) {
+        if (this.authenticate(user.getNombreUsuario(), user.getPassword())) {
+            Optional<User> authenticatedUser = this.findByNombreUsuario(user.getNombreUsuario());
+            if (authenticatedUser.isPresent()) {
+                session.setAttribute("loggedUser", authenticatedUser.get());
+                
+                if (authenticatedUser.get().isAdmin()) {
+                    return "redirect:/admin/dashboard";
+                } else {
+                    return "redirect:/home";
+                }
+            }
+
+        }
+        redirectAttributes.addFlashAttribute("error", "Credenciales incorrectas");
+        return "redirect:/login";
+    }
+
+    public boolean verificacion(User user) {
+        // Verificar si el nombre de usuario ya existe
+        if (this.existsByNombreUsuario(user.getNombreUsuario()) || this.existsByCorreo(user.getCorreo())) {
+            return true;
         }
         return false;
     }
