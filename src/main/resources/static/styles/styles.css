@@ -7,7 +7,7 @@
     --primary-light: #FFB4A0;              /* Variante más clara */
 
     --accent-color: #FFC107;               /* Amarillo secundario */
-    --accent-hover: #FFB300;
+    --accent-hover: #eea804;
 
     --error-color: #1E293B;                /* Azul oscuro para contraste/error */
     --error-hover: #162032;
@@ -488,7 +488,7 @@ body {
 
 /* Header del dropdown */
 .user-dropdown-menu .dropdown-header {
-    background: linear-gradient(135deg, var(--primary-light), var(--accent-color));
+    background: var(--accent-hover);
     color: var(--neutral-text);
     font-weight: 600;
     font-size: 0.9rem;
