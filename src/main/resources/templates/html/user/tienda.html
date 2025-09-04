@@ -1,373 +1,350 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Menú - El Picantito</title>
     <!--Bootstrap-->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
-      crossorigin="anonymous"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous" />
     <!--icons-->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
     <!--Google fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <!--styles-->
     <link rel="stylesheet" href="/styles/styles.css" />
     <link rel="stylesheet" href="/styles/css/dark-hc.css" />
-  </head>
-  <body class="dark-high-contrast">
+</head>
+
+<body class="dark-high-contrast">
     <!--NAVBAR-->
     <header class="position-sticky top-0 z-3">
-      <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-sm">
-        <div class="container">
-          <!-- Logo -->
-          <a class="navbar-brand d-flex align-items-center" href="home">
-            <img src="/images/LogoFont.png" alt="El Picantito Logo" width="200" height="120" class="me-2" />
-          </a>
-          
-          <!-- Buscador Central -->
-          <div class="d-none d-lg-flex flex-grow-1 justify-content-center mx-3">
-            <form class="search-form-center w-100" style="max-width: 400px;">
-              <div class="input-group">
-                <input
-                  class="form-control border-0 rounded-start-pill"
-                  type="search"
-                  placeholder="Buscar tacos..."
-                  aria-label="Search"
-                  name="search"
-                />
-                <button class="btn btn-dark rounded-end-pill px-3" type="submit">
+        <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-sm">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center" href="home">
+                    <img src="/images/LogoFont.png" alt="El Picantito Logo" width="200" height="120" class="me-2" />
+                </a>
+
+                <!-- Buscador Central -->
+                <div class="d-none d-lg-flex flex-grow-1 justify-content-center mx-3">
+                    <form class="search-form-center w-100" style="max-width: 400px;">
+                        <div class="input-group">
+                            <input class="form-control border-0 rounded-start-pill" type="search" placeholder="Buscar tacos..." aria-label="Search" name="search" />
+                            <button class="btn btn-dark rounded-end-pill px-3" type="submit">
                   <i class="bi bi-search"></i>
                 </button>
-              </div>
-            </form>
-          </div>
-          
-          <!-- Navegación con iconos -->
-          <div class="d-flex align-items-center">
-            <ul class="navbar-nav flex-row">
-              <li class="nav-item me-2">
-                <a class="nav-link icon-nav" href="/sobre-nosotros" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sobre Nosotros">
-                  <i class="bi bi-info-circle fs-5"></i>
-                </a>
-              </li>
-              <li class="nav-item me-2">
-                <a class="nav-link icon-nav" href="/tienda" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Menú">
-                  <i class="bi bi-grid fs-5"></i>
-                </a>
-              </li>
-              <li class="nav-item me-2">
-                <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ubicación">
-                  <i class="bi bi-geo-alt-fill fs-5"></i>
-                </a>
-              </li>
-              <li class="nav-item me-2">
-                <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Carrito">
-                  <i class="bi bi-cart3 fs-5"></i>
-                </a>
-              </li>
-              
-              <!-- Opciones de usuario - Usuario no logueado -->
-              <li class="nav-item dropdown" th:if="${session.loggedUser == null}">
-                <a class="nav-link icon-nav dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-person fs-5"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="userDropdown">
-                  <li class="dropdown-header">
-                    <img src="/images/LogoMinimalistBlackWhite.png" alt="Logo" style="width:45px;height:45px;object-fit:contain;margin-right:8px;">
-                    <span>¿Sin Cuenta?</span>
-                  </li>
-                  <li>
-                    <a class="dropdown-item user-dropdown-item" href="/login">
-                      <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item user-dropdown-item" href="/registry">
-                      <i class="bi bi-person-plus me-2"></i>Registrarse
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <!-- Opciones de usuario - Usuario logueado -->
-              <li class="nav-item dropdown" th:if="${session.loggedUser != null}">
-                <a class="nav-link icon-nav dropdown-toggle" href="#" id="loggedUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-person-check fs-5"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="loggedUserDropdown">
-                  <li class="dropdown-header">
-                    <img src="/images/LogoMinimalistBlackWhite.png" alt="Logo" style="width:45px;height:45px;object-fit:contain;margin-right:8px;">
-                    <span th:text="${session.loggedUser.nombreUsuario}">Usuario</span>
-                  </li>
-                  <li>
-                    <a class="dropdown-item user-dropdown-item" href="/mi-perfil">
-                      <i class="bi bi-person me-2"></i>Mi Perfil
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item user-dropdown-item" href="#">
-                      <i class="bi bi-bag me-2"></i>Mis Pedidos
-                    </a>
-                  </li>
-                  <li th:if="${session.loggedUser.admin}"><hr class="dropdown-divider"></li>
-                  <li th:if="${session.loggedUser.admin}">
-                    <a class="dropdown-item user-dropdown-item admin-item" href="/admin/dashboard">
-                      <i class="bi bi-gear me-2"></i>Panel Administrativo
-                    </a>
-                  </li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li>
-                    <a class="dropdown-item user-dropdown-item logout-item" href="/logout">
-                      <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Navegación con iconos -->
+                <div class="d-flex align-items-center">
+                    <ul class="navbar-nav flex-row">
+                        <li class="nav-item me-2">
+                            <a class="nav-link icon-nav" href="/sobre-nosotros" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sobre Nosotros">
+                                <i class="bi bi-info-circle fs-5"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item me-2">
+                            <a class="nav-link icon-nav" href="/tienda" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Menú">
+                                <i class="bi bi-grid fs-5"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item me-2">
+                            <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ubicación">
+                                <i class="bi bi-geo-alt-fill fs-5"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item me-2">
+                            <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Carrito">
+                                <i class="bi bi-cart3 fs-5"></i>
+                            </a>
+                        </li>
+
+                        <!-- Opciones de usuario - Usuario no logueado -->
+                        <li class="nav-item dropdown" th:if="${session.loggedUser == null}">
+                            <a class="nav-link icon-nav dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person fs-5"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="userDropdown">
+                                <li class="dropdown-header">
+                                    <img src="/images/LogoMinimalistBlackWhite.png" alt="Logo" style="width:45px;height:45px;object-fit:contain;margin-right:8px;">
+                                    <span>¿Sin Cuenta?</span>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item user-dropdown-item" href="/login">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item user-dropdown-item" href="/registry">
+                                        <i class="bi bi-person-plus me-2"></i>Registrarse
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Opciones de usuario - Usuario logueado -->
+                        <li class="nav-item dropdown" th:if="${session.loggedUser != null}">
+                            <a class="nav-link icon-nav dropdown-toggle" href="#" id="loggedUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-check fs-5"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="loggedUserDropdown">
+                                <li class="dropdown-header">
+                                    <img src="/images/LogoMinimalistBlackWhite.png" alt="Logo" style="width:45px;height:45px;object-fit:contain;margin-right:8px;">
+                                    <span th:text="${session.loggedUser.nombreUsuario}">Usuario</span>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item user-dropdown-item" href="/mi-perfil">
+                                        <i class="bi bi-person me-2"></i>Mi Perfil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item user-dropdown-item" href="#">
+                                        <i class="bi bi-bag me-2"></i>Mis Pedidos
+                                    </a>
+                                </li>
+                                <li th:if="${session.loggedUser.admin}">
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li th:if="${session.loggedUser.admin}">
+                                    <a class="dropdown-item user-dropdown-item admin-item" href="/admin/dashboard">
+                                        <i class="bi bi-gear me-2"></i>Panel Administrativo
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item user-dropdown-item logout-item" href="/logout">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </header>
 
     <!-- HERO SECTION TIENDA -->
     <section class="menu-hero py-5 bg-light">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-8">
-            <h1 class="display-5 fw-bold mb-3">Nuestro Delicioso <span class="text-warning">Menú</span></h1>
-            <p class="lead text-muted mb-4">
-              Descubre nuestra selección de tacos auténticos preparados con ingredientes frescos 
-              y recetas tradicionales mexicanas.
-            </p>
-          </div>
-          <div class="col-lg-4 text-center">
-            <div class="menu-stats">
-              <div class="d-flex justify-content-around">
-                <div class="stat-item">
-                  <h4 class="fw-bold text-warning mb-0" th:text="${#lists.size(productos)} + '+'">12+</h4>
-                  <small class="text-muted">Variedades</small>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-5 fw-bold mb-3">Nuestro Delicioso <span class="text-warning">Menú</span></h1>
+                    <p class="lead text-muted mb-4">
+                        Descubre nuestra selección de tacos auténticos preparados con ingredientes frescos y recetas tradicionales mexicanas.
+                    </p>
                 </div>
-                <div class="stat-item">
-                  <h4 class="fw-bold text-warning mb-0">100%</h4>
-                  <small class="text-muted">Frescos</small>
+                <div class="col-lg-4 text-center">
+                    <div class="menu-stats">
+                        <div class="d-flex justify-content-around">
+                            <div class="stat-item">
+                                <h4 class="fw-bold text-warning mb-0" th:text="${#lists.size(productos)} + '+'">12+</h4>
+                                <small class="text-muted">Variedades</small>
+                            </div>
+                            <div class="stat-item">
+                                <h4 class="fw-bold text-warning mb-0">100%</h4>
+                                <small class="text-muted">Frescos</small>
+                            </div>
+                            <div class="stat-item">
+                                <h4 class="fw-bold text-warning mb-0">5★</h4>
+                                <small class="text-muted">Calificación</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-item">
-                  <h4 class="fw-bold text-warning mb-0">5★</h4>
-                  <small class="text-muted">Calificación</small>
-                </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </section>
 
     <!-- FILTROS -->
     <section class="filters py-4 bg-white border-bottom">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-6">
-            <h6 class="mb-3 mb-md-0 fw-semibold">Filtrar por categoría:</h6>
-          </div>
-          <div class="col-md-6">
-            <div class="filter-buttons text-md-end">
-              <button class="btn btn-outline-warning btn-sm me-2 mb-2 active">Todos</button>
-              <button class="btn btn-outline-warning btn-sm me-2 mb-2">Tacos</button>
-              <button class="btn btn-outline-warning btn-sm me-2 mb-2">Bebidas</button>
-              <button class="btn btn-outline-warning btn-sm me-2 mb-2">Extras</button>
-              <button class="btn btn-outline-warning btn-sm mb-2">Especiales</button>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h6 class="mb-3 mb-md-0 fw-semibold">Filtrar por categoría:</h6>
+                </div>
+                <div class="col-md-6">
+                    <div class="filter-buttons text-md-end">
+                        <button class="btn btn-outline-warning btn-sm me-2 mb-2 active">Todos</button>
+                        <button class="btn btn-outline-warning btn-sm me-2 mb-2">Tacos</button>
+                        <button class="btn btn-outline-warning btn-sm me-2 mb-2">Bebidas</button>
+                        <button class="btn btn-outline-warning btn-sm me-2 mb-2">Extras</button>
+                        <button class="btn btn-outline-warning btn-sm mb-2">Especiales</button>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </section>
-   
+
     <!-- SECCIÓN DE PRODUCTOS DINÁMICOS -->
     <main class="container py-5">
-      <div class="row g-4">
-        <!-- Producto dinámico con Thymeleaf -->
-        <div class="col-lg-4 col-md-6" th:each="producto : ${productos}">
-          <div class="card taco-card h-100 border-0 shadow-sm overflow-hidden">
-            <div class="row g-0 h-100">
-              <div class="col-12">
-                <div class="card-img-container position-relative" style="height: 200px;">
-                  <img th:src="${producto.imagen}" 
-                       th:alt="${producto.nombre}"
-                       class="card-img-top h-100 object-fit-cover">
-                  <div class="position-absolute top-0 end-0 m-2">
-                    <span th:if="${producto.disponible}" class="badge bg-success">Disponible</span>
-                    <span th:unless="${producto.disponible}" class="badge bg-danger">Agotado</span>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="card-body h-100 d-flex flex-column p-3">
-                  <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h5 class="card-title fw-bold mb-0" th:text="${producto.nombre}">Nombre del Producto</h5>
-                    <div class="rating">
-                      <!-- Estrellas dinámicas -->
-                      <th:block th:each="i : ${#numbers.sequence(1, producto.calificacion)}">
-                        <i class="bi bi-star-fill text-warning"></i>
-                      </th:block>
-                      <th:block th:if="${producto.calificacion < 5}" th:each="i : ${#numbers.sequence(producto.calificacion + 1, 5)}">
-                        <i class="bi bi-star text-warning"></i>
-                      </th:block>
-                    </div>
-                  </div>
-                  <div class="mt-auto">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div class="price">
-                        <span class="h5 fw-bold text-warning mb-0">
+        <div class="row g-4">
+            <!-- Producto dinámico con Thymeleaf -->
+            <div class="col-lg-4 col-md-6" th:each="producto : ${productos}">
+                <div class="card taco-card h-100 border-0 shadow-sm overflow-hidden position-relative">
+                    <div class="row g-0 h-100">
+                        <div class="col-12">
+                            <div class="card-img-container position-relative" style="height: 200px;">
+                                <img th:src="${producto.imagen}" th:alt="${producto.nombre}" class="card-img-top h-100 object-fit-cover">
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span th:if="${producto.disponible}" class="badge bg-success">Disponible</span>
+                                    <span th:unless="${producto.disponible}" class="badge bg-danger">Agotado</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card-body h-100 d-flex flex-column p-3">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title fw-bold mb-0" th:text="${producto.nombre}">Nombre del Producto</h5>
+                                    <div class="rating">
+                                        <!-- Estrellas dinámicas -->
+                                        <th:block th:each="i : ${#numbers.sequence(1, producto.calificacion)}">
+                                            <i class="bi bi-star-fill text-warning"></i>
+                                        </th:block>
+                                        <th:block th:if="${producto.calificacion < 5}" th:each="i : ${#numbers.sequence(producto.calificacion + 1, 5)}">
+                                            <i class="bi bi-star text-warning"></i>
+                                        </th:block>
+                                    </div>
+                                </div>
+                                <a class="stretched-link" th:href="@{/productos/{id}(id=${producto.id})}" th:aria-label="'Ver ' + ${producto.nombre}"></a>
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="price">
+                                            <span class="h5 fw-bold text-warning mb-0">
                           $<span th:text="${#numbers.formatDecimal(producto.precio, 1, 2)}">0.00</span>
-                        </span>
-                      </div>
-                      <div class="d-flex gap-2">
-                        <a th:href="@{/productos/{id}(id=${producto.id})}" 
-                           class="btn btn-outline-warning btn-sm">
-                          <i class="bi bi-eye me-1"></i>Ver
-                        </a>
-                        <button th:if="${producto.disponible}" 
-                                class="btn btn-warning btn-sm px-3">
+                                            </span>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button th:if="${producto.disponible}" class="btn btn-warning btn-sm px-3">
                           <i class="bi bi-plus-circle me-1"></i>Agregar
                         </button>
-                        <button th:unless="${producto.disponible}" 
-                                class="btn btn-secondary btn-sm px-3" disabled>
+                                            <button th:unless="${producto.disponible}" class="btn btn-secondary btn-sm px-3" disabled>
                           <i class="bi bi-x-circle me-1"></i>Agotado
                         </button>
-                      </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
             </div>
-          </div>
+
         </div>
 
-      </div>
-
-      <!-- CTA SECTION -->
-      <div class="row mt-5">
-        <div class="col-12">
-          <div class="cta-section bg-warning bg-opacity-10 rounded-4 p-5 text-center">
-            <h3 class="fw-bold mb-3">¿No encuentras lo que buscas?</h3>
-            <p class="text-muted mb-4">Crea tu propio taco personalizado con más de 20 ingredientes frescos disponibles.</p>
-            <button class="btn btn-warning btn-lg px-4 py-2 rounded-pill">
+        <!-- CTA SECTION -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="cta-section bg-warning bg-opacity-10 rounded-4 p-5 text-center">
+                    <h3 class="fw-bold mb-3">¿No encuentras lo que buscas?</h3>
+                    <p class="text-muted mb-4">Crea tu propio taco personalizado con más de 20 ingredientes frescos disponibles.</p>
+                    <button class="btn btn-warning btn-lg px-4 py-2 rounded-pill">
               <i class="bi bi-plus-circle me-2"></i>Crear Taco Personalizado
             </button>
-          </div>
+                </div>
+            </div>
         </div>
-      </div>
     </main>
 
     <!-- FOOTER -->
     <footer class="bg-dark text-white py-5">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-4 mb-4">
-            <div class="d-flex align-items-center mb-3">
-              <img src="/images/LogoMinimalist.png" alt="El Picantito" width="40" height="40" class="me-2">
-              <h5 class="mb-0 fw-bold">El Picantito</h5>
-            </div>
-            <p class="text-light opacity-75 mb-3">
-              Auténticos tacos mexicanos preparados con amor y los mejores ingredientes frescos.
-            </p>
-            <div class="social-links">
-              <a href="#" class="text-white me-3 fs-5"><i class="bi bi-facebook"></i></a>
-              <a href="#" class="text-white me-3 fs-5"><i class="bi bi-instagram"></i></a>
-              <a href="#" class="text-white me-3 fs-5"><i class="bi bi-twitter-x"></i></a>
-              <a href="#" class="text-white fs-5"><i class="bi bi-whatsapp"></i></a>
-            </div>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="/images/LogoMinimalist.png" alt="El Picantito" width="40" height="40" class="me-2">
+                        <h5 class="mb-0 fw-bold">El Picantito</h5>
+                    </div>
+                    <p class="text-light opacity-75 mb-3">
+                        Auténticos tacos mexicanos preparados con amor y los mejores ingredientes frescos.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3 fs-5"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3 fs-5"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white me-3 fs-5"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-white fs-5"><i class="bi bi-whatsapp"></i></a>
+                    </div>
+                </div>
 
-          <div class="col-lg-3 col-md-6 mb-4">
-            <h6 class="text-uppercase fw-bold mb-3">Contacto</h6>
-            <div class="contact-info">
-              <p class="mb-2">
-                <i class="bi bi-geo-alt-fill text-warning me-2"></i>
-                Calle 123 #45-67<br>
-                <span class="ms-4">Bogotá, Colombia</span>
-              </p>
-              <p class="mb-2">
-                <i class="bi bi-telephone-fill text-warning me-2"></i>
-                +57 310 123 4567
-              </p>
-              <p class="mb-0">
-                <i class="bi bi-envelope-fill text-warning me-2"></i>
-                hola@elpicantito.com
-              </p>
-            </div>
-          </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-3">Contacto</h6>
+                    <div class="contact-info">
+                        <p class="mb-2">
+                            <i class="bi bi-geo-alt-fill text-warning me-2"></i> Calle 123 #45-67<br>
+                            <span class="ms-4">Bogotá, Colombia</span>
+                        </p>
+                        <p class="mb-2">
+                            <i class="bi bi-telephone-fill text-warning me-2"></i> +57 310 123 4567
+                        </p>
+                        <p class="mb-0">
+                            <i class="bi bi-envelope-fill text-warning me-2"></i> hola@elpicantito.com
+                        </p>
+                    </div>
+                </div>
 
-          <div class="col-lg-2 col-md-6 mb-4">
-            <h6 class="text-uppercase fw-bold mb-3">Enlaces</h6>
-            <ul class="list-unstyled">
-              <li class="mb-2"><a href="home" class="text-light text-decoration-none opacity-75">Inicio</a></li>
-              <li class="mb-2"><a href="tienda" class="text-light text-decoration-none opacity-75">Menú</a></li>
-              <li class="mb-2"><a href="#" class="text-light text-decoration-none opacity-75">Promociones</a></li>
-              <li class="mb-2"><a href="sobre-nosotros" class="text-light text-decoration-none opacity-75">Sobre Nosotros</a></li>
-              <li class="mb-2"><a href="#" class="text-light text-decoration-none opacity-75">Contacto</a></li>
-            </ul>
-          </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-3">Enlaces</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="home" class="text-light text-decoration-none opacity-75">Inicio</a></li>
+                        <li class="mb-2"><a href="tienda" class="text-light text-decoration-none opacity-75">Menú</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none opacity-75">Promociones</a></li>
+                        <li class="mb-2"><a href="sobre-nosotros" class="text-light text-decoration-none opacity-75">Sobre Nosotros</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none opacity-75">Contacto</a></li>
+                    </ul>
+                </div>
 
-          <div class="col-lg-3 col-md-12 mb-4">
-            <h6 class="text-uppercase fw-bold mb-3">Newsletter</h6>
-            <p class="text-light opacity-75 mb-3">Recibe ofertas especiales y novedades</p>
-            <form class="newsletter-form">
-              <div class="input-group">
-                <input type="email" class="form-control" placeholder="Tu email">
-                <button class="btn btn-warning" type="submit">
+                <div class="col-lg-3 col-md-12 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-3">Newsletter</h6>
+                    <p class="text-light opacity-75 mb-3">Recibe ofertas especiales y novedades</p>
+                    <form class="newsletter-form">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Tu email">
+                            <button class="btn btn-warning" type="submit">
                   <i class="bi bi-arrow-right"></i>
                 </button>
-              </div>
-            </form>
-          </div>
-        </div>
-        
-        <hr class="my-4 opacity-25">
-        <div class="row align-items-center">
-          <div class="col-md-6">
-            <small class="text-light opacity-50">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <hr class="my-4 opacity-25">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <small class="text-light opacity-50">
               &copy; 2025 El Picantito. Todos los derechos reservados.
             </small>
-          </div>
-          <div class="col-md-6 text-md-end">
-            <small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <small>
               <a href="#" class="text-light text-decoration-none opacity-50 me-3">Términos</a>
               <a href="#" class="text-light text-decoration-none opacity-50">Privacidad</a>
             </small>
-          </div>
+                </div>
+            </div>
         </div>
-      </div>
     </footer>
 
     <!-- Scripts -->
     <script src="/js/script.js"></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
-      crossorigin="anonymous"
-    ></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+
     <script>
-      // Inicializar tooltips
-      document.addEventListener('DOMContentLoaded', function () {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-      });
+        // Inicializar tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
     </script>
-  </body>
+</body>
+
+</html>
+
 </html>
