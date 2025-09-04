@@ -74,7 +74,7 @@ public class UserController {
                 session.setAttribute("loggedUser", authenticatedUser.get());
                 
                 if (authenticatedUser.get().isAdmin()) {
-                    return "html/admin/dashboard";
+                    return "redirect:/home";
                 } else {
                     return "redirect:/home";
                 }
