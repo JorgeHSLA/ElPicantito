@@ -29,17 +29,16 @@
     <link rel="stylesheet" href="/styles/creaTaco.css" />
   </head>
   <body class="dark-high-contrast">
-    <!--NAVBAR-->
-    <header class="position-sticky top-0 z-3">
-      <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-sm">
-        <div class="container">
+    <!--NAVBAR FLOTANTE-->
+  <header class="floating-header w-100 d-flex justify-content-center align-items-center" style="position:fixed; top:8px; left:0; z-index:100; pointer-events:none;">
+      <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-lg rounded-4" style="width:75%; background:rgba(255,86,48,0.92); pointer-events:auto; transition:box-shadow 0.2s;">
+        <div class="d-flex w-100 align-items-center px-4 py-2">
           <!-- Logo -->
-          <a class="navbar-brand d-flex align-items-center" href="home">
-            <img src="/images/LogoFont.png" alt="El Picantito Logo" width="200" height="120" class="me-2" />
+          <a class="navbar-brand d-flex align-items-center me-3" href="home">
+            <img src="/images/LogoFont.png" alt="El Picantito Logo" width="140" height="80" class="me-2" />
           </a>
-          
           <!-- Buscador Central -->
-          <div class="d-none d-lg-flex flex-grow-1 justify-content-center mx-3">
+          <div class="flex-grow-1 d-none d-lg-flex justify-content-center mx-3">
             <form class="search-form-center w-100" style="max-width: 400px;">
               <div class="input-group">
                 <input
@@ -55,9 +54,8 @@
               </div>
             </form>
           </div>
-          
           <!-- Navegación con iconos -->
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center ms-3">
             <ul class="navbar-nav flex-row">
               <li class="nav-item me-2">
                 <a class="nav-link icon-nav" href="/sobre-nosotros" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sobre Nosotros">
@@ -141,25 +139,30 @@
       </nav>
     </header>
     
-  <section class="hero-section position-relative" style="background: url('/images/taco1.webp') center center/cover no-repeat; min-height: 80vh;">
-      <div class="container position-relative z-2 py-5">
-        <div class="row align-items-center min-vh-60">
-          <div class="col-lg-7 text-white">
-            <h1 class="display-3 fw-bold mb-4" style="text-shadow: 2px 2px 8px #000;">
-              El Picantito<br>
-              <span class="text-warning">Auténticos Tacos Mexicanos</span>
-            </h1>
-            <p class="lead mb-4" style="text-shadow: 1px 1px 6px #000;">
-              Vive la experiencia mexicana con los mejores ingredientes y recetas tradicionales. ¡Sabor, color y alegría en cada taco!
-            </p>
-            <a href="tienda" class="btn btn-warning btn-lg px-4 py-2 rounded-pill shadow">
-              <i class="bi bi-arrow-right me-2"></i>Ordenar Ahora
-            </a>
-          </div>
+  <section class="hero-section position-relative" style="background: url('/images/taco1.webp') center center/cover no-repeat; min-height: 90vh;">
+    <div class="container position-relative z-2 py-5 h-100">
+      <div class="row align-items-center justify-content-center h-100" style="min-height: 90vh;">
+        <div class="col-lg-7 text-white">
+          <h1 class="display-3 fw-bold mb-4" style="text-shadow: 2px 2px 8px #000;">
+            El Picantito<br>
+            <span class="text-warning">Auténticos Tacos Mexicanos</span>
+          </h1>
+          <p class="lead mb-4" style="text-shadow: 1px 1px 6px #000;">
+            Vive la experiencia mexicana con los mejores ingredientes y recetas tradicionales. ¡Sabor, color y alegría en cada taco!
+          </p>
+          <a href="tienda" class="btn btn-warning btn-lg px-4 py-2 rounded-pill shadow">
+            <i class="bi bi-arrow-right me-2"></i>Ordenar Ahora
+          </a>
         </div>
       </div>
-      <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.45);"></div>
-    </section>
+    </div>
+    <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.45);"></div>
+  </section>
+    <!-- Línea separadora de TACOS -->
+    <div class="w-100" style="background: transparent; margin-top: -4rem; margin-bottom: -2rem; z-index:2; position:relative;">
+      <div style="width:110%; height:80px; background: repeat-x url('/images/separadorTaco.png') center; background-size: 60px 40px;">
+      </div>
+    </div>
     <!-- CARRUSEL -->
     <section class="carousel-section">
       <div id="promoCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
