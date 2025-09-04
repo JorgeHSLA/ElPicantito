@@ -65,6 +65,7 @@ public class AutenticacionServiceImpl implements AutentificacionService {
         return false;
     }
 
+    @Override
     public boolean verificacion(User user) {
         // Verificar si el nombre de usuario ya existe
         if (this.existsByNombreUsuario(user.getNombreUsuario()) || this.existsByCorreo(user.getCorreo())) {
@@ -73,6 +74,7 @@ public class AutenticacionServiceImpl implements AutentificacionService {
         return false;
     }
 
+    @Override
     public String edicionPerfil(User loggedUser, User usuario) {
         // Verificar si el nombre de usuario ya existe
         if (!loggedUser.getId().equals(usuario.getId())) {
@@ -98,7 +100,7 @@ public class AutenticacionServiceImpl implements AutentificacionService {
 
         return "1";
     }
-
+    @Override
     public boolean ultimoAdmin(User loggedUser){
         if (loggedUser.isAdmin()) {
             long adminCount = this.findAll().stream()

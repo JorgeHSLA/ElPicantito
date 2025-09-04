@@ -46,34 +46,16 @@ public class ProductoController {
     public ResponseEntity<Map<String, Object>> asignarAdicionales(@RequestBody Map<String, Object> request) {
         Map<String, Object> response = new HashMap<>();
         
-        try {
-            Integer productoId = (Integer) request.get("productoId");
-            @SuppressWarnings("unchecked")
-            List<Integer> adicionalesIds = (List<Integer>) request.get("adicionalesIds");
-            
-            Optional<Producto> producto = tiendaService.getProductoById(productoId);
-            
-            if (producto.isPresent()) {
-                for (Integer adicionalId : adicionalesIds) {
-                    Optional<Adicional> adicional = tiendaService.getAdicionalById(adicionalId);
-                    if (adicional.isPresent() && adicional.get().getProducto() == null) {
-                        adicional.get().setProducto(producto.get());
-                        tiendaService.saveAdicional(adicional.get());
-                    }
-                }
-                
-                response.put("success", true);
-                response.put("message", "Adicionales asignados correctamente");
-            } else {
-                response.put("success", false);
-                response.put("message", "Producto no encontrado");
-            }
-            
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Error interno del servidor");
-        }
         
+        Integer productoId = (Integer) request.get("productoId");
+        @SuppressWarnings("unchecked")
+        List<Integer> adicionalesIds = (List<Integer>) request.get("adicionalesIds");
+        List<String> responseList = tiendaService.asignarAdicionales(productoId, adicionalesIds);
+        
+        response.put("success", responseList.get(0).equals("1"));
+        response.put("message", responseList.get(1));
+            
+
         return ResponseEntity.ok(response);
     }
 }
