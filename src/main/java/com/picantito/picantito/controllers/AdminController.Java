@@ -93,8 +93,7 @@ public class AdminController {
         if (producto.isPresent()) {
             model.addAttribute("producto", producto.get());
             return "html/admin/edit-producto";
-        }
-        
+        }  
         return "redirect:/admin/productos";
     }
 
@@ -155,16 +154,11 @@ public class AdminController {
         
         try {
             // Verificar duplicados
-            if (autentificacionService.existsByNombreUsuario(usuario.getNombreUsuario())) {
-                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado");
+            if(autentificacionService.verificacion(usuario))
+            {
+                redirectAttributes.addFlashAttribute("error", "El nombre de usuario o correo ya están registrados");
                 return "redirect:/admin/usuarios";
             }
-            
-            if (autentificacionService.existsByCorreo(usuario.getCorreo())) {
-                redirectAttributes.addFlashAttribute("error", "El correo electrónico ya está registrado");
-                return "redirect:/admin/usuarios";
-            }
-            
             autentificacionService.save(usuario);
             redirectAttributes.addFlashAttribute("success", "Usuario guardado exitosamente");
         } catch (Exception e) {
@@ -214,19 +208,12 @@ public class AdminController {
         }
         
         try {
-            // Verificar duplicados para otros usuarios
-            Optional<User> existingUserByUsername = autentificacionService.findByNombreUsuario(usuario.getNombreUsuario());
-            if (existingUserByUsername.isPresent() && !existingUserByUsername.get().getId().equals(usuario.getId())) {
-                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado por otro usuario");
+            if(autentificacionService.verificacion(usuario))
+            {
+                redirectAttributes.addFlashAttribute("error", "El nombre de usuario o correo ya están registrados");
                 return "redirect:/admin/usuarios";
             }
-            
-            Optional<User> existingUserByEmail = autentificacionService.findByCorreo(usuario.getCorreo());
-            if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(usuario.getId())) {
-                redirectAttributes.addFlashAttribute("error", "El correo ya está registrado por otro usuario");
-                return "redirect:/admin/usuarios";
-            }
-            
+
             autentificacionService.save(usuario);
             redirectAttributes.addFlashAttribute("success", "Usuario actualizado exitosamente");
         } catch (Exception e) {
@@ -296,16 +283,8 @@ public class AdminController {
         }
         
         try {
-            // Establecer el producto si se selecciono uno
-            if (productoId != null && productoId > 0) {
-                Optional<Producto> producto = tiendaService.getProductoById(productoId);
-                if (producto.isPresent()) {
-                    adicional.setProducto(producto.get());
-                }
-            } else {
-                adicional.setProducto(null);
-            }
             
+            tiendaService.updateAdicional( productoId ,adicional);
             tiendaService.saveAdicional(adicional);
             redirectAttributes.addFlashAttribute("success", "Adicional actualizado exitosamente");
         } catch (Exception e) {

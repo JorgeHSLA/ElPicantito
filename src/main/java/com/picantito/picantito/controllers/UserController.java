@@ -43,21 +43,16 @@ public class UserController {
     @PostMapping("/registry")
     public String postAutentificacion(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         try {
-            // Verificar si el nombre de usuario ya existe
-            if (autentificacionService.existsByNombreUsuario(user.getNombreUsuario())) {
-                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado");
-                return "redirect:/registry";
-            }
-            
-            // Verificar si el correo ya existe
-            if (autentificacionService.existsByCorreo(user.getCorreo())) {
-                redirectAttributes.addFlashAttribute("error", "El correo electrónico ya está registrado");
+
+            if (autentificacionService.verificacion(user)){
+                redirectAttributes.addFlashAttribute("error", "El nombre o correo de usuario ya está registrado");
                 return "redirect:/registry";
             }
             
             autentificacionService.save(user);
             redirectAttributes.addFlashAttribute("success", "Usuario registrado exitosamente");
             return "redirect:/login";
+
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al registrar usuario");
             return "redirect:/registry";
@@ -72,15 +67,16 @@ public class UserController {
     
     @PostMapping("/login")
     public String postLogin(@ModelAttribute("user") User user, HttpSession session, RedirectAttributes redirectAttributes) {
+        
         if (autentificacionService.authenticate(user.getNombreUsuario(), user.getPassword())) {
             Optional<User> authenticatedUser = autentificacionService.findByNombreUsuario(user.getNombreUsuario());
             if (authenticatedUser.isPresent()) {
                 session.setAttribute("loggedUser", authenticatedUser.get());
                 
                 if (authenticatedUser.get().isAdmin()) {
-                    return "redirect:/admin/dashboard";
+                    return "redirect:/home";
                 } else {
-                    return "redirect:/tienda";
+                    return "redirect:/home";
                 }
             }
         }
@@ -130,28 +126,12 @@ public class UserController {
         }
         
         try {
-            if (!loggedUser.getId().equals(usuario.getId())) {
-                redirectAttributes.addFlashAttribute("error", "No tienes permisos para editar este perfil");
+
+            String flag = autentificacionService.edicionPerfil(loggedUser, usuario);
+
+            if (!flag.equals("1")) {
+                redirectAttributes.addFlashAttribute("error", flag);
                 return "redirect:/mi-perfil";
-            }
-            
-            Optional<User> existingUserByUsername = autentificacionService.findByNombreUsuario(usuario.getNombreUsuario());
-            if (existingUserByUsername.isPresent() && !existingUserByUsername.get().getId().equals(usuario.getId())) {
-                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado por otro usuario");
-                return "redirect:/mi-perfil";
-            }
-            
-            Optional<User> existingUserByEmail = autentificacionService.findByCorreo(usuario.getCorreo());
-            if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(usuario.getId())) {
-                redirectAttributes.addFlashAttribute("error", "El correo ya está registrado por otro usuario");
-                return "redirect:/mi-perfil";
-            }
-            
-            if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
-                Optional<User> currentUser = autentificacionService.findById(usuario.getId());
-                if (currentUser.isPresent()) {
-                    usuario.setPassword(currentUser.get().getPassword());
-                }
             }
             
             usuario.setRole(loggedUser.getRole());
@@ -174,15 +154,9 @@ public class UserController {
         }
         
         try {
-            if (loggedUser.isAdmin()) {
-                long adminCount = autentificacionService.findAll().stream()
-                    .filter(User::isAdmin)
-                    .count();
-                
-                if (adminCount <= 1) {
-                    redirectAttributes.addFlashAttribute("error", "No puedes eliminar la única cuenta de administrador");
-                    return "redirect:/mi-perfil";
-                }
+            if (autentificacionService.ultimoAdmin(loggedUser) ) {
+                redirectAttributes.addFlashAttribute("error", "No puedes eliminar la única cuenta de administrador");
+                return "redirect:/mi-perfil";
             }
             
             autentificacionService.deleteById(loggedUser.getId());

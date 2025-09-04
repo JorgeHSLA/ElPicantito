@@ -22,4 +22,6 @@ public interface TiendaService {
     List<Adicional> getAdicionalesByProductoId(Integer productoId);
     List<Adicional> getAdicionalesDisponibles();
     List<Adicional> getAdicionalesSinAsignar();
+    List<String> asignarAdicionales(Integer productoId, List<Integer> adicionalesIds);
+    public void updateAdicional( Integer productoId ,  Adicional adicional);
 }

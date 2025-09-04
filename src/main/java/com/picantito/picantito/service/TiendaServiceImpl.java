@@ -81,4 +81,48 @@ public class TiendaServiceImpl implements TiendaService {
     public List<Adicional> getAdicionalesSinAsignar() {
         return adicionalRepository.findByDisponibleTrueAndProductoIsNull();
     }
+
+    @Override
+    public List<String> asignarAdicionales(Integer productoId, List<Integer> adicionalesIds) {
+        
+        try {
+            
+    
+            Optional<Producto> producto = this.getProductoById(productoId);
+            
+            if (producto.isPresent()) {
+                for (Integer adicionalId : adicionalesIds) {
+                    Optional<Adicional> adicional = this.getAdicionalById(adicionalId);
+                    if (adicional.isPresent() && adicional.get().getProducto() == null) {
+                        adicional.get().setProducto(producto.get());
+                        this.saveAdicional(adicional.get());
+                    }
+                }
+                
+                return List.of("1", "Adicionales asignados correctamente");
+            } else {
+                return List.of("0", "Producto no encontrado");
+            }
+            
+        } catch (Exception e) {
+            return List.of("1", "Error interno del servidor");
+        }
+        
+    }
+
+    public void updateAdicional( Integer productoId ,  Adicional adicional){
+
+        // Establecer el producto si se selecciono uno
+            if (productoId != null && productoId > 0) {
+                Optional<Producto> producto = this.getProductoById(productoId);
+                if (producto.isPresent()) {
+                    adicional.setProducto(producto.get());
+                }
+            } else {
+                adicional.setProducto(null);
+            }
+            
+            this.saveAdicional(adicional);
+    }
+
 }
