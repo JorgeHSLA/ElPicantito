@@ -208,19 +208,12 @@ public class AdminController {
         }
         
         try {
-            // Verificar duplicados para otros usuarios
-            Optional<User> existingUserByUsername = autentificacionService.findByNombreUsuario(usuario.getNombreUsuario());
-            if (existingUserByUsername.isPresent() && !existingUserByUsername.get().getId().equals(usuario.getId())) {
-                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado por otro usuario");
+            if(autentificacionService.verificacion(usuario))
+            {
+                redirectAttributes.addFlashAttribute("error", "El nombre de usuario o correo ya están registrados");
                 return "redirect:/admin/usuarios";
             }
-            
-            Optional<User> existingUserByEmail = autentificacionService.findByCorreo(usuario.getCorreo());
-            if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(usuario.getId())) {
-                redirectAttributes.addFlashAttribute("error", "El correo ya está registrado por otro usuario");
-                return "redirect:/admin/usuarios";
-            }
-            
+
             autentificacionService.save(usuario);
             redirectAttributes.addFlashAttribute("success", "Usuario actualizado exitosamente");
         } catch (Exception e) {
