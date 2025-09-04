@@ -283,16 +283,8 @@ public class AdminController {
         }
         
         try {
-            // Establecer el producto si se selecciono uno
-            if (productoId != null && productoId > 0) {
-                Optional<Producto> producto = tiendaService.getProductoById(productoId);
-                if (producto.isPresent()) {
-                    adicional.setProducto(producto.get());
-                }
-            } else {
-                adicional.setProducto(null);
-            }
             
+            tiendaService.updateAdicional( productoId ,adicional);
             tiendaService.saveAdicional(adicional);
             redirectAttributes.addFlashAttribute("success", "Adicional actualizado exitosamente");
         } catch (Exception e) {

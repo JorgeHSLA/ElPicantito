@@ -110,4 +110,19 @@ public class TiendaServiceImpl implements TiendaService {
         
     }
 
+    public void updateAdicional( Integer productoId ,  Adicional adicional){
+
+        // Establecer el producto si se selecciono uno
+            if (productoId != null && productoId > 0) {
+                Optional<Producto> producto = this.getProductoById(productoId);
+                if (producto.isPresent()) {
+                    adicional.setProducto(producto.get());
+                }
+            } else {
+                adicional.setProducto(null);
+            }
+            
+            this.saveAdicional(adicional);
+    }
+
 }
