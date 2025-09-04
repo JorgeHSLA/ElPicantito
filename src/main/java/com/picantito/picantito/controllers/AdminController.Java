@@ -93,8 +93,7 @@ public class AdminController {
         if (producto.isPresent()) {
             model.addAttribute("producto", producto.get());
             return "html/admin/edit-producto";
-        }
-        
+        }  
         return "redirect:/admin/productos";
     }
 
@@ -155,16 +154,11 @@ public class AdminController {
         
         try {
             // Verificar duplicados
-            if (autentificacionService.existsByNombreUsuario(usuario.getNombreUsuario())) {
-                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado");
+            if(autentificacionService.verificacion(usuario))
+            {
+                redirectAttributes.addFlashAttribute("error", "El nombre de usuario o correo ya están registrados");
                 return "redirect:/admin/usuarios";
             }
-            
-            if (autentificacionService.existsByCorreo(usuario.getCorreo())) {
-                redirectAttributes.addFlashAttribute("error", "El correo electrónico ya está registrado");
-                return "redirect:/admin/usuarios";
-            }
-            
             autentificacionService.save(usuario);
             redirectAttributes.addFlashAttribute("success", "Usuario guardado exitosamente");
         } catch (Exception e) {
