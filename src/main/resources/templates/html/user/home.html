@@ -386,7 +386,7 @@
     
 
     <!--RECOMENDADOS-->
-    <section class="recommended-section py-5 bg-light">
+    <section class="recommended-carousel-section py-5 bg-light">
       <div class="container">
         <div class="row mb-4">
           <div class="col-lg-8">
@@ -399,62 +399,126 @@
             </a>
           </div>
         </div>
-        
-        <div class="d-flex flex-nowrap overflow-auto gap-3 pb-3">
-          <a href="tienda" class="text-decoration-none">
-            <div class="card border-0 shadow-sm">
-              <img src="images/recomendados/taco4.jpeg" class="card-img-top" alt="Taco al Pastor">
-              <div class="card-body">
-                <h6 class="fw-semibold mb-0">Taco al Pastor</h6>
-              </div>
+        <div class="position-relative">
+          <div class="recommended-carousel">
+            <div class="recommended-carousel-container" id="recommendedCarousel">
+              <!-- Taco al Pastor -->
+              <a href="http://localhost:9998/productos/1" class="recommended-card-carousel">
+                <div class="card-img-container">
+                  <img src="https://lastaquerias.com/wp-content/uploads/2022/11/tacos-pastor-gaacc26fa8_1920.jpg" class="card-img-top" alt="Taco al Pastor">
+                </div>
+                <div class="card-body">
+                  <div class="rating mb-2">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                  </div>
+                  <h5 class="card-title">Taco al Pastor</h5>
+                  <p class="card-text">Taco tradicional de cerdo adobado con piña, cebolla y cilantro en tortilla de maíz.</p>
+                  <div class="price">$1.40</div>
+                </div>
+              </a>
+              <!-- Taco de Carne Asada -->
+              <a href="http://localhost:9998/productos/2" class="recommended-card-carousel">
+                <div class="card-img-container">
+                  <img src="https://www.eatingonadime.com/wp-content/uploads/2024/03/carne-asada-1-square-1.jpg" class="card-img-top" alt="Taco de Carne Asada">
+                </div>
+                <div class="card-body">
+                  <div class="rating mb-2">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                  </div>
+                  <h5 class="card-title">Taco de Carne Asada</h5>
+                  <p class="card-text">Carne de res asada a la parrilla con guacamole, cebolla y cilantro.</p>
+                  <div class="price">$1.55</div>
+                </div>
+              </a>
+              <!-- Taco de Suadero -->
+              <a href="http://localhost:9998/productos/3" class="recommended-card-carousel">
+                <div class="card-img-container">
+                  <img src="https://images.squarespace-cdn.com/content/v1/5a95f6d54611a0f9ec0a7f5e/1568912331542-701S75SMDWD3VQZI72OA/tacos-rey-del-suadero.jpg" class="card-img-top" alt="Taco de Suadero">
+                </div>
+                <div class="card-body">
+                  <div class="rating mb-2">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                  </div>
+                  <h5 class="card-title">Taco de Suadero</h5>
+                  <p class="card-text">Suaves trozos de suadero fritos en su jugo, servidos con salsa verde.</p>
+                  <div class="price">$1.50</div>
+                </div>
+              </a>
+              <!-- Taco de Carnitas -->
+              <a href="http://localhost:9998/productos/4" class="recommended-card-carousel">
+                <div class="card-img-container">
+                  <img src="https://okdiario.com/img/2022/04/30/tacos.jpg" class="card-img-top" alt="Taco de Carnitas">
+                </div>
+                <div class="card-body">
+                  <div class="rating mb-2">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                  </div>
+                  <h5 class="card-title">Taco de Carnitas</h5>
+                  <p class="card-text">Cerdo cocido lentamente, servido con cebolla y cilantro.</p>
+                  <div class="price">$1.40</div>
+                </div>
+              </a>
+              <!-- Taco de Barbacoa -->
+              <a href="http://localhost:9998/productos/5" class="recommended-card-carousel">
+                <div class="card-img-container">
+                  <img src="https://images.squarespace-cdn.com/content/v1/56801b350e4c11744888ec37/1460472452918-SE8BPNUWMWCKTOPP1CHF/Lamb+Barbacoa+Tacos.jpg?format=1500w" class="card-img-top" alt="Taco de Barbacoa">
+                </div>
+                <div class="card-body">
+                  <div class="rating mb-2">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                  </div>
+                  <h5 class="card-title">Taco de Barbacoa</h5>
+                  <p class="card-text">Taco de barbacoa de borrego con salsa borracha.</p>
+                  <div class="price">$1.70</div>
+                </div>
+              </a>
+              <!-- Taco de Birria -->
+              <a href="http://localhost:9998/productos/6" class="recommended-card-carousel">
+                <div class="card-img-container">
+                  <img src="https://happyvegannie.com/wp-content/uploads/2023/09/birriatacos-1200x1200-2.jpg" class="card-img-top" alt="Taco de Birria">
+                </div>
+                <div class="card-body">
+                  <div class="rating mb-2">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                  </div>
+                  <h5 class="card-title">Taco de Birria</h5>
+                  <p class="card-text">Taco de birria de res acompañado de consomé.</p>
+                  <div class="price">$1.80</div>
+                </div>
+              </a>
             </div>
-          </a>
-          
-          <a href="tienda" class="text-decoration-none">
-            <div class="card border-0 shadow-sm">
-              <img src="images/taco2.webp" class="card-img-top" alt="Taco de Asada">
-              <div class="card-body">
-                <h6 class="fw-semibold mb-0">Taco de Asada</h6>
-              </div>
-            </div>
-          </a>
-          
-          <a href="tienda" class="text-decoration-none">
-            <div class="card border-0 shadow-sm">
-              <img src="../images/recomendados/tacosBellakitos1.jpeg" class="card-img-top" alt="Taco de Carnitas">
-              <div class="card-body">
-                <h6 class="fw-semibold mb-0">Taco de Carnitas</h6>
-              </div>
-            </div>
-          </a>
-          
-          <a href="tienda" class="text-decoration-none">
-            <div class="card border-0 shadow-sm">
-              <img src="../images/recomendados/tacosBellakitos2.jpeg" class="card-img-top" alt="Taco de Pollo">
-              <div class="card-body">
-                <h6 class="fw-semibold mb-0">Taco de Pollo</h6>
-              </div>
-            </div>
-          </a>
-          
-          <a href="tienda" class="text-decoration-none">
-            <div class="card border-0 shadow-sm">
-              <img src="../images/recomendados/taco3.jpeg" class="card-img-top" alt="Taco Angarita">
-              <div class="card-body">
-                <h6 class="fw-semibold mb-0">Taco Angarita</h6>
-              </div>
-            </div>
-          </a>
-          
-          <!-- Añadir más recomendados si quieres -->
-          <a href="tienda" class="text-decoration-none">
-            <div class="card border-0 shadow-sm">
-              <img src="../images/taco1.webp" class="card-img-top" alt="Taco Especial">
-              <div class="card-body">
-                <h6 class="fw-semibold mb-0">Taco Especial</h6>
-              </div>
-            </div>
-          </a>
+            <!-- Controles del carrusel -->
+            <button class="carousel-control-recommended prev" id="prevBtn" type="button">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="carousel-control-recommended next" id="nextBtn" type="button">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -593,5 +657,101 @@
         })
       });
     </script>
+
+    <!-- Carrusel infinito JS -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.getElementById('recommendedCarousel');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (!carousel || !prevBtn || !nextBtn) return;
+
+    let currentIndex = 0;
+    const originalCards = Array.from(carousel.children);
+    const totalCards = originalCards.length;
+
+    function getVisibleCards() {
+        if (window.innerWidth > 992) return 3;
+        if (window.innerWidth > 768) return 2;
+        return 1;
+    }
+
+    function setupInfiniteCarousel() {
+        // Limpiar clones previos
+        const clones = carousel.querySelectorAll('.clone');
+        clones.forEach(clone => clone.remove());
+
+        const visibleCards = getVisibleCards();
+
+        // Clonar primeras al final
+        for (let i = 0; i < visibleCards; i++) {
+            const clone = originalCards[i].cloneNode(true);
+            clone.classList.add('clone');
+            carousel.appendChild(clone);
+        }
+        // Clonar últimas al inicio
+        for (let i = totalCards - visibleCards; i < totalCards; i++) {
+            const clone = originalCards[i].cloneNode(true);
+            clone.classList.add('clone');
+            carousel.insertBefore(clone, carousel.firstChild);
+        }
+        currentIndex = visibleCards;
+        updateCarouselPosition(false);
+    }
+
+    function updateCarouselPosition(animate = true) {
+        const cardWidth = carousel.children[0].offsetWidth;
+        const gap = parseFloat(window.getComputedStyle(carousel).gap) || 24;
+        const translateX = currentIndex * (cardWidth + gap);
+
+        if (animate) {
+            carousel.classList.remove('no-transition');
+        } else {
+            carousel.classList.add('no-transition');
+        }
+        carousel.style.transform = `translateX(-${translateX}px)`;
+
+        if (!animate) {
+            setTimeout(() => {
+                carousel.classList.remove('no-transition');
+            }, 50);
+        }
+    }
+
+    function checkInfiniteLoop() {
+        const visibleCards = getVisibleCards();
+        const totalWithClones = carousel.children.length;
+        if (currentIndex >= totalWithClones - visibleCards) {
+            currentIndex = visibleCards;
+            updateCarouselPosition(false);
+        } else if (currentIndex < visibleCards) {
+            currentIndex = totalWithClones - visibleCards * 2;
+            updateCarouselPosition(false);
+        }
+    }
+
+    nextBtn.addEventListener('click', function() {
+        currentIndex++;
+        updateCarouselPosition(true);
+        setTimeout(() => {
+            checkInfiniteLoop();
+        }, 500);
+    });
+
+    prevBtn.addEventListener('click', function() {
+        currentIndex--;
+        updateCarouselPosition(true);
+        setTimeout(() => {
+            checkInfiniteLoop();
+        }, 500);
+    });
+
+    window.addEventListener('resize', function() {
+        setupInfiniteCarousel();
+    });
+
+    setupInfiniteCarousel();
+});
+</script>
   </body>
 </html>

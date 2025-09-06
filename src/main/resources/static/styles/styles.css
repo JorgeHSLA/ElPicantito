@@ -510,17 +510,36 @@ body {
     padding: 0.75rem 1rem;
     color: var(--neutral-text);
     font-weight: 500;
-    transition: all var(--transition-fast);
+    transition: background 0.3s, color 0.3s;
     border: none;
     display: flex;
     align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
 .user-dropdown-item:hover {
     background: linear-gradient(135deg, var(--primary-light), rgba(255, 193, 7, 0.1));
     color: var(--primary-hover);
-    transform: translateX(5px);
-    padding-left: 1.25rem;
+    /* Eliminar transform y padding-left extra */
+    /* transform: translateX(5px); */
+    /* padding-left: 1.25rem; */
+    box-shadow: inset 3px 0 0 var(--primary-color);
+}
+
+.user-dropdown-item::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 86, 48, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.user-dropdown-item:hover::before {
+    left: 100%;
 }
 
 /* Item de logout especial */
@@ -1015,4 +1034,238 @@ body {
 .scroll-content .card:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.user-dropdown-item {
+    padding: 0.75rem 1rem;
+    color: var(--neutral-text);
+    font-weight: 500;
+    transition: background 0.3s, color 0.3s;
+    border: none;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-dropdown-item:hover {
+    background: linear-gradient(135deg, var(--primary-light), rgba(255, 193, 7, 0.1));
+    color: var(--primary-hover);
+    box-shadow: inset 3px 0 0 var(--primary-color);
+}
+
+.user-dropdown-item::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 86, 48, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.user-dropdown-item:hover::before {
+    left: 100%;
+}
+
+.recommended-carousel-section {
+    padding: 4rem 0;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.recommended-carousel {
+    position: relative;
+    overflow: hidden;
+    padding: 0 80px;
+}
+
+.recommended-carousel-container {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    gap: 1.5rem;
+    will-change: transform;
+}
+
+.recommended-carousel-container.no-transition {
+    transition: none;
+}
+
+.recommended-card-carousel {
+    flex: 0 0 calc(33.333% - 1rem);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-light);
+    border: none;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+
+.recommended-card-carousel:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-heavy);
+    text-decoration: none;
+    color: inherit;
+}
+
+.recommended-card-carousel .card-img-container {
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+}
+
+.recommended-card-carousel .card-img-top {
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-fast);
+}
+
+.recommended-card-carousel:hover .card-img-top {
+    transform: scale(1.1);
+}
+
+.recommended-card-carousel .card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.recommended-card-carousel .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--neutral-text);
+    margin-bottom: 0.5rem;
+}
+
+.recommended-card-carousel .card-text {
+    color: var(--neutral-text-light);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.recommended-card-carousel .price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-top: 1rem;
+}
+
+.recommended-card-carousel .rating {
+    margin-bottom: 0.5rem;
+}
+
+.recommended-card-carousel .rating .bi-star-fill {
+    color: var(--accent-color);
+}
+
+.recommended-card-carousel .rating .bi-star {
+    color: var(--neutral-border);
+}
+
+.carousel-control-recommended {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    border: none;
+    border-radius: 15px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    z-index: 10;
+    box-shadow: var(--shadow-medium);
+    backdrop-filter: blur(10px);
+}
+
+.carousel-control-recommended:hover {
+    background: linear-gradient(135deg, var(--primary-hover), var(--primary-color));
+    transform: translateY(-50%) scale(1.1);
+    color: white;
+    box-shadow: var(--shadow-heavy);
+}
+
+.carousel-control-recommended:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-control-recommended.prev {
+    left: 10px;
+}
+
+.carousel-control-recommended.next {
+    right: 10px;
+}
+
+.carousel-control-recommended i {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .recommended-card-carousel {
+        flex: 0 0 calc(50% - 0.75rem);
+    }
+    .recommended-carousel {
+        padding: 0 70px;
+    }
+    .carousel-control-recommended {
+        width: 50px;
+        height: 50px;
+    }
+    .carousel-control-recommended i {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .recommended-card-carousel {
+        flex: 0 0 calc(100% - 0rem);
+        height: 350px;
+    }
+    .recommended-card-carousel .card-img-container {
+        height: 200px;
+    }
+    .recommended-carousel {
+        padding: 0 60px;
+    }
+    .carousel-control-recommended.prev {
+        left: 5px;
+    }
+    .carousel-control-recommended.next {
+        right: 5px;
+    }
+    .carousel-control-recommended {
+        width: 45px;
+        height: 45px;
+    }
+    .carousel-control-recommended i {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .recommended-carousel {
+        padding: 0 50px;
+    }
+    .carousel-control-recommended {
+        width: 40px;
+        height: 40px;
+    }
+    .carousel-control-recommended i {
+        font-size: 0.9rem;
+    }
 }
