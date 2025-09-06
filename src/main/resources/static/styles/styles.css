@@ -237,8 +237,50 @@ body {
     background: rgba(0,0,0,0.45);
 }
 
+/* Fondo principal mejorado */
 .main-content-background {
     background: url('/images/fondoAmarilloMexico.png') center center/cover repeat;
+    min-height: 100vh;
+}
+
+/* Secciones con backdrop blur mejorado */
+.about-section,
+.build-your-taco-section,
+.recommended-section,
+.features-section,
+.carousel-section {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 0;
+    margin: 2rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Cards con blur mejorado */
+.feature-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-light);
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow-medium);
+}
+
+/* Carrusel con mejor transparencia */
+.carousel-content {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    margin: 2rem;
+    padding: 3rem 0;
+    box-shadow: var(--shadow-medium);
 }
 
 /* Hero de tienda */
@@ -273,7 +315,10 @@ body {
 
 /* About section */
 .about-hero {
-    padding: 5rem 0;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 4rem 0;
+    margin: 2rem 0;
 }
 
 .story-card {
@@ -589,7 +634,7 @@ body.auth-page {
 }
 
 /* =========================
-   DROPDOWN MEJORADO
+   DROPDOWN MEJORADO SIN ESPACIO EN BLANCO
    ========================= */
 .user-dropdown-menu {
     border: none;
@@ -627,12 +672,34 @@ body.auth-page {
     border: none;
     display: flex;
     align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
+/* Arreglar la animación para que no haya espacio en blanco */
 .user-dropdown-item:hover {
     background: linear-gradient(135deg, rgba(255, 86, 48, 0.1), rgba(255, 86, 48, 0.05));
     color: var(--primary-color);
-    transform: translateX(5px);
+    /* Remover transform que causaba el espacio */
+    transform: none;
+    /* Agregar un efecto sutil sin desplazamiento */
+    box-shadow: inset 3px 0 0 var(--primary-color);
+}
+
+/* Efecto alternativo con pseudo-elemento para mantener la sensación de movimiento */
+.user-dropdown-item::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 86, 48, 0.1), transparent);
+    transition: left 0.3s ease;
+}
+
+.user-dropdown-item:hover::before {
+    left: 100%;
 }
 
 /* =========================
@@ -737,11 +804,12 @@ body.auth-page {
 }
 
 .carousel-content {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
     border-radius: 20px;
     margin: 2rem;
     padding: 3rem 0;
+    box-shadow: var(--shadow-medium);
 }
 
 .promo-text {
@@ -790,11 +858,6 @@ body.auth-page {
 .recommended-section .card {
     flex: 0 0 250px;
     margin-right: 1rem;
-}
-
-.recommended-section .card img {
-    height: 180px;
-    object-fit: cover;
 }
 
 /* =========================
@@ -931,6 +994,35 @@ body.auth-page {
 
     .taco-image img {
         height: 250px;
+    }
+}
+
+/* =========================
+   RESPONSIVE MEJORADO PARA RECOMENDADOS
+   ========================= */
+@media (max-width: 768px) {
+    .recommended-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .recommended-card {
+        height: 350px;
+    }
+    
+    .recommended-card .card-img-top {
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .recommended-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .page-header .navbar {
+        width: 95%;
     }
 }
 
@@ -1138,4 +1230,272 @@ footer .social-links a:hover {
 
 .menu-stats small {
     color: var(--neutral-text-light);
+}
+
+/* =========================
+   MEJORAS PARA FONDO Y SECCIONES
+   ========================= */
+
+/* Fondo principal mejorado */
+.main-content-background {
+    background: url('/images/fondoAmarilloMexico.png') center center/cover repeat;
+    min-height: 100vh;
+}
+
+/* Secciones con backdrop blur mejorado */
+.about-section,
+.build-your-taco-section,
+.recommended-section,
+.features-section,
+.carousel-section {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 0;
+    margin: 2rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Cards con blur mejorado */
+.feature-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-light);
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow-medium);
+}
+
+/* Carrusel con mejor transparencia */
+.carousel-content {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    margin: 2rem;
+    padding: 3rem 0;
+    box-shadow: var(--shadow-medium);
+}
+
+/* =========================
+   CARRUSEL DE RECOMENDADOS MEJORADO CON CONTROLES ARREGLADOS
+   ========================= */
+.recommended-section {
+    padding: 4rem 0;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.recommended-carousel {
+    position: relative;
+    overflow: hidden;
+    padding: 0 80px;
+}
+
+.recommended-carousel-container {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    gap: 1.5rem;
+    will-change: transform;
+}
+
+/* Para el carrusel infinito, necesitamos que no haya cambios bruscos */
+.recommended-carousel-container.no-transition {
+    transition: none;
+}
+
+.recommended-card-carousel {
+    flex: 0 0 calc(33.333% - 1rem);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-light);
+    border: none;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+
+.recommended-card-carousel:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-heavy);
+    text-decoration: none;
+    color: inherit;
+}
+
+.recommended-card-carousel .card-img-container {
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+}
+
+.recommended-card-carousel .card-img-top {
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-fast);
+}
+
+.recommended-card-carousel:hover .card-img-top {
+    transform: scale(1.1);
+}
+
+.recommended-card-carousel .card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.recommended-card-carousel .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--neutral-text);
+    margin-bottom: 0.5rem;
+}
+
+.recommended-card-carousel .card-text {
+    color: var(--neutral-text-light);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.recommended-card-carousel .price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-top: 1rem;
+}
+
+.recommended-card-carousel .rating {
+    margin-bottom: 0.5rem;
+}
+
+.recommended-card-carousel .rating .bi-star-fill {
+    color: var(--accent-color);
+}
+
+.recommended-card-carousel .rating .bi-star {
+    color: var(--neutral-border);
+}
+
+/* Controles del carrusel (sin cambios) */
+.carousel-control-recommended {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    border: none;
+    border-radius: 15px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    z-index: 10;
+    box-shadow: var(--shadow-medium);
+    backdrop-filter: blur(10px);
+}
+
+.carousel-control-recommended:hover {
+    background: linear-gradient(135deg, var(--primary-hover), var(--primary-color));
+    transform: translateY(-50%) scale(1.1);
+    color: white;
+    box-shadow: var(--shadow-heavy);
+}
+
+.carousel-control-recommended:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-control-recommended.prev {
+    left: 10px;
+}
+
+.carousel-control-recommended.next {
+    right: 10px;
+}
+
+.carousel-control-recommended i {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+/* Responsive para el carrusel */
+@media (max-width: 992px) {
+    .recommended-card-carousel {
+        flex: 0 0 calc(50% - 0.75rem);
+    }
+    
+    .recommended-carousel {
+        padding: 0 70px;
+    }
+    
+    .carousel-control-recommended {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .carousel-control-recommended i {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .recommended-card-carousel {
+        flex: 0 0 calc(100% - 0rem);
+        height: 350px;
+    }
+    
+    .recommended-card-carousel .card-img-container {
+        height: 200px;
+    }
+    
+    .recommended-carousel {
+        padding: 0 60px;
+    }
+    
+    .carousel-control-recommended.prev {
+        left: 5px;
+    }
+    
+    .carousel-control-recommended.next {
+        right: 5px;
+    }
+    
+    .carousel-control-recommended {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .carousel-control-recommended i {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .recommended-carousel {
+        padding: 0 50px;
+    }
+    
+    .carousel-control-recommended {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .carousel-control-recommended i {
+        font-size: 0.9rem;
+    }
 }
