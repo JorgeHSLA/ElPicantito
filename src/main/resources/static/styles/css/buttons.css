@@ -1,0 +1,236 @@
+/* =========================
+   BOTONES Y COMPONENTES
+   ========================= */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    transform: translateY(0);
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.btn-primary:active {
+    transform: translateY(-1px);
+    transition: transform 0.1s;
+}
+
+.btn-warning {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--neutral-text);
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-warning::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+}
+
+.btn-warning:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-3px);
+}
+
+.btn-warning:hover::before {
+    left: 100%;
+}
+
+.btn-warning:active {
+    transform: translateY(-1px);
+    transition: transform 0.1s;
+}
+
+.btn-danger {
+    background-color: var(--error-color);
+    border-color: var(--error-color);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-danger::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+}
+
+.btn-danger:hover {
+    background-color: var(--error-hover);
+    border-color: var(--error-hover);
+    transform: translateY(-3px);
+}
+
+.btn-danger:hover::before {
+    left: 100%;
+}
+
+.btn-danger:active {
+    transform: translateY(-1px);
+    transition: transform 0.1s;
+}
+
+/* Botones secundarios en tonos neutros */
+.btn-outline-primary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+/* =========================
+   BOTÓN DE CERRAR/VOLVER
+   ========================= */
+.btn-close-custom {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 18px;
+    font-weight: bold;
+    transition: all var(--transition-fast);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+}
+
+.btn-close-custom:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.6);
+    color: white;
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-close-custom:active {
+    transform: rotate(90deg) scale(0.95);
+}
+
+/* Variante para fondo oscuro si es necesario */
+.btn-close-custom.dark {
+    border-color: var(--neutral-border);
+    background: var(--neutral-surface);
+    color: var(--neutral-text);
+}
+
+.btn-close-custom.dark:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-hover);
+    color: white;
+}
+
+/* =========================
+   ANIMACIONES DE BOTONES
+   ========================= */
+
+/* Animación de pulso para botones importantes */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 86, 48, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 86, 48, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 86, 48, 0); }
+}
+
+.btn-pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Botón con efecto de ondas */
+.btn-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-ripple:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* =========================
+   BADGES/ETIQUETAS
+   ========================= */
+.badge {
+    transition: transform 0.25s cubic-bezier(0.4, 0.2, 0.2, 1), box-shadow 0.25s;
+}
+
+.badge:hover {
+    transform: scale(1.13);
+    box-shadow: 0 4px 16px rgba(255, 86, 48, 0.15), 0 1.5px 6px rgba(0,0,0,0.08);
+}
+
+.badge-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.badge-warning {
+    background-color: var(--accent-color);
+    color: var(--neutral-text);
+}
+
+.badge-danger {
+    background-color: var(--error-color);
+    color: white;
+}
