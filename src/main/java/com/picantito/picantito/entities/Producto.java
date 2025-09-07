@@ -35,7 +35,8 @@ public class Producto {
     @Column(nullable = false)
     private Integer calificacion = 5;
     
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // Cambio: Relación muchos a muchos con Adicional
+    @ManyToMany(mappedBy = "productos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Adicional> adicionales = new ArrayList<>();
 
     // Constructor sin ID (para nuevos productos)
@@ -53,10 +54,11 @@ public class Producto {
         return "Producto{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
                 ", precio=" + precio +
+                ", imagen='" + imagen + '\'' +
                 ", disponible=" + disponible +
                 ", calificacion=" + calificacion +
-                // NO incluir adicionales aquí para evitar referencia circular
                 '}';
     }
 }

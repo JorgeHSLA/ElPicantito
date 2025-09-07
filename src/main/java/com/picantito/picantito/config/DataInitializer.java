@@ -3,6 +3,7 @@ package com.picantito.picantito.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import java.util.List;
 
 import com.picantito.picantito.entities.Adicional;
 import com.picantito.picantito.entities.Producto;
@@ -41,14 +42,19 @@ public class DataInitializer implements CommandLineRunner {
             4.00, "https://www.goya.com/wp-content/uploads/2023/10/carne-asada-tacos1.jpg", true, 4));
             
         // Adicionales para Taco al Pastor
-        tiendaService.saveAdicional(new Adicional("Extra Piña", "Piña fresca adicional", 0.50, true, tacoAlPastor));
-        tiendaService.saveAdicional(new Adicional("Salsa Verde Picante", "Salsa verde casera extra picante", 0.25, true, tacoAlPastor));
-        tiendaService.saveAdicional(new Adicional("Guacamole Extra", "Porción adicional de guacamole", 1.00, true, tacoAlPastor));
-        
+        Adicional extraPina = tiendaService.saveAdicional(new Adicional("Extra Piña", "Piña fresca adicional", 0.50, true));
+        Adicional salsaVerde = tiendaService.saveAdicional(new Adicional("Salsa Verde Picante", "Salsa verde casera extra picante", 0.25, true));
+        Adicional guacamole = tiendaService.saveAdicional(new Adicional("Guacamole Extra", "Porción adicional de guacamole", 1.00, true));
+        tiendaService.asociarAdicionalAProductos(extraPina.getId(), List.of(tacoAlPastor.getId()));
+        tiendaService.asociarAdicionalAProductos(salsaVerde.getId(), List.of(tacoAlPastor.getId()));
+        tiendaService.asociarAdicionalAProductos(guacamole.getId(), List.of(tacoAlPastor.getId()));
+
         // Adicionales para Taco de Asada
-        tiendaService.saveAdicional(new Adicional("Extra Carne", "Porción adicional de carne asada", 1.50, true, tacoAsada));
-        tiendaService.saveAdicional(new Adicional("Pico de Gallo", "Mezcla fresca de tomate, cebolla y cilantro", 0.75, true, tacoAsada));
-        
+        Adicional extraCarne = tiendaService.saveAdicional(new Adicional("Extra Carne", "Porción adicional de carne asada", 1.50, true));
+        Adicional picoGallo = tiendaService.saveAdicional(new Adicional("Pico de Gallo", "Mezcla fresca de tomate, cebolla y cilantro", 0.75, true));
+        tiendaService.asociarAdicionalAProductos(extraCarne.getId(), List.of(tacoAsada.getId()));
+        tiendaService.asociarAdicionalAProductos(picoGallo.getId(), List.of(tacoAsada.getId()));
+
         // Más productos
         tiendaService.saveProducto(new Producto("Taco de Carnitas", 
             "Carne de cerdo cocinada lentamente con especias tradicionales", 

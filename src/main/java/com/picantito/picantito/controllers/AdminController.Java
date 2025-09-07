@@ -52,7 +52,7 @@ public class AdminController {
         return "html/admin/dashboard";
     }
 
-    // CRUD Productos
+    // CRUD Productos (sin cambios significativos)
     @GetMapping("/productos")
     public String productos(HttpSession session, Model model) {
         if (!isAdmin(session)) {
@@ -129,6 +129,110 @@ public class AdminController {
         }
         
         return "redirect:/admin/productos";
+    }
+
+    // CRUD Adicionales - MODIFICADO para muchos a muchos
+    @GetMapping("/adicionales")
+    public String adicionales(HttpSession session, Model model) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        List<Adicional> adicionales = tiendaService.getAllAdicionales();
+        List<Producto> productos = tiendaService.getAllProductos();
+        
+        model.addAttribute("adicionales", adicionales);
+        model.addAttribute("productos", productos);
+        model.addAttribute("nuevoAdicional", new Adicional());
+        
+        return "html/admin/adicionales";
+    }
+
+    @PostMapping("/adicionales/save")
+    public String saveAdicional(@ModelAttribute("nuevoAdicional") Adicional adicional,
+                               @RequestParam(value = "productosIds", required = false) List<Integer> productosIds,
+                               HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            // Guardar el adicional primero
+            Adicional savedAdicional = tiendaService.saveAdicional(adicional);
+            
+            // Asociar con productos si se seleccionaron
+            if (productosIds != null && !productosIds.isEmpty()) {
+                tiendaService.asociarAdicionalAProductos(savedAdicional.getId(), productosIds);
+            }
+            
+            redirectAttributes.addFlashAttribute("success", "Adicional guardado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al guardar el adicional: " + e.getMessage());
+        }
+        
+        return "redirect:/admin/adicionales";
+    }
+
+    @GetMapping("/adicionales/edit/{id}")
+    public String editAdicional(@PathVariable Integer id, HttpSession session, Model model) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        Optional<Adicional> adicional = tiendaService.getAdicionalById(id);
+        if (adicional.isPresent()) {
+            List<Producto> productos = tiendaService.getAllProductos();
+            model.addAttribute("adicional", adicional.get());
+            model.addAttribute("productos", productos);
+            return "html/admin/edit-adicional";
+        }
+        
+        return "redirect:/admin/adicionales";
+    }
+
+    @PostMapping("/adicionales/update")
+    public String updateAdicional(@ModelAttribute("adicional") Adicional adicional,
+                             @RequestParam(value = "productosIds", required = false) List<Integer> productosIds,
+                             HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            // Primero guardar el adicional con sus datos básicos
+            tiendaService.saveAdicional(adicional);
+            
+            // Luego actualizar las asociaciones con productos
+            if (productosIds != null) {
+                tiendaService.asociarAdicionalAProductos(adicional.getId(), productosIds);
+            } else {
+                // Si no se seleccionó ningún producto, limpiar asociaciones
+                tiendaService.asociarAdicionalAProductos(adicional.getId(), List.of());
+            }
+            
+            redirectAttributes.addFlashAttribute("success", "Adicional actualizado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el adicional: " + e.getMessage());
+        }
+        
+        return "redirect:/admin/adicionales";
+    }
+
+    @GetMapping("/adicionales/delete/{id}")
+    public String deleteAdicional(@PathVariable Integer id, HttpSession session, 
+                                 RedirectAttributes redirectAttributes) {
+        if (!isAdmin(session)) {
+            return "redirect:/home";
+        }
+        
+        try {
+            tiendaService.deleteAdicional(id);
+            redirectAttributes.addFlashAttribute("success", "Adicional eliminado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar el adicional");
+        }
+        
+        return "redirect:/admin/adicionales";
     }
 
     // CRUD Usuarios
@@ -221,93 +325,5 @@ public class AdminController {
         }
         
         return "redirect:/admin/usuarios";
-    }
-
-    // CRUD Adicionales
-    @GetMapping("/adicionales")
-    public String adicionales(HttpSession session, Model model) {
-        if (!isAdmin(session)) {
-            return "redirect:/home";
-        }
-        
-        List<Adicional> adicionales = tiendaService.getAllAdicionales();
-        List<Producto> productos = tiendaService.getAllProductos();
-        
-        model.addAttribute("adicionales", adicionales);
-        model.addAttribute("productos", productos);
-        model.addAttribute("nuevoAdicional", new Adicional());
-        
-        return "html/admin/adicionales";
-    }
-
-    @PostMapping("/adicionales/save")
-    public String saveAdicional(@ModelAttribute("nuevoAdicional") Adicional adicional, 
-                               HttpSession session, RedirectAttributes redirectAttributes) {
-        if (!isAdmin(session)) {
-            return "redirect:/home";
-        }
-        
-        try {
-            tiendaService.saveAdicional(adicional);
-            redirectAttributes.addFlashAttribute("success", "Adicional guardado exitosamente");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al guardar el adicional");
-        }
-        
-        return "redirect:/admin/adicionales";
-    }
-
-    @GetMapping("/adicionales/edit/{id}")
-    public String editAdicional(@PathVariable Integer id, HttpSession session, Model model) {
-        if (!isAdmin(session)) {
-            return "redirect:/home";
-        }
-        
-        Optional<Adicional> adicional = tiendaService.getAdicionalById(id);
-        if (adicional.isPresent()) {
-            List<Producto> productos = tiendaService.getAllProductos();
-            model.addAttribute("adicional", adicional.get());
-            model.addAttribute("productos", productos);
-            return "html/admin/edit-adicional";
-        }
-        
-        return "redirect:/admin/adicionales";
-    }
-
-    @PostMapping("/adicionales/update")
-    public String updateAdicional(@ModelAttribute("adicional") Adicional adicional, 
-                                 @RequestParam(value = "producto.id", required = false) Integer productoId,
-                                 HttpSession session, RedirectAttributes redirectAttributes) {
-        if (!isAdmin(session)) {
-            return "redirect:/home";
-        }
-        
-        try {
-            
-            tiendaService.updateAdicional( productoId ,adicional);
-            tiendaService.saveAdicional(adicional);
-            redirectAttributes.addFlashAttribute("success", "Adicional actualizado exitosamente");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al actualizar el adicional: " + e.getMessage());
-        }
-        
-        return "redirect:/admin/adicionales";
-    }
-
-    @GetMapping("/adicionales/delete/{id}")
-    public String deleteAdicional(@PathVariable Integer id, HttpSession session, 
-                                 RedirectAttributes redirectAttributes) {
-        if (!isAdmin(session)) {
-            return "redirect:/home";
-        }
-        
-        try {
-            tiendaService.deleteAdicional(id);
-            redirectAttributes.addFlashAttribute("success", "Adicional eliminado exitosamente");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al eliminar el adicional");
-        }
-        
-        return "redirect:/admin/adicionales";
     }
 }

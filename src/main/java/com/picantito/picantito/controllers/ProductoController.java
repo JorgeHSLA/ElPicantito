@@ -32,7 +32,8 @@ public class ProductoController {
     public String mostrarProducto(@PathVariable Integer id, Model model) {
         Optional<Producto> producto = tiendaService.getProductoById(id);
         if (producto.isPresent()) {
-            List<Adicional> adicionales = tiendaService.getAdicionalesDisponibles();
+            // Obtener adicionales específicos para este producto
+            List<Adicional> adicionales = tiendaService.getAdicionalesByProductoId(id);
             model.addAttribute("producto", producto.get());
             model.addAttribute("adicionales", adicionales);
             return "html/productos/detalle";
@@ -46,7 +47,6 @@ public class ProductoController {
     public ResponseEntity<Map<String, Object>> asignarAdicionales(@RequestBody Map<String, Object> request) {
         Map<String, Object> response = new HashMap<>();
         
-        
         Integer productoId = (Integer) request.get("productoId");
         @SuppressWarnings("unchecked")
         List<Integer> adicionalesIds = (List<Integer>) request.get("adicionalesIds");
@@ -54,7 +54,6 @@ public class ProductoController {
         
         response.put("success", responseList.get(0).equals("1"));
         response.put("message", responseList.get(1));
-            
 
         return ResponseEntity.ok(response);
     }

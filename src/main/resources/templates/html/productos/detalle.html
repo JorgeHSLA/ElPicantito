@@ -43,21 +43,21 @@
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-start mb-3">
-                            <h1 class="fw-bold" th:text="${producto.nombre}"></h1>
-                            <span th:if="${producto.disponible}" class="badge bg-success fs-6 px-3 py-2">Disponible</span>
-                            <span th:unless="${producto.disponible}" class="badge bg-danger fs-6 px-3 py-2">No disponible</span>
+                            <h1 class="h2 fw-bold" th:text="${producto.nombre}"></h1>
+                            <span th:if="${producto.disponible}" class="badge bg-success fs-6">Disponible</span>
+                            <span th:unless="${producto.disponible}" class="badge bg-danger fs-6">No Disponible</span>
                         </div>
                         
-                        <div class="mb-4">
-                            <div class="d-flex align-items-center mb-2">
-                                <!-- Estrellas llenas -->
-                                <th:block th:each="i : ${#numbers.sequence(1, producto.calificacion)}">
-                                    <i class="bi bi-star-fill text-warning fs-5"></i>
-                                </th:block>
-                                <!-- Estrellas vacías -->
-                                <th:block th:if="${producto.calificacion < 5}" th:each="i : ${#numbers.sequence(producto.calificacion + 1, 5)}">
-                                    <i class="bi bi-star text-warning fs-5"></i>
-                                </th:block>
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <th:block th:each="i : ${#numbers.sequence(1, producto.calificacion)}">
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                    </th:block>
+                                    <th:block th:if="${producto.calificacion < 5}" th:each="i : ${#numbers.sequence(producto.calificacion + 1, 5)}">
+                                        <i class="bi bi-star text-warning"></i>
+                                    </th:block>
+                                </div>
                                 <span class="ms-3 text-muted">(<span th:text="${producto.calificacion}"></span>/5 estrellas)</span>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                         </div>
                         
                         <div class="mb-4" th:if="${adicionales != null and !adicionales.empty}">
-                            <h5 class="fw-semibold mb-3">Adicionales Disponibles:</h5>
+                            <h5 class="fw-semibold mb-3">Adicionales Disponibles para este producto:</h5>
                             
                             <!-- Contenedor con scroll horizontal -->
                             <div class="scroll-container-horizontal position-relative">
@@ -86,7 +86,7 @@
                                                     <input class="form-check-input adicional-check" type="checkbox" 
                                                            th:id="'adicional-' + ${adicional.id}" 
                                                            th:value="${adicional.id}"
-                                                           th:disabled="${!adicional.disponible or adicional.producto != null}">
+                                                           th:disabled="${!adicional.disponible}">
                                                     <label class="form-check-label fw-semibold" th:for="'adicional-' + ${adicional.id}">
                                                         <span th:text="${adicional.nombre}"></span>
                                                     </label>
@@ -98,8 +98,7 @@
                                                     </span>
                                                     <div>
                                                         <span th:if="${!adicional.disponible}" class="badge bg-danger">Agotado</span>
-                                                        <span th:if="${adicional.disponible and adicional.producto != null}" class="badge bg-secondary">Asignado</span>
-                                                        <span th:if="${adicional.disponible and adicional.producto == null}" class="badge bg-success">Disponible</span>
+                                                        <span th:if="${adicional.disponible}" class="badge bg-success">Disponible</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -112,7 +111,7 @@
                         <div class="d-grid gap-2">
                             <button th:if="${producto.disponible}" 
                                     class="btn btn-warning btn-lg" 
-                                    onclick="asignarAdicionalesYAgregar()"
+                                    onclick="agregarAlCarrito()"
                                     th:attr="data-producto-id=${producto.id}">
                                 <i class="bi bi-cart-plus me-2"></i>Agregar al Carrito
                             </button>
@@ -132,20 +131,22 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-function asignarAdicionalesYAgregar() {
+function agregarAlCarrito() {
     const adicionalesSeleccionados = [];
     const checkboxes = document.querySelectorAll('.adicional-check:checked');
     const productoId = document.querySelector('[data-producto-id]').getAttribute('data-producto-id');
     
     checkboxes.forEach(checkbox => {
-        // Solo agregar si no está ya asignado
         if (!checkbox.disabled) {
             adicionalesSeleccionados.push(parseInt(checkbox.value));
         }
     });
     
+    // Obtener información del producto
+    const productoNombre = document.querySelector('h1.h2').textContent;
+    
     if (adicionalesSeleccionados.length > 0) {
-        // Hacer petición al servidor para asignar adicionales al producto
+        // Hacer petición al servidor para confirmar la selección
         fetch('/productos/asignar-adicionales', {
             method: 'POST',
             headers: {
@@ -159,22 +160,16 @@ function asignarAdicionalesYAgregar() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Marcar como asignados en la interfaz
+                alert(`¡${productoNombre} agregado al carrito con ${adicionalesSeleccionados.length} adicionales!`);
+                
+                // Opcional: Deshabilitar adicionales seleccionados
                 checkboxes.forEach(checkbox => {
                     if (adicionalesSeleccionados.includes(parseInt(checkbox.value))) {
-                        const card = checkbox.closest('.card');
-                        checkbox.disabled = true;
                         checkbox.checked = false;
-                        
-                        // Cambiar badge a "Asignado"
-                        const badgeContainer = card.querySelector('.d-flex .align-items-center > div');
-                        badgeContainer.innerHTML = '<span class="badge bg-secondary">Asignado</span>';
                     }
                 });
-                
-                alert('¡Adicionales asignados al producto y agregado al carrito exitosamente!');
             } else {
-                alert('Error al asignar adicionales: ' + data.message);
+                alert('Error al procesar adicionales: ' + data.message);
             }
         })
         .catch(error => {
@@ -183,7 +178,7 @@ function asignarAdicionalesYAgregar() {
         });
     } else {
         // Si no hay adicionales seleccionados, solo agregar el producto al carrito
-        alert('Producto agregado al carrito sin adicionales');
+        alert(`¡${productoNombre} agregado al carrito!`);
     }
 }
     </script>

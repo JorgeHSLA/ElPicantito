@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "adicionales")
 @Data
@@ -27,17 +30,21 @@ public class Adicional {
     @Column(nullable = false)
     private Boolean disponible = true;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "producto_id")
-    private Producto producto;
-    
-    // Constructor sin ID
-    public Adicional(String nombre, String descripcion, Double precio, Boolean disponible, Producto producto) {
+    // Cambio: Relación muchos a muchos con Producto
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "producto_adicional",
+        joinColumns = @JoinColumn(name = "adicional_id"),
+        inverseJoinColumns = @JoinColumn(name = "producto_id")
+    )
+    private List<Producto> productos = new ArrayList<>();
+
+    // Constructor sin ID (para nuevos adicionales)
+    public Adicional(String nombre, String descripcion, Double precio, Boolean disponible) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.disponible = disponible;
-        this.producto = producto;
     }
 
     @Override
@@ -45,9 +52,9 @@ public class Adicional {
         return "Adicional{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
                 ", precio=" + precio +
                 ", disponible=" + disponible +
-                // NO incluir producto aquí para evitar referencia circular
                 '}';
     }
 }

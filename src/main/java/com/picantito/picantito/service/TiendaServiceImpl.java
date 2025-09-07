@@ -79,50 +79,84 @@ public class TiendaServiceImpl implements TiendaService {
     
     @Override
     public List<Adicional> getAdicionalesSinAsignar() {
-        return adicionalRepository.findByDisponibleTrueAndProductoIsNull();
+        return adicionalRepository.findByDisponibleTrueAndProductosIsEmpty();
     }
 
     @Override
     public List<String> asignarAdicionales(Integer productoId, List<Integer> adicionalesIds) {
-        
         try {
-            
-    
             Optional<Producto> producto = this.getProductoById(productoId);
             
             if (producto.isPresent()) {
                 for (Integer adicionalId : adicionalesIds) {
                     Optional<Adicional> adicional = this.getAdicionalById(adicionalId);
-                    if (adicional.isPresent() && adicional.get().getProducto() == null) {
-                        adicional.get().setProducto(producto.get());
-                        this.saveAdicional(adicional.get());
+                    if (adicional.isPresent()) {
+                        // Verificar si ya está asociado
+                        if (!adicional.get().getProductos().contains(producto.get())) {
+                            adicional.get().getProductos().add(producto.get());
+                            this.saveAdicional(adicional.get());
+                        }
                     }
                 }
-                
                 return List.of("1", "Adicionales asignados correctamente");
             } else {
                 return List.of("0", "Producto no encontrado");
             }
-            
         } catch (Exception e) {
-            return List.of("1", "Error interno del servidor");
+            return List.of("0", "Error interno del servidor");
         }
-        
     }
 
-    public void updateAdicional( Integer productoId ,  Adicional adicional){
+    @Override
+    public void updateAdicional(Integer productoId, Adicional adicional) {
+        // Este método ahora maneja múltiples productos
+        this.saveAdicional(adicional);
+    }
 
-        // Establecer el producto si se selecciono uno
-            if (productoId != null && productoId > 0) {
-                Optional<Producto> producto = this.getProductoById(productoId);
-                if (producto.isPresent()) {
-                    adicional.setProducto(producto.get());
+    @Override
+    public void asociarAdicionalAProductos(Integer adicionalId, List<Integer> productosIds) {
+        try {
+            Optional<Adicional> adicional = this.getAdicionalById(adicionalId);
+            if (adicional.isPresent()) {
+                // Limpiar asociaciones actuales
+                adicional.get().getProductos().clear();
+                
+                // Agregar nuevas asociaciones
+                if (productosIds != null) {
+                    for (Integer productoId : productosIds) {
+                        Optional<Producto> producto = this.getProductoById(productoId);
+                        if (producto.isPresent()) {
+                            adicional.get().getProductos().add(producto.get());
+                            System.out.println("Asociando adicional " + adicional.get().getNombre() + 
+                                             " con producto " + producto.get().getNombre());
+                        }
+                    }
                 }
-            } else {
-                adicional.setProducto(null);
+                
+                // Guardar las asociaciones
+                Adicional savedAdicional = adicionalRepository.save(adicional.get());
+                System.out.println("Adicional guardado con " + savedAdicional.getProductos().size() + " productos asociados");
             }
-            
-            this.saveAdicional(adicional);
+        } catch (Exception e) {
+            System.err.println("Error en asociarAdicionalAProductos: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
+    @Override
+    public void desasociarAdicionalDeProducto(Integer adicionalId, Integer productoId) {
+        Optional<Adicional> adicional = this.getAdicionalById(adicionalId);
+        Optional<Producto> producto = this.getProductoById(productoId);
+        
+        if (adicional.isPresent() && producto.isPresent()) {
+            adicional.get().getProductos().remove(producto.get());
+            this.saveAdicional(adicional.get());
+        }
+    }
+
+    @Override
+    public List<Adicional> getAdicionalesDisponiblesParaProducto(Integer productoId) {
+        return adicionalRepository.findAvailableForProduct(productoId);
+    }
 }
