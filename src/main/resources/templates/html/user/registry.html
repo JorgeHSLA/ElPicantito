@@ -9,232 +9,32 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
-
-    <!-- Bootstrap opcional -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-         :root {
-            --accent-color: #ffc107;
-        }
-        
-        html,
-        body {
-            height: 100%;
-        }
-        
-        body {
-            font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            background: url(\/images\/CreateTaco\.jpg) no-repeat center center fixed;
-            /* carga directa desde /static/images */
-            background-size: cover;
-            margin: 0;
-            color: #e9f6ef;
-        }
-        
-        .auth-wrapper {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 48px;
-            /* Más espacio */
-        }
-        
-        .auth-card {
-            width: 100%;
-            max-width: 1400px;
-            /* Más ancho */
-            height: 800px;
-            /* Más alto */
-            display: flex;
-            border-radius: 32px;
-            /* Más redondeado */
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-            background: none;
-            /* Sin fondo extra */
-        }
-        
-        .auth-left {
-            flex: 2;
-            position: relative;
-            padding: 96px 72px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 32px;
-            background: rgba(6, 30, 15, 0.35);
-            /* Más transparente */
-            backdrop-filter: blur(12px);
-            /* Más difuminado */
-            /* Elimina background-image */
-            transition: background 300ms ease;
-        }
-        
-        .auth-title {
-            font-family: "Playfair Display", serif;
-            font-size: 64px;
-            /* Más grande */
-            line-height: 1.05;
-            font-weight: 700;
-            color: #ffffff;
-            text-shadow: 0 12px 40px rgba(6, 20, 10, 0.7);
-            margin: 0;
-        }
-        
-        .auth-sub {
-            max-width: 540px;
-            color: rgba(255, 255, 255, 0.88);
-            font-size: 22px;
-            /* Más grande */
-        }
-        
-        .auth-right {
-            flex: 1.2;
-            position: relative;
-            padding: 72px 56px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.55);
-            /* Blanco translúcido */
-            backdrop-filter: blur(6px);
-            /* Menos difuminado */
-            border-left: 1px solid rgba(255, 255, 255, 0.03);
-            min-width: 400px;
-        }
-        
-        .form-panel {
-            background: rgba(255, 255, 255, 0.72);
-            /* Más blanco y translúcido */
-            padding: 32px 28px;
-            border-radius: 16px;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.03);
-            width: 100%;
-            max-width: 420px;
-            margin-left: auto;
-            margin-right: auto;
-            backdrop-filter: blur(3px);
-            /* Ligero difuminado */
-        }
-        
-        .form-panel h3 {
-            margin: 0 0 28px 0;
-            color: #222;
-            /* Texto oscuro para contraste */
-            font-size: 36px;
-            font-weight: 700;
-            font-family: "Playfair Display", serif;
-        }
-        
-        .line-input {
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid rgba(0, 0, 0, 0.18);
-            /* Oscurece el borde */
-            color: #222;
-            /* Texto oscuro */
-            padding: 18px 10px;
-            width: 100%;
-            outline: none;
-            font-size: 18px;
-            border-radius: 0;
-        }
-        
-        .line-input::placeholder {
-            color: rgba(0, 0, 0, 0.35);
-        }
-        
-        .form-label-small {
-            color: rgba(0, 0, 0, 0.7);
-            font-size: 15px;
-            margin-bottom: 8px;
-            display: block;
-        }
-        
-        .form-note {
-            color: rgba(0, 0, 0, 0.65);
-            font-size: 15px;
-            margin-top: 12px;
-        }
-        
-        .btn-accent {
-            background: var(--accent-color);
-            color: #000;
-            border: none;
-            padding: 18px 24px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 20px;
-            width: 100%;
-            margin-top: 24px;
-            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.32), 0 8px 16px rgba(255, 193, 7, 0.08);
-        }
-        
-        .btn-accent:hover {
-            filter: brightness(.97);
-        }
-        
-        .right-decor {
-            position: absolute;
-            right: 14px;
-            top: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-            opacity: 0.06;
-        }
-        
-        @media (max-width:1200px) {
-            .auth-card {
-                flex-direction: column;
-                height: auto;
-                max-width: 1000px;
-            }
-            .auth-left {
-                order: 2;
-                padding: 48px;
-                height: 400px;
-            }
-            .auth-right {
-                order: 1;
-                padding: 36px;
-            }
-            .form-panel {
-                max-width: 100%;
-            }
-        }
-        
-        @media (max-width:700px) {
-            .auth-title {
-                font-size: 38px;
-            }
-            .auth-left {
-                padding: 20px;
-                height: 260px;
-            }
-            .auth-card {
-                max-width: 100vw;
-                height: auto;
-                border-radius: 0;
-            }
-        }
-    </style>
-    <style type="text/css"></style>
-    <style type="text/css" id="operaUserStyle">
-        video {
-            filter: -opera-shader(url(data:text/plain;base64,Ly8gaHR0cHM6Ly9naXRodWIuY29tL0dQVU9wZW4tRWZmZWN0cy9GaWRlbGl0eUZYLUNBUwovLyB2MwoKdW5pZm9ybSBzaGFkZXIgaUNodW5rOwp1bmlmb3JtIGZsb2F0MiBpQ2h1bmtTaXplOwp1bmlmb3JtIGZsb2F0MiBpTW91c2U7CnVuaWZvcm0gZmxvYXQgaUFyZ3NbMV07Cgpjb25zdCBmbG9hdCBFUFNJT04gPSAwLjE7CmNvbnN0IGZsb2F0IFZfTUlOID0gMDsKY29uc3QgZmxvYXQgVl9MT1cgPSAwLjI1Owpjb25zdCBmbG9hdCBWX01FRCA9IDAuNTsKY29uc3QgZmxvYXQgVl9ISUdIID0gMC43NTsKY29uc3QgZmxvYXQgVl9NQVggPSAxOwoKY29uc3QgZmxvYXQgVEhSRVNIT0xEX0FSRUEgPSA4MDAgKiA2MDA7CmNvbnN0IGZsb2F0IE1JTl9BUkVBID0gNDAwICogMTAwOwpjb25zdCBmbG9hdCBNSU5fU1RSSVAgPSAyMDsKY29uc3QgZmxvYXQgTUFSR0lOID0gMTsKCmZsb2F0MyBwaXhlbChpbnQgeCwgaW50IHksIGZsb2F0MiB4eSkgewogICAgcmV0dXJuIGlDaHVuay5ldmFsKHh5ICsgZmxvYXQyKHgsIHkpKS5yZ2I7Cn0KCmZsb2F0MyBzaGFycGVuKGZsb2F0MiB4eSkgewogICAgZmxvYXQzIGYgPQogICAgICAgIHBpeGVsKC0xLCAtMSwgeHkpICogIDEgKwogICAgICAgIHBpeGVsKCAwLCAtMSwgeHkpICogLTEgKwogICAgICAgIHBpeGVsKCAxLCAtMSwgeHkpICogIDEgKwoKICAgICAgICBwaXhlbCgtMSwgMCwgeHkpICogLTEgICsKICAgICAgICBwaXhlbCggMCwgMCwgeHkpICogLTEgICsKICAgICAgICBwaXhlbCggMSwgMCwgeHkpICogLTEgICsKCiAgICAgICAgcGl4ZWwoLTEsIDEsIHh5KSAqIDEgICArCiAgICAgICAgcGl4ZWwoIDAsIDEsIHh5KSAqIC0xICArCiAgICAgICAgcGl4ZWwoIDEsIDEsIHh5KSAqIDE7CiAgICByZXR1cm4gZiAvIC0xOwp9CgpmbG9hdDQgUkdYMihmbG9hdDIgeHkpIHsKICAgIGZsb2F0NCBjb2xvciA9IGlDaHVuay5ldmFsKHh5KTsKCiAgICBpZiAoaUNodW5rU2l6ZS54ICogaUNodW5rU2l6ZS55IDwgTUlOX0FSRUEpIHsKICAgICAgICByZXR1cm4gY29sb3I7CiAgICB9CgogICAgaWYgKGlDaHVua1NpemUueSA8IE1JTl9TVFJJUCB8fCBpQ2h1bmtTaXplLnggPCBNSU5fU1RSSVApIHsKICAgICAgICByZXR1cm4gY29sb3I7CiAgICB9CgogICAgaWYgKHh5LnggPCBNQVJHSU4gfHwgeHkueCA+IChpQ2h1bmtTaXplLnggLSBNQVJHSU4pIHx8CiAgICAgICAgeHkueSA8IE1BUkdJTiB8fCB4eS55ID4gKGlDaHVua1NpemUueSAtIE1BUkdJTikpIHsKICAgICAgICByZXR1cm4gY29sb3I7CiAgICB9CgogICAgcmV0dXJuIGZsb2F0NChzaGFycGVuKHh5KSwgMSk7Cn0KCmZsb2F0IG1pbjMoZmxvYXQgeCwgZmxvYXQgeSwgZmxvYXQgeikgewogICAgcmV0dXJuIG1pbih4LCBtaW4oeSwgeikpOwp9CgpmbG9hdCBtYXgzKGZsb2F0IHgsIGZsb2F0IHksIGZsb2F0IHopIHsKICAgIHJldHVybiBtYXgoeCwgbWF4KHksIHopKTsKfQoKZmxvYXQgcmNwKGZsb2F0IHYpIHsKICAgIHJldHVybiAxIC8gdjsKfQoKZmxvYXQzIFJHWDMoZmxvYXQyIHh5LCBmbG9hdCBzdHJlbmd0aCkgewogICAgZmxvYXQzIGEgPSBwaXhlbCgtMSwgLTEsIHh5KTsKICAgIGZsb2F0MyBiID0gcGl4ZWwoIDAsIC0xLCB4eSk7CiAgICBmbG9hdDMgYyA9IHBpeGVsKCAxLCAtMSwgeHkpOwoKICAgIGZsb2F0MyBkID0gcGl4ZWwoLTEsIDAsIHh5KTsKICAgIGZsb2F0MyBlID0gcGl4ZWwoIDAsIDAsIHh5KTsKICAgIGZsb2F0MyBmID0gcGl4ZWwoIDEsIDAsIHh5KTsKCiAgICBmbG9hdDMgZyA9IHBpeGVsKC0xLCAxLCB4eSk7CiAgICBmbG9hdDMgaCA9IHBpeGVsKCAwLCAxLCB4eSk7CiAgICBmbG9hdDMgaSA9IHBpeGVsKCAxLCAxLCB4eSk7CgogICAgZmxvYXQgbW5SID0gbWluMyhtaW4zKGQuciwgZS5yLCBmLnIpLCBiLnIsIGgucik7CiAgICBmbG9hdCBtbkcgPSBtaW4zKG1pbjMoZC5nLCBlLmcsIGYuZyksIGIuZywgaC5nKTsKICAgIGZsb2F0IG1uQiA9IG1pbjMobWluMyhkLmIsIGUuYiwgZi5iKSwgYi5iLCBoLmIpOwoKICAgIGZsb2F0IG1uUjIgPSBtaW4zKG1pbjMobW5SLCBhLnIsIGMuciksIGcuciwgaS5yKTsKICAgIGZsb2F0IG1uRzIgPSBtaW4zKG1pbjMobW5HLCBhLmcsIGMuZyksIGcuZywgaS5nKTsKICAgIGZsb2F0IG1uQjIgPSBtaW4zKG1pbjMobW5CLCBhLmIsIGMuYiksIGcuYiwgaS5iKTsKCiAgICBtblIgPSBtblIgKyBtblIyOwogICAgbW5HID0gbW5HICsgbW5HMjsKICAgIG1uQiA9IG1uQiArIG1uQjI7CgogICAgZmxvYXQgbXhSID0gbWF4MyhtYXgzKGQuciwgZS5yLCBmLnIpLCBiLnIsIGgucik7CiAgICBmbG9hdCBteEcgPSBtYXgzKG1heDMoZC5nLCBlLmcsIGYuZyksIGIuZywgaC5nKTsKICAgIGZsb2F0IG14QiA9IG1heDMobWF4MyhkLmIsIGUuYiwgZi5iKSwgYi5iLCBoLmIpOwoKICAgIGZsb2F0IG14UjIgPSBtYXgzKG1heDMobXhSLCBhLnIsIGMuciksIGcuciwgaS5yKTsKICAgIGZsb2F0IG14RzIgPSBtYXgzKG1heDMobXhHLCBhLmcsIGMuZyksIGcuZywgaS5nKTsKICAgIGZsb2F0IG14QjIgPSBtYXgzKG1heDMobXhCLCBhLmIsIGMuYiksIGcuYiwgaS5iKTsKCiAgICBteFIgPSBteFIgKyBteFIyOwogICAgbXhHID0gbXhHICsgbXhHMjsKICAgIG14QiA9IG14QiArIG14QjI7CgogICAgZmxvYXQgcmNwTVIgPSByY3AobXhSKTsKICAgIGZsb2F0IHJjcE1HID0gcmNwKG14Ryk7CiAgICBmbG9hdCByY3BNQiA9IHJjcChteEIpOwoKICAgIGZsb2F0IGFtcFIgPSBzYXR1cmF0ZShtaW4obW5SLCAyIC0gbXhSKSAqIHJjcE1SKTsKICAgIGZsb2F0IGFtcEcgPSBzYXR1cmF0ZShtaW4obW5HLCAyIC0gbXhHKSAqIHJjcE1HKTsKICAgIGZsb2F0IGFtcEIgPSBzYXR1cmF0ZShtaW4obW5CLCAyIC0gbXhCKSAqIHJjcE1CKTsKCiAgICBhbXBSID0gc3FydChhbXBSKTsKICAgIGFtcEcgPSBzcXJ0KGFtcEcpOwogICAgYW1wQiA9IHNxcnQoYW1wQik7CgogICAgZmxvYXQgcGVhayA9IC1yY3AobWl4KDgsIDUsIHN0cmVuZ3RoKSk7CgogICAgZmxvYXQgd1IgPSBhbXBSICogcGVhazsKICAgIGZsb2F0IHdHID0gYW1wRyAqIHBlYWs7CiAgICBmbG9hdCB3QiA9IGFtcEIgKiBwZWFrOwoKICAgIGZsb2F0IHJjcFdlaWdodFIgPSByY3AoMSArIDQgKiB3Uik7CiAgICBmbG9hdCByY3BXZWlnaHRHID0gcmNwKDEgKyA0ICogd0cpOwogICAgZmxvYXQgcmNwV2VpZ2h0QiA9IHJjcCgxICsgNCAqIHdCKTsKCiAgICByZXR1cm4gZmxvYXQzKAogICAgICAgIHNhdHVyYXRlKChiLnIgKiB3UiArIGQuciAqIHdSICsgZi5yICogd1IgKyBoLnIgKiB3UiArIGUucikgKiByY3BXZWlnaHRSKSwKICAgICAgICBzYXR1cmF0ZSgoYi5nICogd0cgKyBkLmcgKiB3RyArIGYuZyAqIHdHICsgaC5nICogd0cgKyBlLmcpICogcmNwV2VpZ2h0RyksCiAgICAgICAgc2F0dXJhdGUoKGIuYiAqIHdCICsgZC5iICogd0IgKyBmLmIgKiB3QiArIGguYiAqIHdCICsgZS5iKSAqIHJjcFdlaWdodEIpKTsKfQoKCmZsb2F0NCBtYWluKGZsb2F0MiB4eSkgewoKICAgIGZsb2F0NCBvcmlnaW5hbENvbG9yID0gaUNodW5rLmV2YWwoeHkpOwogICAgaWYgKG9yaWdpbmFsQ29sb3IuYSA8IDEpIHsKICAgICAgICByZXR1cm4gaUNodW5rLmV2YWwoeHkpOwogICAgfQoKICAgIGZsb2F0IGludGVuc2l0eSA9IGlBcmdzWzBdOwogICAgZmxvYXQgc3RyZW5ndGggPSAwOwogICAgZmxvYXQzIGNvbG9yOwoKICAgIGlmIChpbnRlbnNpdHkgPCBWX01JTiArIEVQU0lPTikgewogICAgICAgIHN0cmVuZ3RoID0gMC4xMDsKICAgICAgICBjb2xvciA9IFJHWDMoeHksIHN0cmVuZ3RoKTsKCiAgICB9IGVsc2UgaWYgKGludGVuc2l0eSA+IFZfTE9XIC0gRVBTSU9OICYmIGludGVuc2l0eSA8IFZfTE9XICsgRVBTSU9OKSB7CiAgICAgICAgc3RyZW5ndGggPSAwLjMzOwogICAgICAgIGNvbG9yID0gUkdYMyh4eSwgc3RyZW5ndGgpOwoKICAgIH0gZWxzZSBpZiAoaW50ZW5zaXR5ID4gVl9NRUQgLSBFUFNJT04gJiYgaW50ZW5zaXR5IDwgVl9NRUQgKyBFUFNJT04pIHsKICAgICAgICBzdHJlbmd0aCA9IDAuNTsKICAgICAgICBjb2xvciA9IFJHWDMoeHksIHN0cmVuZ3RoKTsKCiAgICB9IGVsc2UgaWYgKGludGVuc2l0eSA+IFZfSElHSCAtIEVQU0lPTiAmJiBpbnRlbnNpdHkgPCBWX0hJR0ggKyBFUFNJT04pIHsKICAgICAgICBzdHJlbmd0aCA9IDAuOTk7CiAgICAgICAgY29sb3IgPSBSR1gzKHh5LCBzdHJlbmd0aCk7CgogICAgfSBlbHNlIGlmIChpbnRlbnNpdHkgPiBWX01BWCAtIEVQU0lPTikgewogICAgICAgIHN0cmVuZ3RoID0gMTsKICAgICAgICBjb2xvciA9IFJHWDIoeHkpLnJnYjsKICAgIH0KCiAgICByZXR1cm4gZmxvYXQ0KGNvbG9yLCBvcmlnaW5hbENvbG9yLmEpOwp9) -opera-args(0.50 calc(env(-opera-accent-color-r, 255)/255) calc(env(-opera-accent-color-g, 255)/255) calc(env(-opera-accent-color-b, 255)/255)));
-        }
-    </style>
+    <link rel="stylesheet" href="/styles/css/dark-hc.css">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/css/auth.css">
+    <link rel="stylesheet" href="/styles/css/registry.css">
 </head>
 
-<body>
+<body class="registry-page">
+    <!-- NAVBAR igual que login -->
+    <header class="position-sticky top-0 z-3">
+        <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-sm" style="background: #212529;">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="/home">
+                    <img src="/images/LogoFont.png" alt="El Picantito Logo" width="200" height="120" class="me-2" />
+                </a>
+                <div class="ms-auto">
+                    <a href="/home" class="btn btn-outline-light px-4 py-2 rounded-pill fw-bold" role="button" aria-label="Ir al inicio">
+                        Volver al inicio
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
     <main class="auth-wrapper">
         <div class="auth-card">
-
             <!-- LADO IZQUIERDO -->
             <section class="auth-left" id="left-side">
                 <h1 class="auth-title">Comencemos</h1>
@@ -247,36 +47,28 @@
             <aside class="auth-right">
                 <div class="form-panel" role="region" aria-label="Formulario de registro">
                     <h3>Regístrate</h3>
-
-                    <form action="/registry" method="post" novalidate="">
-                        <label for="nombreCompleto" class="form-label-small">Nombre completo</label>
-                        <input id="nombreCompleto" name="nombreCompleto" type="text" class="line-input" placeholder="Ej: Juan Pérez García" required="">
-
-                        <label for="nombreUsuario" class="form-label-small" style="margin-top:14px;">Usuario</label>
-                        <input id="nombreUsuario" name="nombreUsuario" type="text" class="line-input" placeholder="juan.perez" required="">
-
-                        <label for="correo" class="form-label-small" style="margin-top:14px;">Correo electrónico</label>
-                        <input id="correo" name="correo" type="email" class="line-input" placeholder="correo@ejemplo.com" required="">
-
-                        <label for="password" class="form-label-small" style="margin-top:14px;">Contraseña</label>
-                        <input id="password" name="password" type="password" class="line-input" placeholder="Crea una contraseña segura" required="">
-
-                        <label for="password2" class="form-label-small" style="margin-top:14px;">Repetir contraseña</label>
-                        <input id="password2" name="password2" type="password" class="line-input" placeholder="Repite la contraseña" required="">
-
-                        <div style="margin-top:12px;">
-                            <input id="terminos" type="checkbox" style="vertical-align:middle;" required="">
-                            <label for="terminos" style="font-size:13px; color:rgba(0,0,0,0.75); margin-left:8px;">
-                                Acepto los <a href="#" style="color:var(--accent-color); text-decoration:underline;">términos y condiciones</a>
-                            </label>
+                    <form action="/registry" method="post" novalidate="" class="form-dark-text">
+                        <div class="mb-3">
+                            <label for="nombreCompleto" class="form-label-small">Nombre completo</label>
+                            <input id="nombreCompleto" name="nombreCompleto" type="text" class="line-input form-control" placeholder="Ej: Juan Pérez García" required="">
                         </div>
-
+                        <div class="mb-3">
+                            <label for="nombreUsuario" class="form-label-small">Usuario</label>
+                            <input id="nombreUsuario" name="nombreUsuario" type="text" class="line-input form-control" placeholder="juan.perez" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="correo" class="form-label-small">Correo electrónico</label>
+                            <input id="correo" name="correo" type="email" class="line-input form-control" placeholder="correo@ejemplo.com" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label-small">Contraseña</label>
+                            <input id="password" name="password" type="password" class="line-input form-control" placeholder="Crea una contraseña segura" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password2" class="form-label-small">Repetir contraseña</label>
+                            <input id="password2" name="password2" type="password" class="line-input form-control" placeholder="Repite la contraseña" required="">
+                        </div>
                         <button type="submit" class="btn-accent" aria-label="Crear cuenta">Crear mi cuenta</button>
-
-                        <a href="/home" class="btn btn-outline-dark w-100 mt-2" role="button" aria-label="Ir al inicio">
-                          Volver al inicio
-                        </a>
-
                         <div class="form-note" style="text-align:center; margin-top:12px;">
                             ¿Ya tienes cuenta? <a href="/login" style="color:var(--accent-color); text-decoration:underline;">Inicia sesión</a>
                         </div>
@@ -286,13 +78,9 @@
                     <div style="width:1px; height:80%; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border-radius:2px;"></div>
                 </div>
             </aside>
-
         </div>
     </main>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-
-
 </body>
 
 </html>
