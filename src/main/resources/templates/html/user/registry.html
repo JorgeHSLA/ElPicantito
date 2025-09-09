@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -47,22 +47,39 @@
             <aside class="auth-right">
                 <div class="form-panel" role="region" aria-label="Formulario de registro">
                     <h3>Regístrate</h3>
-                    <form action="/registry" method="post" novalidate="" class="form-dark-text">
+                    
+                    <!-- Mostrar mensajes de error -->
+                    <div th:if="${error}" class="alert alert-danger" style="margin-bottom: 1rem;">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+                    
+                    <!-- Mostrar mensajes de éxito -->
+                    <div th:if="${success}" class="alert alert-success" style="margin-bottom: 1rem;">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <span th:text="${success}"></span>
+                    </div>
+                    
+                    <form action="/registry" method="post" th:object="${user}" novalidate="" class="form-dark-text">
                         <div class="mb-3">
                             <label for="nombreCompleto" class="form-label-small">Nombre completo</label>
-                            <input id="nombreCompleto" name="nombreCompleto" type="text" class="line-input form-control" placeholder="Ej: Juan Pérez García" required="">
+                            <input id="nombreCompleto" th:field="*{nombreCompleto}" type="text" class="line-input form-control" placeholder="Ej: Juan Pérez García" required="">
                         </div>
                         <div class="mb-3">
                             <label for="nombreUsuario" class="form-label-small">Usuario</label>
-                            <input id="nombreUsuario" name="nombreUsuario" type="text" class="line-input form-control" placeholder="juan.perez" required="">
+                            <input id="nombreUsuario" th:field="*{nombreUsuario}" type="text" class="line-input form-control" placeholder="juan.perez" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label-small">Teléfono</label>
+                            <input id="telefono" th:field="*{telefono}" type="tel" class="line-input form-control" placeholder="Ej: +57 300 123 4567" required="">
                         </div>
                         <div class="mb-3">
                             <label for="correo" class="form-label-small">Correo electrónico</label>
-                            <input id="correo" name="correo" type="email" class="line-input form-control" placeholder="correo@ejemplo.com" required="">
+                            <input id="correo" th:field="*{correo}" type="email" class="line-input form-control" placeholder="correo@ejemplo.com" required="">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label-small">Contraseña</label>
-                            <input id="password" name="password" type="password" class="line-input form-control" placeholder="Crea una contraseña segura" required="">
+                            <input id="password" th:field="*{password}" type="password" class="line-input form-control" placeholder="Crea una contraseña segura" required="">
                         </div>
                         <div class="mb-3">
                             <label for="password2" class="form-label-small">Repetir contraseña</label>

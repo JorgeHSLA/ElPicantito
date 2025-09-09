@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.picantito.picantito.entities.Producto;
@@ -41,20 +42,38 @@ public class UserController {
     }
     
     @PostMapping("/registry")
-    public String postAutentificacion(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+    public String postAutentificacion(@ModelAttribute("user") User user, 
+                                     @RequestParam("password2") String password2,
+                                     HttpSession session,
+                                     RedirectAttributes redirectAttributes) {
         try {
-
-            if (autentificacionService.verificacion(user)){
-                redirectAttributes.addFlashAttribute("error", "El nombre o correo de usuario ya está registrado");
+            // Validar que las contraseñas coincidan
+            if (!user.getPassword().equals(password2)) {
+                redirectAttributes.addFlashAttribute("error", "Las contraseñas no coinciden");
                 return "redirect:/registry";
             }
             
-            autentificacionService.save(user);
-            redirectAttributes.addFlashAttribute("success", "Usuario registrado exitosamente");
-            return "redirect:/login";
+            // Validar que no esté duplicado
+            if (autentificacionService.verificacion(user)){
+                redirectAttributes.addFlashAttribute("error", "El nombre de usuario o correo ya está registrado");
+                return "redirect:/registry";
+            }
+            
+            // Establecer rol por defecto
+            user.setRole("USER");
+            
+            // Guardar usuario
+            User savedUser = autentificacionService.save(user);
+            
+            // Iniciar sesión automáticamente
+            session.setAttribute("loggedUser", savedUser);
+            
+            // Redirigir a home con mensaje de éxito
+            redirectAttributes.addFlashAttribute("success", "¡Bienvenido! Tu cuenta ha sido creada exitosamente");
+            return "redirect:/home";
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al registrar usuario");
+            redirectAttributes.addFlashAttribute("error", "Error al registrar usuario: " + e.getMessage());
             return "redirect:/registry";
         }
     }
