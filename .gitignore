@@ -36,5 +36,5 @@ build/
 .vscode/extensions.json
 .history/
 
-
+data/picantito_db.trace.db
 data/picantito_db.mv.db
