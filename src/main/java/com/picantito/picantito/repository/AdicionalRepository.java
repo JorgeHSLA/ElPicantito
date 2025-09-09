@@ -15,15 +15,15 @@ public interface AdicionalRepository extends JpaRepository<Adicional, Integer> {
     // Encontrar adicionales disponibles
     List<Adicional> findByDisponibleTrue();
     
-    // Encontrar adicionales que están asociados a un producto específico
+    // Encontrar adicionales que estan asociados a un producto especifico
     @Query("SELECT a FROM Adicional a JOIN a.productos p WHERE p.id = :productoId AND a.disponible = true")
     List<Adicional> findByProductoIdAndDisponibleTrue(@Param("productoId") Integer productoId);
     
-    // Encontrar adicionales que NO están asociados a ningún producto
+    // Encontrar adicionales que NO estan asociados a ningun producto
     @Query("SELECT a FROM Adicional a WHERE a.productos IS EMPTY AND a.disponible = true")
     List<Adicional> findByDisponibleTrueAndProductosIsEmpty();
     
-    // Encontrar adicionales que NO están asociados a un producto específico
+    // Encontrar adicionales que NO estan asociados a un producto especifico
     @Query("SELECT a FROM Adicional a WHERE a.disponible = true AND a.id NOT IN " +
            "(SELECT aa.id FROM Adicional aa JOIN aa.productos p WHERE p.id = :productoId)")
     List<Adicional> findAvailableForProduct(@Param("productoId") Integer productoId);

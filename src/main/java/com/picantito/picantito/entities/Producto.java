@@ -35,11 +35,9 @@ public class Producto {
     @Column(nullable = false)
     private Integer calificacion = 5;
     
-    // Cambio: Relación muchos a muchos con Adicional
     @ManyToMany(mappedBy = "productos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Adicional> adicionales = new ArrayList<>();
 
-    // Constructor sin ID (para nuevos productos)
     public Producto(String nombre, String descripcion, Double precio, String imagen, Boolean disponible, Integer calificacion) {
         this.nombre = nombre;
         this.descripcion = descripcion;

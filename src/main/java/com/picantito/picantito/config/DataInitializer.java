@@ -55,7 +55,7 @@ public class DataInitializer implements CommandLineRunner {
         tiendaService.asociarAdicionalAProductos(extraCarne.getId(), List.of(tacoAsada.getId()));
         tiendaService.asociarAdicionalAProductos(picoGallo.getId(), List.of(tacoAsada.getId()));
 
-        // Más productos
+        // Mas productos
         tiendaService.saveProducto(new Producto("Taco de Carnitas", 
             "Carne de cerdo cocinada lentamente con especias tradicionales", 
             3.75, "https://okdiario.com/img/2022/04/30/tacos.jpg", true, 4));

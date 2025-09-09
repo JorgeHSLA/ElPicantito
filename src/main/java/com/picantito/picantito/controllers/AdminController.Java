@@ -32,7 +32,6 @@ public class AdminController {
     @Autowired
     private AutentificacionService autentificacionService;
 
-    // Verificar si el usuario es admin
     private boolean isAdmin(HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         return loggedUser != null && loggedUser.isAdmin();
@@ -52,7 +51,7 @@ public class AdminController {
         return "html/admin/dashboard";
     }
 
-    // CRUD Productos (sin cambios significativos)
+    // CRUD Productos
     @GetMapping("/productos")
     public String productos(HttpSession session, Model model) {
         if (!isAdmin(session)) {
@@ -131,7 +130,7 @@ public class AdminController {
         return "redirect:/admin/productos";
     }
 
-    // CRUD Adicionales - MODIFICADO para muchos a muchos
+    // CRUD Adicionale
     @GetMapping("/adicionales")
     public String adicionales(HttpSession session, Model model) {
         if (!isAdmin(session)) {
@@ -157,10 +156,8 @@ public class AdminController {
         }
         
         try {
-            // Guardar el adicional primero
             Adicional savedAdicional = tiendaService.saveAdicional(adicional);
             
-            // Asociar con productos si se seleccionaron
             if (productosIds != null && !productosIds.isEmpty()) {
                 tiendaService.asociarAdicionalAProductos(savedAdicional.getId(), productosIds);
             }
@@ -199,14 +196,11 @@ public class AdminController {
         }
         
         try {
-            // Primero guardar el adicional con sus datos básicos
             tiendaService.saveAdicional(adicional);
             
-            // Luego actualizar las asociaciones con productos
             if (productosIds != null) {
                 tiendaService.asociarAdicionalAProductos(adicional.getId(), productosIds);
             } else {
-                // Si no se seleccionó ningún producto, limpiar asociaciones
                 tiendaService.asociarAdicionalAProductos(adicional.getId(), List.of());
             }
             
@@ -257,7 +251,6 @@ public class AdminController {
         }
         
         try {
-            // Verificar duplicados
             if(autentificacionService.verificacion(usuario))
             {
                 redirectAttributes.addFlashAttribute("error", "El nombre de usuario o correo ya están registrados");

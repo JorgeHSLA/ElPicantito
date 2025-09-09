@@ -47,7 +47,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pedido> pedidos = new ArrayList<>();
     
-    // Constructor sin ID
     public User(String nombreCompleto, String nombreUsuario, String telefono, String correo, String password) {
         this.nombreCompleto = nombreCompleto;
         this.nombreUsuario = nombreUsuario;
@@ -57,7 +56,6 @@ public class User {
         this.role = "USER";
     }
     
-    // Constructor con rol
     public User(String nombreCompleto, String nombreUsuario, String telefono, String correo, String password, String role) {
         this.nombreCompleto = nombreCompleto;
         this.nombreUsuario = nombreUsuario;
@@ -71,12 +69,11 @@ public class User {
         return "ADMIN".equals(this.role);
     }
     
-    // Getter para mantener compatibilidad (usar nombreCompleto como name)
+    // (usar nombreCompleto como name)
     public String getName() {
         return this.nombreCompleto;
     }
     
-    // Setter para mantener compatibilidad
     public void setName(String name) {
         this.nombreCompleto = name;
     }

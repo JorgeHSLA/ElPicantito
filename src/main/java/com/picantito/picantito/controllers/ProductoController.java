@@ -32,7 +32,6 @@ public class ProductoController {
     public String mostrarProducto(@PathVariable Integer id, Model model) {
         Optional<Producto> producto = tiendaService.getProductoById(id);
         if (producto.isPresent()) {
-            // Obtener adicionales específicos para este producto
             List<Adicional> adicionales = tiendaService.getAdicionalesByProductoId(id);
             model.addAttribute("producto", producto.get());
             model.addAttribute("adicionales", adicionales);

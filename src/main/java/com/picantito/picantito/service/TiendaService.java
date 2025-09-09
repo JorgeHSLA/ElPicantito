@@ -23,9 +23,7 @@ public interface TiendaService {
     List<Adicional> getAdicionalesDisponibles();
     List<Adicional> getAdicionalesSinAsignar();
     List<String> asignarAdicionales(Integer productoId, List<Integer> adicionalesIds);
-    void updateAdicional(Integer productoId, Adicional adicional);
-    
-    // Nuevos métodos para relación muchos a muchos
+    void updateAdicional(Integer productoId, Adicional adicional);    
     void asociarAdicionalAProductos(Integer adicionalId, List<Integer> productosIds);
     void desasociarAdicionalDeProducto(Integer adicionalId, Integer productoId);
     List<Adicional> getAdicionalesDisponiblesParaProducto(Integer productoId);

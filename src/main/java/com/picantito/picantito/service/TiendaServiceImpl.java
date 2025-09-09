@@ -91,7 +91,6 @@ public class TiendaServiceImpl implements TiendaService {
                 for (Integer adicionalId : adicionalesIds) {
                     Optional<Adicional> adicional = this.getAdicionalById(adicionalId);
                     if (adicional.isPresent()) {
-                        // Verificar si ya está asociado
                         if (!adicional.get().getProductos().contains(producto.get())) {
                             adicional.get().getProductos().add(producto.get());
                             this.saveAdicional(adicional.get());
@@ -109,7 +108,6 @@ public class TiendaServiceImpl implements TiendaService {
 
     @Override
     public void updateAdicional(Integer productoId, Adicional adicional) {
-        // Este método ahora maneja múltiples productos
         this.saveAdicional(adicional);
     }
 
@@ -118,10 +116,8 @@ public class TiendaServiceImpl implements TiendaService {
         try {
             Optional<Adicional> adicional = this.getAdicionalById(adicionalId);
             if (adicional.isPresent()) {
-                // Limpiar asociaciones actuales
                 adicional.get().getProductos().clear();
                 
-                // Agregar nuevas asociaciones
                 if (productosIds != null) {
                     for (Integer productoId : productosIds) {
                         Optional<Producto> producto = this.getProductoById(productoId);
@@ -131,9 +127,7 @@ public class TiendaServiceImpl implements TiendaService {
                                              " con producto " + producto.get().getNombre());
                         }
                     }
-                }
-                
-                // Guardar las asociaciones
+                }                
                 Adicional savedAdicional = adicionalRepository.save(adicional.get());
                 System.out.println("Adicional guardado con " + savedAdicional.getProductos().size() + " productos asociados");
             }

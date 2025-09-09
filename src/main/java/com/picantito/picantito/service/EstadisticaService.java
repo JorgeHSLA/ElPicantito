@@ -33,7 +33,7 @@ public interface EstadisticaService {
     Double ingresosTotales();
 
 
-    // EL string es el nombre de porducto Long la cantidad
+    // EL string es el nombre de producto Long la cantidad
 
     
 }

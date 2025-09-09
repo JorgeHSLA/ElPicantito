@@ -30,7 +30,6 @@ public class Adicional {
     @Column(nullable = false)
     private Boolean disponible = true;
     
-    // Cambio: Relación muchos a muchos con Producto
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
         name = "producto_adicional",
@@ -39,7 +38,6 @@ public class Adicional {
     )
     private List<Producto> productos = new ArrayList<>();
 
-    // Constructor sin ID (para nuevos adicionales)
     public Adicional(String nombre, String descripcion, Double precio, Boolean disponible) {
         this.nombre = nombre;
         this.descripcion = descripcion;
