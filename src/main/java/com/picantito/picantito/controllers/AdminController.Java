@@ -199,17 +199,26 @@ public class AdminController {
         }
         
         try {
-            tiendaService.saveAdicional(adicional);
-            
-            if (productosIds != null) {
-                tiendaService.asociarAdicionalAProductos(adicional.getId(), productosIds);
-            } else {
-                tiendaService.asociarAdicionalAProductos(adicional.getId(), List.of());
+            Optional<Adicional> existingAdicional = tiendaService.getAdicionalById(adicional.getId());
+            if (existingAdicional.isPresent()) {
+                existingAdicional.get().setNombre(adicional.getNombre());
+                existingAdicional.get().setDescripcion(adicional.getDescripcion());
+                existingAdicional.get().setPrecio(adicional.getPrecio());
+                existingAdicional.get().setDisponible(adicional.getDisponible());
+                
+                tiendaService.saveAdicional(existingAdicional.get());
+                
+                if (productosIds != null) {
+                    tiendaService.asociarAdicionalAProductos(adicional.getId(), productosIds);
+                } else {
+                    tiendaService.asociarAdicionalAProductos(adicional.getId(), List.of());
+                }
             }
             
             redirectAttributes.addFlashAttribute("success", "Adicional actualizado exitosamente");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al actualizar el adicional: " + e.getMessage());
+            e.printStackTrace();
         }
         
         return "redirect:/admin/adicionales";
