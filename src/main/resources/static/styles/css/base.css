@@ -102,3 +102,30 @@ body {
     transform: translateY(-2px) scale(1.1);
     color: var(--accent-color) !important;
 }
+
+/* =========================
+   SECCIÓN EQUIPO - SOBRE NOSOTROS
+   ========================= */
+.team-avatar {
+    width: 120px !important;
+    height: 120px !important;
+    object-fit: cover;
+    border: 3px solid var(--accent-color);
+    transition: all 0.3s ease;
+}
+
+.team-avatar:hover {
+    transform: scale(1.05);
+    border-color: var(--primary-color);
+}
+
+.team-card {
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
