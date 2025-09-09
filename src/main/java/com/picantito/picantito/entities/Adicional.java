@@ -30,7 +30,7 @@ public class Adicional {
     @Column(nullable = false)
     private Boolean disponible = true;
     
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "producto_adicional",
         joinColumns = @JoinColumn(name = "adicional_id"),

@@ -35,7 +35,7 @@ public class Producto {
     @Column(nullable = false)
     private Integer calificacion = 5;
     
-    @ManyToMany(mappedBy = "productos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "productos", fetch = FetchType.LAZY)
     private List<Adicional> adicionales = new ArrayList<>();
 
     public Producto(String nombre, String descripcion, Double precio, String imagen, Boolean disponible, Integer calificacion) {

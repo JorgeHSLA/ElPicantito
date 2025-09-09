@@ -115,7 +115,7 @@ public class AdminController {
 
     @GetMapping("/productos/delete/{id}")
     public String deleteProducto(@PathVariable Integer id, HttpSession session, 
-                                RedirectAttributes redirectAttributes) {
+                            RedirectAttributes redirectAttributes) {
         if (!isAdmin(session)) {
             return "redirect:/home";
         }
@@ -123,8 +123,11 @@ public class AdminController {
         try {
             tiendaService.deleteProducto(id);
             redirectAttributes.addFlashAttribute("success", "Producto eliminado exitosamente");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al eliminar el producto");
+            redirectAttributes.addFlashAttribute("error", "Error inesperado al eliminar el producto");
+            System.err.println("Error al eliminar producto: " + e.getMessage());
         }
         
         return "redirect:/admin/productos";
@@ -214,7 +217,7 @@ public class AdminController {
 
     @GetMapping("/adicionales/delete/{id}")
     public String deleteAdicional(@PathVariable Integer id, HttpSession session, 
-                                 RedirectAttributes redirectAttributes) {
+                             RedirectAttributes redirectAttributes) {
         if (!isAdmin(session)) {
             return "redirect:/home";
         }
@@ -222,8 +225,11 @@ public class AdminController {
         try {
             tiendaService.deleteAdicional(id);
             redirectAttributes.addFlashAttribute("success", "Adicional eliminado exitosamente");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al eliminar el adicional");
+            redirectAttributes.addFlashAttribute("error", "Error inesperado al eliminar el adicional");
+            System.err.println("Error al eliminar adicional: " + e.getMessage());
         }
         
         return "redirect:/admin/adicionales";
@@ -305,16 +311,30 @@ public class AdminController {
         }
         
         try {
-            if(autentificacionService.verificacion(usuario))
-            {
-                redirectAttributes.addFlashAttribute("error", "El nombre de usuario o correo ya están registrados");
-                return "redirect:/admin/usuarios";
+            Optional<User> existingUserByUsername = autentificacionService.findByNombreUsuario(usuario.getNombreUsuario());
+            if (existingUserByUsername.isPresent() && !existingUserByUsername.get().getId().equals(usuario.getId())) {
+                redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya está registrado por otro usuario");
+                return "redirect:/admin/usuarios/edit/" + usuario.getId();
             }
-
+            
+            Optional<User> existingUserByEmail = autentificacionService.findByCorreo(usuario.getCorreo());
+            if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(usuario.getId())) {
+                redirectAttributes.addFlashAttribute("error", "El correo ya está registrado por otro usuario");
+                return "redirect:/admin/usuarios/edit/" + usuario.getId();
+            }
+            
+            if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
+                Optional<User> currentUser = autentificacionService.findById(usuario.getId());
+                if (currentUser.isPresent()) {
+                    usuario.setPassword(currentUser.get().getPassword());
+                }
+            }
+            
             autentificacionService.save(usuario);
             redirectAttributes.addFlashAttribute("success", "Usuario actualizado exitosamente");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al actualizar el usuario");
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el usuario: " + e.getMessage());
+            return "redirect:/admin/usuarios/edit/" + usuario.getId();
         }
         
         return "redirect:/admin/usuarios";

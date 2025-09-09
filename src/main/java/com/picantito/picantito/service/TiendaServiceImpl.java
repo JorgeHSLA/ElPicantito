@@ -38,7 +38,26 @@ public class TiendaServiceImpl implements TiendaService {
 
     @Override
     public void deleteProducto(Integer id) {
-        productoRepository.deleteById(id);
+        try {
+            // Primero eliminar las asociaciones con adicionales
+            Optional<Producto> producto = getProductoById(id);
+            if (producto.isPresent()) {
+                // Obtener todos los adicionales asociados al producto
+                List<Adicional> adicionales = adicionalRepository.findByProductoIdAndDisponibleTrue(id);
+                
+                // Desasociar el producto de todos los adicionales
+                for (Adicional adicional : adicionales) {
+                    adicional.getProductos().remove(producto.get());
+                    adicionalRepository.save(adicional);
+                }
+                
+                // Ahora eliminar el producto
+                productoRepository.deleteById(id);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al eliminar producto: " + e.getMessage());
+            throw new RuntimeException("No se puede eliminar el producto. Verifique que no tenga dependencias.", e);
+        }
     }
     
     @Override
@@ -64,7 +83,18 @@ public class TiendaServiceImpl implements TiendaService {
 
     @Override
     public void deleteAdicional(Integer id) {
-        adicionalRepository.deleteById(id);
+        try {
+            Optional<Adicional> adicional = getAdicionalById(id);
+            if (adicional.isPresent()) {
+                adicional.get().getProductos().clear();
+                adicionalRepository.save(adicional.get());
+                
+                adicionalRepository.deleteById(id);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al eliminar adicional: " + e.getMessage());
+            throw new RuntimeException("No se puede eliminar el adicional. Verifique que no tenga dependencias.", e);
+        }
     }
 
     @Override

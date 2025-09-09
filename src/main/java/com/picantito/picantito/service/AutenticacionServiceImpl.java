@@ -76,9 +76,8 @@ public class AutenticacionServiceImpl implements AutentificacionService {
 
     @Override
     public String edicionPerfil(User loggedUser, User usuario) {
-        // Verificar si el nombre de usuario ya existe
         if (!loggedUser.getId().equals(usuario.getId())) {
-            return "No tirenes permisos para editar este perfil";
+            return "No tienes permisos para editar este perfil";
         }
         
         Optional<User> existingUserByUsername = this.findByNombreUsuario(usuario.getNombreUsuario());
@@ -97,8 +96,13 @@ public class AutenticacionServiceImpl implements AutentificacionService {
                 usuario.setPassword(currentUser.get().getPassword());
             }
         }
-
-        return "1";
+        
+        try {
+            this.save(usuario);
+            return "Perfil actualizado exitosamente";
+        } catch (Exception e) {
+            return "Error al actualizar el perfil: " + e.getMessage();
+        }
     }
     @Override
     public boolean ultimoAdmin(User loggedUser){
