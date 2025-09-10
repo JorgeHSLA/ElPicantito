@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.picantito.picantito.entities.User;
 
 public interface AutentificacionService {
-
     // CRUD Usuarios
     List<User> findAll();
     Optional<User> findById(Integer id);
@@ -19,7 +18,11 @@ public interface AutentificacionService {
     boolean existsByNombreUsuario(String nombreUsuario);
     boolean existsByCorreo(String correo);
     boolean authenticate(String nombreUsuario, String password);
-    boolean verificacion(User user);
+    
+    // Métodos de negocio con validaciones completas
+    String registrarUsuario(User user, String password2);
+    String crearUsuario(User user);
+    String actualizarUsuario(User user);
     String edicionPerfil(User loggedUser, User usuario);
     boolean ultimoAdmin(User loggedUser);
 }

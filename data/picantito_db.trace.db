@@ -990,3 +990,31 @@ The connection was not closed by the application and is garbage collected [90018
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 16 more
+2025-09-10 11:20:12.183571-05:00 jdbc[33]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "DELETE FROM ADICIONALES\000d\000aDELETE [*]FROM PRODUCTOS"
+Syntax error in SQL statement "DELETE FROM ADICIONALES\000d\000aDELETE [*]FROM PRODUCTOS"; SQL statement:
+DELETE FROM ADICIONALES
+DELETE FROM PRODUCTOS [42000-232]
+2025-09-10 11:20:22.126603-05:00 jdbc[33]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "DELETE FROM PRODUCTOS\000d\000aDELETE [*]FROM ADICIONALES"
+Syntax error in SQL statement "DELETE FROM PRODUCTOS\000d\000aDELETE [*]FROM ADICIONALES"; SQL statement:
+DELETE FROM PRODUCTOS
+DELETE FROM ADICIONALES [42000-232]
+2025-09-10 11:20:24.926825-05:00 jdbc[33]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "DELETE FROM PRODUCTOS\000d\000aDELETE [*]FROM ADICIONALES"
+Syntax error in SQL statement "DELETE FROM PRODUCTOS\000d\000aDELETE [*]FROM ADICIONALES"; SQL statement:
+DELETE FROM PRODUCTOS
+DELETE FROM ADICIONALES [42000-232]
+2025-09-10 11:20:26.499818-05:00 jdbc[33]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "DELETE FROM PRODUCTOS\000d\000aDELETE [*]FROM ADICIONALES"
+Syntax error in SQL statement "DELETE FROM PRODUCTOS\000d\000aDELETE [*]FROM ADICIONALES"; SQL statement:
+DELETE FROM PRODUCTOS
+DELETE FROM ADICIONALES [42000-232]
+2025-09-10 12:19:55.965513-05:00 jdbc[44]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "IMAGEN CHARACTER VARYING(255)": "'https://coopasan.com.co/rails/active_storage/representations/proxy/eyJfcmFpbHMi... (342)"
+Value too long for column "IMAGEN CHARACTER VARYING(255)": "'https://coopasan.com.co/rails/active_storage/representations/proxy/eyJfcmFpbHMi... (342)"; SQL statement:
+update productos set calificacion=?,descripcion=?,disponible=?,imagen=?,nombre=?,precio=? where id=? [22001-232]
+2025-09-10 12:20:21.066520-05:00 jdbc[44]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "IMAGEN CHARACTER VARYING(255)": "'https://coopasan.com.co/rails/active_storage/representations/proxy/eyJfcmFpbHMi... (342)"
+Value too long for column "IMAGEN CHARACTER VARYING(255)": "'https://coopasan.com.co/rails/active_storage/representations/proxy/eyJfcmFpbHMi... (342)"; SQL statement:
+update productos set calificacion=?,descripcion=?,disponible=?,imagen=?,nombre=?,precio=? where id=? [22001-232]

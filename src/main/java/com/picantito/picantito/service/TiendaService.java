@@ -11,14 +11,14 @@ public interface TiendaService {
     List<Producto> getAllProductos();
     Optional<Producto> getProductoById(Integer id);
     Producto saveProducto(Producto producto);
-    void deleteProducto(Integer id);
+    String eliminarProducto(Integer id); // Cambiar void por String
     List<Producto> getProductosDisponibles();
     
     // CRUD Adicionales
     List<Adicional> getAllAdicionales();
     Optional<Adicional> getAdicionalById(Integer id);
     Adicional saveAdicional(Adicional adicional);
-    void deleteAdicional(Integer id);
+    String eliminarAdicional(Integer id); // Cambiar void por String
     List<Adicional> getAdicionalesByProductoId(Integer productoId);
     List<Adicional> getAdicionalesDisponibles();
     List<Adicional> getAdicionalesSinAsignar();

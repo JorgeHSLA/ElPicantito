@@ -66,12 +66,67 @@ public class AutenticacionServiceImpl implements AutentificacionService {
     }
 
     @Override
-    public boolean verificacion(User user) {
-        // Verificar si el nombre de usuario ya existe
-        if (this.existsByNombreUsuario(user.getNombreUsuario()) || this.existsByCorreo(user.getCorreo())) {
-            return true;
+    public String registrarUsuario(User user, String password2) {
+        // Validar que las contraseñas coincidan
+        if (!user.getPassword().equals(password2)) {
+            return "Las contraseñas no coinciden";
         }
-        return false;
+        
+        // Validar que no esté duplicado
+        if (this.existsByNombreUsuario(user.getNombreUsuario()) || this.existsByCorreo(user.getCorreo())) {
+            return "El nombre de usuario o correo ya está registrado";
+        }
+        
+        // Establecer rol por defecto
+        user.setRole("USER");
+        
+        try {
+            this.save(user);
+            return "SUCCESS";
+        } catch (Exception e) {
+            return "Error al registrar usuario: " + e.getMessage();
+        }
+    }
+
+    @Override
+    public String crearUsuario(User usuario) {
+        if (this.existsByNombreUsuario(usuario.getNombreUsuario()) || this.existsByCorreo(usuario.getCorreo())) {
+            return "El nombre de usuario o correo ya están registrados";
+        }
+        
+        try {
+            this.save(usuario);
+            return "SUCCESS";
+        } catch (Exception e) {
+            return "Error al guardar el usuario: " + e.getMessage();
+        }
+    }
+
+    @Override
+    public String actualizarUsuario(User usuario) {
+        Optional<User> existingUserByUsername = this.findByNombreUsuario(usuario.getNombreUsuario());
+        if (existingUserByUsername.isPresent() && !existingUserByUsername.get().getId().equals(usuario.getId())) {
+            return "El nombre de usuario ya está registrado por otro usuario";
+        }
+        
+        Optional<User> existingUserByEmail = this.findByCorreo(usuario.getCorreo());
+        if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(usuario.getId())) {
+            return "El correo ya está registrado por otro usuario";
+        }
+        
+        if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
+            Optional<User> currentUser = this.findById(usuario.getId());
+            if (currentUser.isPresent()) {
+                usuario.setPassword(currentUser.get().getPassword());
+            }
+        }
+        
+        try {
+            this.save(usuario);
+            return "SUCCESS";
+        } catch (Exception e) {
+            return "Error al actualizar el usuario: " + e.getMessage();
+        }
     }
 
     @Override
@@ -97,13 +152,16 @@ public class AutenticacionServiceImpl implements AutentificacionService {
             }
         }
         
+        usuario.setRole(loggedUser.getRole());
+        
         try {
             this.save(usuario);
-            return "Perfil actualizado exitosamente";
+            return "SUCCESS";
         } catch (Exception e) {
             return "Error al actualizar el perfil: " + e.getMessage();
         }
     }
+
     @Override
     public boolean ultimoAdmin(User loggedUser){
         if (loggedUser.isAdmin()) {

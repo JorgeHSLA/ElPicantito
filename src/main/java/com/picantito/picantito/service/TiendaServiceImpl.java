@@ -37,7 +37,7 @@ public class TiendaServiceImpl implements TiendaService {
     }
 
     @Override
-    public void deleteProducto(Integer id) {
+    public String eliminarProducto(Integer id) {
         try {
             Optional<Producto> producto = getProductoById(id);
             if (producto.isPresent()) {
@@ -57,14 +57,12 @@ public class TiendaServiceImpl implements TiendaService {
                 // Ahora eliminar el producto
                 productoRepository.deleteById(id);
                 
-                System.out.println("Producto eliminado exitosamente con ID: " + id);
+                return "SUCCESS";
             } else {
-                throw new RuntimeException("Producto no encontrado con ID: " + id);
+                return "Producto no encontrado con ID: " + id;
             }
         } catch (Exception e) {
-            System.err.println("Error al eliminar producto: " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException("No se puede eliminar el producto. Error: " + e.getMessage(), e);
+            return "No se puede eliminar el producto. Error: " + e.getMessage();
         }
     }
     
@@ -90,7 +88,7 @@ public class TiendaServiceImpl implements TiendaService {
     }
 
     @Override
-    public void deleteAdicional(Integer id) {
+    public String eliminarAdicional(Integer id) {
         try {
             Optional<Adicional> adicional = getAdicionalById(id);
             if (adicional.isPresent()) {
@@ -110,14 +108,12 @@ public class TiendaServiceImpl implements TiendaService {
                 // Ahora eliminar el adicional
                 adicionalRepository.deleteById(id);
                 
-                System.out.println("Adicional eliminado exitosamente con ID: " + id);
+                return "SUCCESS";
             } else {
-                throw new RuntimeException("Adicional no encontrado con ID: " + id);
+                return "Adicional no encontrado con ID: " + id;
             }
         } catch (Exception e) {
-            System.err.println("Error al eliminar adicional: " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException("No se puede eliminar el adicional. Error: " + e.getMessage(), e);
+            return "No se puede eliminar el adicional. Error: " + e.getMessage();
         }
     }
 

@@ -47,35 +47,23 @@ public class UserController {
                                      HttpSession session,
                                      RedirectAttributes redirectAttributes) {
         try {
-            // Validar que las contraseñas coincidan
-            if (!user.getPassword().equals(password2)) {
-                redirectAttributes.addFlashAttribute("error", "Las contraseñas no coinciden");
-                return "redirect:/registry";
+            String result = autentificacionService.registrarUsuario(user, password2);
+            
+            if (result.equals("SUCCESS")) {
+                Optional<User> savedUser = autentificacionService.findByNombreUsuario(user.getNombreUsuario());
+                if (savedUser.isPresent()) {
+                    session.setAttribute("loggedUser", savedUser.get());
+                    redirectAttributes.addFlashAttribute("success", "¡Bienvenido! Tu cuenta ha sido creada exitosamente");
+                    return "redirect:/home";
+                }
+            } else {
+                redirectAttributes.addFlashAttribute("error", result);
             }
-            
-            // Validar que no esté duplicado
-            if (autentificacionService.verificacion(user)){
-                redirectAttributes.addFlashAttribute("error", "El nombre de usuario o correo ya está registrado");
-                return "redirect:/registry";
-            }
-            
-            // Establecer rol por defecto
-            user.setRole("USER");
-            
-            // Guardar usuario
-            User savedUser = autentificacionService.save(user);
-            
-            // Iniciar sesión automáticamente
-            session.setAttribute("loggedUser", savedUser);
-            
-            // Redirigir a home con mensaje de éxito
-            redirectAttributes.addFlashAttribute("success", "¡Bienvenido! Tu cuenta ha sido creada exitosamente");
-            return "redirect:/home";
-
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al registrar usuario: " + e.getMessage());
-            return "redirect:/registry";
+            redirectAttributes.addFlashAttribute("error", "Error al registrar usuario");
         }
+        
+        return "redirect:/registry";
     }
 
     @GetMapping("/login")
@@ -145,19 +133,15 @@ public class UserController {
         }
         
         try {
-
-            String flag = autentificacionService.edicionPerfil(loggedUser, usuario);
-
-            if (!flag.equals("1")) {
-                redirectAttributes.addFlashAttribute("error", flag);
-                return "redirect:/mi-perfil";
-            }
+            String result = autentificacionService.edicionPerfil(loggedUser, usuario);
             
-            usuario.setRole(loggedUser.getRole());
-            User updatedUser = autentificacionService.save(usuario);
-            session.setAttribute("loggedUser", updatedUser);
-            redirectAttributes.addFlashAttribute("success", "Perfil actualizado exitosamente");
-
+            if (result.equals("SUCCESS")) {
+                User updatedUser = autentificacionService.save(usuario);
+                session.setAttribute("loggedUser", updatedUser);
+                redirectAttributes.addFlashAttribute("success", "Perfil actualizado exitosamente");
+            } else {
+                redirectAttributes.addFlashAttribute("error", result);
+            }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al actualizar el perfil");
         }
