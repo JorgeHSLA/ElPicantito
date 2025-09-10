@@ -39,11 +39,10 @@ public class TiendaServiceImpl implements TiendaService {
     @Override
     public void deleteProducto(Integer id) {
         try {
-            // Primero eliminar las asociaciones con adicionales
             Optional<Producto> producto = getProductoById(id);
             if (producto.isPresent()) {
                 // Obtener todos los adicionales asociados al producto
-                List<Adicional> adicionales = adicionalRepository.findByProductoIdAndDisponibleTrue(id);
+                List<Adicional> adicionales = producto.get().getAdicionales();
                 
                 // Desasociar el producto de todos los adicionales
                 for (Adicional adicional : adicionales) {
@@ -51,12 +50,21 @@ public class TiendaServiceImpl implements TiendaService {
                     adicionalRepository.save(adicional);
                 }
                 
+                // Limpiar las asociaciones del producto antes de eliminarlo
+                producto.get().getAdicionales().clear();
+                productoRepository.save(producto.get());
+                
                 // Ahora eliminar el producto
                 productoRepository.deleteById(id);
+                
+                System.out.println("Producto eliminado exitosamente con ID: " + id);
+            } else {
+                throw new RuntimeException("Producto no encontrado con ID: " + id);
             }
         } catch (Exception e) {
             System.err.println("Error al eliminar producto: " + e.getMessage());
-            throw new RuntimeException("No se puede eliminar el producto. Verifique que no tenga dependencias.", e);
+            e.printStackTrace();
+            throw new RuntimeException("No se puede eliminar el producto. Error: " + e.getMessage(), e);
         }
     }
     
@@ -86,14 +94,30 @@ public class TiendaServiceImpl implements TiendaService {
         try {
             Optional<Adicional> adicional = getAdicionalById(id);
             if (adicional.isPresent()) {
+                // Obtener todos los productos asociados al adicional
+                List<Producto> productos = adicional.get().getProductos();
+                
+                // Desasociar el adicional de todos los productos
+                for (Producto producto : productos) {
+                    producto.getAdicionales().remove(adicional.get());
+                    productoRepository.save(producto);
+                }
+                
+                // Limpiar las asociaciones del adicional antes de eliminarlo
                 adicional.get().getProductos().clear();
                 adicionalRepository.save(adicional.get());
                 
+                // Ahora eliminar el adicional
                 adicionalRepository.deleteById(id);
+                
+                System.out.println("Adicional eliminado exitosamente con ID: " + id);
+            } else {
+                throw new RuntimeException("Adicional no encontrado con ID: " + id);
             }
         } catch (Exception e) {
             System.err.println("Error al eliminar adicional: " + e.getMessage());
-            throw new RuntimeException("No se puede eliminar el adicional. Verifique que no tenga dependencias.", e);
+            e.printStackTrace();
+            throw new RuntimeException("No se puede eliminar el adicional. Error: " + e.getMessage(), e);
         }
     }
 
