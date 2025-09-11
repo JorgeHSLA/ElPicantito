@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.picantito.picantito.entities.Adicional;
 import com.picantito.picantito.entities.Producto;
+import com.picantito.picantito.entities.ProductosAdicionales;
 import com.picantito.picantito.repository.AdicionalRepository;
 import com.picantito.picantito.repository.ProductRepository;
+import com.picantito.picantito.repository.ProductosAdicionalesRepository;
 
 @Service
 public class TiendaServiceImpl implements TiendaService {
@@ -19,6 +21,9 @@ public class TiendaServiceImpl implements TiendaService {
     
     @Autowired
     private AdicionalRepository adicionalRepository;
+    
+    @Autowired
+    private ProductosAdicionalesRepository productosAdicionalesRepository;
 
     // CRUD Productos
     @Override
@@ -41,18 +46,9 @@ public class TiendaServiceImpl implements TiendaService {
         try {
             Optional<Producto> producto = getProductoById(id);
             if (producto.isPresent()) {
-                // Obtener todos los adicionales asociados al producto
-                List<Adicional> adicionales = producto.get().getAdicionales();
-                
-                // Desasociar el producto de todos los adicionales
-                for (Adicional adicional : adicionales) {
-                    adicional.getProductos().remove(producto.get());
-                    adicionalRepository.save(adicional);
-                }
-                
-                // Limpiar las asociaciones del producto antes de eliminarlo
-                producto.get().getAdicionales().clear();
-                productoRepository.save(producto.get());
+                // Eliminar todas las relaciones del producto con adicionales
+                List<ProductosAdicionales> relaciones = productosAdicionalesRepository.findByProducto(producto.get());
+                productosAdicionalesRepository.deleteAll(relaciones);
                 
                 // Ahora eliminar el producto
                 productoRepository.deleteById(id);
@@ -92,18 +88,9 @@ public class TiendaServiceImpl implements TiendaService {
         try {
             Optional<Adicional> adicional = getAdicionalById(id);
             if (adicional.isPresent()) {
-                // Obtener todos los productos asociados al adicional
-                List<Producto> productos = adicional.get().getProductos();
-                
-                // Desasociar el adicional de todos los productos
-                for (Producto producto : productos) {
-                    producto.getAdicionales().remove(adicional.get());
-                    productoRepository.save(producto);
-                }
-                
-                // Limpiar las asociaciones del adicional antes de eliminarlo
-                adicional.get().getProductos().clear();
-                adicionalRepository.save(adicional.get());
+                // Eliminar todas las relaciones del adicional con productos
+                List<ProductosAdicionales> relaciones = productosAdicionalesRepository.findByAdicional(adicional.get());
+                productosAdicionalesRepository.deleteAll(relaciones);
                 
                 // Ahora eliminar el adicional
                 adicionalRepository.deleteById(id);
@@ -118,89 +105,134 @@ public class TiendaServiceImpl implements TiendaService {
     }
 
     @Override
-    public List<Adicional> getAdicionalesByProductoId(Integer productoId) {
-        return adicionalRepository.findByProductoIdAndDisponibleTrue(productoId);
-    }
-
-    @Override
     public List<Adicional> getAdicionalesDisponibles() {
         return adicionalRepository.findByDisponibleTrue();
     }
-    
+
     @Override
-    public List<Adicional> getAdicionalesSinAsignar() {
-        return adicionalRepository.findByDisponibleTrueAndProductosIsEmpty();
+    public List<Producto> getProductosByAdicional(Integer adicionalId) {
+        Optional<Adicional> adicional = getAdicionalById(adicionalId);
+        if (adicional.isPresent()) {
+            List<ProductosAdicionales> relaciones = productosAdicionalesRepository.findByAdicional(adicional.get());
+            return relaciones.stream()
+                    .map(ProductosAdicionales::getProducto)
+                    .toList();
+        }
+        return List.of();
+    }
+
+    // Gestión de relaciones Productos-Adicionales
+    @Override
+    public List<ProductosAdicionales> getProductosAdicionalesByProducto(Integer productoId) {
+        Optional<Producto> producto = getProductoById(productoId);
+        if (producto.isPresent()) {
+            return productosAdicionalesRepository.findByProducto(producto.get());
+        }
+        return List.of();
     }
 
     @Override
-    public List<String> asignarAdicionales(Integer productoId, List<Integer> adicionalesIds) {
+    public List<ProductosAdicionales> getProductosAdicionalesByAdicional(Integer adicionalId) {
+        Optional<Adicional> adicional = getAdicionalById(adicionalId);
+        if (adicional.isPresent()) {
+            return productosAdicionalesRepository.findByAdicional(adicional.get());
+        }
+        return List.of();
+    }
+
+    @Override
+    public ProductosAdicionales saveProductoAdicional(ProductosAdicionales productoAdicional) {
+        return productosAdicionalesRepository.save(productoAdicional);
+    }
+
+    @Override
+    public String eliminarProductoAdicional(Integer id) {
         try {
-            Optional<Producto> producto = this.getProductoById(productoId);
+            productosAdicionalesRepository.deleteById(id);
+            return "SUCCESS";
+        } catch (Exception e) {
+            return "Error al eliminar la relación: " + e.getMessage();
+        }
+    }
+
+    @Override
+    public String asociarAdicionalAProducto(Integer productoId, Integer adicionalId, Integer cantidad) {
+        try {
+            Optional<Producto> producto = getProductoById(productoId);
+            Optional<Adicional> adicional = getAdicionalById(adicionalId);
             
-            if (producto.isPresent()) {
-                for (Integer adicionalId : adicionalesIds) {
-                    Optional<Adicional> adicional = this.getAdicionalById(adicionalId);
-                    if (adicional.isPresent()) {
-                        if (!adicional.get().getProductos().contains(producto.get())) {
-                            adicional.get().getProductos().add(producto.get());
-                            this.saveAdicional(adicional.get());
-                        }
+            if (producto.isPresent() && adicional.isPresent()) {
+                // Verificar si ya existe la relación
+                List<ProductosAdicionales> existentes = productosAdicionalesRepository
+                    .findByProductoAndAdicional(producto.get(), adicional.get());
+                
+                if (existentes.isEmpty()) {
+                    ProductosAdicionales nuevaRelacion = new ProductosAdicionales(
+                        adicional.get(), producto.get(), cantidad);
+                    productosAdicionalesRepository.save(nuevaRelacion);
+                    return "SUCCESS";
+                } else {
+                    return "La relación ya existe";
+                }
+            } else {
+                return "Producto o adicional no encontrado";
+            }
+        } catch (Exception e) {
+            return "Error al asociar adicional a producto: " + e.getMessage();
+        }
+    }
+
+    @Override
+    public String desasociarAdicionalDeProducto(Integer productoId, Integer adicionalId) {
+        try {
+            Optional<Producto> producto = getProductoById(productoId);
+            Optional<Adicional> adicional = getAdicionalById(adicionalId);
+            
+            if (producto.isPresent() && adicional.isPresent()) {
+                List<ProductosAdicionales> relaciones = productosAdicionalesRepository
+                    .findByProductoAndAdicional(producto.get(), adicional.get());
+                
+                if (!relaciones.isEmpty()) {
+                    productosAdicionalesRepository.deleteAll(relaciones);
+                    return "SUCCESS";
+                } else {
+                    return "No existe la relación";
+                }
+            } else {
+                return "Producto o adicional no encontrado";
+            }
+        } catch (Exception e) {
+            return "Error al desasociar adicional del producto: " + e.getMessage();
+        }
+    }
+
+    @Override
+    public String asociarAdicionalAProductos(Integer adicionalId, List<Integer> productosIds) {
+        try {
+            Optional<Adicional> adicional = getAdicionalById(adicionalId);
+            if (!adicional.isPresent()) {
+                return "Adicional no encontrado";
+            }
+
+            // Eliminar todas las relaciones existentes del adicional
+            List<ProductosAdicionales> relacionesExistentes = productosAdicionalesRepository.findByAdicional(adicional.get());
+            productosAdicionalesRepository.deleteAll(relacionesExistentes);
+
+            // Crear nuevas relaciones
+            if (productosIds != null && !productosIds.isEmpty()) {
+                for (Integer productoId : productosIds) {
+                    Optional<Producto> producto = getProductoById(productoId);
+                    if (producto.isPresent()) {
+                        ProductosAdicionales nuevaRelacion = new ProductosAdicionales(
+                            adicional.get(), producto.get(), 1); // cantidad por defecto = 1
+                        productosAdicionalesRepository.save(nuevaRelacion);
                     }
                 }
-                return List.of("1", "Adicionales asignados correctamente");
-            } else {
-                return List.of("0", "Producto no encontrado");
             }
+
+            return "SUCCESS";
         } catch (Exception e) {
-            return List.of("0", "Error interno del servidor");
+            return "Error al asociar adicional a productos: " + e.getMessage();
         }
-    }
-
-    @Override
-    public void updateAdicional(Integer productoId, Adicional adicional) {
-        this.saveAdicional(adicional);
-    }
-
-    @Override
-    public void asociarAdicionalAProductos(Integer adicionalId, List<Integer> productosIds) {
-        try {
-            Optional<Adicional> adicional = this.getAdicionalById(adicionalId);
-            if (adicional.isPresent()) {
-                adicional.get().getProductos().clear();
-                
-                if (productosIds != null) {
-                    for (Integer productoId : productosIds) {
-                        Optional<Producto> producto = this.getProductoById(productoId);
-                        if (producto.isPresent()) {
-                            adicional.get().getProductos().add(producto.get());
-                            System.out.println("Asociando adicional " + adicional.get().getNombre() + 
-                                             " con producto " + producto.get().getNombre());
-                        }
-                    }
-                }                
-                Adicional savedAdicional = adicionalRepository.save(adicional.get());
-                System.out.println("Adicional guardado con " + savedAdicional.getProductos().size() + " productos asociados");
-            }
-        } catch (Exception e) {
-            System.err.println("Error en asociarAdicionalAProductos: " + e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-    @Override
-    public void desasociarAdicionalDeProducto(Integer adicionalId, Integer productoId) {
-        Optional<Adicional> adicional = this.getAdicionalById(adicionalId);
-        Optional<Producto> producto = this.getProductoById(productoId);
-        
-        if (adicional.isPresent() && producto.isPresent()) {
-            adicional.get().getProductos().remove(producto.get());
-            this.saveAdicional(adicional.get());
-        }
-    }
-
-    @Override
-    public List<Adicional> getAdicionalesDisponiblesParaProducto(Integer productoId) {
-        return adicionalRepository.findAvailableForProduct(productoId);
     }
 }

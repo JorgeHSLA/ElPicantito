@@ -34,8 +34,7 @@ public class Cliente {
     @Column(nullable = false)
     private String password;
     
-    // Nuevos campos según diagrama ER
-    // private Integer idCarrito;
+    private Integer idCarrito;
     
     @Column(nullable = false)
     private String direccion;

@@ -1,16 +1,10 @@
 package com.picantito.picantito.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,9 +35,6 @@ public class User {
     
     @Column(nullable = false)
     private String role = "USER"; // USER o ADMIN
-    
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Pedido> pedidos = new ArrayList<>();
     
     public User(String nombreCompleto, String nombreUsuario, String telefono, String correo, String password) {
         this.nombreCompleto = nombreCompleto;

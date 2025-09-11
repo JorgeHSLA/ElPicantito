@@ -1,16 +1,10 @@
 package com.picantito.picantito.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,8 +27,8 @@ public class Producto {
     @Column(nullable = false)
     private Double precio;
     
-    // Nuevo campo según diagrama ER
-    // private Double precioDeAdquisicion;
+    @Column(nullable = false)
+    private Double precioDeAdquisicion;
     
     private String imagen;
     
@@ -43,14 +37,12 @@ public class Producto {
     
     @Column(nullable = false)
     private Integer calificacion = 5;
-    
-    @ManyToMany(mappedBy = "productos", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Adicional> adicionales = new ArrayList<>();
 
-    public Producto(String nombre, String descripcion, Double precio, String imagen, Boolean disponible, Integer calificacion) {
+    public Producto(String nombre, String descripcion, Double precio, Double precioDeAdquisicion, String imagen, Boolean disponible, Integer calificacion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
+        this.precioDeAdquisicion = precioDeAdquisicion;
         this.imagen = imagen;
         this.disponible = disponible;
         this.calificacion = calificacion;
@@ -63,6 +55,7 @@ public class Producto {
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", precio=" + precio +
+                ", precioDeAdquisicion=" + precioDeAdquisicion +
                 ", imagen='" + imagen + '\'' +
                 ", disponible=" + disponible +
                 ", calificacion=" + calificacion +

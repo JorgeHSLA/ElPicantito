@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-/*
 @Entity
 @Table(name = "productos_adicionales")
 @Data
@@ -35,4 +33,3 @@ public class ProductosAdicionales {
         this.cantidadProducto = cantidadProducto;
     }
 }
-*/

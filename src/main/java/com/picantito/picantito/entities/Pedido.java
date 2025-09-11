@@ -1,8 +1,6 @@
 package com.picantito.picantito.entities;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,8 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -29,31 +25,17 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @Column(nullable = false)
-    private String nombre;
-    
-    // Nuevos campos según diagrama ER
-    // private String nombreRepartidor;
+    private String nombreRepartidor;
     
     @Column(nullable = false)
     private Double precio;
     
-    // Nuevo campo según diagrama ER
-    // private Double precioDeAdquisicion;
+    @Column(nullable = false)
+    private Double precioDeAdquisicion;
     
-    // Campo deprecado - usar relación many-to-many en su lugar
-    // private Integer producto_ID;
-    
-    // Nuevo campo según diagrama ER
-    // private String estado;
-    
-    @ManyToMany
-    @JoinTable(
-        name = "pedido_productos",
-        joinColumns = @JoinColumn(name = "pedido_id"),
-        inverseJoinColumns = @JoinColumn(name = "producto_id")
-    )
-    private List<Producto> productos = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "producto_id")
+    private Producto producto;
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaEntrega;
@@ -62,11 +44,9 @@ public class Pedido {
     private Date fechaSolicitud;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "clientes_id")
+    private Cliente cliente;
     
-    // Nueva relación según diagrama ER
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "clientes_id")
-    // private Cliente cliente;
+    @Column(nullable = false)
+    private String estado = "pendiente";
 }

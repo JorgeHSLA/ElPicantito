@@ -137,13 +137,13 @@
                                         <td th:text="${adicional.descripcion}"></td>
                                         <td>$<span th:text="${#numbers.formatDecimal(adicional.precio, 1, 2)}"></span></td>
                                         <td>
-                                            <div th:if="${#lists.isEmpty(adicional.productos)}">
+                                            <div th:if="${#lists.isEmpty(adicionalesConProductos[adicional.id])}">
                                                 <span class="text-muted">Sin productos asociados</span>
                                             </div>
-                                            <div th:unless="${#lists.isEmpty(adicional.productos)}">
-                                                <span class="badge bg-primary me-2" th:text="${#lists.size(adicional.productos)} + ' productos'"></span>
+                                            <div th:unless="${#lists.isEmpty(adicionalesConProductos[adicional.id])}">
+                                                <span class="badge bg-primary me-2" th:text="${#lists.size(adicionalesConProductos[adicional.id])} + ' productos'"></span>
                                                 <div class="mt-1">
-                                                    <span th:each="producto, iterStat : ${adicional.productos}" 
+                                                    <span th:each="producto, iterStat : ${adicionalesConProductos[adicional.id]}" 
                                                           class="badge bg-secondary me-1 mb-1 small"
                                                           th:text="${producto.nombre}"></span>
                                                 </div>

@@ -144,8 +144,16 @@ public class AdminController {
         List<Adicional> adicionales = tiendaService.getAllAdicionales();
         List<Producto> productos = tiendaService.getAllProductos();
         
+        // Crear un mapa para asociar cada adicional con sus productos
+        java.util.Map<Integer, List<Producto>> adicionalesConProductos = new java.util.HashMap<>();
+        for (Adicional adicional : adicionales) {
+            List<Producto> productosDelAdicional = tiendaService.getProductosByAdicional(adicional.getId());
+            adicionalesConProductos.put(adicional.getId(), productosDelAdicional);
+        }
+        
         model.addAttribute("adicionales", adicionales);
         model.addAttribute("productos", productos);
+        model.addAttribute("adicionalesConProductos", adicionalesConProductos);
         model.addAttribute("nuevoAdicional", new Adicional());
         
         return "html/admin/adicionales";
