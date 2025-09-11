@@ -1,17 +1,23 @@
 package com.picantito.picantito.entities;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "productos")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor 
 public class Producto {
     @Id
@@ -26,6 +32,9 @@ public class Producto {
     
     @Column(nullable = false)
     private Double precio;
+    
+    // Nuevo campo según diagrama ER
+    // private Double precioDeAdquisicion;
     
     private String imagen;
     

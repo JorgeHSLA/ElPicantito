@@ -1,18 +1,28 @@
 package com.picantito.picantito.entities;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "pedidos")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor 
 public class Pedido {
     @Id
@@ -22,8 +32,20 @@ public class Pedido {
     @Column(nullable = false)
     private String nombre;
     
+    // Nuevos campos según diagrama ER
+    // private String nombreRepartidor;
+    
     @Column(nullable = false)
     private Double precio;
+    
+    // Nuevo campo según diagrama ER
+    // private Double precioDeAdquisicion;
+    
+    // Campo deprecado - usar relación many-to-many en su lugar
+    // private Integer producto_ID;
+    
+    // Nuevo campo según diagrama ER
+    // private String estado;
     
     @ManyToMany
     @JoinTable(
@@ -42,4 +64,9 @@ public class Pedido {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+    
+    // Nueva relación según diagrama ER
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "clientes_id")
+    // private Cliente cliente;
 }

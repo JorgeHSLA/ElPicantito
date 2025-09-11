@@ -6,14 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "clientes")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Cliente {
     
@@ -35,6 +33,9 @@ public class Cliente {
     
     @Column(nullable = false)
     private String password;
+    
+    // Nuevos campos según diagrama ER
+    // private Integer idCarrito;
     
     @Column(nullable = false)
     private String direccion;
