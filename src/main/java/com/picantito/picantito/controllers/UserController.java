@@ -75,7 +75,7 @@ public class UserController {
     @PostMapping("/login")
     public String postLogin(@ModelAttribute("user") User user, HttpSession session, RedirectAttributes redirectAttributes) {
         
-        if (autentificacionService.authenticate(user.getNombreUsuario(), user.getPassword())) {
+        if (autentificacionService.authenticate(user.getNombreUsuario(), user.getContrasenia())) {
             Optional<User> authenticatedUser = autentificacionService.findByNombreUsuario(user.getNombreUsuario());
             if (authenticatedUser.isPresent()) {
                 session.setAttribute("loggedUser", authenticatedUser.get());

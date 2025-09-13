@@ -60,4 +60,8 @@ public class User {
         this.estado = estado;
         this.rol = rol;
     }
+    public boolean isAdmin() {
+    return "ADMIN".equalsIgnoreCase(this.rol);
+    }
+
 }

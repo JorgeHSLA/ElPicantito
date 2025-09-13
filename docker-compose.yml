@@ -1,0 +1,27 @@
+#servicios
+services:
+    chatbot:
+      build:
+        context: chatbot/          # ruta donde está tu Dockerfile
+        dockerfile: Dockerfile
+      container_name: elpicantito-chat
+      ports:
+        - "8501:8501"
+      
+  #crear bases de datos 
+    db:
+      image: postgres:16.1
+      container_name: ElPicantitoDB
+      restart: always
+      volumes:
+      # el volumen es para persistencia de datos aunque el container se caiga 
+      # podemos ver que hay docker-entrypoint-initdb.d, en este fragmento se indica el init, lo cual hace que cada vez que se inicie el contenedor se van a leer esos archivos
+      # docker compose up para que inicie el contenedor
+        - ./sql:/docker-entrypoint-initdb.d
+      environment:
+      ## informacion de bases de datos
+        POSTGRES_DB: 'picantitodb'
+        POSTGRES_USER: 'taquito'
+        POSTGRES_PASSWORD: 'taquito123'
+      ports:
+        - '5432:5432'

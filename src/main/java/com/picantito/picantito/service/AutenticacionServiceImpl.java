@@ -60,7 +60,7 @@ public class AutenticacionServiceImpl implements AutentificacionService {
     public boolean authenticate(String nombreUsuario, String password) {
         Optional<User> user = findByNombreUsuario(nombreUsuario);
         if (user.isPresent()) {
-            return user.get().getPassword().equals(password);
+            return user.get().getContrasenia().equals(password);
         }
         return false;
     }
@@ -68,7 +68,7 @@ public class AutenticacionServiceImpl implements AutentificacionService {
     @Override
     public String registrarUsuario(User user, String password2) {
         // Validar que las contraseñas coincidan
-        if (!user.getPassword().equals(password2)) {
+        if (!user.getContrasenia().equals(password2)) {
             return "Las contraseñas no coinciden";
         }
         
@@ -78,7 +78,7 @@ public class AutenticacionServiceImpl implements AutentificacionService {
         }
         
         // Establecer rol por defecto
-        user.setRole("USER");
+        user.setRol("USER");
         
         try {
             this.save(user);
@@ -114,10 +114,10 @@ public class AutenticacionServiceImpl implements AutentificacionService {
             return "El correo ya está registrado por otro usuario";
         }
         
-        if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
+        if (usuario.getContrasenia() == null || usuario.getContrasenia().trim().isEmpty()) {
             Optional<User> currentUser = this.findById(usuario.getId());
             if (currentUser.isPresent()) {
-                usuario.setPassword(currentUser.get().getPassword());
+                usuario.setContrasenia(currentUser.get().getContrasenia());
             }
         }
         
@@ -145,14 +145,14 @@ public class AutenticacionServiceImpl implements AutentificacionService {
             return "El correo ya está registrado por otro usuario";
         }
         
-        if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
+        if (usuario.getContrasenia() == null || usuario.getContrasenia().trim().isEmpty()) {
             Optional<User> currentUser = this.findById(usuario.getId());
             if (currentUser.isPresent()) {
-                usuario.setPassword(currentUser.get().getPassword());
+                usuario.setContrasenia(currentUser.get().getContrasenia());
             }
         }
         
-        usuario.setRole(loggedUser.getRole());
+        usuario.setRol(loggedUser.getRol());
         
         try {
             this.save(usuario);

@@ -1,9 +1,10 @@
 package com.picantito.picantito.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import java.util.List;
 
 import com.picantito.picantito.entities.Adicional;
 import com.picantito.picantito.entities.Producto;
@@ -69,18 +70,18 @@ public class DataInitializer implements CommandLineRunner {
         try {
             // Verifica si el admin ya existe
             if (!autentificacionService.existsByNombreUsuario("admin")) {
-                User admin = new User("Administrador Principal", "admin", "3001234567", "admin@elpicantito.com", "admin123", "ADMIN");
+                User admin = new User("Administrador Principal", "admin", "3001234567", "admin@elpicantito.com", "admin123", null, "ADMIN");
                 autentificacionService.save(admin);
             }
             
             // Usuarios de prueba
             if (!autentificacionService.existsByNombreUsuario("carlos.lopez")) {
-                User testUser = new User("Carlos López García", "carlos.lopez", "3009876543", "carlos@email.com", "password123");
+                User testUser = new User("Carlos López García", "carlos.lopez", "3009876543", "carlos@email.com", "password123", null, "USER");
                 autentificacionService.save(testUser);
             }
             
             if (!autentificacionService.existsByNombreUsuario("maria.garcia")) {
-                User testUser2 = new User("María García Rodríguez", "maria.garcia", "3001357924", "maria@email.com", "password456");
+                User testUser2 = new User("María García Rodríguez", "maria.garcia", "3001357924", "maria@email.com", "password456", null, "USER");
                 autentificacionService.save(testUser2);
             }
         } catch (Exception e) {

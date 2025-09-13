@@ -1,22 +1,99 @@
+-- Crear un esquema (puedes cambiar el nombre si quieres)
+CREATE SCHEMA IF NOT EXISTS pedidos_app;
+SET search_path TO pedidos_app;
 
-
-CREATE TABLE cliente (
-    id INT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    telefono INT NOT NULL,
-    contrasena VARCHAR(255) NOT NULL
+-- ==========================
+-- Tabla: Usuarios
+-- ==========================
+CREATE TABLE Usuarios (
+    ID SERIAL PRIMARY KEY,
+    nombreCompleto VARCHAR(255) NOT NULL,
+    nombreUsuario VARCHAR(100) UNIQUE NOT NULL,
+    telefono VARCHAR(20),
+    correo VARCHAR(150) UNIQUE NOT NULL,
+    contrasenia VARCHAR(255) NOT NULL,
+    Estado VARCHAR(50),
+    Rol VARCHAR(50)
 );
 
+-- ==========================
+-- Tabla: Productos
+-- ==========================
+CREATE TABLE Productos (
+    ID SERIAL PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    descripcion VARCHAR(500),
+    precio FLOAT NOT NULL,
+    precioDeAdquisicion FLOAT,
+    imagen VARCHAR(255),
+    disponible BOOLEAN DEFAULT TRUE,
+    calificacion INTEGER
+);
 
-CREATE INDEX cliente_telefono ON usuario(telefono);
+-- ==========================
+-- Tabla: Adicionales
+-- ==========================
+CREATE TABLE Adicionales (
+    ID SERIAL PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    descripcion VARCHAR(500),
+    precio FLOAT NOT NULL,
+    precioDeAdquisicion FLOAT,
+    Cantidad INTEGER
+);
 
+-- ==========================
+-- Tabla: Productos_Adicionales
+-- (relación N:M entre Productos y Adicionales)
+-- ==========================
+CREATE TABLE Productos_Adicionales (
+    adicional_id INT NOT NULL,
+    producto_id INT NOT NULL,
+    cantidadProducto INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (adicional_id, producto_id),
+    FOREIGN KEY (adicional_id) REFERENCES Adicionales(ID) ON DELETE CASCADE,
+    FOREIGN KEY (producto_id) REFERENCES Productos(ID) ON DELETE CASCADE
+);
 
-CREATE TABLE pedido (
-    id INT PRIMARY KEY,
-    estado VARCHAR(50) NOT NULL, 
-    destino VARCHAR(255) NOT NULL,
-    fecha_solicitud DATE NOT NULL,
-    fecha_entrega DATE,
-    cliente_id INT NOT NULL,
-    FOREIGN KEY (cliente_id) REFERENCES cliente(id)
+-- ==========================
+-- Tabla: Pedidos
+-- ==========================
+CREATE TABLE Pedidos (
+    ID SERIAL PRIMARY KEY,
+    precio FLOAT,
+    precioDeAdquisicion FLOAT,
+    fechaEntrega DATE,
+    fechaSolicitud DATE DEFAULT CURRENT_DATE,
+    Clientes_id INT NOT NULL,
+    Estado VARCHAR(50),
+    Repartidor_id INT,
+    Direccion VARCHAR(255),
+    FOREIGN KEY (Clientes_id) REFERENCES Usuarios(ID) ON DELETE CASCADE,
+    FOREIGN KEY (Repartidor_id) REFERENCES Usuarios(ID) ON DELETE SET NULL
+);
+
+-- ==========================
+-- Tabla: Pedido_Producto
+-- (productos dentro de un pedido)
+-- ==========================
+CREATE TABLE Pedido_Producto (
+    ID SERIAL PRIMARY KEY,
+    pedido_id INT NOT NULL,
+    producto_id INT NOT NULL,
+    cantidadProducto INT NOT NULL DEFAULT 1,
+    FOREIGN KEY (pedido_id) REFERENCES Pedidos(ID) ON DELETE CASCADE,
+    FOREIGN KEY (producto_id) REFERENCES Productos(ID) ON DELETE CASCADE
+);
+
+-- ==========================
+-- Tabla: Pedido_Producto_Adicional
+-- (adicionales dentro de un producto de un pedido)
+-- ==========================
+CREATE TABLE Pedido_Producto_Adicional (
+    pedido_producto_id INT NOT NULL,
+    adicional_id INT NOT NULL,
+    cantidadAdicional INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (pedido_producto_id, adicional_id),
+    FOREIGN KEY (pedido_producto_id) REFERENCES Pedido_Producto(ID) ON DELETE CASCADE,
+    FOREIGN KEY (adicional_id) REFERENCES Adicionales(ID) ON DELETE CASCADE
 );
