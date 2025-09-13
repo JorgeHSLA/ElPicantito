@@ -2,6 +2,7 @@ package com.picantito.picantito.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -29,6 +30,7 @@ public class Adicional {
     private Float precio;
     private Float precioDeAdquisicion;
     private Integer cantidad;
+    private Boolean disponible;
 
     @OneToMany(mappedBy = "adicional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductoAdicional> productoAdicionales = new ArrayList<>();
@@ -63,8 +65,9 @@ public class Adicional {
         return this.productoAdicionales.stream()
             .map(ProductoAdicional::getProducto)
             .distinct()
-            .toList();
+            .collect(Collectors.toCollection(ArrayList::new)); // ✅ mutable
     }
+
 
     public void setProductos(List<Producto> productos) {
         this.productoAdicionales.clear();

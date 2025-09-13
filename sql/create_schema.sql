@@ -12,10 +12,9 @@ CREATE TABLE Usuarios (
     telefono VARCHAR(20),
     correo VARCHAR(150) UNIQUE NOT NULL,
     contrasenia VARCHAR(255) NOT NULL,
-    Estado VARCHAR(50),
+    Estado VARCHAR(50),  
     Rol VARCHAR(50)
 );
-
 -- ==========================
 -- Tabla: Productos
 -- ==========================
@@ -39,7 +38,8 @@ CREATE TABLE Adicionales (
     descripcion VARCHAR(500),
     precio FLOAT NOT NULL,
     precioDeAdquisicion FLOAT,
-    Cantidad INTEGER
+    cantidad INTEGER,
+    disponible BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 -- ==========================

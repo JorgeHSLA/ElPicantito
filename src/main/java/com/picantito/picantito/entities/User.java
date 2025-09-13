@@ -39,7 +39,7 @@ public class User {
     @Column(nullable = false)
     private String contrasenia;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String estado;
     
     @Column(nullable = false)

@@ -2,6 +2,7 @@ package com.picantito.picantito.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -59,12 +60,13 @@ public class Producto {
         }
     }
     @Transient
-    public List<Pedido> getPedidos() {
-        return this.pedidoProductos.stream()
-            .map(PedidoProducto::getPedido)
+    public List<Producto> getProductos() {
+        return this.productoAdicionales.stream()
+            .map(ProductoAdicional::getProducto)
             .distinct()
-            .toList();
+            .collect(Collectors.toCollection(ArrayList::new)); // ✅ lista mutable
     }
+
 
     public void setPedidos(List<Pedido> pedidos) {
         this.pedidoProductos.clear();

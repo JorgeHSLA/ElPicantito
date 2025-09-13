@@ -12,6 +12,8 @@ import com.picantito.picantito.entities.User;
 import com.picantito.picantito.service.AutentificacionService;
 import com.picantito.picantito.service.TiendaService;
 
+import jakarta.transaction.Transactional;
+
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -22,6 +24,7 @@ public class DataInitializer implements CommandLineRunner {
     private AutentificacionService autentificacionService;
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
         // Inicializa si no hay datos en la bd
         if (tiendaService.getAllProductos().isEmpty()) {
