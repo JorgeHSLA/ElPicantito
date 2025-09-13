@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "usuarios")
 @Data
-@NoArgsConstructor 
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,42 +37,27 @@ public class User {
     private String correo;
     
     @Column(nullable = false)
-    private String password;
+    private String contrasenia;
     
     @Column(nullable = false)
-    private String role = "USER"; // USER o ADMIN
+    private String estado;
     
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Pedido> pedidos = new ArrayList<>();
+    @Column(nullable = false)
+    private String rol = "USER"; // USER, REPARTIDOR, ADMIN
     
-    public User(String nombreCompleto, String nombreUsuario, String telefono, String correo, String password) {
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pedido> pedidosCliente = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "repartidor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pedido> pedidosRepartidor = new ArrayList<>();
+
+    public User(String nombreCompleto, String nombreUsuario, String telefono, String correo, String contrasenia, String estado, String rol) {
         this.nombreCompleto = nombreCompleto;
         this.nombreUsuario = nombreUsuario;
         this.telefono = telefono;
         this.correo = correo;
-        this.password = password;
-        this.role = "USER";
-    }
-    
-    public User(String nombreCompleto, String nombreUsuario, String telefono, String correo, String password, String role) {
-        this.nombreCompleto = nombreCompleto;
-        this.nombreUsuario = nombreUsuario;
-        this.telefono = telefono;
-        this.correo = correo;
-        this.password = password;
-        this.role = role;
-    }
-    
-    public boolean isAdmin() {
-        return "ADMIN".equals(this.role);
-    }
-    
-    // (usar nombreCompleto como name)
-    public String getName() {
-        return this.nombreCompleto;
-    }
-    
-    public void setName(String name) {
-        this.nombreCompleto = name;
+        this.contrasenia = contrasenia;
+        this.estado = estado;
+        this.rol = rol;
     }
 }
