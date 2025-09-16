@@ -222,9 +222,9 @@ if prompt := st.chat_input("🌶️ Hazme una pregunta sobre Elpicantito..."):
     try:
         stream = client.chat.completions.create(
             model="deepseek/deepseek-r1:free",  # ajustar modelo si es necesario
-            messages=st.session_state.messages,
+            messages=st.session_state.messages, # type: ignore
             stream=True,
-        )
+        ) # pyright: ignore[reportCallIssue]
     except Exception as e:
         st.error(f"❌ Error al llamar a la API: {e}")
         st.stop()
@@ -239,7 +239,7 @@ if prompt := st.chat_input("🌶️ Hazme una pregunta sobre Elpicantito..."):
         response = "Lo siento, hubo un problema al procesar tu solicitud. Por favor, inténtalo de nuevo."
 
     # Guardar la respuesta en el historial para futuras interacciones
-    st.session_state.messages.append({"role": "assistant", "content": response})
+    st.session_state.messages.append({"role": "assistant", "content": response}) # pyright: ignore[reportArgumentType]
 
 # Footer decorativo
 st.markdown(
