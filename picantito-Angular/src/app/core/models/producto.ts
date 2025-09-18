@@ -1,3 +1,5 @@
+import { Adicional } from './adicional';
+
 export interface Producto {
   id?: number;
   nombre: string;
