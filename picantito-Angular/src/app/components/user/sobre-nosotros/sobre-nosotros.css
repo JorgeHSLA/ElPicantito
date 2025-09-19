@@ -1,0 +1,82 @@
+/* Importar estilos base desde la carpeta styles */
+@import '../../../../assets/styles/styles.css';
+@import '../../../../assets/styles/css/dark-hc.css';
+
+/* Estilos específicos para sobre nosotros */
+.about-hero {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.story-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.story-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.value-card {
+  transition: transform 0.3s ease;
+}
+
+.value-card:hover {
+  transform: translateY(-5px);
+}
+
+.value-icon {
+  transition: transform 0.3s ease;
+}
+
+.value-card:hover .value-icon {
+  transform: scale(1.1);
+}
+
+.team-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.team-avatar {
+  width: 120px !important;
+  height: 120px !important;
+  object-fit: cover;
+  border: 3px solid var(--accent-color);
+  transition: all 0.3s ease;
+}
+
+.team-avatar:hover {
+  transform: scale(1.05);
+}
+
+.commitment {
+  background: linear-gradient(45deg, #fff 0%, #f8f9fa 100%);
+}
+
+.cta-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .display-4 {
+    font-size: 2rem;
+  }
+  
+  .display-5 {
+    font-size: 1.75rem;
+  }
+  
+  .display-6 {
+    font-size: 1.5rem;
+  }
+  
+  .team-avatar {
+    width: 100px !important;
+    height: 100px !important;
+  }
+}
