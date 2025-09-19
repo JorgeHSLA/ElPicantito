@@ -1,6 +1,4 @@
-/* =========================
-   BOTONES Y COMPONENTES
-   ========================= */
+
 .btn-primary {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
@@ -493,3 +491,4 @@
 .card:hover {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
+/* You can add global styles to this file, and also import other style files */

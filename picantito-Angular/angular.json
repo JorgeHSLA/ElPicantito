@@ -25,9 +25,7 @@
               }
             ],
             "styles": [
-              "src/assets/styles/styles.css",
-              "src/assets/styles/css/navbar.css",
-              "src/assets/styles/css/variables.css"
+              "src/styles.css"
             ]
           },
           "configurations": {
