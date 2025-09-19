@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "picantito-Angular": {
+    "picantito-angular": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -25,19 +25,8 @@
               }
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
-              "src/assets/styles/main.css",
               "src/styles.css"
-            ],
-            "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {
@@ -67,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "picantito-Angular:build:production"
+              "buildTarget": "picantito-angular:build:production"
             },
             "development": {
-              "buildTarget": "picantito-Angular:build:development"
+              "buildTarget": "picantito-angular:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -101,6 +90,6 @@
     }
   },
   "cli": {
-    "analytics": "5ce17905-45b9-40fb-9495-121d7a53ec64"
+    "analytics": "82b5f712-3721-4e3a-addf-20ab9780714c"
   }
 }
