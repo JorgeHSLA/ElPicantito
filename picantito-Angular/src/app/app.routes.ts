@@ -11,7 +11,7 @@ import { Tienda } from './components/user/tienda/tienda';
 import { SobreNosotros } from './components/user/sobre-nosotros/sobre-nosotros';
 
 export const routes: Routes = [
-    {path: '', component: Home},
+    {path: 'home', component: Home},
     {path: 'adicionales', component: Adicionales},
     {path: 'dashboard', component: Dashboard},
     {path: 'edit-adicional', component: EditAdicional},
