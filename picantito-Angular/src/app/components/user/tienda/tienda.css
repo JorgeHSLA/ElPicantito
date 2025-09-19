@@ -1,0 +1,113 @@
+/* Importar estilos base desde la carpeta styles */
+@import '../../../../assets/styles/styles.css';
+@import '../../../../assets/styles/css/dark-hc.css';
+
+/* Estilos específicos para tienda */
+.menu-hero {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.menu-stats {
+  background: rgba(255, 193, 7, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.filters-section {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.filter-buttons .btn.active {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--neutral-bg);
+}
+
+.taco-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.taco-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-container {
+  overflow: hidden;
+}
+
+.card-img-container img {
+  transition: transform 0.3s ease;
+}
+
+.taco-card:hover .card-img-container img {
+  transform: scale(1.05);
+}
+
+.rating i {
+  font-size: 0.875rem;
+}
+
+.price-and-action {
+  margin-top: auto;
+}
+
+.action-buttons .btn {
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.action-buttons .btn:hover {
+  transform: translateY(-2px);
+}
+
+.cta-section {
+  border: 2px dashed var(--accent-color);
+  transition: all 0.3s ease;
+}
+
+.cta-section:hover {
+  background-color: rgba(255, 193, 7, 0.2) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .display-5 {
+    font-size: 2rem;
+  }
+  
+  .menu-stats {
+    margin-top: 2rem;
+  }
+  
+  .filter-buttons {
+    text-align: center;
+  }
+  
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .action-buttons .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .price-and-action {
+    text-align: center;
+  }
+  
+  .price-and-action .d-flex {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
