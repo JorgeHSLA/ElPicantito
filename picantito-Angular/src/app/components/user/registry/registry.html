@@ -1,1 +1,152 @@
-<p>registry works!</p>
+<!-- NAVBAR -->
+<header class="position-sticky top-0 z-3">
+  <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-sm" style="background: #212529;">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" (click)="navigateToHome()" style="cursor: pointer;">
+        <img src="assets/images/LogoFont.png" alt="El Picantito Logo" width="200" height="120" class="me-2" />
+      </a>
+      <div class="ms-auto">
+        <button (click)="navigateToHome()" class="btn btn-outline-light px-4 py-2 rounded-pill fw-bold" 
+                type="button" aria-label="Ir al inicio">
+          Volver al inicio
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="auth-wrapper">
+  <div class="auth-card">
+    <!-- LADO IZQUIERDO -->
+    <section class="auth-left" id="left-side">
+      <h1 class="auth-title">Comencemos</h1>
+      <p class="auth-sub">
+        Crea tu cuenta para disfrutar de nuestros servicios, hacer pedidos y crear tus propios tacos.
+      </p>
+    </section>
+
+    <!-- LADO DERECHO: formulario -->
+    <aside class="auth-right">
+      <div class="form-panel" role="region" aria-label="Formulario de registro">
+        <h3>Regístrate</h3>
+        
+        <!-- Mostrar mensajes de error -->
+        <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ error }}
+          <button type="button" class="btn-close" (click)="clearMessages()"></button>
+        </div>
+        
+        <!-- Mostrar mensajes de éxito -->
+        <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle me-2"></i>
+          {{ success }}
+          <button type="button" class="btn-close" (click)="clearMessages()"></button>
+        </div>
+        
+        <form (ngSubmit)="onSubmit()" novalidate class="form-dark-text">
+          <div class="mb-3">
+            <label for="nombreCompleto" class="form-label-small">Nombre completo</label>
+            <input 
+              id="nombreCompleto" 
+              [(ngModel)]="registryForm.nombreCompleto"
+              name="nombreCompleto"
+              type="text" 
+              class="line-input form-control" 
+              placeholder="Ej: Juan Pérez García" 
+              required
+              [disabled]="isLoading">
+          </div>
+          
+          <div class="mb-3">
+            <label for="nombreUsuario" class="form-label-small">Usuario</label>
+            <input 
+              id="nombreUsuario" 
+              [(ngModel)]="registryForm.nombreUsuario"
+              name="nombreUsuario"
+              type="text" 
+              class="line-input form-control" 
+              placeholder="juan.perez" 
+              required
+              [disabled]="isLoading">
+          </div>
+          
+          <div class="mb-3">
+            <label for="telefono" class="form-label-small">Teléfono</label>
+            <input 
+              id="telefono" 
+              [(ngModel)]="registryForm.telefono"
+              name="telefono"
+              type="tel" 
+              class="line-input form-control" 
+              placeholder="Ej: +57 300 123 4567" 
+              required
+              [disabled]="isLoading">
+          </div>
+          
+          <div class="mb-3">
+            <label for="correo" class="form-label-small">Correo electrónico</label>
+            <input 
+              id="correo" 
+              [(ngModel)]="registryForm.correo"
+              name="correo"
+              type="email" 
+              class="line-input form-control" 
+              placeholder="correo@ejemplo.com" 
+              required
+              [disabled]="isLoading">
+          </div>
+          
+          <div class="mb-3">
+            <label for="password" class="form-label-small">Contraseña</label>
+            <input 
+              id="password" 
+              [(ngModel)]="registryForm.password"
+              name="password"
+              type="password" 
+              class="line-input form-control" 
+              placeholder="Crea una contraseña segura" 
+              required
+              [disabled]="isLoading">
+          </div>
+          
+          <div class="mb-3">
+            <label for="password2" class="form-label-small">Repetir contraseña</label>
+            <input 
+              id="password2" 
+              [(ngModel)]="registryForm.password2"
+              name="password2"
+              type="password" 
+              class="line-input form-control" 
+              placeholder="Repite la contraseña" 
+              required
+              [disabled]="isLoading">
+          </div>
+          
+          <button 
+            type="submit" 
+            class="btn-accent" 
+            aria-label="Crear cuenta"
+            [disabled]="isLoading">
+            <span *ngIf="!isLoading">Crear mi cuenta</span>
+            <span *ngIf="isLoading">
+              <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+              Creando cuenta...
+            </span>
+          </button>
+          
+          <div class="form-note" style="text-align:center; margin-top:12px;">
+            ¿Ya tienes cuenta? 
+            <a (click)="navigateToLogin()" style="color:var(--accent-color); text-decoration:underline; cursor: pointer;">
+              Inicia sesión
+            </a>
+          </div>
+        </form>
+      </div>
+      
+      <div class="right-decor" aria-hidden="true">
+        <div style="width:1px; height:80%; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border-radius:2px;"></div>
+      </div>
+    </aside>
+  </div>
+</main>

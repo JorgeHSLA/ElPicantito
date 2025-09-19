@@ -9,6 +9,9 @@ import { EditProducto } from './components/admin/edit-producto/edit-producto';
 import { EditAdicional } from './components/admin/edit-adicional/edit-adicional';
 import { TiendaComponent } from './components/user/tienda/tienda';
 import { SobreNosotrosComponent } from './components/user/sobre-nosotros/sobre-nosotros';
+import { LoginComponent } from './components/user/login/login';
+import { RegistryComponent } from './components/user/registry/registry';
+import { MiPerfilComponent } from './components/user/mi-perfil/mi-perfil';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -22,4 +25,7 @@ export const routes: Routes = [
   { path: 'usuarios', component: Usuarios },
   { path: 'tienda', component: TiendaComponent },
   { path: 'sobre-nosotros', component: SobreNosotrosComponent },
+    { path: 'login', component: LoginComponent },
+  { path: 'registry', component: RegistryComponent },
+  { path: 'mi-perfil', component: MiPerfilComponent },
 ];
