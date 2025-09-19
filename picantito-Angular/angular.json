@@ -25,7 +25,9 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/assets/styles/styles.css",
+              "src/assets/styles/css/navbar.css",
+              "src/assets/styles/css/variables.css"
             ]
           },
           "configurations": {
@@ -82,7 +84,9 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/assets/styles/styles.css",
+              "src/assets/styles/css/navbar.css",
+              "src/assets/styles/css/variables.css"
             ]
           }
         }

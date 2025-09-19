@@ -1,1 +1,76 @@
-<p>navbar works!</p>
+<header class="position-sticky top-0 z-3">
+  <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-sm">
+    <div class="container">
+      <!-- Logo -->
+      <a class="navbar-brand d-flex align-items-center" routerLink="/home">
+        <img src="images/LogoFont.png" alt="El Picantito Logo" width="200" height="120" class="me-2" />
+      </a>
+      
+      <!-- Buscador Central -->
+      <div class="d-none d-lg-flex flex-grow-1 justify-content-center mx-3">
+        <form class="search-form-center w-100" style="max-width: 400px;">
+          <div class="input-group">
+            <input
+              class="form-control border-0 rounded-start-pill"
+              type="search"
+              placeholder="Buscar tacos..."
+              aria-label="Search"
+              name="search"
+            />
+            <button class="btn btn-dark rounded-end-pill px-3" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Navegación con iconos -->
+      <div class="d-flex align-items-center">
+        <ul class="navbar-nav flex-row">
+          <li class="nav-item me-2">
+            <a class="nav-link icon-nav" routerLink="/sobre-nosotros" title="Sobre Nosotros">
+              <i class="bi bi-info-circle fs-5"></i>
+            </a>
+          </li>
+          <li class="nav-item me-2">
+            <a class="nav-link icon-nav" routerLink="/tienda" title="Menú">
+              <i class="bi bi-grid fs-5"></i>
+            </a>
+          </li>
+          <li class="nav-item me-2">
+            <a class="nav-link icon-nav" href="#" title="Ubicación">
+              <i class="bi bi-geo-alt-fill fs-5"></i>
+            </a>
+          </li>
+          <li class="nav-item me-2">
+            <a class="nav-link icon-nav" href="#" title="Carrito">
+              <i class="bi bi-cart3 fs-5"></i>
+            </a>
+          </li>
+          <!-- Opciones de usuario - Usuario no logueado -->
+          <li class="nav-item dropdown">
+            <a class="nav-link icon-nav dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person fs-5"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="userDropdown">
+              <li class="dropdown-header">
+                <img src="images/LogoMinimalistBlackWhite.png" alt="Logo" style="width:45px;height:45px;object-fit:contain;margin-right:8px;">
+                <span>¿Sin Cuenta?</span>
+              </li>
+              <li>
+                <a class="dropdown-item user-dropdown-item" routerLink="/login">
+                  <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item user-dropdown-item" routerLink="/registry">
+                  <i class="bi bi-person-plus me-2"></i>Registrarse
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

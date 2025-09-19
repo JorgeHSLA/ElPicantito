@@ -4,21 +4,21 @@
    ========================= */
 
 /* Importar variables globales */
-@import url('variables.css');
+@import url('css/variables.css');
 
 /* Importar estilos base */
-@import url('base.css');
+@import url('css/base.css');
 
 /* Importar componentes específicos */
-@import url('buttons.css');
-@import url('forms.css');
-@import url('navbar.css');
-@import url('carrusel.css');
-@import url('productos.css');
-@import url('admin.css');
+@import url('css/buttons.css');
+@import url('css/forms.css');
+@import url('css/navbar.css');
+@import url('css/carrusel.css');
+@import url('css/productos.css');
+@import url('css/admin.css');
 
 /* Importar tema */
-@import url('dark-hc.css');
+@import url('css/dark-hc.css');
 
 /* =========================
    ESTILOS ESPECÍFICOS ADICIONALES
