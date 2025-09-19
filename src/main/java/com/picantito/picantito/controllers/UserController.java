@@ -1,45 +1,27 @@
 package com.picantito.picantito.controllers;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.entities.User;
 import com.picantito.picantito.service.AutentificacionService;
-import com.picantito.picantito.service.TiendaService;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
 
-    @Autowired
-    private TiendaService tiendaService;
-    
+
     @Autowired
     private AutentificacionService autentificacionService;
 
-    @GetMapping("/tienda")
-    public String tienda(Model model) {
-        List<Producto> productos = tiendaService.getAllProductos();
-        model.addAttribute("productos", productos);
-        return "html/user/tienda";
-    }
-
-    @GetMapping("/registry")
-    public String autentificacion(Model model) {
-        model.addAttribute("user", new User());
-        return "html/user/registry";
-    }
     
     @PostMapping("/registry")
     public String postAutentificacion(@ModelAttribute("user") User user, 
@@ -66,12 +48,7 @@ public class UserController {
         return "redirect:/registry";
     }
 
-    @GetMapping("/login")
-    public String logIn(Model model) {
-        model.addAttribute("user", new User());
-        return "html/user/logIn";
-    }
-    
+
     @PostMapping("/login")
     public String postLogin(@ModelAttribute("user") User user, HttpSession session, RedirectAttributes redirectAttributes) {
         
@@ -92,37 +69,6 @@ public class UserController {
         return "redirect:/login";
     }
     
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/home";
-    }
-
-    @GetMapping("/home")
-    public String menu() {
-        return "html/user/home";
-    }
-
-    @GetMapping("/sobre-nosotros")
-    public String sobreNosotros() {
-        return "html/user/sobre-nosotros";
-    }
-
-    @GetMapping("/mi-perfil")
-    public String miPerfil(HttpSession session, Model model) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
-        if (loggedUser == null) {
-            return "redirect:/login";
-        }
-        
-        Optional<User> usuario = autentificacionService.findById(loggedUser.getId());
-        if (usuario.isPresent()) {
-            model.addAttribute("usuario", usuario.get());
-            return "html/user/mi-perfil";
-        }
-        
-        return "redirect:/logout";
-    }
 
     @PostMapping("/mi-perfil/update")
     public String updatePerfil(@ModelAttribute("usuario") User usuario, 
