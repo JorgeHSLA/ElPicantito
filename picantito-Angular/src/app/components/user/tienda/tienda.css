@@ -1,6 +1,6 @@
 /* Importar estilos base desde la carpeta styles */
-@import '../../../../assets/styles/styles.css';
-@import '../../../../assets/styles/css/dark-hc.css';
+@import '../../../assets/styles/styles.css';
+@import '../../../assets/styles/css/dark-hc.css';
 
 /* Estilos específicos para tienda */
 .menu-hero {

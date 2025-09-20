@@ -1,0 +1,127 @@
+/* Importar estilos base desde la carpeta styles */
+@import '../../../assets/styles/styles.css';
+@import '../../../assets/styles/css/dark-hc.css';
+@import '../../../assets/styles/css/auth.css';
+
+/* Estilos específicos para mi-perfil */
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.profile-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-logo {
+  transition: transform 0.3s ease;
+}
+
+.auth-logo:hover {
+  transform: scale(1.05);
+}
+
+.profile-card {
+  transition: var(--transition-fast);
+  border: 2px solid var(--neutral-border);
+  border-radius: 15px;
+  background-color: var(--neutral-surface);
+}
+
+.profile-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-heavy);
+  border-color: var(--primary-color);
+}
+
+.badge-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.danger-zone {
+  border: 2px solid var(--error-color);
+  border-radius: 15px;
+}
+
+.danger-zone .card-body {
+  background-color: rgba(220, 53, 69, 0.05);
+}
+
+/* Form enhancements */
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.25);
+}
+
+/* Loading states */
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Modal styles */
+.modal-content {
+  border-radius: 15px;
+  border: none;
+  box-shadow: var(--shadow-heavy);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--neutral-border);
+  border-radius: 15px 15px 0 0;
+}
+
+.modal-footer {
+  border-top: 1px solid var(--neutral-border);
+  border-radius: 0 0 15px 15px;
+}
+
+/* Animations */
+.alert {
+  animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  .profile-card {
+    margin-bottom: 1rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  .auth-logo {
+    width: 80px !important;
+    height: 80px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .d-grid.gap-2.d-md-flex {
+    display: grid !important;
+  }
+  
+  .btn-lg {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+}
