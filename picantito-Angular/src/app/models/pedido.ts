@@ -1,3 +1,5 @@
+import { Producto } from "./producto"
+
 export class Pedido {
 
     id?:number  
@@ -8,5 +10,7 @@ export class Pedido {
     estado?:String  
     direccion?:String  
     cliente?:any     
-    repartidor?:any     
+    repartidor?:any 
+    productos?: Map<Producto, number>;
+    
 }

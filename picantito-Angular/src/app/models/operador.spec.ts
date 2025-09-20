@@ -1,7 +1,7 @@
-import { Operario } from './operario';
+import { Operador } from './operador';
 
 describe('Operario', () => {
   it('should create an instance', () => {
-    expect(new Operario()).toBeTruthy();
+    expect(new Operador()).toBeTruthy();
   });
 });

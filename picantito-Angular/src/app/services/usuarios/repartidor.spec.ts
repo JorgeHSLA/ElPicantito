@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Domiciliario } from './domiciliario.service';
+import { RepartidorService } from './repartidor.service';
 
 describe('Domiciliario', () => {
-  let service: Domiciliario;
+  let service: RepartidorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(Domiciliario);
+    service = TestBed.inject(RepartidorService);
   });
 
   it('should be created', () => {

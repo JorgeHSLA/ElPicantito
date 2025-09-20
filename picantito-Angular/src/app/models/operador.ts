@@ -1,6 +1,6 @@
 import { Usuario } from './usuario'; // Importando Usuario desde la carpeta 'models'
 
-export class Operario implements Usuario {
+export class Operador implements Usuario {
     id?:number
     nombreCompleto?:String  
     nombreUsuario?:String  
