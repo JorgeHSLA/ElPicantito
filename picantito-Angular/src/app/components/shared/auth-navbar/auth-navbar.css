@@ -1,0 +1,38 @@
+/* Importar estilos base */
+@import '../../../assets/styles/styles.css';
+@import '../../../assets/styles/css/dark-hc.css';
+@import '../../../assets/styles/css/navbar.css';
+
+/* Estilos específicos para navbar de autenticación */
+.navBarExtra {
+  background: #212529 !important;
+  border-bottom: 2px solid #343a40;
+  min-height: 80px;
+}
+
+.navbar-brand img {
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover img {
+  transform: scale(1.05);
+}
+
+.btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar-brand img {
+    width: 150px !important;
+    height: 90px !important;
+  }
+  
+  .btn-outline-light {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem;
+  }
+}

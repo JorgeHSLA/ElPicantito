@@ -2,13 +2,14 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthNavbarComponent } from '../../shared/auth-navbar/auth-navbar';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, AuthNavbarComponent],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })

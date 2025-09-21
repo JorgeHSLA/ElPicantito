@@ -10,7 +10,8 @@
 }
 
 .auth-wrapper {
-  min-height: calc(100vh - 140px); /* Ajustar para el navbar */
+  min-height: calc(100vh - 80px); /* Ajustar para el nuevo navbar */
+  padding-top: 0; /* Eliminar padding superior ya que el navbar maneja el espacio */
 }
 
 /* Animaciones para los mensajes */
