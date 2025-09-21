@@ -1,3 +1,8 @@
-<app-navbar></app-navbar>
+<!-- Solo mostrar navbar principal si NO estamos en rutas de auth -->
+<app-navbar *ngIf="showMainNavbar"></app-navbar>
+
+<!-- El contenido de las rutas (incluyendo auth-navbar cuando corresponda) -->
 <router-outlet></router-outlet>
-<app-footer></app-footer>
+
+<!-- Solo mostrar footer si NO estamos en rutas de auth -->
+<app-footer *ngIf="showFooter"></app-footer>
