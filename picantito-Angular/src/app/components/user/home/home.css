@@ -1,5 +1,5 @@
 /* Importar estilos base desde la carpeta styles */
-@import '../../../assets/styles/styles.css';
+@import 'carrusel.css';
 @import '../../../assets/styles/css/dark-hc.css';
 @import '../../../assets/styles/creaTaco.css';
 
@@ -105,17 +105,7 @@
 }
 
 /* Estilos para el carrusel principal */
-.carousel-section {
-  position: relative;
-}
 
-.carousel-content {
-  min-height: 60vh;
-  display: flex;
-  align-items: center;
-  background: linear-gradient(135deg, #2c1810 0%, #8B4513 100%);
-  color: white;
-}
 
 .promo-text {
   padding: 2rem 0;

@@ -19,30 +19,24 @@
 }
 
 .carousel-content {
-    background: linear-gradient(120deg, 
-        var(--neutral-bg) 0%, 
-        var(--neutral-surface) 25%, 
-        var(--primary-light) 50%, 
-        var(--accent-color) 75%,
-        var(--accent-hover) 90%,
-        var(--accent-color) 100%);
-    padding: 4rem 0;
-    min-height: 65vh;
-    position: relative;
-    background-image: 
-        linear-gradient(120deg, 
-            var(--neutral-bg) 0%, 
-            var(--neutral-surface) 25%, 
-            var(--primary-light) 50%, 
-            var(--accent-color) 75%,
-            var(--accent-hover) 90%,
-            var(--accent-color) 100%),
-        linear-gradient(to right, 
-            transparent 0%, 
-            transparent 85%, 
-            var(--accent-color) 100%);
-    background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Color sólido de fondo */
+  background-color: #fd9c7e;
+
+  /* Imagen transparente encima */
+  background-image: url('./fondoCarru.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  padding: 4rem 0;
+  min-height: 65vh;
+  position: relative;
 }
+
 
 .carousel-content::before {
     content: '';
@@ -142,9 +136,8 @@
 .carousel-indicators .active::before {
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    
 }
-
 /* Botones de control rediseñados */
 .carousel-control-prev,
 .carousel-control-next {
@@ -545,3 +538,21 @@
         font-size: 0.9rem;
     }
 }
+
+.carousel-indicators [data-bs-target] {
+  background-color: black !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.carousel-indicators .active {
+  background-color: red !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.carousel-section {
+  position: relative;
+}
+
+
