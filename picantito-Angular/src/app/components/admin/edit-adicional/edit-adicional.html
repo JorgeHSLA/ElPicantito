@@ -1,1 +1,77 @@
-<p>edit-adicional works!</p>
+<app-admin-navbar></app-admin-navbar>
+
+<div class="container-fluid">
+  <div class="row">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Editar Adicional</h1>
+        <a routerLink="/admin/adicionales" class="btn btn-secondary">
+          <i class="bi bi-arrow-left me-2"></i>Volver a Adicionales
+        </a>
+      </div>
+
+      <!-- FORMULARIO DE EDICIÓN -->
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Datos del Adicional</h5>
+            </div>
+            <div class="card-body">
+              <form (ngSubmit)="updateAdicional()">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="nombre" class="form-label">Nombre del Adicional:</label>
+                      <input type="text" class="form-control" id="nombre" 
+                             [value]="adicional().nombre"
+                             (input)="updateField('nombre', $any($event.target).value)"
+                             required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="precio" class="form-label">Precio:</label>
+                      <input type="number" step="0.01" class="form-control" id="precio" 
+                             [value]="adicional().precio"
+                             (input)="updateField('precio', +$any($event.target).value)"
+                             required>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="descripcion" class="form-label">Descripción:</label>
+                  <textarea class="form-control" id="descripcion" rows="3"
+                            [value]="adicional().descripcion"
+                            (input)="updateField('descripcion', $any($event.target).value)"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="disponible"
+                           [checked]="adicional().disponible"
+                           (change)="updateField('disponible', $any($event.target).checked)">
+                    <label class="form-check-label" for="disponible">
+                      Adicional disponible
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <a routerLink="/admin/adicionales" class="btn btn-secondary me-md-2">Cancelar</a>
+                  <button type="submit" class="btn btn-info">
+                    <i class="bi bi-save me-2"></i>Guardar Cambios
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

@@ -1,1 +1,129 @@
-<p>adicionales works!</p>
+<app-admin-navbar></app-admin-navbar>
+
+<div class="container-fluid">
+  <div class="row">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Gestión de Adicionales</h1>
+        <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#nuevoAdicionalModal">
+          <i class="bi bi-plus-circle me-2"></i>Nuevo Adicional
+        </button>
+      </div>
+
+      <!-- ALERTAS -->
+      <div *ngIf="successMessage()" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span>{{ successMessage() }}</span>
+        <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
+      </div>
+      
+      <div *ngIf="errorMessage()" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span>{{ errorMessage() }}</span>
+        <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+      </div>
+
+      <!-- TABLA DE ADICIONALES -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Lista de Adicionales</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Precio</th>
+                  <th>Disponible</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let adicional of adicionales()">
+                  <td>{{ adicional.id }}</td>
+                  <td>{{ adicional.nombre }}</td>
+                  <td>{{ adicional.descripcion }}</td>
+                  <td>${{ adicional.precio?.toFixed(2) }}</td>
+                  <td>
+                    <span *ngIf="adicional.disponible" class="badge bg-success">Disponible</span>
+                    <span *ngIf="!adicional.disponible" class="badge bg-danger">No disponible</span>
+                  </td>
+                  <td>
+                    <a [routerLink]="['/admin/adicionales/edit', adicional.id]" 
+                       class="btn btn-sm btn-outline-primary me-1">
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <button class="btn btn-sm btn-outline-danger"
+                            (click)="deleteAdicional(adicional.id!)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="adicionales().length === 0">
+                  <td colspan="6" class="text-center text-muted">No hay adicionales registrados</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL NUEVO ADICIONAL -->
+<div class="modal fade" id="nuevoAdicionalModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Nuevo Adicional</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form (ngSubmit)="saveAdicional()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre del Adicional:</label>
+            <input type="text" class="form-control" id="nombre" 
+                   [value]="nuevoAdicional().nombre"
+                   (input)="updateAdicionalField('nombre', $any($event.target).value)"
+                   required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción:</label>
+            <textarea class="form-control" id="descripcion" rows="2"
+                      [value]="nuevoAdicional().descripcion"
+                      (input)="updateAdicionalField('descripcion', $any($event.target).value)"></textarea>
+          </div>
+          
+          <div class="mb-3">
+            <label for="precio" class="form-label">Precio:</label>
+            <input type="number" step="0.01" class="form-control" id="precio" 
+                   [value]="nuevoAdicional().precio"
+                   (input)="updateAdicionalField('precio', +$any($event.target).value)"
+                   required>
+          </div>
+          
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="disponible"
+                     [checked]="nuevoAdicional().disponible"
+                     (change)="updateAdicionalField('disponible', $any($event.target).checked)">
+              <label class="form-check-label" for="disponible">
+                Adicional disponible
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-info">Guardar Adicional</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -24,10 +26,51 @@ export const routes: Routes = [
   },
   {
     path: 'mi-perfil',
-    loadComponent: () => import('./components/user/mi-perfil/mi-perfil').then(m => m.MiPerfilComponent)
+    loadComponent: () => import('./components/user/mi-perfil/mi-perfil').then(m => m.MiPerfilComponent),
+    canActivate: [AuthGuard]
   },
   {
     path: 'sobre-nosotros',
     loadComponent: () => import('./components/user/sobre-nosotros/sobre-nosotros').then(m => m.SobreNosotrosComponent)
+  },
+  // Rutas de administración
+  {
+    path: 'admin',
+    canActivate: [AdminGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./components/admin/dashboard/dashboard').then(m => m.DashboardComponent)
+      },
+      {
+        path: 'productos',
+        loadComponent: () => import('./components/admin/productos/productos').then(m => m.ProductosComponent)
+      },
+      {
+        path: 'productos/edit/:id',
+        loadComponent: () => import('./components/admin/edit-producto/edit-producto').then(m => m.EditProductoComponent)
+      },
+      {
+        path: 'adicionales',
+        loadComponent: () => import('./components/admin/adicionales/adicionales').then(m => m.AdicionalesComponent)
+      },
+      {
+        path: 'adicionales/edit/:id',
+        loadComponent: () => import('./components/admin/edit-adicional/edit-adicional').then(m => m.EditAdicionalComponent)
+      },
+      {
+        path: 'usuarios',
+        loadComponent: () => import('./components/admin/usuarios/usuarios').then(m => m.UsuariosComponent)
+      },
+      {
+        path: 'usuarios/edit/:id',
+        loadComponent: () => import('./components/admin/edit-usuario/edit-usuario').then(m => m.EditUsuarioComponent)
+      }
+    ]
   }
 ];

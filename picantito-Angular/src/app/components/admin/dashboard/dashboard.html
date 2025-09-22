@@ -1,1 +1,112 @@
-<p>dashboard works!</p>
+<app-admin-navbar></app-admin-navbar>
+
+<div class="container-fluid">
+  <div class="row">
+    <app-admin-sidebar></app-admin-sidebar>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Panel Administrativo</h1>
+      </div>
+
+      <!-- ESTADÍSTICAS -->
+      <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card stats-card bg-warning">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="stats-label text-dark text-uppercase mb-1">
+                    Total Productos
+                  </div>
+                  <div class="stats-number text-dark">{{ totalProductos() }}</div>
+                </div>
+                <div class="col-auto">
+                  <i class="bi bi-box fs-2 text-dark"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card stats-card bg-success">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="stats-label text-light text-uppercase mb-1">
+                    Total Usuarios
+                  </div>
+                  <div class="stats-number text-light">{{ totalUsuarios() }}</div>
+                </div>
+                <div class="col-auto">
+                  <i class="bi bi-people fs-2 text-light"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card stats-card bg-info">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="stats-label text-light text-uppercase mb-1">
+                    Total Adicionales
+                  </div>
+                  <div class="stats-number text-light">{{ totalAdicionales() }}</div>
+                </div>
+                <div class="col-auto">
+                  <i class="bi bi-plus-circle fs-2 text-light"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCIONES RÁPIDAS -->
+      <div class="row">
+        <div class="col-12">
+          <h4 class="mb-3">Acciones Rápidas</h4>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <div class="card text-center">
+                <div class="card-body">
+                  <i class="bi bi-plus-circle fs-1 text-warning mb-3"></i>
+                  <h5 class="card-title">Nuevo Producto</h5>
+                  <p class="card-text">Agregar un nuevo producto al menú</p>
+                  <a routerLink="/admin/productos" class="btn btn-warning">Gestionar</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+              <div class="card text-center">
+                <div class="card-body">
+                  <i class="bi bi-person-plus fs-1 text-success mb-3"></i>
+                  <h5 class="card-title">Nuevo Usuario</h5>
+                  <p class="card-text">Registrar un nuevo usuario</p>
+                  <a routerLink="/admin/usuarios" class="btn btn-success">Gestionar</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+              <div class="card text-center">
+                <div class="card-body">
+                  <i class="bi bi-shop fs-1 text-info mb-3"></i>
+                  <h5 class="card-title">Ver Tienda</h5>
+                  <p class="card-text">Ir a la vista de cliente</p>
+                  <a routerLink="/tienda" class="btn btn-info">Visitar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

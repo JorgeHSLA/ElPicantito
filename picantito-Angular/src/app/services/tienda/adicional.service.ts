@@ -1,47 +1,67 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Adicional } from '../../models/adicional';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdicionalService {
-  private adicionales: Adicional[] = [
-  {
-    id: 1,
-    nombre: "Salsa BBQ",
-    descripcion: "Porción extra de salsa barbacoa",
-    precio: 3000,
-    precioDeAdquisicion: 1500,
-    cantidad: 50,
-    disponible: true
-  },
-  {
-    id: 2,
-    nombre: "Queso Extra",
-    descripcion: "Adición de queso mozzarella",
-    precio: 5000,
-    precioDeAdquisicion: 2500,
-    cantidad: 30,
-    disponible: true
-  },
-  {
-    id: 3,
-    nombre: "Papas a la Francesa",
-    descripcion: "Porción mediana de papas fritas",
-    precio: 8000,
-    precioDeAdquisicion: 4000,
-    cantidad: 20,
-    disponible: false
-  },
-  {
-    id: 4,
-    nombre: "Bebida Gaseosa",
-    descripcion: "Botella de 400 ml",
-    precio: 6000,
-    precioDeAdquisicion: 3000,
-    cantidad: 40,
-    disponible: true
-  }
-]
+  private adicionalesData = signal<Adicional[]>([
+    {
+      id: 1,
+      nombre: 'Queso Extra',
+      descripcion: 'Queso cheddar adicional',
+      precio: 2.50,
+      disponible: true
+    },
+    {
+      id: 2,
+      nombre: 'Aguacate',
+      descripcion: 'Rebanadas de aguacate fresco',
+      precio: 3.00,
+      disponible: true
+    },
+    {
+      id: 3,
+      nombre: 'Jalapeños',
+      descripcion: 'Jalapeños en escabeche',
+      precio: 1.75,
+      disponible: true
+    },
+    {
+      id: 4,
+      nombre: 'Salsa Picante',
+      descripcion: 'Salsa picante casera',
+      precio: 1.25,
+      disponible: true
+    }
+  ]);
 
+  getAdicionales() {
+    return this.adicionalesData.asReadonly();
+  }
+
+  saveAdicional(adicional: Adicional) {
+    const adicionales = this.adicionalesData();
+    if (adicional.id) {
+      // Actualizar
+      const index = adicionales.findIndex(a => a.id === adicional.id);
+      if (index !== -1) {
+        adicionales[index] = adicional;
+      }
+    } else {
+      // Crear nuevo
+      adicional.id = Math.max(...adicionales.map(a => a.id || 0)) + 1;
+      adicionales.push(adicional);
+    }
+    this.adicionalesData.set([...adicionales]);
+  }
+
+  deleteAdicional(id: number) {
+    const adicionales = this.adicionalesData().filter(a => a.id !== id);
+    this.adicionalesData.set(adicionales);
+  }
+
+  getAdicionalById(id: number) {
+    return this.adicionalesData().find(a => a.id === id);
+  }
 }

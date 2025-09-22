@@ -1,0 +1,13 @@
+.table th {
+  background-color: var(--neutral-surface);
+  font-weight: 600;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.badge {
+  font-size: 0.75rem;
+}
