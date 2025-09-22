@@ -2,7 +2,10 @@
 
 <div class="container-fluid">
   <div class="row">
-    <app-admin-sidebar></app-admin-sidebar>
+    <!-- SIDEBAR -->
+    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <app-admin-sidebar></app-admin-sidebar>
+    </nav>
 
     <!-- CONTENIDO PRINCIPAL -->
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -22,6 +25,7 @@
             </div>
             <div class="card-body">
               <form (ngSubmit)="updateProducto()">
+                <!-- Campos del formulario -->
                 <div class="row">
                   <div class="col-md-6">
                     <div class="mb-3">
