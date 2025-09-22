@@ -1,31 +1,33 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/user/home/home';
-import { Adicionales } from './components/admin/adicionales/adicionales';
-import { Dashboard } from './components/admin/dashboard/dashboard';
-import { Usuarios } from './components/admin/usuarios/usuarios';
-import { Productos } from './components/admin/productos/productos';
-import { EditUsuario } from './components/admin/edit-usuario/edit-usuario';
-import { EditProducto } from './components/admin/edit-producto/edit-producto';
-import { EditAdicional } from './components/admin/edit-adicional/edit-adicional';
-import { TiendaComponent } from './components/user/tienda/tienda';
-import { SobreNosotrosComponent } from './components/user/sobre-nosotros/sobre-nosotros';
-import { LoginComponent } from './components/user/login/login';
-import { RegistryComponent } from './components/user/registry/registry';
-import { MiPerfilComponent } from './components/user/mi-perfil/mi-perfil';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'adicionales', component: Adicionales },
-  { path: 'dashboard', component: Dashboard },
-  { path: 'edit-adicional', component: EditAdicional },
-  { path: 'edit-producto', component: EditProducto },
-  { path: 'edit-usuario', component: EditUsuario },
-  { path: 'productos', component: Productos },
-  { path: 'usuarios', component: Usuarios },
-  { path: 'tienda', component: TiendaComponent },
-  { path: 'sobre-nosotros', component: SobreNosotrosComponent },
-    { path: 'login', component: LoginComponent },
-  { path: 'registry', component: RegistryComponent },
-  { path: 'mi-perfil', component: MiPerfilComponent },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./components/user/home/home').then(m => m.HomeComponent)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./components/user/login/login').then(m => m.LoginComponent)
+  },
+  {
+    path: 'registry',
+    loadComponent: () => import('./components/user/registry/registry').then(m => m.RegistryComponent)
+  },
+  {
+    path: 'tienda',
+    loadComponent: () => import('./components/user/tienda/tienda').then(m => m.TiendaComponent)
+  },
+  {
+    path: 'mi-perfil',
+    loadComponent: () => import('./components/user/mi-perfil/mi-perfil').then(m => m.MiPerfilComponent)
+  },
+  {
+    path: 'sobre-nosotros',
+    loadComponent: () => import('./components/user/sobre-nosotros/sobre-nosotros').then(m => m.SobreNosotrosComponent)
+  }
 ];

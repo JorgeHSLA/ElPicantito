@@ -12,21 +12,20 @@
       <div class="form-panel" role="region" aria-label="Formulario de inicio de sesión">
         
         <!-- Mensajes de error -->
-        <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div *ngIf="errorMessage()" class="alert alert-danger mb-3">
           <i class="bi bi-exclamation-triangle me-2"></i>
-          {{ error }}
-          <button type="button" class="btn-close" (click)="clearMessages()"></button>
+          {{ errorMessage() }}
         </div>
-        
-        <!-- Mensajes de éxito -->
-        <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
-          <i class="bi bi-check-circle me-2"></i>
-          {{ success }}
-          <button type="button" class="btn-close" (click)="clearMessages()"></button>
+
+        <!-- Datos de prueba -->
+        <div class="alert alert-info mb-3">
+          <strong>Datos de prueba:</strong><br>
+          <small>Cliente: carlos.lopez / password123</small><br>
+          <small>Admin: admin / admin123</small>
         </div>
         
         <!-- Formulario -->
-        <form (ngSubmit)="onSubmit()" class="form-dark-text" novalidate>
+        <form (ngSubmit)="onSubmit()" class="form-dark-text">
           <div class="mb-3">
             <label for="nombreUsuario" class="form-label fw-semibold">
               <i class="bi bi-person me-2 text-warning"></i>Nombre de Usuario
@@ -37,9 +36,9 @@
               id="nombreUsuario" 
               placeholder="Ingresa tu nombre de usuario" 
               required 
-              [(ngModel)]="loginForm.nombreUsuario"
-              name="nombreUsuario"
-              [disabled]="isLoading">
+              [value]="nombreUsuario()"
+              (input)="updateNombreUsuario($event.target.value || '')"
+              [disabled]="isLoading()">
           </div>
           
           <div class="mb-4">
@@ -52,20 +51,20 @@
               id="password" 
               placeholder="Ingresa tu contraseña" 
               required 
-              [(ngModel)]="loginForm.password"
-              name="password"
-              [disabled]="isLoading">
+              [value]="password()"
+              (input)="updatePassword($event.target.value || '')"
+              [disabled]="isLoading()">
           </div>
           
           <div class="d-grid mb-3">
             <button 
               type="submit" 
               class="btn btn-warning btn-lg rounded-3 fw-semibold py-3"
-              [disabled]="isLoading">
-              <span *ngIf="!isLoading">
+              [disabled]="isLoading()">
+              <span *ngIf="!isLoading()">
                 <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
               </span>
-              <span *ngIf="isLoading">
+              <span *ngIf="isLoading()">
                 <span class="spinner-border spinner-border-sm me-2" role="status"></span>
                 Iniciando sesión...
               </span>
@@ -76,15 +75,12 @@
         <div class="text-center mt-3">
           <span class="text-muted">¿No tienes cuenta?</span>
         </div>
+        
         <div class="d-grid mt-2">
-          <button (click)="navigateToRegistry()" class="btn btn-outline-warning btn-lg rounded-3 fw-semibold py-3">
+          <a routerLink="/registry" class="btn btn-outline-warning btn-lg rounded-3 fw-semibold py-3">
             <i class="bi bi-person-plus me-2"></i>Crear Cuenta Nueva
-          </button>
+          </a>
         </div>
-      </div>
-      
-      <div class="right-decor" aria-hidden="true">
-        <div style="width:1px; height:80%; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border-radius:2px;"></div>
       </div>
     </aside>
   </div>

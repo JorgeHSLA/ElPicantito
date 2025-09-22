@@ -1,100 +1,56 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { AuthNavbarComponent } from '../../shared/auth-navbar/auth-navbar';
-
-declare var bootstrap: any;
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, AuthNavbarComponent],
+  imports: [CommonModule, FormsModule, RouterModule, AuthNavbarComponent],
   templateUrl: './login.html',
-  styleUrls: ['./login.css']
+  styleUrl: './login.css'
 })
-export class LoginComponent implements OnInit, AfterViewInit {
-  
-  // Modelo del formulario
-  loginForm = {
-    nombreUsuario: '',
-    password: ''
-  };
+export class LoginComponent {
+  nombreUsuario = signal('');
+  password = signal('');
+  errorMessage = signal('');
+  isLoading = signal(false);
 
-  // Estado del componente
-  isLoading = false;
-  error: string | null = null;
-  success: string | null = null;
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  constructor(private router: Router) {}
-
-  ngOnInit(): void {
-    // Limpiar mensajes al inicializar
-    this.error = null;
-    this.success = null;
-  }
-
-  ngAfterViewInit(): void {
-    this.initializeBootstrapComponents();
-  }
-
-  private initializeBootstrapComponents(): void {
-    // Inicializar tooltips si existen
-    const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach(tooltipTriggerEl => {
-      new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-  }
-
-  // Métodos del formulario
-  onSubmit(): void {
-    if (!this.isValidForm()) {
+  onSubmit() {
+    if (!this.nombreUsuario() || !this.password()) {
+      this.errorMessage.set('Por favor completa todos los campos');
       return;
     }
 
-    this.isLoading = true;
-    this.error = null;
+    this.isLoading.set(true);
+    this.errorMessage.set('');
 
-    // Simular llamada a API (aquí integrarás con tu servicio de autenticación)
+    // Simular delay de autenticación
     setTimeout(() => {
-      // Simulación de autenticación
-      if (this.loginForm.nombreUsuario === 'admin' && this.loginForm.password === 'admin123') {
-        this.success = '¡Bienvenido! Iniciando sesión...';
-        setTimeout(() => {
-          this.router.navigate(['/home']);
-        }, 1000);
-      } else if (this.loginForm.nombreUsuario && this.loginForm.password) {
-        this.success = '¡Bienvenido! Iniciando sesión...';
-        setTimeout(() => {
-          this.router.navigate(['/home']);
-        }, 1000);
+      const loginSuccess = this.authService.login(this.nombreUsuario(), this.password());
+      
+      if (loginSuccess) {
+        this.router.navigate(['/home']);
       } else {
-        this.error = 'Credenciales incorrectas';
+        this.errorMessage.set('Credenciales incorrectas');
       }
-      this.isLoading = false;
-    }, 1500);
+      
+      this.isLoading.set(false);
+    }, 1000);
   }
 
-  private isValidForm(): boolean {
-    if (!this.loginForm.nombreUsuario || !this.loginForm.password) {
-      this.error = 'Por favor completa todos los campos';
-      return false;
-    }
-    return true;
+  updateNombreUsuario(value: string) {
+    this.nombreUsuario.set(value);
   }
 
-  // Navegación
-  navigateToRegistry(): void {
-    this.router.navigate(['/registry']);
-  }
-
-  navigateToHome(): void {
-    this.router.navigate(['/home']);
-  }
-
-  // Limpiar mensajes
-  clearMessages(): void {
-    this.error = null;
-    this.success = null;
+  updatePassword(value: string) {
+    this.password.set(value);
   }
 }
