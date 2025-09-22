@@ -1,8 +1,8 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar';
-import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar';
+import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar.component';
+import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar.component';
 
 @Component({
   selector: 'app-dashboard',

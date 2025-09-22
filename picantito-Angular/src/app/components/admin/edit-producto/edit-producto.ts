@@ -2,8 +2,8 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar';
-import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar';
+import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar.component';
+import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar.component';
 import { Producto } from '../../../models/producto';
 
 @Component({
