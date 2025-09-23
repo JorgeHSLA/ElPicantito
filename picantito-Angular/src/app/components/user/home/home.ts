@@ -244,9 +244,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('Navegando a producto:', productId);
   }
 
+  navigateToStore(): void {
+    this.router.navigate(['/tienda']).then(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    });
+  }
+
   navigateToAbout(): void {
     this.router.navigate(['/sobre-nosotros']).then(() => {
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     });
   }
 }
