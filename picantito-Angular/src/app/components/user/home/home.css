@@ -418,6 +418,17 @@
 }
 
 .build-your-taco-section h2:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+/* Efecto de pulse en el span resaltado de Arma Tu Taco */
+.build-your-taco-section h2 .text-warning {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.build-your-taco-section h2:hover .text-warning {
     animation: pulse 1.5s infinite;
 }
 
@@ -426,6 +437,17 @@
 }
 
 .recommended-carousel-section h2:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+/* Efecto de pulse en el span resaltado de Recomendados */
+.recommended-carousel-section h2 .text-warning {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.recommended-carousel-section h2:hover .text-warning {
     animation: pulse 1.5s infinite;
 }
 
