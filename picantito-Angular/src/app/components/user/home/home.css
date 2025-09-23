@@ -1,4 +1,5 @@
 /* Importar estilos base desde la carpeta styles */
+@import '../../../assets/styles/css/variables.css';
 @import 'carrusel.css';
 @import '../../../assets/styles/css/dark-hc.css';
 @import '../../../assets/styles/creaTaco.css';
