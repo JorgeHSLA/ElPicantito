@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar.component';
 import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar.component';
 import { Producto } from '../../../models/producto';
+import { ProductoService } from '../../../services/tienda/producto.service';
 
 @Component({
   selector: 'app-edit-producto',
@@ -19,6 +20,7 @@ export class EditProductoComponent implements OnInit {
     nombre: '',
     descripcion: '',
     precio: 0,
+    precioDeAdquisicion: 0,
     imagen: '',
     calificacion: 5,
     disponible: true
@@ -26,33 +28,33 @@ export class EditProductoComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private productoService: ProductoService
   ) {}
 
   ngOnInit() {
     const id = this.route.snapshot.params['id'];
-    this.loadProducto(id);
+    this.loadProducto(+id);
   }
 
   loadProducto(id: number) {
-    // Datos de ejemplo - aquí llamarías al servicio real
-    const productoEjemplo = {
-      id: id,
-      nombre: 'Taco de Carne Asada',
-      descripcion: 'Delicioso taco con carne asada a la parrilla',
-      precio: 12.99,
-      imagen: '/images/taco1.jpg',
-      calificacion: 5,
-      disponible: true
-    };
-    this.producto.set(productoEjemplo);
+    const producto = this.productoService.getProductoById(id);
+    if (producto) {
+      this.producto.set(producto);
+    } else {
+      console.error('Producto no encontrado');
+      this.router.navigate(['/admin/productos']);
+    }
   }
 
   updateProducto() {
     try {
-      console.log('Actualizando producto:', this.producto());
-      // Aquí llamarías al servicio para actualizar
-      this.router.navigate(['/admin/productos']);
+      const productoActualizado = this.producto();
+      if (productoActualizado.id) {
+        this.productoService.updateProducto(productoActualizado.id, productoActualizado);
+        console.log('Producto actualizado exitosamente');
+        this.router.navigate(['/admin/productos']);
+      }
     } catch (error) {
       console.error('Error al actualizar producto:', error);
     }
