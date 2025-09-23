@@ -1,67 +1,40 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Adicional } from '../../models/adicional';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdicionalService {
-  private adicionalesData = signal<Adicional[]>([
-    {
-      id: 1,
-      nombre: 'Queso Extra',
-      descripcion: 'Queso cheddar adicional',
-      precio: 2.50,
-      disponible: true
-    },
-    {
-      id: 2,
-      nombre: 'Aguacate',
-      descripcion: 'Rebanadas de aguacate fresco',
-      precio: 3.00,
-      disponible: true
-    },
-    {
-      id: 3,
-      nombre: 'Jalapeños',
-      descripcion: 'Jalapeños en escabeche',
-      precio: 1.75,
-      disponible: true
-    },
-    {
-      id: 4,
-      nombre: 'Salsa Picante',
-      descripcion: 'Salsa picante casera',
-      precio: 1.25,
-      disponible: true
-    }
-  ]);
+  
+  private adicionales: Adicional[] = [
+    { id: 1, nombre: 'Queso Extra', descripcion: 'Queso cheddar adicional', precio: 2.50, disponible: true },
+    { id: 2, nombre: 'Aguacate', descripcion: 'Rebanadas de aguacate fresco', precio: 3.00, disponible: true },
+    { id: 3, nombre: 'Jalapeños', descripcion: 'Jalapeños en escabeche', precio: 1.75, disponible: true },
+    { id: 4, nombre: 'Salsa Picante', descripcion: 'Salsa picante casera', precio: 1.25, disponible: true },
+    { id: 5, nombre: 'Cebolla Caramelizada', descripcion: 'Cebolla caramelizada al sartén', precio: 1.50, disponible: false }
+  ];
 
-  getAdicionales() {
-    return this.adicionalesData.asReadonly();
+  // obtener lista
+  getAdicionales(): Adicional[] {
+    return [...this.adicionales]; // retorno copia para no mutar directamente
   }
 
+  // crear
   saveAdicional(adicional: Adicional) {
-    const adicionales = this.adicionalesData();
-    if (adicional.id) {
-      // Actualizar
-      const index = adicionales.findIndex(a => a.id === adicional.id);
-      if (index !== -1) {
-        adicionales[index] = adicional;
-      }
-    } else {
-      // Crear nuevo
-      adicional.id = Math.max(...adicionales.map(a => a.id || 0)) + 1;
-      adicionales.push(adicional);
+    const nuevoId = this.adicionales.length > 0 ? Math.max(...this.adicionales.map(a => a.id ?? 0)) + 1 : 1;
+    this.adicionales.push({ ...adicional, id: nuevoId });
+  }
+
+  // actualizar
+  updateAdicional(id: number, adicional: Adicional) {
+    const index = this.adicionales.findIndex(a => a.id === id);
+    if (index !== -1) {
+      this.adicionales[index] = { ...adicional, id };
     }
-    this.adicionalesData.set([...adicionales]);
   }
 
+  // eliminar
   deleteAdicional(id: number) {
-    const adicionales = this.adicionalesData().filter(a => a.id !== id);
-    this.adicionalesData.set(adicionales);
-  }
-
-  getAdicionalById(id: number) {
-    return this.adicionalesData().find(a => a.id === id);
+    this.adicionales = this.adicionales.filter(a => a.id !== id);
   }
 }
