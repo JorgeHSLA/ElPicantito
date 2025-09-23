@@ -277,18 +277,7 @@
             (click)="navigateToProduct(producto.id)"
             class="recommended-card-carousel"
             style="cursor: pointer;">
-            <div class="card-img-container">
-              <img [src]="producto.imagen" class="card-img-top" [alt]="producto.nombre">
-            </div>
-            <div class="card-body">
-              <div class="rating mb-2">
-                <i *ngFor="let star of getStarsArray(producto.calificacion)" class="bi bi-star-fill"></i>
-                <i *ngFor="let star of getEmptyStarsArray(producto.calificacion)" class="bi bi-star"></i>
-              </div>
-              <h5 class="card-title">{{ producto.nombre }}</h5>
-              <p class="card-text">{{ producto.descripcion }}</p>
-              <div class="price">${{ producto.precio.toFixed(2) }}</div>
-            </div>
+            <app-recommended-product-card [producto]="producto"></app-recommended-product-card>
           </a>
         </div>
         <button class="carousel-control-recommended prev" id="prevBtn" type="button">

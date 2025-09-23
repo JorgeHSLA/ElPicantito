@@ -173,45 +173,8 @@
     </div>
     
     <div class="row g-4">
-      <div class="col-lg-3 text-center">
-        <div class="team-card bg-white rounded-4 shadow-sm p-4">
-          <img src="/images/javier.jpg" class="rounded-circle mb-3 team-avatar" alt="Chef Principal">
-          <h5 class="fw-bold mb-2">Javier Aldana</h5>
-          <p class="text-warning fw-semibold mb-3">Chef Principal</p>
-          <p class="text-muted small">
-            Especialista en cocina mexicana tradicional con más de 10 años de experiencia. Aprendió las técnicas auténticas directamente en Oaxaca, México.
-          </p>
-        </div>
-      </div>
-      <div class="col-lg-3 text-center">
-        <div class="team-card bg-white rounded-4 shadow-sm p-4">
-          <img src="/images/jorge.jpg" class="rounded-circle mb-3 team-avatar" alt="Chef Secundario">
-          <h5 class="fw-bold mb-2">Jorge Sierra</h5>
-          <p class="text-warning fw-semibold mb-3">Chef Secundario</p>
-          <p class="text-muted small">
-            Especialista en cocina mexicana tradicional con alrededor de 5 años de experiencia. Aprendió técnicas culinarias mexicanas en varios cruceros de lujo en Cancún.
-          </p>
-        </div>
-      </div>
-      <div class="col-lg-3 text-center">
-        <div class="team-card bg-white rounded-4 shadow-sm p-4">
-          <img src="/images/david.jpg" class="rounded-circle mb-3 team-avatar" alt="Fundador">
-          <h5 class="fw-bold mb-2">David Roa</h5>
-          <p class="text-warning fw-semibold mb-3">Fundador</p>
-          <p class="text-muted small">
-            Ingeniero de sistemas convertido en emprendedor gastronómico. Su pasión por la comida mexicana lo llevó a crear El Picantito.
-          </p>
-        </div>
-      </div>
-      <div class="col-lg-3 text-center">
-        <div class="team-card bg-white rounded-4 shadow-sm p-4">
-          <img src="/images/diego.jpg" class="rounded-circle mb-3 team-avatar" alt="Gerente General">
-          <h5 class="fw-bold mb-2">Juan Diego Muñoz</h5>
-          <p class="text-warning fw-semibold mb-3">Gerente General</p>
-          <p class="text-muted small">
-            Administrador de empresas especializado en experiencia del cliente. Se encarga de que cada visita sea memorable. Es el genio detrás de todo. Crack total.
-          </p>
-        </div>
+      <div class="col-lg-3 text-center" *ngFor="let miembro of miembros">
+        <app-team-member-card [miembro]="miembro"></app-team-member-card>
       </div>
     </div>
   </div>

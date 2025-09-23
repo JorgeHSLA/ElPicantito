@@ -1,13 +1,14 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { RecommendedProductCardComponent } from '../../shared/recommended-product-card/recommended-product-card.component';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RecommendedProductCardComponent],
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })
