@@ -2,17 +2,35 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { RecommendedProductCardComponent } from '../../shared/recommended-product-card/recommended-product-card.component';
+import { FeatureCardComponent } from '../../shared/feature-card/feature-card.component';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, RecommendedProductCardComponent],
+  imports: [CommonModule, RouterModule, RecommendedProductCardComponent, FeatureCardComponent],
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
+  features = [
+    {
+      icon: 'bi bi-award-fill',
+      titulo: 'Ingredientes Frescos',
+      descripcion: 'Seleccionamos los mejores ingredientes cada día para garantizar el sabor auténtico.'
+    },
+    {
+      icon: 'bi bi-clock-fill',
+      titulo: 'Preparación Rápida',
+      descripcion: 'Tus tacos listos en minutos sin comprometer la calidad y el sabor tradicional.'
+    },
+    {
+      icon: 'bi bi-heart-fill',
+      titulo: 'Recetas Tradicionales',
+      descripcion: 'Preparados con recetas familiares que mantienen el sabor auténtico mexicano.'
+    }
+  ];
   // Datos de productos recomendados
   productosRecomendados = [
     {

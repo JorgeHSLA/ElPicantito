@@ -1,0 +1,15 @@
+/* Estilos para la tarjeta de valor */
+.value-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    cursor: pointer;
+}
+.value-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.value-icon {
+    margin-bottom: 1rem;
+}

@@ -118,43 +118,8 @@
     </div>
     
     <div class="row g-4">
-      <div class="col-lg-4 text-center">
-        <div class="value-card p-4">
-          <div class="value-icon mb-3">
-            <i class="bi bi-award-fill fs-1 text-warning"></i>
-          </div>
-          <h5 class="fw-bold mb-3">Autenticidad</h5>
-          <p class="text-muted">
-            Respetamos las recetas tradicionales y utilizamos técnicas auténticas 
-            transmitidas por generaciones de cocineros mexicanos.
-          </p>
-        </div>
-      </div>
-      
-      <div class="col-lg-4 text-center">
-        <div class="value-card p-4">
-          <div class="value-icon mb-3">
-            <i class="bi bi-patch-check-fill fs-1 text-warning"></i>
-          </div>
-          <h5 class="fw-bold mb-3">Ingredientes Frescos</h5>
-          <p class="text-muted">
-            Seleccionamos cuidadosamente cada ingrediente, priorizando la frescura 
-            y la calidad por encima de todo.
-          </p>
-        </div>
-      </div>
-      
-      <div class="col-lg-4 text-center">
-        <div class="value-card p-4">
-          <div class="value-icon mb-3">
-            <i class="bi bi-people-fill fs-1 text-warning"></i>
-          </div>
-          <h5 class="fw-bold mb-3">Comunidad</h5>
-          <p class="text-muted">
-            Creemos en crear conexiones genuinas con nuestros clientes y en ser 
-            parte activa de la comunidad local.
-          </p>
-        </div>
+      <div class="col-lg-4 text-center" *ngFor="let value of valores">
+        <app-value-card [value]="value"></app-value-card>
       </div>
     </div>
   </div>

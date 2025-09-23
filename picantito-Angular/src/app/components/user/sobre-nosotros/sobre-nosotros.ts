@@ -2,17 +2,35 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TeamMemberCardComponent } from '../../shared/team-member-card/team-member-card.component';
+import { ValueCardComponent } from '../../shared/value-card/value-card.component';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-sobre-nosotros',
   standalone: true,
-  imports: [CommonModule, RouterModule, TeamMemberCardComponent],
+  imports: [CommonModule, RouterModule, TeamMemberCardComponent, ValueCardComponent],
   templateUrl: './sobre-nosotros.html',
   styleUrls: ['./sobre-nosotros.css']
 })
 export class SobreNosotrosComponent implements OnInit, AfterViewInit {
+  valores = [
+    {
+      icon: 'bi bi-award-fill',
+      titulo: 'Autenticidad',
+      descripcion: 'Respetamos las recetas tradicionales y utilizamos técnicas auténticas transmitidas por generaciones de cocineros mexicanos.'
+    },
+    {
+      icon: 'bi bi-patch-check-fill',
+      titulo: 'Ingredientes Frescos',
+      descripcion: 'Seleccionamos cuidadosamente cada ingrediente, priorizando la frescura y la calidad por encima de todo.'
+    },
+    {
+      icon: 'bi bi-people-fill',
+      titulo: 'Comunidad',
+      descripcion: 'Creemos en crear conexiones genuinas con nuestros clientes y en ser parte activa de la comunidad local.'
+    }
+  ];
   miembros = [
     {
       nombre: 'Javier Aldana',
