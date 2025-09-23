@@ -1,0 +1,195 @@
+/* =========================
+   ESTILOS PARA CREAR TU TACO
+   ========================= */
+
+.build-your-taco-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.build-your-taco-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="taco-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23FF5630" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23taco-pattern)"/></svg>');
+    z-index: 0;
+}
+
+.build-your-taco-section .container {
+    position: relative;
+    z-index: 1;
+}
+
+.taco-content {
+    padding: 2rem 0;
+}
+
+.taco-image img {
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 1rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.taco-image img:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+}
+
+.steps {
+    margin: 2rem 0;
+}
+
+.steps .badge {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--md-sys-color-secondary), #ffb300);
+    color: var(--md-sys-color-on-secondary);
+    border: 3px solid white;
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.steps .d-flex:hover .badge {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+}
+
+.steps h6 {
+    color: var(--md-sys-color-on-background);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    transition: color 0.3s ease;
+}
+
+.steps small {
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.steps .d-flex {
+    transition: transform 0.3s ease;
+    padding: 0.5rem 0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.steps .d-flex:hover {
+    transform: translateX(10px);
+    background-color: rgba(255, 86, 48, 0.05);
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Botón principal */
+.btn-warning.btn-lg {
+    background: linear-gradient(135deg, var(--md-sys-color-secondary), #ffb300);
+    border: none;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-warning.btn-lg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-warning.btn-lg:hover::before {
+    left: 100%;
+}
+
+.btn-warning.btn-lg:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(255, 193, 7, 0.4);
+}
+
+.btn-warning.btn-lg:active {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.3);
+}
+
+/* Efectos de parallax para la imagen */
+@media (min-width: 992px) {
+    .taco-image {
+        position: relative;
+    }
+    
+    .taco-image::after {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        right: -20px;
+        bottom: -20px;
+        background: linear-gradient(135deg, rgba(255, 86, 48, 0.1), rgba(255, 193, 7, 0.1));
+        border-radius: 1rem;
+        z-index: -1;
+        transition: all 0.3s ease;
+    }
+    
+    .taco-image:hover::after {
+        transform: rotate(2deg) scale(1.02);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 991px) {
+    .taco-content {
+        text-align: center;
+        padding: 1rem 0;
+    }
+    
+    .steps .d-flex:hover {
+        transform: none;
+        background-color: transparent;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    .taco-image img {
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .build-your-taco-section {
+        padding: 3rem 0;
+    }
+    
+    .taco-image img {
+        max-height: 300px;
+    }
+    
+    .steps .badge {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    .display-5 {
+        font-size: 2rem;
+    }
+}

@@ -1,0 +1,15 @@
+/* Importar estilos base desde la carpeta styles */
+@import '../../../assets/styles/styles.css';
+@import '../../../assets/styles/css/dark-hc.css';
+@import '../../../assets/styles/css/auth.css';
+@import '../../../assets/styles/css/registry.css';
+
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px; /* Reducir padding para pantallas pequeñas */
+    box-sizing: border-box;
+    background-image: url('./RegistryImage.png');
+}

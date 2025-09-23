@@ -13,7 +13,6 @@ public interface TiendaService {
     Producto saveProducto(Producto producto);
     String eliminarProducto(Integer id); // Cambiar void por String
     List<Producto> getProductosDisponibles();
-    
     // CRUD Adicionales
     List<Adicional> getAllAdicionales();
     Optional<Adicional> getAdicionalById(Integer id);

@@ -1,0 +1,56 @@
+/* =========================
+   TEMA OSCURO DE ALTO CONTRASTE - PICANTE ELEGANTE
+   ========================= */
+.dark-high-contrast {
+    --md-sys-color-primary: #FF5630;
+    --md-sys-color-surface-tint: #FF5630;
+    --md-sys-color-on-primary: #FFFFFF;
+    --md-sys-color-primary-container: #FF5630;
+    --md-sys-color-on-primary-container: #FFFFFF;
+
+    --md-sys-color-secondary: #FFC107;
+    --md-sys-color-on-secondary: #333333;
+    --md-sys-color-secondary-container: #FFB300;
+    --md-sys-color-on-secondary-container: #333333;
+
+    --md-sys-color-tertiary: #1E293B; /* Azul oscuro para contraste */
+    --md-sys-color-on-tertiary: #FFFFFF;
+    --md-sys-color-tertiary-container: #162032;
+    --md-sys-color-on-tertiary-container: #FFFFFF;
+
+    --md-sys-color-background: #FFFFFF;
+    --md-sys-color-on-background: #333333;
+    --md-sys-color-surface: #F5F5F5;
+    --md-sys-color-on-surface: #333333;
+    --md-sys-color-surface-variant: #E0E0E0;
+    --md-sys-color-on-surface-variant: #757575;
+    --md-sys-color-surface-bright: #FFFFFF;
+    --md-sys-color-surface-container: #F5F5F5;
+    --md-sys-color-surface-container-high: #E0E0E0;
+
+    --md-sys-color-outline: #E0E0E0;
+    --md-sys-color-outline-variant: #757575;
+
+    --md-sys-color-error: #1E293B;
+    --md-sys-color-on-error: #FFFFFF;
+    --md-sys-color-error-container: #1E293B;
+    --md-sys-color-on-error-container: #FFFFFF;
+}
+
+/* Aplicación específica para navbar */
+.bg-primary-container {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+}
+
+.navBarExtra {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    height: 100px;
+}
+
+.btn-dark:hover {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    border-color: var(--md-sys-color-secondary-container);
+}
