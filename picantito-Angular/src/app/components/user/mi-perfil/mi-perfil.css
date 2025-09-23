@@ -1,11 +1,10 @@
 /* Importar estilos base desde la carpeta styles */
-@import '../../../assets/styles/styles.css';
+
 @import '../../../assets/styles/css/dark-hc.css';
 @import '../../../assets/styles/css/auth.css';
 
 /* Estilos específicos para mi-perfil */
 :host {
-  display: block;
   min-height: 100vh;
 }
 
@@ -124,4 +123,21 @@
     padding: 0.75rem 1rem;
     font-size: 1rem;
   }
+}
+
+
+.layout-container {
+  display: flex;
+  gap: 9rem; /* separación entre columnas */
+  align-items: flex-start; /* evita que se estire hacia abajo */
+}
+
+.left-col {
+  flex: 1; /* ocupa el mismo espacio que la derecha */
+  max-width: 35%; /* controla el ancho */
+}
+
+.right-col {
+  flex: 2;
+  max-width: 65%; /* controla el ancho */
 }
