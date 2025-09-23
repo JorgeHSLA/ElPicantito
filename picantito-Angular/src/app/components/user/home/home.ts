@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { RouterModule, Router } from '@angular/router';
 
 declare var bootstrap: any;
 
@@ -68,7 +67,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Estado del usuario (simulado por ahora)
   loggedUser: any = null; // Aquí integrarás con tu servicio de autenticación
 
-  constructor(private router: Router) {}
   constructor(private router: Router) {}
 
   ngOnInit(): void {
@@ -244,12 +242,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   navigateToProduct(productId: number): void {
     // Implementar navegación a producto
     console.log('Navegando a producto:', productId);
-  }
-
-  navigateToStore(): void {
-    this.router.navigate(['/tienda']).then(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    });
   }
 
   navigateToAbout(): void {
