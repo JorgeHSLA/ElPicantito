@@ -13,18 +13,23 @@
             <div class="row align-items-center min-vh-50">
               <div class="col-lg-6">
                 <div class="promo-text">
-                  <span class="badge bg-black mb-3 px-3 py-2 shadow">
-                    <i class="bi me-1"></i>¡Nueva Promoción!
+                  <span class="badge bg-primary text-white mb-3 px-3 py-2">
+                    <i class="bi bi-fire me-1"></i>¡Nueva Promoción!
                   </span>
-
                   <h2 class="display-4 fw-bold mb-3">
-                    2x1 en Tacos Al Pastor, prueba ya!!
+                    2x1 en Tacos <span class="text-primary">Al Pastor</span>
                   </h2>
+                  <p class="lead mb-4">
+                    Todos los martes y jueves. El sabor auténtico mexicano ahora al mejor precio. 
+                    ¡No te pierdas esta increíble oferta por tiempo limitado!
+                  </p>
                   <div class="d-flex flex-wrap gap-3">
-                    <button (click)="navigateToStore()" class="btn btn-danger btn-lg px-4 py-2 rounded-pill shadow">
+                    <button (click)="navigateToStore()" class="btn btn-primary btn-lg px-4 py-2 rounded-pill shadow">
                       <i class="bi bi-bag-plus me-2"></i>Ordenar Ahora
                     </button>
-                    
+                    <button class="btn btn-outline-primary btn-lg px-4 py-2 rounded-pill">
+                      <i class="bi bi-info-circle me-2"></i>Más Info
+                    </button>
                   </div>
                 </div>
               </div>
@@ -44,18 +49,23 @@
             <div class="row align-items-center min-vh-50">
               <div class="col-lg-6">
                 <div class="promo-text">
-                  
-                  <span class="badge bg-black mb-3 px-3 py-2 shadow">
-                    <i class="bi me-1"></i>Vegano
+                  <span class="badge bg-success text-white mb-3 px-3 py-2">
+                    <i class="bi bi-leaf me-1"></i>¡Nuevo!
                   </span>
                   <h2 class="display-4 fw-bold mb-3">
-                    Nuevos tacos veganos para los menos carniceros
+                    Tacos <span class="text-success">Veganos</span>
                   </h2>
+                  <p class="lead mb-4">
+                    Descubre nuestra nueva línea de tacos 100% vegetales con proteína de soya 
+                    y vegetales frescos. Sabor auténtico, experiencia consciente.
+                  </p>
                   <div class="d-flex flex-wrap gap-3">
-                    <button (click)="navigateToStore()" class="btn btn-danger btn-lg px-4 py-2 rounded-pill shadow">
-                      <i class="bi bi-bag-plus me-2"></i>Ordenar Ahora
+                    <button (click)="navigateToStore()" class="btn btn-success btn-lg px-4 py-2 rounded-pill shadow">
+                      <i class="bi bi-leaf me-2"></i>Probar Ahora
                     </button>
-                    
+                    <button class="btn btn-outline-success btn-lg px-4 py-2 rounded-pill">
+                      <i class="bi bi-heart me-2"></i>Conoce Más
+                    </button>
                   </div>
                 </div>
               </div>
@@ -75,15 +85,22 @@
             <div class="row align-items-center min-vh-50">
               <div class="col-lg-6">
                 <div class="promo-text">
-                  <span class="badge bg-black mb-3 px-3 py-2 shadow">
+                  <span class="badge bg-danger text-white mb-3 px-3 py-2">
                     <i class="bi bi-fire me-1"></i>¡Picante!
                   </span>
                   <h2 class="display-4 fw-bold mb-3">
-                    Tacos picantes solo para valientes
+                    Reto <span class="text-danger">Habanero</span>
                   </h2>
+                  <p class="lead mb-4">
+                    ¿Eres valiente? Prueba nuestro taco más picante y gana una bebida gratis. 
+                    Solo para los más atrevidos. ¿Aceptas el desafío?
+                  </p>
                   <div class="d-flex flex-wrap gap-3">
                     <button (click)="navigateToStore()" class="btn btn-danger btn-lg px-4 py-2 rounded-pill shadow">
                       <i class="bi bi-fire me-2"></i>Acepto el Reto
+                    </button>
+                    <button class="btn btn-outline-danger btn-lg px-4 py-2 rounded-pill">
+                      <i class="bi bi-question-circle me-2"></i>Ver Reglas
                     </button>
                   </div>
                 </div>
@@ -99,6 +116,15 @@
       </div>
     </div>
     
+    <!-- Controles rediseñados -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev" aria-label="Anterior">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next" aria-label="Siguiente">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
   </div>
 </section>
 

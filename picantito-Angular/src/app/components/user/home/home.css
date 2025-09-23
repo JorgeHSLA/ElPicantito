@@ -1,171 +1,440 @@
-/* Importar estilos base desde la carpeta styles */
+  /* Importar estilos base desde la carpeta styles */
 @import 'carrusel.css';
 @import '../../../assets/styles/css/dark-hc.css';
 @import '../../../assets/styles/creaTaco.css';
 
 /* Estilos específicos para el carrusel infinito */
+
 .recommended-carousel {
-  position: relative;
-  overflow: hidden;
+    position: relative;
+    overflow: hidden;
 }
 
 .recommended-carousel-container {
-  display: flex;
-  gap: 24px;
-  transition: transform 0.5s ease;
+    display: flex;
+    gap: 24px;
+    transition: transform 0.5s ease;
 }
 
 .recommended-carousel-container.no-transition {
-  transition: none;
+    transition: none;
 }
 
 .recommended-card-carousel {
-  flex: 0 0 auto;
-  width: calc(33.333% - 16px);
-  text-decoration: none;
-  color: inherit;
+    flex: 0 0 auto;
+    width: calc(33.333% - 16px);
+    text-decoration: none;
+    color: inherit;
 }
 
 @media (max-width: 992px) {
-  .recommended-card-carousel {
-    width: calc(50% - 12px);
-  }
+    .recommended-card-carousel {
+        width: calc(50% - 12px);
+    }
 }
 
 @media (max-width: 768px) {
-  .recommended-card-carousel {
-    width: 100%;
-  }
+    .recommended-card-carousel {
+        width: 100%;
+    }
 }
+
+
+/* Flechas carrusel recomendados (estilo unificado con navbar) */
 
 .carousel-control-recommended {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  border: none;
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  transition: all 0.3s ease;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 56px;
+    height: 56px;
+    background: var(--primary-color);
+    border: 5px solid var(--primary-color);
+    border-radius: 5px;
+    /* esquinas 5px */
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    transition: all 0.35s ease;
 }
 
-.carousel-control-recommended:hover {
-  background: rgba(0, 0, 0, 0.7);
-  transform: translateY(-50%) scale(1.1);
-}
+
+/* Más adentro del carrusel */
 
 .carousel-control-recommended.prev {
-  left: -20px;
+    left: 15px;
 }
 
 .carousel-control-recommended.next {
-  right: -20px;
+    right: 15px;
+}
+
+.carousel-control-recommended:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-50%) scale(1.06);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.30);
+}
+
+.carousel-control-recommended:active {
+    transform: translateY(-50%) scale(0.95);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.carousel-control-recommended:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+.carousel-control-recommended i {
+    font-size: 1.2rem;
 }
 
 .card-img-container {
-  height: 200px;
-  overflow: hidden;
-  border-radius: 8px 8px 0 0;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
 }
 
 .card-img-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
 .recommended-card-carousel:hover .card-img-container img {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
 
 .card-body {
-  padding: 1rem;
-  background: white;
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    background: white;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .rating i {
-  color: #ffc107;
-  font-size: 0.875rem;
+    color: #ffc107;
+    font-size: 0.875rem;
 }
 
 .price {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #28a745;
-  margin-top: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-top: 0.5rem;
 }
+
 
 /* Estilos para el carrusel principal */
 
-
 .promo-text {
-  padding: 2rem 0;
+    padding: 2rem 0;
 }
 
 .promo-image img {
-  max-height: 400px;
-  object-fit: cover;
+    max-height: 400px;
+    object-fit: cover;
 }
+
 
 /* Responsive adjustments */
+
 @media (max-width: 768px) {
-  .carousel-content {
-    min-height: 50vh;
-  }
-  
-  .promo-text {
-    text-align: center;
-    padding: 1rem 0;
-  }
-  
-  .display-4 {
-    font-size: 2rem;
-  }
+    .carousel-content {
+        min-height: 50vh;
+    }
+    .promo-text {
+        text-align: center;
+        padding: 1rem 0;
+    }
+    .display-4 {
+        font-size: 2rem;
+    }
 }
 
+
 /* Feature cards */
+
 .feature-card {
-  padding: 2rem 1rem;
-  text-align: center;
-  transition: transform 0.3s ease;
+    padding: 2rem 1rem;
+    text-align: center;
+    transition: transform 0.3s ease;
 }
 
 .feature-card:hover {
-  transform: translateY(-5px);
+    transform: translateY(-5px);
 }
 
 .feature-icon {
-  transition: transform 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .feature-card:hover .feature-icon {
-  transform: scale(1.1);
+    transform: scale(1.1);
 }
 
+
 /* Build taco section */
+
 .build-your-taco-section {
-  background: linear-gradient(45deg, #f8f9fa 0%, #e9ecef 100%);
+    background: linear-gradient(45deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
 .steps .badge {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
 }
 
 .taco-image img {
-  max-height: 500px;
-  object-fit: cover;
+    max-height: 500px;
+    object-fit: cover;
+}
+
+/* About section hover animations */
+.about-section {
+    position: relative;
+}
+
+.about-section h2 {
+    transition: all 0.3s ease;
+}
+
+.about-section h2:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+/* Párrafos sin animación
+.about-section p {
+    transition: all 0.3s ease;
+}
+
+.about-section p:hover {
+    transform: translateX(5px);
+    color: var(--neutral-text);
+}
+*/
+
+.about-section ul {
+    transition: all 0.3s ease;
+}
+
+.about-section ul:hover {
+    transform: translateX(5px);
+}
+
+.about-section ul li {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.about-section ul li:hover {
+    transform: translateX(10px) scale(1.02);
+    background: rgba(255, 193, 7, 0.1);
+    border-radius: 8px;
+    padding: 8px;
+    margin: 4px 0;
+}
+
+.about-section ul li:hover i {
+    transform: scale(1.2);
+    color: var(--accent-hover);
+}
+
+.about-section .btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.about-section .btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+}
+
+.about-section .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s;
+    z-index: 0;
+}
+
+.about-section .btn:hover::before {
+    left: 100%;
+}
+
+.about-section .btn span,
+.about-section .btn i {
+    position: relative;
+    z-index: 1;
+}
+
+.about-section img {
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+
+.about-section img:hover {
+    transform: scale(1.05) rotate(1deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+}
+
+.about-section .text-center:hover img {
+    filter: brightness(1.1) contrast(1.1);
+}
+
+/* Efecto de pulse en el span resaltado */
+.about-section h2 .text-warning {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.about-section h2:hover .text-warning {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Efectos adicionales para mejorar interactividad - SIN movimiento de columnas
+.about-section .col-lg-6:first-child {
+    transition: all 0.3s ease;
+}
+
+.about-section .col-lg-6:first-child:hover {
+    transform: translateX(5px);
+}
+
+.about-section .col-lg-6:last-child {
+    transition: all 0.3s ease;
+}
+
+.about-section .col-lg-6:last-child:hover {
+    transform: translateX(-5px);
+}
+*/
+
+/* Aplicar animación pulse a otros elementos destacados de la página */
+
+/* Features section - iconos y títulos */
+.feature-card .feature-icon i {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.feature-card:hover .feature-icon i {
+    animation: pulse 1.5s infinite;
+}
+
+.feature-card h5 {
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover h5 {
+    animation: pulse 1.5s infinite;
+}
+
+/* Build taco section - spans destacados */
+.build-your-taco-section .text-warning {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.build-your-taco-section:hover .text-warning {
+    animation: pulse 1.5s infinite;
+}
+
+.build-your-taco-section .badge {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.build-your-taco-section .badge:hover {
+    animation: pulse 1.5s infinite;
+}
+
+/* Recommended section - spans destacados (SIN animación pulse para no interferir con el carrusel) */
+.recommended-carousel-section .text-warning {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+/* Comentado para no interferir con el funcionamiento del carrusel
+.recommended-carousel-section:hover .text-warning {
+    animation: pulse 1.5s infinite;
+}
+*/
+
+/* Botones principales con efecto pulse en hover */
+.btn-warning {
+    transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+    animation: pulse 1.5s infinite;
+}
+
+.btn-outline-warning {
+    transition: all 0.3s ease;
+}
+
+.btn-outline-warning:hover {
+    animation: pulse 1.5s infinite;
+}
+
+/* Headers principales */
+.features-section h5 {
+    transition: all 0.3s ease;
+}
+
+.build-your-taco-section h2 {
+    transition: all 0.3s ease;
+}
+
+.build-your-taco-section h2:hover {
+    animation: pulse 1.5s infinite;
+}
+
+.recommended-carousel-section h2 {
+    transition: all 0.3s ease;
+}
+
+.recommended-carousel-section h2:hover {
+    animation: pulse 1.5s infinite;
+}
+
+/* Steps badges en build taco section */
+.steps .badge {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.steps .badge:hover {
+    animation: pulse 1.5s infinite;
 }
