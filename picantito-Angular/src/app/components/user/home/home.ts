@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 declare var bootstrap: any;
 
@@ -67,6 +68,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Estado del usuario (simulado por ahora)
   loggedUser: any = null; // Aquí integrarás con tu servicio de autenticación
 
+  constructor(private router: Router) {}
   constructor(private router: Router) {}
 
   ngOnInit(): void {
@@ -135,7 +137,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const carousel = document.getElementById('recommendedCarousel');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
-    
+
     if (!carousel || !prevBtn || !nextBtn) return;
 
     let currentIndex = 0;
@@ -161,14 +163,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
         clone.classList.add('clone');
         carousel.appendChild(clone);
       }
-      
+
       // Clonar últimas al inicio
       for (let i = totalCards - visibleCards; i < totalCards; i++) {
         const clone = originalCards[i].cloneNode(true) as HTMLElement;
         clone.classList.add('clone');
         carousel.insertBefore(clone, carousel.firstChild);
       }
-      
+
       currentIndex = visibleCards;
       updateCarouselPosition(false);
     };
@@ -183,7 +185,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       } else {
         carousel.classList.add('no-transition');
       }
-      
+
       (carousel as HTMLElement).style.transform = `translateX(-${translateX}px)`;
 
       if (!animate) {
@@ -196,7 +198,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const checkInfiniteLoop = () => {
       const visibleCards = getVisibleCards();
       const totalWithClones = carousel.children.length;
-      
+
       if (currentIndex >= totalWithClones - visibleCards) {
         currentIndex = visibleCards;
         updateCarouselPosition(false);
@@ -245,8 +247,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   navigateToStore(): void {
-    // Implementar navegación a tienda
-    console.log('Navegando a tienda');
+    this.router.navigate(['/tienda']).then(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    });
   }
 
   navigateToAbout(): void {
