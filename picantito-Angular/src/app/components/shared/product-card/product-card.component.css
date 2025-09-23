@@ -1,0 +1,43 @@
+/* Puedes agregar estilos personalizados aquí o dejarlo vacío para usar los globales */
+
+/* Animaciones y estilos de la tarjeta */
+.taco-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.taco-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-container {
+    overflow: hidden;
+}
+
+.card-img-container img {
+    transition: transform 0.3s ease;
+}
+
+.taco-card:hover .card-img-container img {
+    transform: scale(1.05);
+}
+
+.rating i {
+    font-size: 0.875rem;
+}
+
+.price-and-action {
+    margin-top: auto;
+}
+
+.action-buttons .btn {
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.action-buttons .btn:hover {
+    transform: translateY(-2px);
+}

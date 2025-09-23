@@ -1,13 +1,14 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ProductCardComponent } from '../../shared/product-card/product-card.component';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-tienda',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ProductCardComponent],
   templateUrl: './tienda.html',
   styleUrls: ['./tienda.css']
 })
