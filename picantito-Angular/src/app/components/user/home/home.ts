@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 declare var bootstrap: any;
 
@@ -67,7 +67,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Estado del usuario (simulado por ahora)
   loggedUser: any = null; // Aquí integrarás con tu servicio de autenticación
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     // Inicialización del componente
@@ -250,7 +250,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   navigateToAbout(): void {
-    // Implementar navegación a sobre nosotros
-    console.log('Navegando a sobre nosotros');
+    this.router.navigate(['/sobre-nosotros']).then(() => {
+      window.scrollTo(0, 0);
+    });
   }
 }
