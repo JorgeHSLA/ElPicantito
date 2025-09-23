@@ -1,62 +1,22 @@
 /* Importar estilos base desde la carpeta styles */
-@import '../../../assets/styles/styles.css';
+
 @import '../../../assets/styles/css/dark-hc.css';
 @import '../../../assets/styles/css/auth.css';
 
-/* Estilos específicos para login */
-:host {
-  display: block;
-  min-height: 100vh;
-}
-
 .auth-wrapper {
-  min-height: calc(100vh - 80px); /* Ajustar para el nuevo navbar */
-  padding-top: 0; /* Eliminar padding superior ya que el navbar maneja el espacio */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px; /* Reducir padding para pantallas pequeñas */
+    box-sizing: border-box;
+    background-image: url('./loginImage.png');
 }
 
-/* Animaciones para los mensajes */
+ .alert-info {
+    --bs-alert-bg: rgba(255, 255, 255, 0.596);
+
+}
 .alert {
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Estados de loading */
-.btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.spinner-border-sm {
-  width: 1rem;
-  height: 1rem;
-}
-
-/* Form validation styles */
-.form-control:invalid {
-  border-color: #dc3545;
-}
-
-.form-control:valid {
-  border-color: #28a745;
-}
-
-/* Responsive adjustments específicos para login */
-@media (max-width: 768px) {
-  .auth-title {
-    font-size: 2.5rem;
-  }
-  
-  .auth-sub {
-    font-size: 1.1rem;
-  }
-}
+      background-color: rgba(255, 255, 255, 0.596);
+} 

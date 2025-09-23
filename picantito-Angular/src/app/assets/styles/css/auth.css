@@ -104,14 +104,7 @@ body.registry-page {
     min-height: 100vh;
 }
 
-.auth-wrapper {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px; /* Reducir padding para pantallas pequeñas */
-    box-sizing: border-box;
-}
+
 
 .auth-card {
     width: 100%;
@@ -162,7 +155,7 @@ body.registry-page {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.55);
+    background: rgb(247, 143, 26);
     backdrop-filter: blur(6px);
     border-left: 1px solid rgba(255, 255, 255, 0.03);
     min-width: 400px;
