@@ -1,136 +1,114 @@
 <!-- HERO SECTION TIENDA -->
 <section class="menu-hero py-5 bg-light">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-8">
-        <h1 class="display-5 fw-bold mb-3">Nuestro Delicioso <span class="text-warning">Menú</span></h1>
-        <p class="lead text-muted mb-4">
-          Descubre nuestra selección de tacos auténticos preparados con ingredientes frescos y recetas tradicionales mexicanas.
-        </p>
-      </div>
-      <div class="col-lg-4 text-center">
-        <div class="menu-stats">
-          <div class="d-flex justify-content-around">
-            <div class="stat-item">
-              <h4 class="fw-bold text-warning mb-0">{{ productos.length }}+</h4>
-              <small class="text-muted">Variedades</small>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">Nuestro Delicioso <span class="text-warning">Menú</span></h1>
+                <p class="lead text-muted mb-4">
+                    Descubre nuestra selección de tacos auténticos preparados con ingredientes frescos y recetas tradicionales mexicanas.
+                </p>
             </div>
-            <div class="stat-item">
-              <h4 class="fw-bold text-warning mb-0">100%</h4>
-              <small class="text-muted">Auténtico</small>
+            <div class="col-lg-4 text-center">
+                <div class="menu-stats">
+                    <div class="d-flex justify-content-around">
+                        <div class="stat-item">
+                            <h4 class="fw-bold text-warning mb-0">{{ productos.length }}+</h4>
+                            <small class="text-muted">Variedades</small>
+                        </div>
+                        <div class="stat-item">
+                            <h4 class="fw-bold text-warning mb-0">100%</h4>
+                            <small class="text-muted">Auténtico</small>
+                        </div>
+                        <div class="stat-item">
+                            <h4 class="fw-bold text-warning mb-0">5★</h4>
+                            <small class="text-muted">Calificación</small>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-item">
-              <h4 class="fw-bold text-warning mb-0">5★</h4>
-              <small class="text-muted">Calificación</small>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>
 
 <!-- FILTROS -->
 <section class="filters-section py-4 bg-white border-bottom">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6">
-        <h5 class="mb-0">Filtrar por categoría:</h5>
-      </div>
-      <div class="col-lg-6">
-        <div class="filter-buttons">
-          <button 
-            *ngFor="let categoria of categorias"
-            (click)="filtrarPorCategoria(categoria)"
-            [class]="'btn btn-outline-warning btn-sm me-2 mb-2 ' + (categoriaSeleccionada === categoria ? 'active' : '')">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h5 class="mb-0">Filtrar por categoría:</h5>
+            </div>
+            <div class="col-lg-6">
+                <div class="filter-buttons">
+                    <button *ngFor="let categoria of categorias" (click)="filtrarPorCategoria(categoria)" [class]="'btn btn-outline-warning btn-sm me-2 mb-2 ' + (categoriaSeleccionada === categoria ? 'active' : '')">
             {{ categoria }}
           </button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>
 
 <!-- SECCIÓN DE PRODUCTOS DINÁMICOS -->
 <main class="container py-5">
-  <div class="row g-4">
-    <!-- Producto dinámico con Angular -->
-    <div class="col-lg-4 col-md-6" *ngFor="let producto of productosFiltrados">
-      <div class="card taco-card h-100 border-0 shadow-sm overflow-hidden position-relative">
-        <div class="row g-0 h-100">
-          <div class="col-12">
-            <div class="card-img-container position-relative" style="height: 200px;">
-              <img [src]="producto.imagen" 
-                   class="card-img-top w-100 h-100" 
-                   style="object-fit: cover;" 
-                   [alt]="producto.nombre">
-              
-              <!-- Badge de disponibilidad -->
-              <span *ngIf="!producto.disponible" 
-                    class="position-absolute top-0 end-0 badge bg-secondary m-2">
+    <div class="row g-4">
+        <!-- Producto dinámico con Angular -->
+        <div class="col-lg-4 col-md-6" *ngFor="let producto of productosFiltrados">
+            <div class="card taco-card h-100 border-0 shadow-sm overflow-hidden position-relative" (click)="navigateToProduct(producto.id)">
+                <div class="row g-0 h-100">
+                    <div class="col-12">
+                        <div class="card-img-container position-relative" style="height: 200px;">
+                            <img [src]="producto.imagen" class="card-img-top w-100 h-100" style="object-fit: cover;" [alt]="producto.nombre">
+
+                            <!-- Badge de disponibilidad -->
+                            <span *ngIf="!producto.disponible" class="position-absolute top-0 end-0 badge bg-secondary m-2">
                 Agotado
               </span>
-            </div>
-            
-            <div class="card-body d-flex flex-column">
-              <!-- Rating -->
-              <div class="rating mb-2">
-                <i *ngFor="let star of getStarsArray(producto.calificacion)" 
-                   class="bi bi-star-fill text-warning"></i>
-                <i *ngFor="let star of getEmptyStarsArray(producto.calificacion)" 
-                   class="bi bi-star text-muted"></i>
-              </div>
-              
-              <h5 class="card-title fw-bold">{{ producto.nombre }}</h5>
-              <p class="card-text text-muted flex-grow-1">{{ producto.descripcion }}</p>
-              
-              <div class="price-and-action">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="price">
-                    <span class="h5 mb-0 text-success fw-bold">${{ producto.precio.toFixed(2) }}</span>
-                  </div>
-                  <div class="action-buttons">
-                    <button 
-                      (click)="navigateToProduct(producto.id)"
-                      class="btn btn-outline-warning btn-sm me-2">
-                      <i class="bi bi-eye me-1"></i>Ver
-                    </button>
-                    <button 
-                      *ngIf="producto.disponible"
-                      (click)="agregarAlCarrito(producto)"
-                      class="btn btn-warning btn-sm">
+                        </div>
+
+                        <div class="card-body d-flex flex-column">
+                            <!-- Rating -->
+                            <div class="rating mb-2">
+                                <i *ngFor="let star of getStarsArray(producto.calificacion)" class="bi bi-star-fill text-warning"></i>
+                                <i *ngFor="let star of getEmptyStarsArray(producto.calificacion)" class="bi bi-star text-muted"></i>
+                            </div>
+
+                            <h5 class="card-title fw-bold">{{ producto.nombre }}</h5>
+                            <p class="card-text text-muted flex-grow-1">{{ producto.descripcion }}</p>
+
+                            <div class="price-and-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="price">
+                                        <span class="h5 mb-0 text-success fw-bold">${{ producto.precio.toFixed(2) }}</span>
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button *ngIf="producto.disponible" (click)="$event.stopPropagation(); agregarAlCarrito(producto)" class="btn btn-warning btn-sm">
                       <i class="bi bi-cart-plus me-1"></i>Agregar
                     </button>
-                    <button 
-                      *ngIf="!producto.disponible" 
-                      class="btn btn-secondary btn-sm" 
-                      disabled>
+                                        <button *ngIf="!producto.disponible" class="btn btn-secondary btn-sm" disabled (click)="$event.stopPropagation()">
                       <i class="bi bi-x-circle me-1"></i>Agotado
                     </button>
-                  </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <!-- CTA SECTION -->
-  <div class="row mt-5">
-    <div class="col-12">
-      <div class="cta-section bg-warning bg-opacity-10 rounded-4 p-5 text-center">
-        <h3 class="fw-bold mb-3">¿No encuentras lo que buscas?</h3>
-        <p class="text-muted mb-4">
-          Crea tu propio taco personalizado con más de 20 ingredientes frescos disponibles.
-        </p>
-        <button 
-          (click)="crearTacoPersonalizado()"
-          class="btn btn-warning btn-lg px-4 py-2 rounded-pill">
+    <!-- CTA SECTION -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="cta-section bg-warning bg-opacity-10 rounded-4 p-5 text-center">
+                <h3 class="fw-bold mb-3">¿No encuentras lo que buscas?</h3>
+                <p class="text-muted mb-4">
+                    Crea tu propio taco personalizado con más de 20 ingredientes frescos disponibles.
+                </p>
+                <button (click)="crearTacoPersonalizado()" class="btn btn-warning btn-lg px-4 py-2 rounded-pill">
           <i class="bi bi-plus-circle me-2"></i>Crear Taco Personalizado
         </button>
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </main>
