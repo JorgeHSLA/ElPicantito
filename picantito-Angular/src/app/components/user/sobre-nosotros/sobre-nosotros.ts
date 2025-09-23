@@ -3,17 +3,44 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TeamMemberCardComponent } from '../../shared/team-member-card/team-member-card.component';
 import { ValueCardComponent } from '../../shared/value-card/value-card.component';
+import { StoryCardComponent } from '../../shared/story-card/story-card.component';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-sobre-nosotros',
   standalone: true,
-  imports: [CommonModule, RouterModule, TeamMemberCardComponent, ValueCardComponent],
+  imports: [CommonModule, RouterModule, TeamMemberCardComponent, ValueCardComponent, StoryCardComponent],
   templateUrl: './sobre-nosotros.html',
   styleUrls: ['./sobre-nosotros.css']
 })
 export class SobreNosotrosComponent implements OnInit, AfterViewInit {
+  historias = [
+    {
+      imagen: 'https://cdn1.matadornetwork.com/blogs/2/2018/08/historia-del-taco-mexicano-shutterstock_405319411.jpg',
+      alt: 'Viaje a México',
+      titulo: 'El Viaje que lo Cambió Todo',
+      descripcion: 'En 2019, durante un intercambio académico en México, descubrimos los auténticos sabores de la comida callejera mexicana. Cada taco era una explosión de sabores que jamás habíamos experimentado en Colombia.'
+    },
+    {
+      imagen: 'https://hotelesb3.com/wp-content/uploads/2023/02/Gastronomia-Colombiana.jpg',
+      alt: 'Pasión por cocinar',
+      titulo: 'La Pasión por Compartir',
+      descripcion: 'Al regresar a Colombia, nos dimos cuenta de que estos sabores auténticos no existían aquí. Decidimos aprender las técnicas tradicionales y traer esa experiencia gastronómica a nuestro país.'
+    },
+    {
+      imagen: 'https://media.istockphoto.com/id/511773173/es/foto/profesor-ayudando-a-los-estudiantes-capacitaci%C3%B3n-para-trabajar-en-servicios-de-catering.jpg?s=612x612&w=0&k=20&c=iIQdObu13JPP-KgpN7a0yCnQ7qDq-Q9khOE_qrD2kHo=',
+      alt: 'Aprendiendo de maestros',
+      titulo: 'Aprendiendo de los Maestros',
+      descripcion: 'Pasamos meses estudiando con cocineros tradicionales mexicanos, aprendiendo los secretos de las marinadas, las técnicas de cocción y la preparación artesanal de tortillas.'
+    },
+    {
+      imagen: 'https://media-cdn.tripadvisor.com/media/photo-s/18/1a/33/b2/es-amplio-y-queda-frente.jpg',
+      alt: 'Apertura del restaurante',
+      titulo: 'El Nacimiento de El Picantito',
+      descripcion: 'En 2023, abrimos las puertas de El Picantito con una misión clara: ofrecer auténticos tacos mexicanos en Colombia, manteniendo la tradición pero adaptándonos a los gustos locales.'
+    }
+  ];
   valores = [
     {
       icon: 'bi bi-award-fill',
