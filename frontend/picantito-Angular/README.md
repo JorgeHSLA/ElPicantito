@@ -1,16 +1,52 @@
-# PicantitoAngular
+# El Picantito - Frontend Angular 🌮
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.2.
+Frontend del sistema de gestión de pedidos para El Picantito, desarrollado con Angular 18+.
 
-## Development server
+## 🚀 Configuración del proyecto
 
-To start a local development server, run:
+### Instalación de dependencias
+```bash
+npm install
+```
 
+### Servidor de desarrollo
+
+Para iniciar el servidor de desarrollo (sin backend):
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Para iniciar con proxy al backend (recomendado):
+```bash
+npm start
+```
+
+El servidor estará disponible en `http://localhost:4200/`. La aplicación se recarga automáticamente cuando modificas archivos.
+
+### Conexión con Backend
+
+El proyecto está configurado para conectarse automáticamente con el backend Spring Boot que corre en `http://localhost:8080`. 
+
+Para usar con backend:
+1. Inicia el backend Spring Boot en el puerto 8080
+2. Ejecuta `npm start` en el frontend
+3. El proxy redirigirá las llamadas `/api/*` al backend
+
+## 📁 Estructura del proyecto
+
+```
+src/
+├── app/
+│   ├── components/
+│   │   ├── admin/          # Componentes de administración
+│   │   ├── shared/         # Componentes compartidos
+│   │   └── user/           # Componentes de usuario
+│   ├── guards/             # Guards de autenticación
+│   ├── models/             # Modelos de datos
+│   └── services/           # Servicios HTTP
+└── public/
+    └── images/             # Imágenes estáticas
+```
 
 ## Code scaffolding
 

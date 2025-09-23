@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Producto } from '../../models/producto';
 
 @Injectable({
@@ -7,6 +9,8 @@ import { Producto } from '../../models/producto';
 
 export class ProductoService {
   
+  private apiUrl = '/api/productos';  // Ruta del backend
+  
   private productos: Producto[] = [
   {
     id: 1,
@@ -14,7 +18,7 @@ export class ProductoService {
     descripcion: "Carne 100% res, pan artesanal, lechuga, tomate y queso cheddar.",
     precio: 18000,
     precioDeAdquisicion: 10000,
-    imagen: "assets/img/hamburguesa_clasica.jpg",
+    imagen: "/images/taco1.webp",
     disponible: true,
     calificacion: 4
   },
@@ -24,7 +28,7 @@ export class ProductoService {
     descripcion: "Pizza mediana con salsa napolitana, queso mozzarella y pepperoni.",
     precio: 25000,
     precioDeAdquisicion: 15000,
-    imagen: "assets/img/pizza_pepperoni.jpg",
+    imagen: "/images/taco2.webp",
     disponible: true,
     calificacion: 5
   },
@@ -34,7 +38,7 @@ export class ProductoService {
     descripcion: "Pan suave, salchicha americana, papas ripio y salsas.",
     precio: 12000,
     precioDeAdquisicion: 7000,
-    imagen: "assets/img/perro_caliente.jpg",
+    imagen: "/images/taco3.webp",
     disponible: false,
     calificacion: 3
   },
@@ -44,7 +48,7 @@ export class ProductoService {
     descripcion: "Pollo a la plancha, lechuga romana, crutones y aderezo césar.",
     precio: 15000,
     precioDeAdquisicion: 8000,
-    imagen: "assets/img/ensalada_cesar.jpg",
+    imagen: "/images/taco1.webp",
     disponible: true,
     calificacion: 4
   },
@@ -54,12 +58,36 @@ export class ProductoService {
     descripcion: "Tortilla de maíz, carne al pastor, piña y guacamole.",
     precio: 20000,
     precioDeAdquisicion: 12000,
-    imagen: "assets/img/tacos_mexicanos.jpg",
+    imagen: "/images/taco2.webp",
     disponible: true,
     calificacion: 5
   }
   ]
 
+  constructor(private http: HttpClient) {}
+
+  // Métodos para conectar con el backend
+  getProductosFromAPI(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(this.apiUrl);
+  }
+
+  getProductoById(id: number): Observable<Producto> {
+    return this.http.get<Producto>(`${this.apiUrl}/${id}`);
+  }
+
+  createProducto(producto: Producto): Observable<Producto> {
+    return this.http.post<Producto>(this.apiUrl, producto);
+  }
+
+  updateProducto(id: number, producto: Producto): Observable<Producto> {
+    return this.http.put<Producto>(`${this.apiUrl}/${id}`, producto);
+  }
+
+  deleteProducto(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // Método temporal para datos de prueba (remover cuando el backend esté listo)
   getProductos() {
     return this.productos;
   }

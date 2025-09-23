@@ -41,7 +41,7 @@ export class EditProductoComponent implements OnInit {
       nombre: 'Taco de Carne Asada',
       descripcion: 'Delicioso taco con carne asada a la parrilla',
       precio: 12.99,
-      imagen: '/images/taco1.jpg',
+      imagen: '/images/taco1.webp',
       calificacion: 5,
       disponible: true
     };
