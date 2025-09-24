@@ -3,84 +3,65 @@
 
 ![El Picantito Logo](shared/assets/images/LogoMinimalist.png)
 
-## 📋 Descripción
-El Picantito es una aplicación web que simula una taquería colombiana especializada en auténticos tacos mexicanos. Este proyecto fue desarrollado para la clase de Desarrollo Web.
+## 🚀 COMANDOS RÁPIDOS
 
-## 🏗️ Arquitectura del Proyecto
+### 🔥 OPCIÓN 1: Scripts Automáticos (Recomendado)
 
-```
-ElPicantito/
-├── apps/
-│   ├── backend/          # Spring Boot API
-│   ├── frontend/         # Angular Application
-│   └── chatbot/          # Streamlit Chatbot
-├── docs/                 # Documentación
-├── infrastructure/       # Docker, SQL, Scripts
-│   ├── docker/          # Docker Compose y configuraciones
-│   ├── sql/             # Scripts de base de datos
-│   └── scripts/         # Scripts de automatización
-├── shared/              # Recursos compartidos
-│   └── assets/          # Imágenes, estilos globales
-└── tools/               # Herramientas de desarrollo
+**Windows PowerShell:**
+```powershell
+.\infrastructure\scripts\start-dev.ps1     # Iniciar todo
+.\infrastructure\scripts\build-all.ps1     # Construir todo
 ```
 
-## 🎨 Paleta de Colores
+**Windows CMD:**
+```cmd
+infrastructure\scripts\start-dev.bat       # Iniciar todo
+infrastructure\scripts\build-all.bat       # Construir todo
+```
 
-### Tema Oscuro de Alto Contraste (Dark High Contrast)
+**Linux/macOS:**
+```bash
+./infrastructure/scripts/start-dev.sh      # Iniciar todo
+./infrastructure/scripts/build-all.sh      # Construir todo
+```
 
-| Color | Hex | Variable CSS | Uso |
-|-------|-----|--------------|-----|
-| ![#1A110E](https://www.colorhexa.com/1a110e.png) | `#1A110E` | `--md-sys-color-surface` | Fondos principales |
-| ![#FFFFFF](https://www.colorhexa.com/ffffff.png) | `#FFFFFF` | `--md-sys-color-on-surface` | Texto sobre superficies |
-| ![#FFB597](https://www.colorhexa.com/ffb597.png) | `#FFB597` | `--md-sys-color-primary-container` | Contenedores primarios |
-| ![#FFC107](https://www.colorhexa.com/ffc107.png) | `#FFC107` | Accent Color | Color de acentos (warning) |
-
-### Variaciones de Superficie
-| Superficie | Hex | Variable CSS |
-|------------|-----|--------------|
-| ![#38221A](https://www.colorhexa.com/38221a.png) | `#38221A` | `--md-sys-color-surface-container` |
-| ![#443935](https://www.colorhexa.com/443935.png) | `#443935` | `--md-sys-color-surface-container-high` |
-
-## � Inicio Rápido
-
-### Usando Docker (Recomendado)
+### 🐳 OPCIÓN 2: Solo Docker
 ```bash
 cd infrastructure/docker
 docker-compose up -d
 ```
 
-### Desarrollo Local
+### 🛠️ OPCIÓN 3: Manual por Servicio
 
-#### Backend (Spring Boot)
+**Backend:**
 ```bash
 cd apps/backend
-./mvnw spring-boot:run
+./mvnw spring-boot:run          # Linux/macOS
+mvnw.cmd spring-boot:run        # Windows
 ```
 
-#### Frontend (Angular)
+**Frontend:**
 ```bash
 cd apps/frontend
 npm install
-ng serve
+npx ng serve
 ```
 
-#### Chatbot (Streamlit)
+**Chatbot:**
 ```bash
 cd apps/chatbot
-pip install -r requirements.txt
+pip install -r requirements.txt    # Linux/macOS: pip3
 streamlit run streamlit_app.py
 ```
 
 ## 🌐 URLs de Acceso
 - **Frontend:** http://localhost:4200
-- **Backend API:** http://localhost:9998
+- **Backend API:** http://localhost:9998  
 - **Chatbot:** http://localhost:8501
 - **Base de Datos:** localhost:5432
-## 👥 Equipo de Desarrollo
 
+## 👥 Equipo
 - **Javier Aldana** - Frontend Developer
 - **David Roa** - Backend Developer 
 - **Jorge Sierra** - Backend Developer 
-- **Juan Diego Muñoz** - Backend Developer 
-
-
+- **Juan Diego Muñoz** - Backend Developer

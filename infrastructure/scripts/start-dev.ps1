@@ -1,5 +1,5 @@
-# Script para iniciar todos los servicios en modo desarrollo
-# Ejecutar desde la raíz del proyecto
+# Script PowerShell para iniciar todos los servicios en modo desarrollo
+# Ejecutar desde la raíz del proyecto: .\infrastructure\scripts\start-dev.ps1
 
 Write-Host "🌮 Iniciando El Picantito - Desarrollo Completo" -ForegroundColor Green
 
@@ -21,18 +21,30 @@ Start-Sleep -Seconds 10
 
 # Iniciar Backend
 Write-Host "🔧 Iniciando Backend (Spring Boot)..." -ForegroundColor Blue
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd apps\backend; .\mvnw spring-boot:run"
+if ($IsWindows -or $env:OS -eq "Windows_NT") {
+    Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd apps\backend; .\mvnw.cmd spring-boot:run"
+} else {
+    Start-Process pwsh -ArgumentList "-NoExit", "-Command", "cd apps/backend; ./mvnw spring-boot:run"
+}
 
 # Esperar un poco antes de iniciar el frontend
 Start-Sleep -Seconds 5
 
 # Iniciar Frontend
 Write-Host "🎨 Iniciando Frontend (Angular)..." -ForegroundColor Cyan
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd apps\frontend; npm install; ng serve"
+if ($IsWindows -or $env:OS -eq "Windows_NT") {
+    Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd apps\frontend; npm install; npx ng serve"
+} else {
+    Start-Process pwsh -ArgumentList "-NoExit", "-Command", "cd apps/frontend; npm install; npx ng serve"
+}
 
 # Iniciar Chatbot
 Write-Host "🤖 Iniciando Chatbot (Streamlit)..." -ForegroundColor Magenta
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd apps\chatbot; pip install -r requirements.txt; streamlit run streamlit_app.py"
+if ($IsWindows -or $env:OS -eq "Windows_NT") {
+    Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd apps\chatbot; pip install -r requirements.txt; streamlit run streamlit_app.py"
+} else {
+    Start-Process pwsh -ArgumentList "-NoExit", "-Command", "cd apps/chatbot; pip3 install -r requirements.txt; streamlit run streamlit_app.py"
+}
 
 Write-Host ""
 Write-Host "✅ Servicios iniciados exitosamente!" -ForegroundColor Green

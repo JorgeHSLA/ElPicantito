@@ -1,5 +1,5 @@
-# Script para construir todas las aplicaciones
-# Ejecutar desde la raíz del proyecto
+# Script PowerShell para construir todas las aplicaciones
+# Ejecutar desde la raíz del proyecto: .\infrastructure\scripts\build-all.ps1
 
 Write-Host "🏗️ Construyendo El Picantito - Todas las Aplicaciones" -ForegroundColor Green
 
@@ -9,7 +9,11 @@ try {
     # Construir Backend
     Write-Host "🔧 Construyendo Backend..." -ForegroundColor Blue
     Set-Location "apps\backend"
-    .\mvnw clean package -DskipTests
+    if ($IsWindows -or $env:OS -eq "Windows_NT") {
+        .\mvnw.cmd clean package -DskipTests
+    } else {
+        ./mvnw clean package -DskipTests
+    }
     Set-Location "..\.."
     Write-Host "✅ Backend construido correctamente" -ForegroundColor Green
 
@@ -17,7 +21,7 @@ try {
     Write-Host "🎨 Construyendo Frontend..." -ForegroundColor Cyan
     Set-Location "apps\frontend"
     npm install
-    ng build --prod
+    npx ng build --configuration production
     Set-Location "..\.."
     Write-Host "✅ Frontend construido correctamente" -ForegroundColor Green
 
