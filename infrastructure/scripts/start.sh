@@ -2,7 +2,7 @@
 # Script Bash para iniciar todos los servicios en modo desarrollo
 # Ejecutar desde la raiz del proyecto: ./infrastructure/scripts/start.sh
 
-echo "Iniciando El Picantito - Desarrollo Completo"
+echo "Iniciando El Picantito - Angular + PostgreSQL"
 
 # Verificar si Docker esta ejecutandose
 if ! docker info >/dev/null 2>&1; then
@@ -18,21 +18,19 @@ cd ../..
 echo "Esperando a que la base de datos este lista..."
 sleep 10
 
-echo "Iniciando Backend (Spring Boot)..."
-# Abrir en nueva terminal (funciona en diferentes sistemas)
-if command -v gnome-terminal >/dev/null 2>&1; then
-    gnome-terminal --title="Backend" -- bash -c "cd apps/backend && ./mvnw spring-boot:run; read -p 'Presiona Enter para cerrar...'"
-elif command -v xterm >/dev/null 2>&1; then
-    xterm -title "Backend" -e "cd apps/backend && ./mvnw spring-boot:run; read -p 'Presiona Enter para cerrar...'" &
-elif command -v open >/dev/null 2>&1; then  # macOS
-    osascript -e 'tell app "Terminal" to do script "cd '$(pwd)'/apps/backend && ./mvnw spring-boot:run"'
-else
-    echo "No se pudo abrir terminal para Backend. Ejecuta manualmente:"
-    echo "   cd apps/backend && ./mvnw spring-boot:run"
-fi
-
-echo "Esperando 5 segundos antes de iniciar frontend..."
-sleep 5
+# Iniciando Backend (DESHABILITADO - Solo desarrollo Angular + DB)
+# echo "Iniciando Backend (Spring Boot)..."
+# if command -v gnome-terminal >/dev/null 2>&1; then
+#     gnome-terminal --title="Backend" -- bash -c "cd apps/backend && ./mvnw spring-boot:run; read -p 'Presiona Enter para cerrar...'"
+# elif command -v xterm >/dev/null 2>&1; then
+#     xterm -title "Backend" -e "cd apps/backend && ./mvnw spring-boot:run; read -p 'Presiona Enter para cerrar...'" &
+# elif command -v open >/dev/null 2>&1; then  # macOS
+#     osascript -e 'tell app "Terminal" to do script "cd '$(pwd)'/apps/backend && ./mvnw spring-boot:run"'
+# else
+#     echo "No se pudo abrir terminal para Backend. Ejecuta manualmente:"
+#     echo "   cd apps/backend && ./mvnw spring-boot:run"
+# fi
+# sleep 5
 
 echo "Iniciando Frontend (Angular)..."
 if command -v gnome-terminal >/dev/null 2>&1; then
@@ -62,7 +60,6 @@ echo ""
 echo "Servicios iniciados exitosamente"
 echo "URLs de acceso:"
 echo "   Frontend:  http://localhost:4200"
-echo "   Backend:   http://localhost:9998"
 echo "   Database:  localhost:5432"
 echo ""
-echo "Para detener todos los servicios, ejecuta: docker-compose -f infrastructure/docker/docker-compose.yml down"
+echo "Para detener la base de datos, ejecuta: docker-compose -f infrastructure/docker/docker-compose.yml down"

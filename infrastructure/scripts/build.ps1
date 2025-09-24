@@ -6,16 +6,16 @@ Write-Host "Construyendo El Picantito - Todas las Aplicaciones" -ForegroundColor
 $ErrorActionPreference = "Stop"
 
 try {
-    # Construir Backend
-    Write-Host "Construyendo Backend..." -ForegroundColor Blue
-    Set-Location "apps\backend"
-    if ($IsWindows -or $env:OS -eq "Windows_NT") {
-        .\mvnw.cmd clean package -DskipTests
-    } else {
-        ./mvnw clean package -DskipTests
-    }
-    Set-Location "..\.."
-    Write-Host "Backend construido correctamente" -ForegroundColor Green
+    # Construir Backend (deshabilitado por ahora)
+    # Write-Host "Construyendo Backend..." -ForegroundColor Blue
+    # Set-Location "apps\backend"
+    # if ($IsWindows -or $env:OS -eq "Windows_NT") {
+    #     .\mvnw.cmd clean package -DskipTests
+    # } else {
+    #     ./mvnw clean package -DskipTests
+    # }
+    # Set-Location "..\.."
+    # Write-Host "Backend construido correctamente" -ForegroundColor Green
 
     # Construir Frontend
     Write-Host "Construyendo Frontend..." -ForegroundColor Cyan
@@ -33,9 +33,8 @@ try {
     # Write-Host "Chatbot validado correctamente" -ForegroundColor Green
 
     Write-Host ""
-    Write-Host "Todas las aplicaciones construidas exitosamente" -ForegroundColor Green
+    Write-Host "Frontend construido exitosamente" -ForegroundColor Green
     Write-Host "Artefactos generados en:" -ForegroundColor White
-    Write-Host "   Backend:  apps/backend/target/" -ForegroundColor Blue
     Write-Host "   Frontend: apps/frontend/dist/" -ForegroundColor Cyan
 
 } catch {

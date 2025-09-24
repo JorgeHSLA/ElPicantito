@@ -1,7 +1,7 @@
 # Script PowerShell para iniciar todos los servicios en modo desarrollo
 # Ejecutar desde la raiz del proyecto: .\infrastructure\scripts\start.ps1
 
-Write-Host "Iniciando El Picantito - Desarrollo Completo" -ForegroundColor Green
+Write-Host "Iniciando El Picantito - Angular + PostgreSQL" -ForegroundColor Green
 
 # Verificar si Docker esta ejecutandose
 $dockerRunning = docker info 2>$null
@@ -19,16 +19,14 @@ Set-Location "..\.."
 Write-Host "Esperando a que la base de datos este lista..." -ForegroundColor Yellow
 Start-Sleep -Seconds 10
 
-# Iniciar Backend
-Write-Host "Iniciando Backend (Spring Boot)..." -ForegroundColor Blue
-if ($IsWindows -or $env:OS -eq "Windows_NT") {
-    Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd apps\backend; .\mvnw.cmd spring-boot:run"
-} else {
-    Start-Process pwsh -ArgumentList "-NoExit", "-Command", "cd apps/backend; ./mvnw spring-boot:run"
-}
-
-# Esperar un poco antes de iniciar el frontend
-Start-Sleep -Seconds 5
+# Iniciar Backend (DESHABILITADO - Solo desarrollo Angular + DB)
+# Write-Host "Iniciando Backend (Spring Boot)..." -ForegroundColor Blue
+# if ($IsWindows -or $env:OS -eq "Windows_NT") {
+#     Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd apps\backend; .\mvnw.cmd spring-boot:run"
+# } else {
+#     Start-Process pwsh -ArgumentList "-NoExit", "-Command", "cd apps/backend; ./mvnw spring-boot:run"
+# }
+# Start-Sleep -Seconds 5
 
 # Iniciar Frontend
 Write-Host "Iniciando Frontend (Angular)..." -ForegroundColor Cyan
@@ -48,6 +46,8 @@ if ($IsWindows -or $env:OS -eq "Windows_NT") {
 
 Write-Host ""
 Write-Host "Servicios iniciados exitosamente" -ForegroundColor Green
+Write-Host "  - PostgreSQL: http://localhost:5432" -ForegroundColor Yellow
+Write-Host "  - Frontend:   http://localhost:4200" -ForegroundColor Yellow
 Write-Host "URLs de acceso:" -ForegroundColor White
 Write-Host "   Frontend:  http://localhost:4200" -ForegroundColor Cyan
 Write-Host "   Backend:   http://localhost:9998" -ForegroundColor Blue

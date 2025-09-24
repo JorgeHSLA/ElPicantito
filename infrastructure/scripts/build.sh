@@ -29,7 +29,6 @@ echo "Frontend construido correctamente"
 # echo "Chatbot validado correctamente"
 
 echo ""
-echo "Todas las aplicaciones construidas exitosamente"
+echo "Frontend construido exitosamente"
 echo "Artefactos generados en:"
-echo "   Backend:  apps/backend/target/"
 echo "   Frontend: apps/frontend/dist/"

@@ -4,16 +4,16 @@ REM Ejecutar desde la raiz del proyecto: infrastructure\scripts\build.bat
 
 echo Construyendo El Picantito - Todas las Aplicaciones
 
-REM Construir Backend
-echo Construyendo Backend...
-cd apps\backend
-call mvnw.cmd clean package -DskipTests
-if %ERRORLEVEL% neq 0 (
-    echo Error construyendo Backend
-    exit /b 1
-)
-cd ..\..
-echo Backend construido correctamente
+REM Construir Backend (deshabilitado por ahora)
+REM echo Construyendo Backend...
+REM cd apps\backend
+REM call mvnw.cmd clean package -DskipTests
+REM if %ERRORLEVEL% neq 0 (
+REM     echo Error construyendo Backend
+REM     exit /b 1
+REM )
+REM cd ..\..
+REM echo Backend construido correctamente
 
 REM Construir Frontend
 echo Construyendo Frontend...
@@ -43,9 +43,8 @@ REM cd ..\..
 REM echo Chatbot validado correctamente
 
 echo.
-echo Todas las aplicaciones construidas exitosamente
+echo Frontend construido exitosamente
 echo Artefactos generados en:
-echo    Backend:  apps\backend\target\
 echo    Frontend: apps\frontend\dist\
 
 pause

@@ -2,7 +2,7 @@
 REM Script CMD/Batch para iniciar todos los servicios en modo desarrollo
 REM Ejecutar desde la raiz del proyecto: infrastructure\scripts\start.bat
 
-echo Iniciando El Picantito - Desarrollo Completo
+echo Iniciando El Picantito - Angular + PostgreSQL
 
 REM Verificar si Docker esta ejecutandose
 docker info >nul 2>&1
@@ -20,11 +20,10 @@ cd ..\..
 echo Esperando a que la base de datos este lista...
 timeout /t 10 /nobreak >nul
 
-echo Iniciando Backend (Spring Boot)...
-start "Backend" cmd /k "cd apps\backend && mvnw.cmd spring-boot:run"
-
-echo Esperando 5 segundos antes de iniciar frontend...
-timeout /t 5 /nobreak >nul
+REM Iniciando Backend (DESHABILITADO - Solo desarrollo Angular + DB)
+REM echo Iniciando Backend (Spring Boot)...
+REM start "Backend" cmd /k "cd apps\backend && mvnw.cmd spring-boot:run"
+REM timeout /t 5 /nobreak >nul
 
 echo Iniciando Frontend (Angular)...
 start "Frontend" cmd /k "cd apps\frontend && npm install && npx ng serve"
@@ -36,7 +35,6 @@ echo.
 echo Servicios iniciados exitosamente
 echo URLs de acceso:
 echo    Frontend:  http://localhost:4200
-echo    Backend:   http://localhost:9998
 echo    Database:  localhost:5432
 echo.
 echo Presiona cualquier tecla para cerrar este script (los servicios seguiran corriendo)...
