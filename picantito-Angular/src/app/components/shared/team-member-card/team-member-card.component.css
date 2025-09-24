@@ -1,0 +1,45 @@
+/* Estilos para la tarjeta de integrante del equipo */
+.team-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 2rem 1rem;
+    position: relative;
+    text-align: center;
+}
+.team-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.team-card .team-avatar {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #ffc107;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    margin-bottom: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.team-card:hover .team-avatar {
+    border-color: #ff9800;
+    box-shadow: 0 4px 16px rgba(255,193,7,0.18);
+}
+.team-card .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+.team-card .text-warning {
+    color: #ffc107 !important;
+}
+.team-card .card-text {
+    font-size: 0.95rem;
+    color: #6c757d;
+}

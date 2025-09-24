@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Registro - El Picantito</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/css/dark-hc.css">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/css/auth.css">
+    <link rel="stylesheet" href="/styles/css/registry.css">
+</head>
+
+<body class="registry-page">
+    <!-- NAVBAR igual que login -->
+    <header class="position-sticky top-0 z-3">
+        <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-sm" style="background: #212529;">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="/home">
+                    <img src="/images/LogoFont.png" alt="El Picantito Logo" width="200" height="120" class="me-2" />
+                </a>
+                <div class="ms-auto">
+                    <a href="/home" class="btn btn-outline-light px-4 py-2 rounded-pill fw-bold" role="button" aria-label="Ir al inicio">
+                        Volver al inicio
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="auth-wrapper">
+        <div class="auth-card">
+            <!-- LADO IZQUIERDO -->
+            <section class="auth-left" id="left-side">
+                <h1 class="auth-title">Comencemos</h1>
+                <p class="auth-sub">
+                    Crea tu cuenta para disfrutar de nuestros servicios, hacer pedidos y crear tus propios tacos.
+                </p>
+            </section>
+
+            <!-- LADO DERECHO: formulario -->
+            <aside class="auth-right">
+                <div class="form-panel" role="region" aria-label="Formulario de registro">
+                    <h3>Regístrate</h3>
+                    
+                    <!-- Mostrar mensajes de error -->
+                    <div th:if="${error}" class="alert alert-danger" style="margin-bottom: 1rem;">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+                    
+                    <!-- Mostrar mensajes de éxito -->
+                    <div th:if="${success}" class="alert alert-success" style="margin-bottom: 1rem;">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <span th:text="${success}"></span>
+                    </div>
+                    
+                    <form action="/registry" method="post" th:object="${user}" novalidate="" class="form-dark-text">
+                        <div class="mb-3">
+                            <label for="nombreCompleto" class="form-label-small">Nombre completo</label>
+                            <input id="nombreCompleto" th:field="*{nombreCompleto}" type="text" class="line-input form-control" placeholder="Ej: Juan Pérez García" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombreUsuario" class="form-label-small">Usuario</label>
+                            <input id="nombreUsuario" th:field="*{nombreUsuario}" type="text" class="line-input form-control" placeholder="juan.perez" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label-small">Teléfono</label>
+                            <input id="telefono" th:field="*{telefono}" type="tel" class="line-input form-control" placeholder="Ej: +57 300 123 4567" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="correo" class="form-label-small">Correo electrónico</label>
+                            <input id="correo" th:field="*{correo}" type="email" class="line-input form-control" placeholder="correo@ejemplo.com" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label-small">Contraseña</label>
+                            <input id="password" th:field="*{password}" type="password" class="line-input form-control" placeholder="Crea una contraseña segura" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password2" class="form-label-small">Repetir contraseña</label>
+                            <input id="password2" name="password2" type="password" class="line-input form-control" placeholder="Repite la contraseña" required="">
+                        </div>
+                        <button type="submit" class="btn-accent" aria-label="Crear cuenta">Crear mi cuenta</button>
+                        <div class="form-note" style="text-align:center; margin-top:12px;">
+                            ¿Ya tienes cuenta? <a href="/login" style="color:var(--accent-color); text-decoration:underline;">Inicia sesión</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="right-decor" aria-hidden="true">
+                    <div style="width:1px; height:80%; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border-radius:2px;"></div>
+                </div>
+            </aside>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

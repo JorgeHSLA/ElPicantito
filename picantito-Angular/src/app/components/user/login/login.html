@@ -1,0 +1,87 @@
+<!-- SOLO el auth-navbar, NO el navbar principal -->
+<app-auth-navbar></app-auth-navbar>
+
+<main class="auth-wrapper">
+  <div class="auth-card">
+    <section class="auth-left">
+      <h1 class="auth-title">Bienvenido de vuelta</h1>
+      <p class="auth-sub">Inicia sesión para continuar con tus pedidos y promociones.</p>
+    </section>
+    
+    <aside class="auth-right">
+      <div class="form-panel" role="region" aria-label="Formulario de inicio de sesión">
+        
+        <!-- Mensajes de error -->
+        <div *ngIf="errorMessage()" class="alert alert-danger mb-3">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ errorMessage() }}
+        </div>
+
+        <!-- Datos de prueba -->
+        <div class="alert alert-info mb-3">
+          <strong>Datos de prueba:</strong><br>
+          <small>Cliente: carlos.lopez / password123</small><br>
+          <small>Admin: admin / admin123</small>
+        </div>
+        
+        <!-- Formulario -->
+        <form (ngSubmit)="onSubmit()" class="form-dark-text">
+          <div class="mb-3">
+            <label for="nombreUsuario" class="form-label fw-semibold">
+              <i class="bi bi-person me-2 text-warning"></i>Nombre de Usuario
+            </label>
+            <input 
+              type="text" 
+              class="form-control form-control-lg rounded-3 border-2" 
+              id="nombreUsuario" 
+              placeholder="Ingresa tu nombre de usuario" 
+              required 
+              [value]="nombreUsuario()"
+              (input)="updateNombreUsuario($event.target.value || '')"
+              [disabled]="isLoading()">
+          </div>
+          
+          <div class="mb-4">
+            <label for="password" class="form-label fw-semibold">
+              <i class="bi bi-lock me-2 text-warning"></i>Contraseña
+            </label>
+            <input 
+              type="password" 
+              class="form-control form-control-lg rounded-3 border-2" 
+              id="password" 
+              placeholder="Ingresa tu contraseña" 
+              required 
+              [value]="password()"
+              (input)="updatePassword($event.target.value || '')"
+              [disabled]="isLoading()">
+          </div>
+          
+          <div class="d-grid mb-3">
+            <button 
+              type="submit" 
+              class="btn btn-warning btn-lg rounded-3 fw-semibold py-3"
+              [disabled]="isLoading()">
+              <span *ngIf="!isLoading()">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+              </span>
+              <span *ngIf="isLoading()">
+                <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                Iniciando sesión...
+              </span>
+            </button>
+          </div>
+        </form>
+        
+        <div class="text-center mt-3">
+          <span class="text-muted">¿No tienes cuenta?</span>
+        </div>
+        
+        <div class="d-grid mt-2">
+          <a routerLink="/registry" class="btn btn-outline-warning btn-lg rounded-3 fw-semibold py-3">
+            <i class="bi bi-person-plus me-2"></i>Crear Cuenta Nueva
+          </a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>

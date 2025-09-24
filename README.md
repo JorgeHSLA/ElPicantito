@@ -1,87 +1,61 @@
-# El Picantito 🌮
+# 🌮 El Picantito
+**Auténticos Tacos Mexicanos en Colombia**
 
-Sistema de gestión de pedidos para restaurante de tacos con frontend Angular y backend Spring Boot.
+![El Picantito Logo](src/main/resources/static/images/LogoMinimalist.png)
 
-## Estructura del Proyecto
+## 📋 Descripción
+El Picantito es una aplicación web que simula una taquería colombiana especializada en auténticos tacos mexicanos. Este proyecto fue desarrollado para la clase de Desarrollo Web.
 
-```
-ElPicantito/
-├── frontend/                 # Aplicación Angular
-│   └── picantito-Angular/    # Código fuente del frontend
-├── backend/                  # API Spring Boot
-│   ├── src/                  # Código fuente del backend
-│   ├── target/               # Archivos compilados
-│   ├── pom.xml               # Dependencias Maven
-│   ├── mvnw                  # Maven wrapper (Unix)
-│   └── mvnw.cmd              # Maven wrapper (Windows)
-├── docs/                     # Documentación
-│   ├── sql/                  # Scripts de base de datos
-│   └── README.md             # Documentación original
-├── scripts/                  # Scripts de despliegue
-│   └── docker-compose.yml    # Configuración de contenedores
-├── chatbot/                  # Bot de atención al cliente
-└── picantito/                # Versión anterior (Thymeleaf)
-```
+## 🎨 Paleta de Colores
 
-## Tecnologías
+### Tema Oscuro de Alto Contraste (Dark High Contrast)
 
-### Frontend
-- **Angular 18+** - Framework principal
-- **TypeScript** - Lenguaje de programación
-- **CSS3** - Estilos y animaciones
+| Color | Hex | Variable CSS | Uso |
+|-------|-----|--------------|-----|
+| ![#1A110E](https://www.colorhexa.com/1a110e.png) | `#1A110E` | `--md-sys-color-surface` | Fondos principales |
+| ![#FFFFFF](https://www.colorhexa.com/ffffff.png) | `#FFFFFF` | `--md-sys-color-on-surface` | Texto sobre superficies |
+| ![#FFB597](https://www.colorhexa.com/ffb597.png) | `#FFB597` | `--md-sys-color-primary-container` | Contenedores primarios |
+| ![#FFC107](https://www.colorhexa.com/ffc107.png) | `#FFC107` | Accent Color | Color de acentos (warning) |
 
-### Backend
-- **Spring Boot** - Framework de Java
-- **Spring Security** - Autenticación y autorización
-- **JPA/Hibernate** - ORM para base de datos
-- **Maven** - Gestión de dependencias
+### Variaciones de Superficie
+| Superficie | Hex | Variable CSS |
+|------------|-----|--------------|
+| ![#38221A](https://www.colorhexa.com/38221a.png) | `#38221A` | `--md-sys-color-surface-container` |
+| ![#443935](https://www.colorhexa.com/443935.png) | `#443935` | `--md-sys-color-surface-container-high` |
 
-### Base de Datos
-- **H2/MySQL** - Sistema de gestión de base de datos
+## 🛠️ Ejecución
 
-## Cómo ejecutar el proyecto
-
-### Frontend (Angular)
+1. **Clonar el repositorio:**
 ```bash
-cd frontend/picantito-Angular
-npm install
-ng serve
+git clone https://github.com/JorgeHSLA/ElPicantito.git
+cd ElPicantito
 ```
 
-### Backend (Spring Boot)
+2. **Compilar el proyecto:**
 ```bash
-cd backend
+./mvnw clean compile
+```
+
+3. **Ejecutar la aplicación:**
+```bash
 ./mvnw spring-boot:run
-# En Windows: mvnw.cmd spring-boot:run
 ```
 
-### Con Docker
-```bash
-cd scripts
-docker-compose up
+4. **Acceder a la aplicación:**
+```
+http://localhost:9998/home
 ```
 
-## Branches
+### En Windows
+```cmd
+mvnw.cmd clean compile
+mvnw.cmd spring-boot:run
+```
+## 👥 Equipo de Desarrollo
 
-- **main**: Versión estable de producción
-- **Diego**: Branch principal de desarrollo
-- **Angular**: Desarrollo específico del frontend
-- **Jorge, Javier, David**: Branches individuales de desarrolladores
+- **Javier Aldana** - Frontend Developer
+- **David Roa** - Backend Developer 
+- **Jorge Sierra** - Backend Developer 
+- **Juan Diego Muñoz** - Backend Developer 
 
-## Contribuir
 
-1. Hacer fork del proyecto
-2. Crear una branch para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -am 'Agregar nueva funcionalidad'`)
-4. Push a la branch (`git push origin feature/nueva-funcionalidad`)
-5. Abrir un Pull Request
-
-## Autores
-
-- **Jorge** - Desarrollo Backend
-- **Diego** - Desarrollo Frontend y DevOps  
-- **Javier** - Desarrollo Full Stack
-- **David** - Desarrollo Frontend
-
----
-*El Picantito - Tacos Colombianos* 🇨🇴
