@@ -31,16 +31,16 @@ if %ERRORLEVEL% neq 0 (
 cd ..\..
 echo Frontend construido correctamente
 
-REM Preparar Chatbot
-echo Validando Chatbot...
-cd apps\chatbot
-pip install -r requirements.txt
-if %ERRORLEVEL% neq 0 (
-    echo Error instalando dependencias del Chatbot
-    exit /b 1
-)
-cd ..\..
-echo Chatbot validado correctamente
+REM Preparar Chatbot (deshabilitado por ahora)
+REM echo Validando Chatbot...
+REM cd apps\chatbot
+REM pip install -r requirements.txt
+REM if %ERRORLEVEL% neq 0 (
+REM     echo Error instalando dependencias del Chatbot
+REM     exit /b 1
+REM )
+REM cd ..\..
+REM echo Chatbot validado correctamente
 
 echo.
 echo Todas las aplicaciones construidas exitosamente

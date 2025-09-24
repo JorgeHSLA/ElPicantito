@@ -47,17 +47,9 @@ npm install
 npx ng serve
 ```
 
-**Chatbot:**
-```bash
-cd apps/chatbot
-pip install -r requirements.txt    # Linux/macOS: pip3
-streamlit run streamlit_app.py
-```
-
 ## 🌐 URLs de Acceso
 - **Frontend:** http://localhost:4200
 - **Backend API:** http://localhost:9998  
-- **Chatbot:** http://localhost:8501
 - **Base de Datos:** localhost:5432
 
 ## 👥 Equipo

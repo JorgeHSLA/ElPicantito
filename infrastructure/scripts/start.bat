@@ -29,15 +29,14 @@ timeout /t 5 /nobreak >nul
 echo Iniciando Frontend (Angular)...
 start "Frontend" cmd /k "cd apps\frontend && npm install && npx ng serve"
 
-echo Iniciando Chatbot (Streamlit)...
-start "Chatbot" cmd /k "cd apps\chatbot && pip install -r requirements.txt && streamlit run streamlit_app.py"
+REM echo Iniciando Chatbot (Streamlit)...
+REM start "Chatbot" cmd /k "cd apps\chatbot && pip install -r requirements.txt && streamlit run streamlit_app.py"
 
 echo.
 echo Servicios iniciados exitosamente
 echo URLs de acceso:
 echo    Frontend:  http://localhost:4200
 echo    Backend:   http://localhost:9998
-echo    Chatbot:   http://localhost:8501
 echo    Database:  localhost:5432
 echo.
 echo Presiona cualquier tecla para cerrar este script (los servicios seguiran corriendo)...

@@ -21,12 +21,12 @@ npx ng build --configuration production
 cd ../..
 echo "Frontend construido correctamente"
 
-# Preparar Chatbot
-echo "Validando Chatbot..."
-cd apps/chatbot
-pip3 install -r requirements.txt
-cd ../..
-echo "Chatbot validado correctamente"
+# Preparar Chatbot (deshabilitado por ahora)
+# echo "Validando Chatbot..."
+# cd apps/chatbot
+# pip3 install -r requirements.txt
+# cd ../..
+# echo "Chatbot validado correctamente"
 
 echo ""
 echo "Todas las aplicaciones construidas exitosamente"

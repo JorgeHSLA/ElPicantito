@@ -38,20 +38,19 @@ if ($IsWindows -or $env:OS -eq "Windows_NT") {
     Start-Process pwsh -ArgumentList "-NoExit", "-Command", "cd apps/frontend; npm install; npx ng serve"
 }
 
-# Iniciar Chatbot
-Write-Host "Iniciando Chatbot (Streamlit)..." -ForegroundColor Magenta
-if ($IsWindows -or $env:OS -eq "Windows_NT") {
-    Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd apps\chatbot; pip install -r requirements.txt; streamlit run streamlit_app.py"
-} else {
-    Start-Process pwsh -ArgumentList "-NoExit", "-Command", "cd apps/chatbot; pip3 install -r requirements.txt; streamlit run streamlit_app.py"
-}
+# Iniciar Chatbot (deshabilitado por ahora)
+# Write-Host "Iniciando Chatbot (Streamlit)..." -ForegroundColor Magenta
+# if ($IsWindows -or $env:OS -eq "Windows_NT") {
+#     Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd apps\chatbot; pip install -r requirements.txt; streamlit run streamlit_app.py"
+# } else {
+#     Start-Process pwsh -ArgumentList "-NoExit", "-Command", "cd apps/chatbot; pip3 install -r requirements.txt; streamlit run streamlit_app.py"
+# }
 
 Write-Host ""
 Write-Host "Servicios iniciados exitosamente" -ForegroundColor Green
 Write-Host "URLs de acceso:" -ForegroundColor White
 Write-Host "   Frontend:  http://localhost:4200" -ForegroundColor Cyan
 Write-Host "   Backend:   http://localhost:9998" -ForegroundColor Blue
-Write-Host "   Chatbot:   http://localhost:8501" -ForegroundColor Magenta
 Write-Host "   Database:  localhost:5432" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "Presiona Ctrl+C para detener los servicios"

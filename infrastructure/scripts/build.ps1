@@ -25,12 +25,12 @@ try {
     Set-Location "..\.."
     Write-Host "Frontend construido correctamente" -ForegroundColor Green
 
-    # Preparar Chatbot
-    Write-Host "Validando Chatbot..." -ForegroundColor Magenta
-    Set-Location "apps\chatbot"
-    pip install -r requirements.txt
-    Set-Location "..\.."
-    Write-Host "Chatbot validado correctamente" -ForegroundColor Green
+    # Preparar Chatbot (deshabilitado por ahora)
+    # Write-Host "Validando Chatbot..." -ForegroundColor Magenta
+    # Set-Location "apps\chatbot"
+    # pip install -r requirements.txt
+    # Set-Location "..\.."
+    # Write-Host "Chatbot validado correctamente" -ForegroundColor Green
 
     Write-Host ""
     Write-Host "Todas las aplicaciones construidas exitosamente" -ForegroundColor Green

@@ -46,24 +46,23 @@ else
     echo "   cd apps/frontend && npm install && npx ng serve"
 fi
 
-echo "Iniciando Chatbot (Streamlit)..."
-if command -v gnome-terminal >/dev/null 2>&1; then
-    gnome-terminal --title="Chatbot" -- bash -c "cd apps/chatbot && pip3 install -r requirements.txt && streamlit run streamlit_app.py; read -p 'Presiona Enter para cerrar...'"
-elif command -v xterm >/dev/null 2>&1; then
-    xterm -title "Chatbot" -e "cd apps/chatbot && pip3 install -r requirements.txt && streamlit run streamlit_app.py; read -p 'Presiona Enter para cerrar...'" &
-elif command -v open >/dev/null 2>&1; then  # macOS
-    osascript -e 'tell app "Terminal" to do script "cd '$(pwd)'/apps/chatbot && pip3 install -r requirements.txt && streamlit run streamlit_app.py"'
-else
-    echo "No se pudo abrir terminal para Chatbot. Ejecuta manualmente:"
-    echo "   cd apps/chatbot && pip3 install -r requirements.txt && streamlit run streamlit_app.py"
-fi
+# echo "Iniciando Chatbot (Streamlit)..."
+# if command -v gnome-terminal >/dev/null 2>&1; then
+#     gnome-terminal --title="Chatbot" -- bash -c "cd apps/chatbot && pip3 install -r requirements.txt && streamlit run streamlit_app.py; read -p 'Presiona Enter para cerrar...'"
+# elif command -v xterm >/dev/null 2>&1; then
+#     xterm -title "Chatbot" -e "cd apps/chatbot && pip3 install -r requirements.txt && streamlit run streamlit_app.py; read -p 'Presiona Enter para cerrar...'" &
+# elif command -v open >/dev/null 2>&1; then  # macOS
+#     osascript -e 'tell app "Terminal" to do script "cd '$(pwd)'/apps/chatbot && pip3 install -r requirements.txt && streamlit run streamlit_app.py"'
+# else
+#     echo "No se pudo abrir terminal para Chatbot. Ejecuta manualmente:"
+#     echo "   cd apps/chatbot && pip3 install -r requirements.txt && streamlit run streamlit_app.py"
+# fi
 
 echo ""
 echo "Servicios iniciados exitosamente"
 echo "URLs de acceso:"
 echo "   Frontend:  http://localhost:4200"
 echo "   Backend:   http://localhost:9998"
-echo "   Chatbot:   http://localhost:8501"
 echo "   Database:  localhost:5432"
 echo ""
 echo "Para detener todos los servicios, ejecuta: docker-compose -f infrastructure/docker/docker-compose.yml down"

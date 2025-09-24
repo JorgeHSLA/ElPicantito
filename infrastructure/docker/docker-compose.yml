@@ -1,12 +1,13 @@
 # ElPicantito - Servicios Docker
 services:
-    chatbot:
-      build:
-        context: ../../apps/chatbot/    # Nueva ruta al chatbot
-        dockerfile: Dockerfile
-      container_name: elpicantito-chat
-      ports:
-        - "8501:8501"
+  # Chatbot deshabilitado por ahora
+  # chatbot:
+  #   build:
+  #     context: ../../apps/chatbot/    # Nueva ruta al chatbot
+  #     dockerfile: Dockerfile
+  #   container_name: elpicantito-chat
+  #   ports:
+  #     - "8501:8501"
       
   #crear bases de datos 
     db:
