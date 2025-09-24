@@ -51,34 +51,14 @@ if ($LASTEXITCODE -ne 0) {
 Set-Location "..\.."
 Write-Host "Dependencias de Angular instaladas correctamente" -ForegroundColor Green
 
-# Iniciar base de datos
-Write-Host ""
-Write-Host "Iniciando base de datos PostgreSQL..." -ForegroundColor Cyan
-Set-Location "infrastructure\docker"
-docker-compose up -d postgres
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Error iniciando PostgreSQL" -ForegroundColor Red
-    exit 1
-}
-Set-Location "..\.."
-Write-Host "PostgreSQL iniciado correctamente" -ForegroundColor Green
-
-# Esperar que la DB este lista
-Write-Host "Esperando que PostgreSQL este completamente listo..." -ForegroundColor Cyan
-Start-Sleep -Seconds 15
-
-# Iniciar Angular
-Write-Host ""
-Write-Host "Iniciando aplicacion Angular..." -ForegroundColor Cyan
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd apps\frontend; npx ng serve --open"
-
 Write-Host ""
 Write-Host "=== CONFIGURACION COMPLETADA ===" -ForegroundColor Green
-Write-Host "El Picantito esta listo para desarrollo" -ForegroundColor Green
+Write-Host "Todas las dependencias instaladas correctamente" -ForegroundColor Green
 Write-Host ""
-Write-Host "URLs disponibles:" -ForegroundColor Yellow
+Write-Host "Para iniciar el proyecto, usa:" -ForegroundColor Yellow
+Write-Host "  .\infrastructure\scripts\start.ps1" -ForegroundColor White
+Write-Host ""
+Write-Host "URLs que estaran disponibles al iniciar:" -ForegroundColor Cyan
 Write-Host "  Frontend:  http://localhost:4200" -ForegroundColor White
 Write-Host "  Database:  localhost:5432" -ForegroundColor White
 Write-Host "  PgAdmin:   http://localhost:5050 (admin@admin.com / admin)" -ForegroundColor White
-Write-Host ""
-Write-Host "Para siguientes sesiones, usa: .\infrastructure\scripts\start.ps1" -ForegroundColor Cyan

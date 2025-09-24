@@ -60,36 +60,15 @@ if %ERRORLEVEL% neq 0 (
 cd ..\..
 echo Dependencias de Angular instaladas correctamente
 
-REM Iniciar base de datos
-echo.
-echo Iniciando base de datos PostgreSQL...
-cd infrastructure\docker
-docker-compose up -d postgres
-if %ERRORLEVEL% neq 0 (
-    echo Error iniciando PostgreSQL
-    pause
-    exit /b 1
-)
-cd ..\..
-echo PostgreSQL iniciado correctamente
-
-REM Esperar que la DB este lista
-echo Esperando que PostgreSQL este completamente listo...
-timeout /t 15 /nobreak >nul
-
-REM Iniciar Angular
-echo.
-echo Iniciando aplicacion Angular...
-start "Angular" cmd /k "cd apps\frontend && npx ng serve --open"
-
 echo.
 echo === CONFIGURACION COMPLETADA ===
-echo El Picantito esta listo para desarrollo
+echo Todas las dependencias instaladas correctamente
 echo.
-echo URLs disponibles:
+echo Para iniciar el proyecto, usa:
+echo   infrastructure\scripts\start.bat
+echo.
+echo URLs que estaran disponibles al iniciar:
 echo   Frontend:  http://localhost:4200
 echo   Database:  localhost:5432
 echo   PgAdmin:   http://localhost:5050 (admin@admin.com / admin)
-echo.
-echo Para siguientes sesiones, usa: infrastructure\scripts\start.bat
 pause

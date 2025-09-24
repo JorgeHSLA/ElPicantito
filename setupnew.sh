@@ -51,45 +51,14 @@ fi
 cd ../..
 echo "Dependencias de Angular instaladas correctamente"
 
-# Iniciar base de datos
-echo ""
-echo "Iniciando base de datos PostgreSQL..."
-cd infrastructure/docker
-docker-compose up -d postgres
-if [ $? -ne 0 ]; then
-    echo "Error iniciando PostgreSQL"
-    exit 1
-fi
-cd ../..
-echo "PostgreSQL iniciado correctamente"
-
-# Esperar que la DB este lista
-echo "Esperando que PostgreSQL este completamente listo..."
-sleep 15
-
-# Iniciar Angular
-echo ""
-echo "Iniciando aplicacion Angular..."
-if command -v gnome-terminal >/dev/null 2>&1; then
-    gnome-terminal --title="Angular" -- bash -c "cd apps/frontend && npx ng serve --open; read -p 'Presiona Enter para cerrar...'"
-elif command -v xterm >/dev/null 2>&1; then
-    xterm -title "Angular" -e "cd apps/frontend && npx ng serve --open; read -p 'Presiona Enter para cerrar...'" &
-elif command -v open >/dev/null 2>&1; then  # macOS
-    osascript -e 'tell app "Terminal" to do script "cd '$(pwd)'/apps/frontend && npx ng serve --open"'
-else
-    echo "Abriendo Angular manualmente..."
-    cd apps/frontend
-    npx ng serve --open &
-    cd ../..
-fi
-
 echo ""
 echo "=== CONFIGURACION COMPLETADA ==="
-echo "El Picantito esta listo para desarrollo"
+echo "Todas las dependencias instaladas correctamente"
 echo ""
-echo "URLs disponibles:"
+echo "Para iniciar el proyecto, usa:"
+echo "  ./infrastructure/scripts/start.sh"
+echo ""
+echo "URLs que estaran disponibles al iniciar:"
 echo "  Frontend:  http://localhost:4200"
 echo "  Database:  localhost:5432"
 echo "  PgAdmin:   http://localhost:5050 (admin@admin.com / admin)"
-echo ""
-echo "Para siguientes sesiones, usa: ./infrastructure/scripts/start.sh"
