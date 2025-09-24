@@ -9,20 +9,20 @@
 
 **Windows PowerShell:**
 ```powershell
-.\infrastructure\scripts\start-dev.ps1     # Iniciar todo
-.\infrastructure\scripts\build-all.ps1     # Construir todo
+.\infrastructure\scripts\start.ps1     # Iniciar todo
+.\infrastructure\scripts\build.ps1     # Construir todo
 ```
 
 **Windows CMD:**
 ```cmd
-infrastructure\scripts\start-dev.bat       # Iniciar todo
-infrastructure\scripts\build-all.bat       # Construir todo
+infrastructure\scripts\start.bat       # Iniciar todo
+infrastructure\scripts\build.bat       # Construir todo
 ```
 
 **Linux/macOS:**
 ```bash
-./infrastructure/scripts/start-dev.sh      # Iniciar todo
-./infrastructure/scripts/build-all.sh      # Construir todo
+./infrastructure/scripts/start.sh      # Iniciar todo
+./infrastructure/scripts/build.sh      # Construir todo
 ```
 
 ### 🐳 OPCIÓN 2: Solo Docker
