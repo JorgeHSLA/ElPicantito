@@ -1,6 +1,12 @@
+# ========================================
+# El Picantito - GitIgnore
+# Estructura de Monorepo Organizada
+# ========================================
+
+# === Backend (Spring Boot) ===
 HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
+**/target/
+**/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -13,6 +19,27 @@ target/
 .springBeans
 .sts4-cache
 
+# === Frontend (Angular) ===
+**/node_modules/
+**/dist/
+**/tmp/
+**/out-tsc/
+**/bazel-out/
+
+# === Chatbot (Python) ===
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+
+# === IDEs ===
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -36,9 +63,30 @@ build/
 .vscode/extensions.json
 .history/
 
-### BDD ###
-
+# === Base de Datos ===
 *.db
 data/
-data/picantito_db.trace.db
-data/picantito_db.mv.db
+**/picantito_db.trace.db
+**/picantito_db.mv.db
+picantito.mv.db
+
+# === Docker ===
+**/docker-data/
+**/volumes/
+
+# === Logs ===
+**/logs/
+**/*.log
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Backup Files ===
+*~
+*.swp
+*.swo
+
+# === Build Artifacts ===
+**/build/
+**/out/

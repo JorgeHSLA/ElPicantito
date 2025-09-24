@@ -1,10 +1,28 @@
 # 🌮 El Picantito
 **Auténticos Tacos Mexicanos en Colombia**
 
-![El Picantito Logo](src/main/resources/static/images/LogoMinimalist.png)
+![El Picantito Logo](shared/assets/images/LogoMinimalist.png)
 
 ## 📋 Descripción
 El Picantito es una aplicación web que simula una taquería colombiana especializada en auténticos tacos mexicanos. Este proyecto fue desarrollado para la clase de Desarrollo Web.
+
+## 🏗️ Arquitectura del Proyecto
+
+```
+ElPicantito/
+├── apps/
+│   ├── backend/          # Spring Boot API
+│   ├── frontend/         # Angular Application
+│   └── chatbot/          # Streamlit Chatbot
+├── docs/                 # Documentación
+├── infrastructure/       # Docker, SQL, Scripts
+│   ├── docker/          # Docker Compose y configuraciones
+│   ├── sql/             # Scripts de base de datos
+│   └── scripts/         # Scripts de automatización
+├── shared/              # Recursos compartidos
+│   └── assets/          # Imágenes, estilos globales
+└── tools/               # Herramientas de desarrollo
+```
 
 ## 🎨 Paleta de Colores
 
@@ -23,34 +41,41 @@ El Picantito es una aplicación web que simula una taquería colombiana especial
 | ![#38221A](https://www.colorhexa.com/38221a.png) | `#38221A` | `--md-sys-color-surface-container` |
 | ![#443935](https://www.colorhexa.com/443935.png) | `#443935` | `--md-sys-color-surface-container-high` |
 
-## 🛠️ Ejecución
+## � Inicio Rápido
 
-1. **Clonar el repositorio:**
+### Usando Docker (Recomendado)
 ```bash
-git clone https://github.com/JorgeHSLA/ElPicantito.git
-cd ElPicantito
+cd infrastructure/docker
+docker-compose up -d
 ```
 
-2. **Compilar el proyecto:**
-```bash
-./mvnw clean compile
-```
+### Desarrollo Local
 
-3. **Ejecutar la aplicación:**
+#### Backend (Spring Boot)
 ```bash
+cd apps/backend
 ./mvnw spring-boot:run
 ```
 
-4. **Acceder a la aplicación:**
-```
-http://localhost:9998/home
+#### Frontend (Angular)
+```bash
+cd apps/frontend
+npm install
+ng serve
 ```
 
-### En Windows
-```cmd
-mvnw.cmd clean compile
-mvnw.cmd spring-boot:run
+#### Chatbot (Streamlit)
+```bash
+cd apps/chatbot
+pip install -r requirements.txt
+streamlit run streamlit_app.py
 ```
+
+## 🌐 URLs de Acceso
+- **Frontend:** http://localhost:4200
+- **Backend API:** http://localhost:9998
+- **Chatbot:** http://localhost:8501
+- **Base de Datos:** localhost:5432
 ## 👥 Equipo de Desarrollo
 
 - **Javier Aldana** - Frontend Developer
