@@ -1,0 +1,11 @@
+<ul class="nav flex-column sidebar-options">
+  <li class="nav-item" *ngFor="let option of options">
+    <a class="nav-link"
+       [routerLink]="option.route"
+       routerLinkActive="active"
+       [routerLinkActiveOptions]="{ exact: true }">
+      <i *ngIf="option.icon" [ngClass]="option.icon"></i>
+      {{ option.label }}
+    </a>
+  </li>
+</ul>

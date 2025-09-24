@@ -1,29 +1,3 @@
-<!-- Solo el contenido interno del sidebar, sin el wrapper nav -->
 <div class="position-sticky pt-3">
-  <ul class="nav flex-column">
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/admin/dashboard" 
-         routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-        <i class="bi bi-speedometer2 me-2"></i>Dashboard
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/admin/productos" 
-         routerLinkActive="active">
-        <i class="bi bi-box me-2"></i>Productos
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/admin/adicionales" 
-         routerLinkActive="active">
-        <i class="bi bi-plus-circle me-2"></i>Adicionales
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/admin/usuarios" 
-         routerLinkActive="active">
-        <i class="bi bi-people me-2"></i>Usuarios
-      </a>
-    </li>
-  </ul>
+  <app-sidebar-options [options]="options"></app-sidebar-options>
 </div>
