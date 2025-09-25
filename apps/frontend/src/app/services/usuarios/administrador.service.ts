@@ -9,6 +9,25 @@ import { Usuario } from '../../models/usuario';
 })
 export class AdministradorService {
 
+  // Métodos de persistencia localStorage
+  private loadFromStorage<T>(key: string, defaultValue: T[]): T[] {
+    try {
+      const stored = localStorage.getItem(`elpicantito_${key}`);
+      return stored ? JSON.parse(stored) : defaultValue;
+    } catch (error) {
+      console.error(`Error loading ${key} from localStorage:`, error);
+      return defaultValue;
+    }
+  }
+
+  private saveToStorage<T>(key: string, data: T[]): void {
+    try {
+      localStorage.setItem(`elpicantito_${key}`, JSON.stringify(data));
+    } catch (error) {
+      console.error(`Error saving ${key} to localStorage:`, error);
+    }
+  }
+
   private administradores: Administrador[] = [ 
     {
       id : 1,
@@ -28,8 +47,8 @@ export class AdministradorService {
     }
   ];
 
-  // Datos de administración - en producción vendrían del backend
-  private productosData = signal<Producto[]>([
+  // Datos iniciales por defecto
+  private defaultProductos: Producto[] = [
     {
       id: 1,
       nombre: 'Taco de Carne Asada',
@@ -57,9 +76,12 @@ export class AdministradorService {
       calificacion: 4,
       disponible: true
     }
-  ]);
+  ];
 
-  private adicionalesData = signal<Adicional[]>([
+  // Signal con persistencia en localStorage
+  private productosData = signal<Producto[]>(this.loadFromStorage('productos', this.defaultProductos));
+
+  private defaultAdicionales: Adicional[] = [
     {
       id: 1,
       nombre: 'Queso Extra',
@@ -87,9 +109,11 @@ export class AdministradorService {
       cantidad: 20,
       disponible: true
     }
-  ]);
+  ];
 
-  private usuariosData = signal<Usuario[]>([
+  private adicionalesData = signal<Adicional[]>(this.loadFromStorage('adicionales', this.defaultAdicionales));
+
+  private defaultUsuarios: Usuario[] = [
     {
       id: 1,
       nombreCompleto: 'Carlos López García',
@@ -106,7 +130,9 @@ export class AdministradorService {
       correo: 'admin@elpicantito.com',
       contrasenia: 'admin123'
     }
-  ]);
+  ];
+
+  private usuariosData = signal<Usuario[]>(this.loadFromStorage('usuarios', this.defaultUsuarios));
 
   // Métodos para administradores
   getAdministradores(): Administrador[] {
@@ -131,12 +157,15 @@ export class AdministradorService {
       producto.id = Math.max(...productos.map(p => p.id || 0)) + 1;
       productos.push(producto);
     }
-    this.productosData.set([...productos]);
+    const nuevosProductos = [...productos];
+    this.productosData.set(nuevosProductos);
+    this.saveToStorage('productos', nuevosProductos);
   }
 
   deleteProducto(id: number) {
     const productos = this.productosData().filter(p => p.id !== id);
     this.productosData.set(productos);
+    this.saveToStorage('productos', productos);
   }
 
   getProductoById(id: number) {
@@ -159,12 +188,15 @@ export class AdministradorService {
       adicional.id = Math.max(...adicionales.map(a => a.id || 0)) + 1;
       adicionales.push(adicional);
     }
-    this.adicionalesData.set([...adicionales]);
+    const nuevosAdicionales = [...adicionales];
+    this.adicionalesData.set(nuevosAdicionales);
+    this.saveToStorage('adicionales', nuevosAdicionales);
   }
 
   deleteAdicional(id: number) {
     const adicionales = this.adicionalesData().filter(a => a.id !== id);
     this.adicionalesData.set(adicionales);
+    this.saveToStorage('adicionales', adicionales);
   }
 
   getAdicionalById(id: number) {
@@ -187,12 +219,15 @@ export class AdministradorService {
       usuario.id = Math.max(...usuarios.map(u => u.id || 0)) + 1;
       usuarios.push(usuario);
     }
-    this.usuariosData.set([...usuarios]);
+    const nuevosUsuarios = [...usuarios];
+    this.usuariosData.set(nuevosUsuarios);
+    this.saveToStorage('usuarios', nuevosUsuarios);
   }
 
   deleteUsuario(id: number) {
     const usuarios = this.usuariosData().filter(u => u.id !== id);
     this.usuariosData.set(usuarios);
+    this.saveToStorage('usuarios', usuarios);
   }
 
   getUserById(id: number) {

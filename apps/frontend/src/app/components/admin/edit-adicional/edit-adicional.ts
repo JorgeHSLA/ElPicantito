@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar.component';
 import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar.component';
 import { Adicional } from '../../../models/adicional';
+import { AdministradorService } from '../../../services/usuarios/administrador.service';
 
 @Component({
   selector: 'app-edit-adicional',
@@ -19,12 +20,18 @@ export class EditAdicionalComponent implements OnInit {
     nombre: '',
     descripcion: '',
     precio: 0,
+    precioDeAdquisicion: 0,
+    cantidad: 0,
     disponible: true
   });
 
+  successMessage = signal('');
+  errorMessage = signal('');
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private adminService: AdministradorService
   ) {}
 
   ngOnInit() {
@@ -33,24 +40,25 @@ export class EditAdicionalComponent implements OnInit {
   }
 
   loadAdicional(id: number) {
-    // Datos de ejemplo - aquí llamarías al servicio real
-    const adicionalEjemplo = {
-      id: id,
-      nombre: 'Queso Extra',
-      descripcion: 'Queso cheddar adicional',
-      precio: 2.50,
-      disponible: true
-    };
-    this.adicional.set(adicionalEjemplo);
+    const adicional = this.adminService.getAdicionalById(Number(id));
+    if (adicional) {
+      this.adicional.set({ ...adicional });
+    } else {
+      this.errorMessage.set('Adicional no encontrado');
+      this.router.navigate(['/admin/adicionales']);
+    }
   }
 
   updateAdicional() {
     try {
-      console.log('Actualizando adicional:', this.adicional());
-      // Aquí llamarías al servicio para actualizar
-      this.router.navigate(['/admin/adicionales']);
+      this.adminService.saveAdicional(this.adicional());
+      this.successMessage.set('Adicional actualizado exitosamente');
+      setTimeout(() => {
+        this.router.navigate(['/admin/adicionales']);
+      }, 1500);
     } catch (error) {
       console.error('Error al actualizar adicional:', error);
+      this.errorMessage.set('Error al actualizar el adicional');
     }
   }
 

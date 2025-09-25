@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar.component';
 import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar.component';
 import { Usuario } from '../../../models/usuario';
+import { AdministradorService } from '../../../services/usuarios/administrador.service';
 
 @Component({
   selector: 'app-edit-usuario',
@@ -23,9 +24,13 @@ export class EditUsuarioComponent implements OnInit {
     contrasenia: ''
   });
 
+  successMessage = signal('');
+  errorMessage = signal('');
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private adminService: AdministradorService
   ) {}
 
   ngOnInit() {
@@ -34,25 +39,25 @@ export class EditUsuarioComponent implements OnInit {
   }
 
   loadUsuario(id: number) {
-    // Datos de ejemplo - aquí llamarías al servicio real
-    const usuarioEjemplo = {
-      id: id,
-      nombreCompleto: 'Carlos López García',
-      nombreUsuario: 'carlos.lopez',
-      telefono: '3009876543',
-      correo: 'carlos@email.com',
-      contrasenia: 'password123'
-    };
-    this.usuario.set(usuarioEjemplo);
+    const usuario = this.adminService.getUserById(Number(id));
+    if (usuario) {
+      this.usuario.set({ ...usuario });
+    } else {
+      this.errorMessage.set('Usuario no encontrado');
+      this.router.navigate(['/admin/usuarios']);
+    }
   }
 
   updateUsuario() {
     try {
-      console.log('Actualizando usuario:', this.usuario());
-      // Aquí llamarías al servicio para actualizar
-      this.router.navigate(['/admin/usuarios']);
+      this.adminService.saveUsuario(this.usuario());
+      this.successMessage.set('Usuario actualizado exitosamente');
+      setTimeout(() => {
+        this.router.navigate(['/admin/usuarios']);
+      }, 1500);
     } catch (error) {
       console.error('Error al actualizar usuario:', error);
+      this.errorMessage.set('Error al actualizar el usuario');
     }
   }
 

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar.component';
 import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar.component';
 import { Producto } from '../../../models/producto';
+import { AdministradorService } from '../../../services/usuarios/administrador.service';
 
 @Component({
   selector: 'app-edit-producto',
@@ -24,9 +25,13 @@ export class EditProductoComponent implements OnInit {
     disponible: true
   });
 
+  successMessage = signal('');
+  errorMessage = signal('');
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private adminService: AdministradorService
   ) {}
 
   ngOnInit() {
@@ -35,26 +40,25 @@ export class EditProductoComponent implements OnInit {
   }
 
   loadProducto(id: number) {
-    // Datos de ejemplo - aquí llamarías al servicio real
-    const productoEjemplo = {
-      id: id,
-      nombre: 'Taco de Carne Asada',
-      descripcion: 'Delicioso taco con carne asada a la parrilla',
-      precio: 12.99,
-      imagen: '/images/taco1.webp',
-      calificacion: 5,
-      disponible: true
-    };
-    this.producto.set(productoEjemplo);
+    const producto = this.adminService.getProductoById(Number(id));
+    if (producto) {
+      this.producto.set({ ...producto });
+    } else {
+      this.errorMessage.set('Producto no encontrado');
+      this.router.navigate(['/admin/productos']);
+    }
   }
 
   updateProducto() {
     try {
-      console.log('Actualizando producto:', this.producto());
-      // Aquí llamarías al servicio para actualizar
-      this.router.navigate(['/admin/productos']);
+      this.adminService.saveProducto(this.producto());
+      this.successMessage.set('Producto actualizado exitosamente');
+      setTimeout(() => {
+        this.router.navigate(['/admin/productos']);
+      }, 1500);
     } catch (error) {
       console.error('Error al actualizar producto:', error);
+      this.errorMessage.set('Error al actualizar el producto');
     }
   }
 
