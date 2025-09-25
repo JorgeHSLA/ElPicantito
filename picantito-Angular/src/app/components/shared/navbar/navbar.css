@@ -49,92 +49,8 @@ header {
 }
 
 /* =========================
-   BÚSQUEDA CENTRADA
+   BÚSQUEDA CENTRADA - movido a searchbar.css
    ========================= */
-.search-container {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 400px;
-    z-index: 10;
-}
-
-.search-input-group {
-    background-color: white;
-    border-radius: 25px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    display: flex;
-    align-items: center;
-}
-
-.search-input-group:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    transform: translateY(-1px);
-}
-
-.search-input-group:focus-within {
-    box-shadow: 0 6px 25px rgba(255, 86, 48, 0.2);
-    border-color: var(--primary-color);
-    transform: translateY(-2px);
-}
-
-.search-input {
-    border: none;
-    background-color: white;
-    font-size: 0.95rem;
-    padding: 0.75rem 1rem;
-    color: var(--neutral-text);
-    box-shadow: none;
-    outline: none;
-    flex: 1;
-}
-
-.search-input:focus {
-    border: none;
-    box-shadow: none;
-    outline: none;
-    background-color: white;
-}
-
-.search-input::placeholder {
-    color: #999;
-    font-style: italic;
-}
-
-.search-btn {
-    border: none;
-    background-color: var(--primary-color);
-    color: white;
-    padding: 0.75rem 1rem;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 50px;
-}
-
-.search-btn:hover {
-    background-color: var(--primary-hover);
-    transform: scale(1.05);
-}
-
-.search-btn:focus {
-    box-shadow: 0 0 0 3px rgba(255, 86, 48, 0.25);
-    outline: none;
-}
-
-.search-btn i {
-    font-size: 1.1rem;
-    transition: transform 0.3s ease;
-}
-
-.search-btn:hover i {
-    transform: scale(1.1);
-}
 
 /* =========================
    ICONOS DE NAVEGACIÓN
@@ -290,9 +206,7 @@ header {
    RESPONSIVE
    ========================= */
 @media (max-width: 991px) {
-    .search-container {
-        display: none !important;
-    }
+    /* Search container rules moved to searchbar.css */
 }
 
 @media (max-width: 768px) {

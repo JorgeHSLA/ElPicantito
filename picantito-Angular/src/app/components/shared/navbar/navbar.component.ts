@@ -2,11 +2,12 @@ import { Component, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { SearchbarComponent } from '../searchbar/searchbar';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule], // Asegurar que RouterModule esté aquí
+  imports: [CommonModule, RouterModule, SearchbarComponent], // Asegurar que RouterModule esté aquí
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
