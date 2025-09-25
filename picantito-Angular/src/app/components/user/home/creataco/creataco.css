@@ -1,0 +1,92 @@
+/* Estilos específicos para la sección Crear Taco */
+
+/* Animación pulse (necesaria para los efectos hover) */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Build taco section */
+.build-your-taco-section {
+    background: linear-gradient(45deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.steps .badge {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+}
+
+.taco-image img {
+    max-height: 500px;
+    object-fit: cover;
+}
+
+/* Build taco section - spans destacados */
+.build-your-taco-section .text-warning {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.build-your-taco-section:hover .text-warning {
+    animation: pulse 1.5s infinite;
+}
+
+.build-your-taco-section .badge {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.build-your-taco-section .badge:hover {
+    animation: pulse 1.5s infinite;
+}
+
+/* Headers principales */
+.build-your-taco-section h2 {
+    transition: all 0.3s ease;
+}
+
+.build-your-taco-section h2:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+/* Efecto de pulse en el span resaltado de Arma Tu Taco */
+.build-your-taco-section h2 .text-warning {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.build-your-taco-section h2:hover .text-warning {
+    animation: pulse 1.5s infinite;
+}
+
+/* Steps badges en build taco section */
+.steps .badge {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.steps .badge:hover {
+    animation: pulse 1.5s infinite;
+}
+
+/* Botones principales con efecto pulse en hover */
+.btn-warning {
+    transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+    animation: pulse 1.5s infinite;
+}

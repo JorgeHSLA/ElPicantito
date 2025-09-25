@@ -1,0 +1,396 @@
+/* Estilos específicos para el carrusel principal */
+
+/* Animación pulse necesaria para los efectos hover */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* =========================
+   CARRUSEL PRINCIPAL
+   ========================= */
+.carousel-section {
+    margin-top: -105px; 
+    padding-top: 70px;
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    opacity: 1;
+}
+
+.carousel-section .carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0;
+    box-shadow: var(--shadow-heavy);
+}
+
+.carousel-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Fondo degradado igual al de Thymeleaf */
+  background: linear-gradient(120deg, 
+      var(--neutral-bg) 0%, 
+      var(--neutral-surface) 25%, 
+      var(--primary-light) 50%, 
+      var(--accent-color) 75%,
+      var(--accent-hover) 90%,
+      var(--accent-color) 100%);
+  background-image: 
+      linear-gradient(120deg, 
+          var(--neutral-bg) 0%, 
+          var(--neutral-surface) 25%, 
+          var(--primary-light) 50%, 
+          var(--accent-color) 75%,
+          var(--accent-hover) 90%,
+          var(--accent-color) 100%),
+      linear-gradient(to right, 
+          transparent 0%, 
+          transparent 85%, 
+          var(--accent-color) 100%);
+  background-attachment: fixed;
+
+  padding: 4rem 0;
+  min-height: 65vh;
+  position: relative;
+}
+
+.carousel-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="20" cy="20" r="1" fill="%23ffffff" opacity="0.03"/><circle cx="80" cy="80" r="0.5" fill="%23ffffff" opacity="0.02"/><circle cx="40" cy="60" r="0.8" fill="%23ffffff" opacity="0.025"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    pointer-events: none;
+}
+
+.carousel-content::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center right, 
+        rgba(255, 193, 7, 0.1) 0%, 
+        rgba(255, 86, 48, 0.08) 30%, 
+        transparent 60%),
+    linear-gradient(120deg, 
+        transparent 0%, 
+        rgba(255, 86, 48, 0.03) 40%, 
+        rgba(255, 193, 7, 0.05) 70%, 
+        rgba(255, 193, 7, 0.08) 100%);
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.carousel-item {
+    background-color: transparent;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.carousel-item h2 {
+    color: var(--neutral-text);
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Playfair Display', serif;
+    letter-spacing: -0.5px;
+}
+
+.carousel-item p {
+    color: var(--neutral-text-light);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+.promo-image img {
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.15));
+}
+
+.carousel-indicators {
+    bottom: 20px;
+    gap: 10px;
+}
+
+.carousel-indicators [data-bs-target] {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    margin: 0;
+    opacity: 0.7;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-indicators [data-bs-target]::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: var(--primary-color);
+    border-radius: 50%;
+    transition: all 0.4s ease;
+    transform: translate(-50%, -50%);
+}
+
+.carousel-indicators .active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    opacity: 1;
+    transform: scale(1.3);
+    box-shadow: 0 0 20px rgba(255, 86, 48, 0.4);
+}
+
+.carousel-indicators .active::before {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+}
+
+/* Botones de control rediseñados */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    border: none;
+    border-radius: 50%;
+    opacity: 0.9;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 8px 25px rgba(255, 86, 48, 0.3);
+    backdrop-filter: blur(10px);
+    z-index: 5;
+}
+
+.carousel-control-prev {
+    left: 30px;
+}
+
+.carousel-control-next {
+    right: 30px;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 12px 35px rgba(255, 86, 48, 0.4);
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+}
+
+.carousel-control-prev:active,
+.carousel-control-next:active {
+    transform: translateY(-50%) scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-image: none;
+    background-color: transparent;
+    width: 25px;
+    height: 25px;
+    position: relative;
+}
+
+.carousel-control-prev-icon::before,
+.carousel-control-next-icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-top: 3px solid white;
+    border-right: 3px solid white;
+    transform-origin: center;
+    transition: transform 0.3s ease;
+}
+
+.carousel-control-prev-icon::before {
+    transform: translate(-30%, -50%) rotate(-135deg);
+}
+
+.carousel-control-next-icon::before {
+    transform: translate(-70%, -50%) rotate(45deg);
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon::before,
+.carousel-control-next:hover .carousel-control-next-icon::before {
+    transform: translate(-50%, -50%) rotate(-135deg) scale(1.2);
+}
+
+.carousel-control-next:hover .carousel-control-next-icon::before {
+    transform: translate(-50%, -50%) rotate(45deg) scale(1.2);
+}
+
+/* Efectos de partículas para los botones */
+.carousel-control-prev::after,
+.carousel-control-next::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.carousel-control-prev:hover::after,
+.carousel-control-next:hover::after {
+    width: 80px;
+    height: 80px;
+    opacity: 0.3;
+}
+
+/* Estilos básicos para elementos del carrusel */
+.carousel-item .promo-text > * {
+    opacity: 1;
+    transform: translateX(0);
+    transition: none; /* Quitar animaciones de aparición */
+}
+
+.promo-text .badge {
+    position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.promo-text .btn {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.promo-text .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+    z-index: -1;
+}
+
+.promo-text .btn:hover::before {
+    left: 100%;
+}
+
+/* Efecto de hover en las imágenes del carrusel */
+.promo-image {
+    perspective: 1000px;
+}
+
+.promo-image img {
+    transition: all 0.3s ease;
+    transform-style: preserve-3d;
+}
+
+.carousel-item:hover .promo-image img {
+    transform: scale(1.02);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+/* Badges simplificados en el carrusel */
+.carousel-item .badge {
+    position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Animación para los títulos completos y badges del carrusel principal */
+.carousel-item h2 {
+    transition: all 0.3s ease;
+}
+
+.carousel-item h2:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+/* Efecto de pulse en los spans resaltados del carrusel */
+.carousel-item h2 .text-primary {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.carousel-item h2:hover .text-primary {
+    animation: pulse 1.5s infinite;
+}
+
+.carousel-item h2 .text-success {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.carousel-item h2:hover .text-success {
+    animation: pulse 1.5s infinite;
+}
+
+.carousel-item h2 .text-danger {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.carousel-item h2:hover .text-danger {
+    animation: pulse 1.5s infinite;
+}
+
+.carousel-item .badge {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.carousel-item .badge:hover {
+    animation: pulse 1.5s infinite;
+}
+
+/* Estilos adicionales para el carrusel principal */
+.promo-text {
+    padding: 2rem 0;
+}
+
+.promo-image img {
+    max-height: 400px;
+    object-fit: cover;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .carousel-content {
+        min-height: 50vh;
+    }
+    .promo-text {
+        text-align: center;
+        padding: 1rem 0;
+    }
+    .display-4 {
+        font-size: 2rem;
+    }
+}
