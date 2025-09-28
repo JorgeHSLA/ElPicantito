@@ -5,9 +5,11 @@
 <section class="features-section py-5 bg-light">
   <div class="container">
     <div class="row text-center">
-      <div class="col-md-4 mb-4" *ngFor="let feature of features">
-        <app-feature-card [feature]="feature"></app-feature-card>
-      </div>
+      @for (feature of features; track feature.titulo) {
+        <div class="col-md-4 mb-4">
+          <app-feature-card [feature]="feature"></app-feature-card>
+        </div>
+      }
     </div>
   </div>
 </section>

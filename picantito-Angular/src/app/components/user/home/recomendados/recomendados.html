@@ -15,13 +15,14 @@
     <div class="position-relative">
       <div class="recommended-carousel">
         <div class="recommended-carousel-container" id="recommendedCarousel">
-          <a 
-            *ngFor="let producto of productosRecomendados" 
-            (click)="navigateToProduct(producto.id)"
-            class="recommended-card-carousel"
-            style="cursor: pointer;">
-            <app-recommended-product-card [producto]="producto"></app-recommended-product-card>
-          </a>
+          @for (producto of productosRecomendados; track producto.id) {
+            <a 
+              (click)="navigateToProduct(producto.id)"
+              class="recommended-card-carousel"
+              style="cursor: pointer;">
+              <app-recommended-product-card [producto]="producto"></app-recommended-product-card>
+            </a>
+          }
         </div>
         <button class="carousel-control-recommended prev" id="prevBtn" type="button">
           <i class="bi bi-chevron-left"></i>

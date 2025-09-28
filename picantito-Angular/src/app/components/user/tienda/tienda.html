@@ -39,9 +39,11 @@
             </div>
             <div class="col-lg-6">
                 <div class="filter-buttons">
-                    <button *ngFor="let categoria of categorias" (click)="filtrarPorCategoria(categoria)" [class]="'btn btn-outline-warning btn-sm me-2 mb-2 ' + (categoriaSeleccionada === categoria ? 'active' : '')">
-            {{ categoria }}
-          </button>
+                                        @for (categoria of categorias; track categoria) {
+                                            <button (click)="filtrarPorCategoria(categoria)" [class]="'btn btn-outline-warning btn-sm me-2 mb-2 ' + (categoriaSeleccionada === categoria ? 'active' : '')">
+                                                {{ categoria }}
+                                            </button>
+                                        }
                 </div>
             </div>
         </div>
@@ -52,13 +54,15 @@
 <main class="container py-5">
     <div class="row g-4">
         <!-- Producto dinámico con Angular -->
-            <div class="col-lg-4 col-md-6" *ngFor="let producto of productosFiltrados">
-              <app-product-card
-                [producto]="producto"
-                (agregar)="agregarAlCarrito($event)"
-                (verProducto)="navigateToProduct($event)">
-              </app-product-card>
-            </div>
+                        @for (producto of productosFiltrados; track producto.id) {
+                            <div class="col-lg-4 col-md-6">
+                                <app-product-card
+                                    [producto]="producto"
+                                    (agregar)="agregarAlCarrito($event)"
+                                    (verProducto)="navigateToProduct($event)">
+                                </app-product-card>
+                            </div>
+                        }
     </div>
 
     <!-- CTA SECTION -->
