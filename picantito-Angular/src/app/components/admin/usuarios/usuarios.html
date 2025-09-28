@@ -17,15 +17,18 @@
       </div>
 
       <!-- ALERTAS -->
-      <div *ngIf="successMessage()" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span>{{ successMessage() }}</span>
-        <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
-      </div>
-      
-      <div *ngIf="errorMessage()" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span>{{ errorMessage() }}</span>
-        <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
-      </div>
+      @if (successMessage()) {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <span>{{ successMessage() }}</span>
+          <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
+        </div>
+      }
+      @if (errorMessage()) {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <span>{{ errorMessage() }}</span>
+          <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+        </div>
+      }
 
       <!-- TABLA DE USUARIOS -->
       <div class="card">
@@ -47,31 +50,39 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let usuario of usuarios()">
-                  <td>{{ usuario.id }}</td>
-                  <td>{{ usuario.nombreCompleto }}</td>
-                  <td>{{ usuario.nombreUsuario }}</td>
-                  <td>{{ usuario.telefono }}</td>
-                  <td>{{ usuario.correo }}</td>
-                  <td>
-                    <span *ngIf="usuario.nombreUsuario === 'admin'" class="badge bg-danger">Admin</span>
-                    <span *ngIf="usuario.nombreUsuario !== 'admin'" class="badge bg-primary">Usuario</span>
-                  </td>
-                  <td>
-                    <a [routerLink]="['/admin/usuarios/edit', usuario.id]" 
-                       class="btn btn-sm btn-outline-primary me-1">
-                      <i class="bi bi-pencil"></i>
-                    </a>
-                    <button class="btn btn-sm btn-outline-danger"
-                            (click)="deleteUsuario(usuario.id!)"
-                            *ngIf="usuario.nombreUsuario !== 'admin'">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr *ngIf="usuarios().length === 0">
-                  <td colspan="7" class="text-center text-muted">No hay usuarios registrados</td>
-                </tr>
+                @for (usuario of usuarios(); track usuario.id) {
+                  <tr>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nombreCompleto }}</td>
+                    <td>{{ usuario.nombreUsuario }}</td>
+                    <td>{{ usuario.telefono }}</td>
+                    <td>{{ usuario.correo }}</td>
+                    <td>
+                      @if (usuario.nombreUsuario === 'admin') {
+                        <span class="badge bg-danger">Admin</span>
+                      } @else {
+                        <span class="badge bg-primary">Usuario</span>
+                      }
+                    </td>
+                    <td>
+                      <a [routerLink]="['/admin/usuarios/edit', usuario.id]" 
+                         class="btn btn-sm btn-outline-primary me-1">
+                        <i class="bi bi-pencil"></i>
+                      </a>
+                      @if (usuario.nombreUsuario !== 'admin') {
+                        <button class="btn btn-sm btn-outline-danger"
+                                (click)="deleteUsuario(usuario.id!)">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+                @if (usuarios().length === 0) {
+                  <tr>
+                    <td colspan="7" class="text-center text-muted">No hay usuarios registrados</td>
+                  </tr>
+                }
               </tbody>
             </table>
           </div>
