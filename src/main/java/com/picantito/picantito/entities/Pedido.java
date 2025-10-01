@@ -1,7 +1,7 @@
 package com.picantito.picantito.entities;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -29,8 +29,8 @@ public class Pedido {
 
     private Float precio;
     private Float precioDeAdquisicion;
-    private Date fechaEntrega;
-    private Date fechaSolicitud;
+    private Timestamp fechaEntrega;
+    private Timestamp fechaSolicitud;
     private String estado;
     private String direccion;
 
