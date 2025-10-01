@@ -308,6 +308,53 @@
     border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
+/* Animación para los títulos completos y badges del carrusel principal - IGUAL que Sobre Nosotros */
+.carousel-item h2 {
+    transition: all 0.3s ease;
+}
+
+.carousel-item h2:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+/* Efecto de pulse en los spans resaltados del carrusel - IGUAL que Sobre Nosotros */
+.carousel-item h2 .text-primary {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.carousel-item h2:hover .text-primary {
+    animation: pulse 1.5s infinite;
+}
+
+.carousel-item h2 .text-success {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.carousel-item h2:hover .text-success {
+    animation: pulse 1.5s infinite;
+}
+
+.carousel-item h2 .text-danger {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.carousel-item h2:hover .text-danger {
+    animation: pulse 1.5s infinite;
+}
+
+.carousel-item .badge {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.carousel-item .badge:hover {
+    animation: pulse 1.5s infinite;
+}
+
 /* =========================
    CARRUSEL RECOMENDADOS
    ========================= */

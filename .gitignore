@@ -42,3 +42,39 @@ build/
 data/
 data/picantito_db.trace.db
 data/picantito_db.mv.db
+
+### Angular ###
+# Node modules
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Angular build outputs
+**/dist/
+**/tmp/
+**/out-tsc/
+**/bazel-out/
+
+# Angular cache
+**/.angular/cache/
+**/.angular/
+
+# IDE files for Angular projects
+picantito-Angular/.vscode/*
+!picantito-Angular/.vscode/settings.json
+!picantito-Angular/.vscode/tasks.json
+!picantito-Angular/.vscode/launch.json
+!picantito-Angular/.vscode/extensions.json
+
+# Angular miscellaneous
+**/.sass-cache/
+**/connect.lock
+**/coverage/
+**/libpeerconnection.log
+**/testem.log
+**/typings/
+
+# System files
+.DS_Store
+Thumbs.db

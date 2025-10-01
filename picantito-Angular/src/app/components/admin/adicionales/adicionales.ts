@@ -33,7 +33,7 @@ export class AdicionalesComponent implements OnInit {
   }
 
   loadAdicionales() {
-    this.adicionales.set(this.adicionalService.getAdicionales()());
+    this.adicionales.set(this.adicionalService.getAdicionales());
   }
 
   saveAdicional() {

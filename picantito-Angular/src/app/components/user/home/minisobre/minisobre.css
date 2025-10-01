@@ -1,0 +1,112 @@
+/* Estilos específicos para la sección Sobre Nosotros */
+
+/* About section hover animations */
+.about-section {
+    position: relative;
+}
+
+.about-section h2 {
+    transition: all 0.3s ease;
+}
+
+.about-section h2:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+.about-section ul {
+    transition: all 0.3s ease;
+}
+
+.about-section ul:hover {
+    transform: translateX(5px);
+}
+
+.about-section ul li {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.about-section ul li:hover {
+    transform: translateX(10px) scale(1.02);
+    background: rgba(255, 193, 7, 0.1);
+    border-radius: 8px;
+    padding: 8px;
+    margin: 4px 0;
+}
+
+.about-section ul li:hover i {
+    transform: scale(1.2);
+    color: var(--accent-hover);
+}
+
+.about-section .btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.about-section .btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+}
+
+.about-section .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s;
+    z-index: 0;
+}
+
+.about-section .btn:hover::before {
+    left: 100%;
+}
+
+.about-section .btn span,
+.about-section .btn i {
+    position: relative;
+    z-index: 1;
+}
+
+.about-section img {
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+
+.about-section img:hover {
+    transform: scale(1.05) rotate(1deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+}
+
+.about-section .text-center:hover img {
+    filter: brightness(1.1) contrast(1.1);
+}
+
+/* Efecto de pulse en el span resaltado */
+.about-section h2 .text-warning {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.about-section h2:hover .text-warning {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

@@ -17,15 +17,18 @@
       </div>
 
       <!-- ALERTAS -->
-      <div *ngIf="successMessage()" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span>{{ successMessage() }}</span>
-        <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
-      </div>
-      
-      <div *ngIf="errorMessage()" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span>{{ errorMessage() }}</span>
-        <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
-      </div>
+      @if (successMessage()) {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <span>{{ successMessage() }}</span>
+          <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
+        </div>
+      }
+      @if (errorMessage()) {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <span>{{ errorMessage() }}</span>
+          <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+        </div>
+      }
 
       <!-- TABLA DE ADICIONALES -->
       <div class="card">
@@ -46,29 +49,36 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let adicional of adicionales()">
-                  <td>{{ adicional.id }}</td>
-                  <td>{{ adicional.nombre }}</td>
-                  <td>{{ adicional.descripcion }}</td>
-                  <td>${{ adicional.precio?.toFixed(2) }}</td>
-                  <td>
-                    <span *ngIf="adicional.disponible" class="badge bg-success">Disponible</span>
-                    <span *ngIf="!adicional.disponible" class="badge bg-danger">No disponible</span>
-                  </td>
-                  <td>
-                    <a [routerLink]="['/admin/adicionales/edit', adicional.id]" 
-                       class="btn btn-sm btn-outline-primary me-1">
-                      <i class="bi bi-pencil"></i>
-                    </a>
-                    <button class="btn btn-sm btn-outline-danger"
-                            (click)="deleteAdicional(adicional.id!)">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr *ngIf="adicionales().length === 0">
-                  <td colspan="6" class="text-center text-muted">No hay adicionales registrados</td>
-                </tr>
+                @for (adicional of adicionales(); track adicional.id) {
+                  <tr>
+                    <td>{{ adicional.id }}</td>
+                    <td>{{ adicional.nombre }}</td>
+                    <td>{{ adicional.descripcion }}</td>
+                    <td>${{ adicional.precio?.toFixed(2) }}</td>
+                    <td>
+                      @if (adicional.disponible) {
+                        <span class="badge bg-success">Disponible</span>
+                      } @else {
+                        <span class="badge bg-danger">No disponible</span>
+                      }
+                    </td>
+                    <td>
+                      <a [routerLink]="['/admin/adicionales/edit', adicional.id]" 
+                         class="btn btn-sm btn-outline-primary me-1">
+                        <i class="bi bi-pencil"></i>
+                      </a>
+                      <button class="btn btn-sm btn-outline-danger"
+                              (click)="deleteAdicional(adicional.id!)">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                }
+                @if (adicionales().length === 0) {
+                  <tr>
+                    <td colspan="6" class="text-center text-muted">No hay adicionales registrados</td>
+                  </tr>
+                }
               </tbody>
             </table>
           </div>

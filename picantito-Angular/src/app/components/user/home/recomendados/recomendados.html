@@ -1,0 +1,36 @@
+<!-- RECOMENDADOS -->
+<section class="recommended-carousel-section py-5 bg-light">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-lg-8">
+        <h2 class="fw-bold mb-2">Nuestros <span class="text-warning">Recomendados</span></h2>
+        <p class="text-muted">Los tacos favoritos de nuestros clientes</p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <button (click)="navigateToStore()" class="btn btn-outline-warning rounded-pill">
+          Ver Todo el Menú <i class="bi bi-arrow-right ms-1"></i>
+        </button>
+      </div>
+    </div>
+    <div class="position-relative">
+      <div class="recommended-carousel">
+        <div class="recommended-carousel-container" id="recommendedCarousel">
+          @for (producto of productosRecomendados; track producto.id) {
+            <a 
+              (click)="navigateToProduct(producto.id)"
+              class="recommended-card-carousel"
+              style="cursor: pointer;">
+              <app-recommended-product-card [producto]="producto"></app-recommended-product-card>
+            </a>
+          }
+        </div>
+        <button class="carousel-control-recommended prev" id="prevBtn" type="button">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <button class="carousel-control-recommended next" id="nextBtn" type="button">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
