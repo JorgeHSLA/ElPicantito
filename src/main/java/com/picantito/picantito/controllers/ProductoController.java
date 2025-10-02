@@ -1,8 +1,6 @@
 package com.picantito.picantito.controllers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.picantito.picantito.entities.Adicional;
 import com.picantito.picantito.entities.Producto;
-import com.picantito.picantito.service.TiendaService;
+import com.picantito.picantito.service.ProductoService;
 
 
 @Controller
@@ -28,49 +24,50 @@ import com.picantito.picantito.service.TiendaService;
 public class ProductoController {
 
     @Autowired
-    private TiendaService tiendaService;
+    private ProductoService productoService;
 
     // Mostrar información de una producto específica: http://localhost:9998/productos/{id}
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductoDetalle(@PathVariable Integer id) {
-        Optional<Producto> producto = tiendaService.getProductoById(id);
+        Optional<Producto> producto = productoService.getProductoById(id);
 
         if (producto.isPresent()) {
-            List<Adicional> adicionales = tiendaService.getAdicionalesByProductoId(id);
-
-            // DTO para devolver todo junto
-            Map<String, Object> response = new HashMap<>();
-            response.put("producto", producto.get());
-            response.put("adicionales", adicionales);
-
-            return ResponseEntity.ok(response);
+            // Simplemente devolvemos el producto directamente, sin adicionales
+            return ResponseEntity.ok(producto.get());
         } else {
             // en vez de "redirect", devolvemos 404
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                 .body("Producto no encontrado");
+                                .body("Producto no encontrado");
         }
     }
     
-    @PostMapping("/asignar-adicionales")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> asignarAdicionales(@RequestBody Map<String, Object> request) {
-        Map<String, Object> response = new HashMap<>();
-        
-        Integer productoId = (Integer) request.get("productoId");
-        @SuppressWarnings("unchecked")
-        List<Integer> adicionalesIds = (List<Integer>) request.get("adicionalesIds");
-        List<String> responseList = tiendaService.asignarAdicionales(productoId, adicionalesIds);
-        
-        response.put("success", responseList.get(0).equals("1"));
-        response.put("message", responseList.get(1));
-
-        return ResponseEntity.ok(response);
-    }
-
-
+    // Mostrar información de todos los productos: http://localhost:9998/productos
     @GetMapping
-    public List<Producto> getAllProductos() {
-        return tiendaService.getAllProductos();
+    public ResponseEntity<List<Producto>> getAllProductos() {
+        List<Producto> productos = productoService.getAllProductos();
+        return ResponseEntity.ok(productos);
+    }
+    
+    // Crear un nuevo producto: POST http://localhost:9998/productos
+    @PostMapping
+    public ResponseEntity<?> crearProducto(@RequestBody Producto producto) {
+        try {
+            // Validación básica
+            if (producto.getNombre() == null || producto.getNombre().trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("El nombre del producto es obligatorio");
+            }
+            
+            // Guardar el producto
+            Producto productoGuardado = productoService.saveProducto(producto);
+            
+            // Devolver el producto creado con código 201 (Created)
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(productoGuardado);
+        } catch (Exception e) {
+            // Manejar cualquier error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al crear el producto: " + e.getMessage());
+        }
     }
     
 }

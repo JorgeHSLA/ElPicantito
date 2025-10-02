@@ -30,7 +30,7 @@ public class Producto {
     private String nombre;
 
     private String descripcion;
-    private Float precio;
+    private Float precioDeVenta;
     private Float precioDeAdquisicion;
     private String imagen;
     private Boolean disponible;
@@ -82,7 +82,7 @@ public class Producto {
     public Producto(String nombre, String descripcion, double precio, String imagen, boolean disponible, int calificacion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.precio = (float) precio;
+        this.precioDeVenta = (float) precio;
         this.imagen = imagen;
         this.disponible = disponible;
         this.calificacion = calificacion;

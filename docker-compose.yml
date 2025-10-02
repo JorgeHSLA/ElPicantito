@@ -18,6 +18,7 @@ services:
       # podemos ver que hay docker-entrypoint-initdb.d, en este fragmento se indica el init, lo cual hace que cada vez que se inicie el contenedor se van a leer esos archivos
       # docker compose up para que inicie el contenedor
         - ./sql:/docker-entrypoint-initdb.d
+        - postgres_data:/var/lib/postgresql/data  # Volumen nombrado para datos persistentes
       environment:
       ## informacion de bases de datos
         POSTGRES_DB: 'picantitodb'
@@ -25,3 +26,7 @@ services:
         POSTGRES_PASSWORD: 'taquito123'
       ports:
         - '5432:5432'
+
+# Definición de volúmenes nombrados para persistencia de datos
+volumes:
+  postgres_data:

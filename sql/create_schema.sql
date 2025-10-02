@@ -22,7 +22,7 @@ CREATE TABLE Productos (
     ID SERIAL PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
     descripcion VARCHAR(500),
-    precio FLOAT NOT NULL,
+    precioDeVenta FLOAT NOT NULL,
     precioDeAdquisicion FLOAT,
     imagen VARCHAR(255),
     disponible BOOLEAN DEFAULT TRUE,
@@ -36,7 +36,7 @@ CREATE TABLE Adicionales (
     ID SERIAL PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
     descripcion VARCHAR(500),
-    precio FLOAT NOT NULL,
+    precioDeVenta FLOAT NOT NULL,
     precioDeAdquisicion FLOAT,
     cantidad INTEGER,
     disponible BOOLEAN NOT NULL DEFAULT TRUE
@@ -60,7 +60,7 @@ CREATE TABLE Productos_Adicionales (
 -- ==========================
 CREATE TABLE Pedidos (
     ID SERIAL PRIMARY KEY,
-    precio FLOAT,
+    precioDeVenta FLOAT,
     precioDeAdquisicion FLOAT,
     fechaEntrega TIMESTAMP,
     fechaSolicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

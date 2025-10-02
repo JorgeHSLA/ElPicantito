@@ -27,7 +27,7 @@ public class Adicional {
 
     private String nombre;
     private String descripcion;
-    private Float precio;
+    private Float precioDeVenta;
     private Float precioDeAdquisicion;
     private Integer cantidad;
     private Boolean disponible;
@@ -76,8 +76,8 @@ public class Adicional {
             pa.setProducto(producto);
             pa.setAdicional(this);
             this.productoAdicionales.add(pa);
+        }
     }
-}
 
     public Adicional(String string, String string2, double d, boolean b) {
         //TODO Auto-generated constructor stub

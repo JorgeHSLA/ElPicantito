@@ -27,7 +27,7 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Float precio;
+    private Float precioDeVenta;
     private Float precioDeAdquisicion;
     private Timestamp fechaEntrega;
     private Timestamp fechaSolicitud;

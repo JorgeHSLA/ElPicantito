@@ -4,16 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.picantito.picantito.entities.Adicional;
-import com.picantito.picantito.entities.Producto;
 
-public interface TiendaService {
-    // CRUD Productos
-    List<Producto> getAllProductos();
-    Optional<Producto> getProductoById(Integer id);
-    Producto saveProducto(Producto producto);
-    String eliminarProducto(Integer id); // Cambiar void por String
-    List<Producto> getProductosDisponibles();
-    // CRUD Adicionales
+public interface AdicionalService {
     List<Adicional> getAllAdicionales();
     Optional<Adicional> getAdicionalById(Integer id);
     Adicional saveAdicional(Adicional adicional);
@@ -21,9 +13,6 @@ public interface TiendaService {
     List<Adicional> getAdicionalesByProductoId(Integer productoId);
     List<Adicional> getAdicionalesDisponibles();
     List<Adicional> getAdicionalesSinAsignar();
-    List<String> asignarAdicionales(Integer productoId, List<Integer> adicionalesIds);
     void updateAdicional(Integer productoId, Adicional adicional);    
-    void asociarAdicionalAProductos(Integer adicionalId, List<Integer> productosIds);
-    void desasociarAdicionalDeProducto(Integer adicionalId, Integer productoId);
     List<Adicional> getAdicionalesDisponiblesParaProducto(Integer productoId);
 }
