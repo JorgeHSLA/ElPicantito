@@ -13,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -42,13 +41,6 @@ public class Producto {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductoAdicional> productoAdicionales = new ArrayList<>();
 
-    @Transient
-    public List<Adicional> getAdicionales() {
-        return this.productoAdicionales.stream()
-            .map(ProductoAdicional::getAdicional)
-            .toList();
-    }
-
     public void setAdicionales(List<Adicional> adicionales) {
         this.productoAdicionales.clear();
         for (Adicional adicional : adicionales) {
@@ -59,25 +51,7 @@ public class Producto {
             this.productoAdicionales.add(pa);
         }
     }
-    @Transient
-    public List<Producto> getProductos() {
-        return this.productoAdicionales.stream()
-            .map(ProductoAdicional::getProducto)
-            .distinct()
-            .collect(Collectors.toCollection(ArrayList::new)); // ✅ lista mutable
-    }
 
-
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidoProductos.clear();
-        for (Pedido pedido : pedidos) {
-            PedidoProducto pp = new PedidoProducto();
-            pp.setPedido(pedido);
-            pp.setProducto(this);
-            pp.setCantidadProducto(1); // valor por defecto
-            this.pedidoProductos.add(pp);
-        }
-    }
 
     public Producto(String nombre, String descripcion, double precio, String imagen, boolean disponible, int calificacion) {
         this.nombre = nombre;

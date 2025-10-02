@@ -1,6 +1,7 @@
 package com.picantito.picantito.controllers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,6 +69,18 @@ public class ProductoController {
             // Manejar cualquier error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al crear el producto: " + e.getMessage());
+        }
+    }
+    
+    // Asignar adicionales por IDs a un producto: PUT http://localhost:9998/productos/{id}/adicionales
+    @PutMapping("/{id}/adicionales")
+    public ResponseEntity<?> asignarAdicionales(@PathVariable Integer id, @RequestBody List<Integer> adicionalesIds) {
+        try {
+            Producto productoActualizado = productoService.asignarAdicionalesPorIds(id, adicionalesIds);
+            return ResponseEntity.ok(productoActualizado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al asignar adicionales: " + e.getMessage());
         }
     }
     
