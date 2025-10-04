@@ -33,9 +33,15 @@
                             <i class="bi bi-geo-alt-fill" style="font-size: 1.1rem;"></i>
                         </a>
                     </li>
-                    <li class="nav-item me-1">
-                        <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Carrito">
-                            <i class="bi bi-cart3" style="font-size: 1.1rem;"></i>
+                    <li class="nav-item me-2">
+                        <a class="nav-link icon-nav cart-link" 
+                           (click)="toggleCart()"
+                           style="cursor:pointer" 
+                           data-bs-toggle="tooltip" 
+                           data-bs-placement="bottom" 
+                           title="Carrito">
+                            <i class="bi bi-cart3 fs-5"></i>
+                            <span *ngIf="cartItemCount() > 0" class="cart-badge">{{ cartItemCount() }}</span>
                         </a>
                     </li>
 
@@ -108,7 +114,9 @@
                     </li>
                 </ul>
             </div>
-            </div>
-        </nav>
-    </div>
+        </div>
+    </nav>
+
+    <!-- Cart Sidebar Component -->
+    <app-cart-sidebar></app-cart-sidebar>
 </header>
