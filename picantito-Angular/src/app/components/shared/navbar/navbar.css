@@ -59,11 +59,6 @@
     max-width: calc(75% - 1.5rem);
 }
 
-.navBarExtra:hover {
-    transform: translateY(-3px) scale(1.01);
-    box-shadow: 0 16px 48px rgba(255, 86, 48, 0.5), 0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(255, 86, 48, 0.3);
-}
-
 header {
     z-index: 1050;
     position: relative;
@@ -350,8 +345,10 @@ header {
         max-width: calc(90% - 1rem);
         box-shadow: 0 6px 24px rgba(255, 86, 48, 0.4), 0 3px 12px rgba(0, 0, 0, 0.15);
     }
-    .navBarExtra:hover {
-        transform: translateY(-2px) scale(1.005);
+
+    .floating-navbar-container.scrolled .navBarExtra:hover {
+        transform: scale(1.0);
+        border-radius: 15px;
     }
     .icon-nav {
         width: 36px;
@@ -382,8 +379,9 @@ header {
         width: 105px;
         height: 52px;
     }
-    .navBarExtra:hover {
-        transform: translateY(-1px) scale(1.002);
+    .floating-navbar-container.scrolled .navBarExtra:hover {
+        transform: scale(1.0);
+        border-radius: 12px;
     }
     .icon-nav {
         width: 34px;
@@ -426,7 +424,12 @@ header {
 }
 
 .floating-navbar-container.scrolled .navBarExtra {
-    transform: scale(0.96);
+    transform: scale(0.9);
     border-radius: 25px;
     box-shadow: 0 10px 40px rgba(255, 86, 48, 0.5), 0 6px 20px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(255, 86, 48, 0.3);
+}
+
+.floating-navbar-container.scrolled .navBarExtra:hover {
+    transform: scale(1.0);
+    border-radius: 20px;
 }
