@@ -33,12 +33,7 @@
                         </a>
                     </li>
                     <li class="nav-item me-2">
-                        <a class="nav-link icon-nav cart-link" 
-                           (click)="toggleCart()"
-                           style="cursor:pointer" 
-                           data-bs-toggle="tooltip" 
-                           data-bs-placement="bottom" 
-                           title="Carrito">
+                        <a class="nav-link icon-nav cart-link" (click)="toggleCart()" style="cursor:pointer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Carrito">
                             <i class="bi bi-cart3 fs-5"></i>
                             <span *ngIf="cartItemCount() > 0" class="cart-badge">{{ cartItemCount() }}</span>
                         </a>

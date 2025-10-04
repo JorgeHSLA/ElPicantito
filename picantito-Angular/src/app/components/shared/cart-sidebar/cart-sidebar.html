@@ -1,109 +1,90 @@
 <!-- Overlay -->
-<div class="cart-overlay" 
-     [class.show]="isVisible()" 
-     (click)="closeCart()">
+<div class="cart-overlay" [class.show]="isVisible()" (click)="closeCart()">
 </div>
 
 <!-- Cart Sidebar -->
 <div class="cart-sidebar" [class.show]="isVisible()">
-  <!-- Header del carrito -->
-  <div class="cart-header">
-    <h5 class="cart-title">
-      <i class="bi bi-cart3 me-2"></i>
-      Carrito de Compras
-    </h5>
-    <button type="button" 
-            class="btn-close-cart" 
-            (click)="closeCart()"
-            aria-label="Cerrar carrito">
+    <!-- Header del carrito -->
+    <div class="cart-header">
+        <h5 class="cart-title">
+            <i class="bi bi-cart3 me-2"></i> Carrito de Compras
+        </h5>
+        <button type="button" class="btn-close-cart" (click)="closeCart()" aria-label="Cerrar carrito">
       <i class="bi bi-x-lg"></i>
     </button>
-  </div>
-
-  <!-- Contenido del carrito -->
-  <div class="cart-content">
-    <!-- Carrito vacío -->
-    <div *ngIf="cartItems().length === 0" class="empty-cart">
-      <i class="bi bi-cart-x empty-cart-icon"></i>
-      <h6>Tu carrito está vacío</h6>
-      <p class="text-muted">Agrega algunos productos para empezar</p>
     </div>
 
-    <!-- Items del carrito -->
-    <div *ngIf="cartItems().length > 0" class="cart-items">
-      <div *ngFor="let item of cartItems()" class="cart-item">
-        <div class="item-image">
-          <img [src]="item.producto.imagen || '/images/taco1.webp'" 
-               [alt]="item.producto.nombre"
-               class="product-image">
+    <!-- Contenido del carrito -->
+    <div class="cart-content">
+        <!-- Carrito vacío -->
+        <div *ngIf="cartItems().length === 0" class="empty-cart">
+            <i class="bi bi-cart-x empty-cart-icon"></i>
+            <h6>Tu carrito está vacío</h6>
+            <p class="text-muted">Agrega algunos productos para empezar</p>
         </div>
-        
-        <div class="item-details">
-          <h6 class="item-name">{{ item.producto.nombre }}</h6>
-          <p class="item-price">${{ (item.producto.precio || 0) | number:'1.0-0' }}</p>
-          
-          <!-- Controles de cantidad -->
-          <div class="quantity-controls">
-            <button type="button" 
-                    class="btn-quantity" 
-                    (click)="updateQuantity(item.producto.id!, item.cantidad - 1)">
+
+        <!-- Items del carrito -->
+        <div *ngIf="cartItems().length > 0" class="cart-items">
+            <div *ngFor="let item of cartItems()" class="cart-item">
+                <div class="item-image">
+                    <img [src]="item.producto.imagen || '/images/taco1.webp'" [alt]="item.producto.nombre" class="product-image">
+                </div>
+
+                <div class="item-details">
+                    <h6 class="item-name">{{ item.producto.nombre }}</h6>
+                    <p class="item-price">${{ (item.producto.precio || 0) | number:'1.0-0' }}</p>
+
+                    <!-- Controles de cantidad -->
+                    <div class="quantity-controls">
+                        <button type="button" class="btn-quantity" (click)="updateQuantity(item.producto.id!, item.cantidad - 1)">
               <i class="bi bi-dash"></i>
             </button>
-            <span class="quantity">{{ item.cantidad }}</span>
-            <button type="button" 
-                    class="btn-quantity" 
-                    (click)="updateQuantity(item.producto.id!, item.cantidad + 1)">
+                        <span class="quantity">{{ item.cantidad }}</span>
+                        <button type="button" class="btn-quantity" (click)="updateQuantity(item.producto.id!, item.cantidad + 1)">
               <i class="bi bi-plus"></i>
             </button>
-          </div>
-        </div>
+                    </div>
+                </div>
 
-        <div class="item-actions">
-          <div class="item-total">
-            ${{ ((item.producto.precio || 0) * item.cantidad) | number:'1.0-0' }}
-          </div>
-          <button type="button" 
-                  class="btn-remove" 
-                  (click)="removeItem(item.producto.id!)"
-                  title="Eliminar producto">
+                <div class="item-actions">
+                    <div class="item-total">
+                        ${{ ((item.producto.precio || 0) * item.cantidad) | number:'1.0-0' }}
+                    </div>
+                    <button type="button" class="btn-remove" (click)="removeItem(item.producto.id!)" title="Eliminar producto">
             <i class="bi bi-trash"></i>
           </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer del carrito -->
-  <div *ngIf="cartItems().length > 0" class="cart-footer">
-    <div class="cart-summary">
-      <div class="summary-row">
-        <span>Subtotal:</span>
-        <span class="fw-bold">${{ subtotal() | number:'1.0-0' }}</span>
-      </div>
-      <div class="summary-row">
-        <span>Domicilio:</span>
-        <span class="fw-bold">${{ domicilioCost() | number:'1.0-0' }}</span>
-      </div>
-      <div class="summary-row total">
-        <span>Total:</span>
-        <span class="fw-bold">${{ total() | number:'1.0-0' }}</span>
-      </div>
     </div>
 
-    <div class="cart-actions">
-      <button type="button" 
-              class="btn btn-outline-danger btn-sm mb-2" 
-              (click)="clearCart()">
+    <!-- Footer del carrito -->
+    <div *ngIf="cartItems().length > 0" class="cart-footer">
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span class="fw-bold">${{ subtotal() | number:'1.0-0' }}</span>
+            </div>
+            <div class="summary-row">
+                <span>Domicilio:</span>
+                <span class="fw-bold">${{ domicilioCost() | number:'1.0-0' }}</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span class="fw-bold">${{ total() | number:'1.0-0' }}</span>
+            </div>
+        </div>
+
+        <div class="cart-actions">
+            <button type="button" class="btn btn-outline-danger btn-sm mb-2" (click)="clearCart()">
         <i class="bi bi-trash me-1"></i>
         Vaciar carrito
       </button>
-      
-      <button type="button" 
-              class="btn btn-primary btn-checkout" 
-              (click)="proceedToCheckout()">
+
+            <button type="button" class="btn btn-primary btn-checkout" (click)="proceedToCheckout()">
         <i class="bi bi-credit-card me-2"></i>
         Proceder a Comprar
       </button>
+        </div>
     </div>
-  </div>
 </div>

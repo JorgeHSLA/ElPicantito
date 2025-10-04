@@ -33,6 +33,10 @@ export const routes: Routes = [
     path: 'sobre-nosotros',
     loadComponent: () => import('./components/user/sobre-nosotros/sobre-nosotros').then(m => m.SobreNosotrosComponent)
   },
+  {
+    path: 'checkout-summary',
+    loadComponent: () => import('./components/user/checkout-summary/checkout-summary.component').then(m => m.CheckoutSummaryComponent)
+  },
   // Rutas de administración
   {
     path: 'admin',

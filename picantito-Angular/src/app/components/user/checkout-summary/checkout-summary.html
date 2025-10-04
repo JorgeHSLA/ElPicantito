@@ -1,0 +1,206 @@
+<div class="checkout-container">
+  <div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="checkout-header d-flex justify-content-between align-items-center">
+          <h2 class="mb-0">
+            <i class="bi bi-cart-check me-2 text-success"></i>
+            Resumen de tu Pedido
+          </h2>
+          <button class="btn btn-outline-secondary" (click)="goBackToCart()">
+            <i class="bi bi-arrow-left me-1"></i>
+            Volver a la Tienda
+          </button>
+        </div>
+        <hr class="mt-3">
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Columna izquierda - Productos -->
+      <div class="col-lg-8 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">
+              <i class="bi bi-bag me-2"></i>
+              Productos Seleccionados ({{ cartItems().length }})
+            </h5>
+          </div>
+          <div class="card-body">
+            <!-- Lista de productos -->
+            <div *ngFor="let item of cartItems(); let last = last" class="product-item">
+              <div class="row align-items-center">
+                <!-- Imagen del producto -->
+                <div class="col-md-2 col-3">
+                  <img [src]="item.producto.imagen || '/images/taco1.webp'" 
+                       [alt]="item.producto.nombre"
+                       class="product-image">
+                </div>
+
+                <!-- Detalles del producto -->
+                <div class="col-md-4 col-9">
+                  <h6 class="product-name">{{ item.producto.nombre }}</h6>
+                  <p class="product-description text-muted">{{ item.producto.descripcion }}</p>
+                  <div class="product-price">
+                    <span class="text-success fw-bold">${{ (item.producto.precio || 0) | number:'1.0-0' }}</span>
+                    <span class="text-muted ms-1">c/u</span>
+                  </div>
+                </div>
+
+                <!-- Controles de cantidad -->
+                <div class="col-md-3 col-6">
+                  <label class="form-label small">Cantidad:</label>
+                  <div class="quantity-controls d-flex align-items-center">
+                    <button class="btn btn-outline-secondary btn-sm" 
+                            (click)="updateQuantity(item.producto.id!, item.cantidad - 1)">
+                      <i class="bi bi-dash"></i>
+                    </button>
+                    <input type="number" 
+                           class="form-control form-control-sm quantity-input mx-2" 
+                           [value]="item.cantidad"
+                           (change)="updateQuantity(item.producto.id!, +$any($event.target).value)"
+                           min="1">
+                    <button class="btn btn-outline-secondary btn-sm" 
+                            (click)="updateQuantity(item.producto.id!, item.cantidad + 1)">
+                      <i class="bi bi-plus"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Acciones y subtotal -->
+                <div class="col-md-3 col-6">
+                  <div class="text-end">
+                    <div class="item-total mb-2">
+                      <strong>${{ ((item.producto.precio || 0) * item.cantidad) | number:'1.0-0' }}</strong>
+                    </div>
+                    <div class="item-actions">
+                      <button class="btn btn-outline-warning btn-sm me-1" 
+                              (click)="editAdicionales(item.producto)"
+                              title="Editar adicionales">
+                        <i class="bi bi-plus-circle"></i>
+                        Adicionales
+                      </button>
+                      <button class="btn btn-outline-danger btn-sm" 
+                              (click)="removeItem(item.producto.id!)"
+                              title="Eliminar producto">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Separador -->
+              <hr *ngIf="!last" class="my-3">
+            </div>
+
+            <!-- Mensaje si no hay productos -->
+            <div *ngIf="cartItems().length === 0" class="text-center py-5">
+              <i class="bi bi-cart-x display-4 text-muted mb-3"></i>
+              <h5>No hay productos en tu carrito</h5>
+              <p class="text-muted">Agrega algunos productos para continuar</p>
+              <button class="btn btn-primary" (click)="continueShopping()">
+                <i class="bi bi-shop me-1"></i>
+                Ir a la Tienda
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna derecha - Resumen y datos -->
+      <div class="col-lg-4">
+        <!-- Información de entrega -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-light">
+            <h6 class="mb-0">
+              <i class="bi bi-geo-alt me-2"></i>
+              Información de Entrega
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="direccion" class="form-label">Dirección *</label>
+              <textarea class="form-control" 
+                        id="direccion" 
+                        [(ngModel)]="customerInfo.direccion"
+                        placeholder="Ingresa tu dirección completa"
+                        rows="3"
+                        required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="telefono" class="form-label">Teléfono *</label>
+              <input type="tel" 
+                     class="form-control" 
+                     id="telefono"
+                     [(ngModel)]="customerInfo.telefono"
+                     placeholder="Ej: +57 300 123 4567"
+                     required>
+            </div>
+            <div class="mb-3">
+              <label for="observaciones" class="form-label">Observaciones</label>
+              <textarea class="form-control" 
+                        id="observaciones"
+                        [(ngModel)]="customerInfo.observaciones"
+                        placeholder="Comentarios adicionales (opcional)"
+                        rows="2"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resumen de totales -->
+        <div class="card shadow-sm">
+          <div class="card-header bg-light">
+            <h6 class="mb-0">
+              <i class="bi bi-calculator me-2"></i>
+              Resumen del Pedido
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="order-summary">
+              <div class="summary-row d-flex justify-content-between">
+                <span>Subtotal:</span>
+                <span>${{ subtotal() | number:'1.0-0' }}</span>
+              </div>
+              <div class="summary-row d-flex justify-content-between">
+                <span>Domicilio:</span>
+                <span>${{ domicilioCost() | number:'1.0-0' }}</span>
+              </div>
+              <hr>
+              <div class="summary-row total d-flex justify-content-between">
+                <strong>Total a Pagar:</strong>
+                <strong class="text-success">${{ total() | number:'1.0-0' }}</strong>
+              </div>
+            </div>
+
+            <!-- Botón de comprar -->
+            <div class="mt-4">
+              <button class="btn btn-success btn-lg w-100" 
+                      (click)="processOrder()"
+                      [disabled]="isProcessingOrder() || cartItems().length === 0"
+                      [class.loading]="isProcessingOrder()">
+                <span *ngIf="!isProcessingOrder()">
+                  <i class="bi bi-credit-card me-2"></i>
+                  Realizar Pedido
+                </span>
+                <span *ngIf="isProcessingOrder()">
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  Procesando...
+                </span>
+              </button>
+            </div>
+
+            <!-- Continuar comprando -->
+            <div class="mt-3">
+              <button class="btn btn-outline-primary w-100" (click)="continueShopping()">
+                <i class="bi bi-shop me-1"></i>
+                Continuar Comprando
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

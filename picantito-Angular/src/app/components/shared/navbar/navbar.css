@@ -1,25 +1,28 @@
 /* =========================
    VARIABLES LOCALES SI NO ESTÁN DEFINIDAS
    ========================= */
+
 :root {
-  --primary-color: #FF5630;
-  --primary-hover: #b93d21;
-  --primary-light: #FFB4A0;
-  --accent-color: #FFC107;
-  --accent-hover: #eea804;
-  --neutral-bg: #FFFFFF;
-  --neutral-surface: #F5F5F5;
-  --neutral-border: #E0E0E0;
-  --neutral-text: #333333;
-  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
-  --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.2);
-  --transition-fast: all 0.3s ease;
+    --primary-color: #FF5630;
+    --primary-hover: #b93d21;
+    --primary-light: #FFB4A0;
+    --accent-color: #FFC107;
+    --accent-hover: #eea804;
+    --neutral-bg: #FFFFFF;
+    --neutral-surface: #F5F5F5;
+    --neutral-border: #E0E0E0;
+    --neutral-text: #333333;
+    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --transition-fast: all 0.3s ease;
 }
+
 
 /* =========================
    NAVEGACIÓN
    ========================= */
+
 .navBarExtra {
     padding: 0.1rem 0;
     min-height: 10px;
@@ -48,7 +51,9 @@ header {
     transform: scale(1.05) rotate(2deg);
 }
 
+
 /* Cart Link and Badge */
+
 .cart-link {
     position: relative;
 }
@@ -83,13 +88,16 @@ header {
     }
 }
 
+
 /* =========================
    BÚSQUEDA CENTRADA - movido a searchbar.css
    ========================= */
 
+
 /* =========================
    ICONOS DE NAVEGACIÓN
    ========================= */
+
 .icon-nav {
     color: white !important;
     padding: 10px;
@@ -116,9 +124,18 @@ header {
 }
 
 @keyframes iconBounce {
-    0%, 20%, 60%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-5px); }
-    80% { transform: translateY(-2px); }
+    0%,
+    20%,
+    60%,
+    100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-5px);
+    }
+    80% {
+        transform: translateY(-2px);
+    }
 }
 
 .icon-nav.active {
@@ -130,9 +147,11 @@ header {
     background-color: rgba(255, 255, 255, 0.15);
 }
 
+
 /* =========================
    DROPDOWN USUARIO
    ========================= */
+
 .user-dropdown-menu {
     border: none;
     border-radius: 15px;
@@ -237,9 +256,11 @@ header {
     box-shadow: inset 3px 0 0 #4caf50;
 }
 
+
 /* =========================
    RESPONSIVE
    ========================= */
+
 @media (max-width: 991px) {
     /* Search container rules moved to searchbar.css */
 }
@@ -249,21 +270,17 @@ header {
         min-width: 200px;
         margin-top: 8px;
     }
-    
     .user-dropdown-menu .dropdown-header {
         padding: 0.75rem;
         font-size: 0.85rem;
     }
-    
     .user-dropdown-item {
         padding: 0.6rem 0.75rem;
         font-size: 0.9rem;
     }
-    
     .navbar-nav {
         gap: 0.5rem;
     }
-    
     .icon-nav {
         width: 40px;
         height: 40px;
@@ -275,16 +292,17 @@ header {
         min-height: 80px;
         padding: 0.5rem 0;
     }
-    
     .navbar-brand img {
         width: 150px;
         height: 90px;
     }
 }
 
+
 /* =========================
    NAVBAR CON SCROLL
    ========================= */
+
 .navbar {
     transition: all 0.3s ease;
 }

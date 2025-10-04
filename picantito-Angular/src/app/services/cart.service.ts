@@ -69,10 +69,10 @@ export class CartService {
       return;
     }
 
-    this.cartItems.update(items => 
-      items.map(item => 
-        item.producto.id === productoId 
-          ? { ...item, cantidad } 
+    this.cartItems.update(items =>
+      items.map(item =>
+        item.producto.id === productoId
+          ? { ...item, cantidad }
           : item
       )
     );
@@ -92,7 +92,7 @@ export class CartService {
 
   // Obtener subtotal del precio
   getSubtotal(): number {
-    return this.cartItems().reduce((total, item) => 
+    return this.cartItems().reduce((total, item) =>
       total + (item.producto.precio || 0) * item.cantidad, 0
     );
   }

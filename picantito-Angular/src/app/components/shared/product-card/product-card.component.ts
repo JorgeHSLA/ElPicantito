@@ -14,7 +14,7 @@ export class ProductCardComponent {
   @Input() producto: Producto = {};
   @Output() agregar = new EventEmitter<any>();
   @Output() verProducto = new EventEmitter<any>();
-  
+
   isAdding = signal(false);
 
   constructor(private cartService: CartService) {}
@@ -31,16 +31,16 @@ export class ProductCardComponent {
 
   onAgregar(event: Event) {
     event.stopPropagation();
-    
+
     if (this.producto.id && this.producto.disponible) {
       this.isAdding.set(true);
-      
+
       // Agregar al carrito usando el servicio
       this.cartService.addToCart(this.producto, 1);
-      
+
       // Emitir evento para compatibilidad con otros componentes
       this.agregar.emit(this.producto);
-      
+
       // Mostrar feedback visual por un momento
       setTimeout(() => {
         this.isAdding.set(false);

@@ -1,6 +1,6 @@
 import { Component, effect, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CartService, CartItem } from '../../../services/cart.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class CartSidebarComponent {
   domicilioCost = signal(0);
   total = signal(0);
 
-  constructor(private cartService: CartService) {
+  constructor(private cartService: CartService, private router: Router) {
     // Suscribirse a cambios del carrito
     effect(() => {
       this.cartItems.set(this.cartService.getCartItems()());
@@ -59,8 +59,8 @@ export class CartSidebarComponent {
   }
 
   proceedToCheckout() {
-    console.log('Proceder a comprar...');
-    // Aquí se puede agregar la lógica para ir al checkout
+    // Cerrar el carrito y navegar a la página de resumen
     this.cartService.closeCart();
+    this.router.navigate(['/checkout-summary']);
   }
 }
