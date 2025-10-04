@@ -18,7 +18,7 @@ export class CheckoutSummaryComponent {
   domicilioCost = signal(0);
   total = signal(0);
   isProcessingOrder = signal(false);
-  
+
   // Formulario de datos adicionales
   customerInfo = {
     direccion: '',
@@ -82,14 +82,14 @@ export class CheckoutSummaryComponent {
     try {
       // Simular proceso de orden (aquí iría la llamada al backend)
       await this.simulateOrderProcess();
-      
+
       // Limpiar carrito después de la compra exitosa
       this.cartService.clearCart();
-      
+
       // Redirigir a página de confirmación o éxito
       alert('¡Pedido realizado con éxito! Nos pondremos en contacto contigo pronto.');
       this.router.navigate(['/home']);
-      
+
     } catch (error) {
       console.error('Error al procesar la orden:', error);
       alert('Error al procesar el pedido. Por favor intenta de nuevo.');
