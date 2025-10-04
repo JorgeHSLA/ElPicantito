@@ -33,6 +33,20 @@ export const routes: Routes = [
     path: 'sobre-nosotros',
     loadComponent: () => import('./components/user/sobre-nosotros/sobre-nosotros').then(m => m.SobreNosotrosComponent)
   },
+  {
+    path: 'checkout-summary',
+    loadComponent: () => import('./components/user/checkout-summary/checkout-summary.component').then(m => m.CheckoutSummaryComponent)
+  },
+  {
+    path: 'payment-portal',
+    loadComponent: () => import('./components/user/payment-portal/payment-portal.component').then(m => m.PaymentPortalComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'rastreo-pedido',
+    loadComponent: () => import('./components/user/rastreo-pedido/rastreo-pedido.component').then(m => m.RastreoPedidoComponent),
+    canActivate: [AuthGuard]
+  },
   // Rutas de administración
   {
     path: 'admin',

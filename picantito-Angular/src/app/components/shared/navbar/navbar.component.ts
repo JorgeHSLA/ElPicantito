@@ -1,23 +1,28 @@
-import { Component, effect, signal } from '@angular/core';
+import { Component, effect, signal, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { CartService } from '../../../services/cart.service';
 import { SearchbarComponent } from '../searchbar/searchbar';
+import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, SearchbarComponent], // Asegurar que RouterModule esté aquí
+  imports: [CommonModule, RouterModule, SearchbarComponent, CartSidebarComponent],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn = signal(false);
   isAdmin = signal(false);
   userName = signal('');
+  isScrolled = signal(false);
+  cartItemCount = signal(0);
 
   constructor(
     private authService: AuthService,
+    private cartService: CartService,
     private router: Router
   ) {
     // Effect para reaccionar a cambios en el usuario logueado
@@ -27,11 +32,54 @@ export class NavbarComponent {
       this.isAdmin.set(this.authService.isAdmin());
       this.userName.set(user?.nombreUsuario?.toString() || '');
     });
+
+    // Effect para reaccionar a cambios en el carrito
+    effect(() => {
+      this.cartItemCount.set(this.cartService.getTotalItems());
+    });
+  }
+
+  ngOnInit() {
+    // Inicializar posición de scroll después de que la vista esté lista
+    setTimeout(() => {
+      this.checkScrollPosition();
+    }, 100);
+  }
+
+  ngOnDestroy() {
+    // Cleanup if needed
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll() {
+    this.checkScrollPosition();
+  }
+
+  private checkScrollPosition() {
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const shouldBeScrolled = scrollPosition > 80;  // Aumenté el umbral para mejor efecto
+    this.isScrolled.set(shouldBeScrolled);
+    
+    // Apply scroll classes to navbar
+    const navbarContainer = document.querySelector('.floating-navbar-container');
+    const navbar = document.querySelector('.navBarExtra');
+    
+    if (shouldBeScrolled) {
+      navbarContainer?.classList.add('scrolled');
+      navbar?.classList.add('scrolled');
+    } else {
+      navbarContainer?.classList.remove('scrolled');
+      navbar?.classList.remove('scrolled');
+    }
   }
 
   logout() {
     this.authService.logout();
     this.router.navigate(['/home']);
+  }
+
+  toggleCart() {
+    this.cartService.toggleCart();
   }
 
   onNavItemClick(route: string, event?: MouseEvent) {
