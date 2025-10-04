@@ -1,9 +1,10 @@
 <header class="position-sticky top-0 z-3">
-    <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-sm">
-        <div class="container">
+    <div class="floating-navbar-container">
+        <nav class="navbar navbar-expand-lg navbar-light navBarExtra shadow-lg">
+            <div class="container-fluid px-3">
             <!-- Logo -->
             <a class="navbar-brand d-flex align-items-center" routerLink="/home">
-                <img src="/images/LogoFont.png" alt="El Picantito Logo" width="160" height="80" class="me-2" />
+                <img src="/images/LogoFont.png" alt="El Picantito Logo" width="120" height="60" class="me-2" />
             </a>
 
             <!-- Buscador Central -->
@@ -17,35 +18,35 @@
             <!-- Navegación -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item me-2">
+                    <li class="nav-item me-1">
                         <a class="nav-link icon-nav" (click)="onNavItemClick('/sobre-nosotros', $event)" style="cursor:pointer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sobre Nosotros">
-                            <i class="bi bi-info-circle fs-5"></i>
+                            <i class="bi bi-info-circle" style="font-size: 1.1rem;"></i>
                         </a>
                     </li>
-                    <li class="nav-item me-2">
+                    <li class="nav-item me-1">
                         <a class="nav-link icon-nav" (click)="onNavItemClick('/tienda', $event)" style="cursor:pointer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Menú">
-                            <i class="bi bi-grid fs-5"></i>
+                            <i class="bi bi-grid" style="font-size: 1.1rem;"></i>
                         </a>
                     </li>
-                    <li class="nav-item me-2">
+                    <li class="nav-item me-1">
                         <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ubicación">
-                            <i class="bi bi-geo-alt-fill fs-5"></i>
+                            <i class="bi bi-geo-alt-fill" style="font-size: 1.1rem;"></i>
                         </a>
                     </li>
-                    <li class="nav-item me-2">
+                    <li class="nav-item me-1">
                         <a class="nav-link icon-nav" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Carrito">
-                            <i class="bi bi-cart3 fs-5"></i>
+                            <i class="bi bi-cart3" style="font-size: 1.1rem;"></i>
                         </a>
                     </li>
 
                     <!-- Usuario NO logueado -->
                     <li class="nav-item dropdown" *ngIf="!isLoggedIn()">
                         <a class="nav-link icon-nav dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person fs-5"></i>
+                            <i class="bi bi-person" style="font-size: 1.1rem;"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="userDropdown">
                             <li class="dropdown-header">
-                                <img src="/images/LogoMinimalistBlackWhite.png" alt="Logo" style="width:45px;height:45px;object-fit:contain;margin-right:8px;">
+                                <img src="/images/LogoMinimalistBlackWhite.png" alt="Logo" style="width:36px;height:36px;object-fit:contain;margin-right:6px;">
                                 <span>¿Sin Cuenta?</span>
                             </li>
                             <li>
@@ -67,11 +68,11 @@
                     <!-- Usuario logueado -->
                     <li class="nav-item dropdown" *ngIf="isLoggedIn()">
                         <a class="nav-link icon-nav dropdown-toggle" href="#" id="loggedUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-check fs-5"></i>
+                            <i class="bi bi-person-check" style="font-size: 1.1rem;"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="loggedUserDropdown">
                             <li class="dropdown-header">
-                                <img src="/images/LogoMinimalistBlackWhite.png" alt="Logo" style="width:45px;height:45px;object-fit:contain;margin-right:8px;">
+                                <img src="/images/LogoMinimalistBlackWhite.png" alt="Logo" style="width:36px;height:36px;object-fit:contain;margin-right:6px;">
                                 <span>{{ userName() }}</span>
                             </li>
                             <li>
@@ -107,6 +108,7 @@
                     </li>
                 </ul>
             </div>
-        </div>
-    </nav>
+            </div>
+        </nav>
+    </div>
 </header>
