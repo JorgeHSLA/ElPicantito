@@ -125,11 +125,9 @@ export class PaymentPortalComponent {
       // Limpiar carrito después del pago exitoso
       this.cartService.clearCart();
 
-      // Mostrar mensaje de éxito y redirigir
+      // Mostrar mensaje de éxito y redirigir al rastreo
       alert('¡Pago procesado exitosamente! Tu pedido ha sido confirmado.');
-      this.router.navigate(['/home']);
-
-    } catch (error) {
+      this.router.navigate(['/rastreo-pedido']);    } catch (error) {
       console.error('Error al procesar el pago:', error);
       alert('Error al procesar el pago. Por favor intenta de nuevo.');
     } finally {

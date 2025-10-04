@@ -1,0 +1,239 @@
+<div class="rastreo-container">
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="rastreo-header d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">
+                        <i class="bi bi-geo-alt me-2 text-primary"></i> Rastreo de Pedido
+                    </h2>
+                    <button class="btn btn-outline-secondary" (click)="goHome()">
+            <i class="bi bi-house me-1"></i>
+            Inicio
+          </button>
+                </div>
+                <p class="text-muted mt-2">Sigue el estado de tu pedido en tiempo real</p>
+                <hr>
+            </div>
+        </div>
+
+        <div *ngIf="orderInfo()" class="row">
+            <!-- Información del Pedido -->
+            <div class="col-lg-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="bi bi-receipt me-2"></i> Información del Pedido
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="order-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Número de Pedido:</span>
+                                <span class="detail-value fw-bold">{{ orderInfo()!.orderId }}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Fecha de Pedido:</span>
+                                <span class="detail-value">{{ orderInfo()!.orderDate }}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Entrega Estimada:</span>
+                                <span class="detail-value text-success fw-bold">{{ orderInfo()!.estimatedDelivery }}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Método de Pago:</span>
+                                <span class="detail-value">{{ orderInfo()!.paymentMethod }}</span>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Información del Cliente -->
+                        <h6 class="mb-3">
+                            <i class="bi bi-person me-2"></i> Información de Entrega
+                        </h6>
+                        <div class="customer-info">
+                            <div class="detail-row">
+                                <span class="detail-label">Cliente:</span>
+                                <span class="detail-value">{{ orderInfo()!.customerInfo.name }}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Dirección:</span>
+                                <span class="detail-value">{{ orderInfo()!.customerInfo.address }}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Teléfono:</span>
+                                <span class="detail-value">{{ orderInfo()!.customerInfo.phone }}</span>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Resumen de Compra -->
+                        <h6 class="mb-3">
+                            <i class="bi bi-calculator me-2"></i> Resumen de Compra
+                        </h6>
+                        <div class="order-summary">
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span>${{ orderInfo()!.subtotal | number:'1.0-0' }}</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Domicilio:</span>
+                                <span>${{ orderInfo()!.delivery | number:'1.0-0' }}</span>
+                            </div>
+                            <div class="summary-row total">
+                                <strong>Total:</strong>
+                                <strong class="text-success">${{ orderInfo()!.total | number:'1.0-0' }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estado del Pedido -->
+            <div class="col-lg-8 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock-history me-2"></i> Estado del Pedido
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Timeline de Estados -->
+                        <div class="order-timeline">
+                            <div *ngFor="let status of orderStatuses; let i = index" class="timeline-item" [class.completed]="status.completed" [class.active]="status.active">
+
+                                <div class="timeline-marker">
+                                    <i [class]="status.icon" [class.text-success]="status.completed" [class.text-primary]="status.active" [class.text-muted]="!status.completed && !status.active"></i>
+                                </div>
+
+                                <div class="timeline-content">
+                                    <h6 class="timeline-title" [class.text-success]="status.completed" [class.text-primary]="status.active">
+                                        {{ status.title }}
+                                    </h6>
+                                    <p class="timeline-description">{{ status.description }}</p>
+                                    <small class="timeline-time" *ngIf="status.time">
+                    <i class="bi bi-clock me-1"></i>{{ status.time }}
+                  </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Acciones según el estado -->
+                        <div class="order-actions mt-4">
+                            <div *ngIf="currentStatus() >= 3 && currentStatus() < 4" class="mb-3">
+                                <button class="btn btn-warning me-2" (click)="callDelivery()">
+                  <i class="bi bi-telephone me-1"></i>
+                  Llamar Repartidor
+                </button>
+                            </div>
+
+                            <div *ngIf="currentStatus() >= 4" class="mb-3">
+                                <button class="btn btn-success me-2" (click)="rateOrder()">
+                  <i class="bi bi-star me-1"></i>
+                  Calificar Pedido
+                </button>
+                                <button class="btn btn-primary" (click)="orderAgain()">
+                  <i class="bi bi-arrow-repeat me-1"></i>
+                  Pedir de Nuevo
+                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos Ordenados -->
+            <div class="col-12 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="bi bi-bag me-2"></i> Productos Ordenados
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div *ngFor="let item of orderInfo()!.items" class="col-md-4 mb-3">
+                                <div class="product-card">
+                                    <div class="row g-0">
+                                        <div class="col-4">
+                                            <img [src]="item.image" [alt]="item.name" class="product-image">
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="product-details">
+                                                <h6 class="product-name">{{ item.name }}</h6>
+                                                <p class="product-quantity">Cantidad: {{ item.quantity }}</p>
+                                                <p class="product-price text-success fw-bold">
+                                                    ${{ (item.price * item.quantity) | number:'1.0-0' }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mapa de Rastreo (Simulado) -->
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="bi bi-map me-2"></i> Ubicación del Repartidor
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="map-container">
+                            <!-- Mapa simulado -->
+                            <div class="fake-map">
+                                <div class="map-location restaurant" [style.left.%]="20" [style.top.%]="30">
+                                    <i class="bi bi-house-fill"></i>
+                                    <span class="location-label">El Picantito</span>
+                                </div>
+
+                                <div class="map-location customer" [style.left.%]="80" [style.top.%]="70">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                    <span class="location-label">Tu ubicación</span>
+                                </div>
+
+                                <div *ngIf="currentStatus() >= 3" class="map-location delivery" [style.left.%]="20 + (60 * (currentStatus() - 2) / 2)" [style.top.%]="30 + (40 * (currentStatus() - 2) / 2)">
+                                    <i class="bi bi-bicycle"></i>
+                                    <span class="location-label">Repartidor</span>
+                                </div>
+
+                                <!-- Ruta simulada -->
+                                <div *ngIf="currentStatus() >= 3" class="delivery-route"></div>
+                            </div>
+
+                            <div class="map-legend">
+                                <div class="legend-item">
+                                    <i class="bi bi-house-fill text-primary"></i>
+                                    <span>Restaurante</span>
+                                </div>
+                                <div class="legend-item">
+                                    <i class="bi bi-geo-alt-fill text-danger"></i>
+                                    <span>Tu ubicación</span>
+                                </div>
+                                <div class="legend-item" *ngIf="currentStatus() >= 3">
+                                    <i class="bi bi-bicycle text-warning"></i>
+                                    <span>Repartidor</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estado de Carga -->
+        <div *ngIf="!orderInfo()" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3">Cargando información del pedido...</p>
+        </div>
+    </div>
+</div>
