@@ -13,7 +13,8 @@ CREATE TABLE Usuarios (
     correo VARCHAR(150) UNIQUE NOT NULL,
     contrasenia VARCHAR(255) NOT NULL,
     Estado VARCHAR(50),  
-    Rol VARCHAR(50)
+    Rol VARCHAR(50),
+    activo BOOLEAN DEFAULT TRUE
 );
 -- ==========================
 -- Tabla: Productos

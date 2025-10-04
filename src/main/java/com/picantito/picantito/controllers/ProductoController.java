@@ -23,13 +23,13 @@ import com.picantito.picantito.service.ProductoService;
 
 @Controller
 @RestController
-@RequestMapping("/productos")
+@RequestMapping("/api/productos")
 public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
 
-    // Mostrar información de una producto específica: http://localhost:9998/productos/{id}
+    // Mostrar información de una producto específica: http://localhost:9998/api/productos/{id}
     @GetMapping("/{id}")
     public ResponseEntity<?> getProducto(@PathVariable Integer id) {
         Optional<Producto> producto = productoService.getProductoById(id);
@@ -44,14 +44,14 @@ public class ProductoController {
         }
     }
     
-    // Mostrar información de todos los productos: http://localhost:9998/productos
+    // Mostrar información de todos los productos: http://localhost:9998/api/productos
     @GetMapping
     public ResponseEntity<List<Producto>> getAllProductos() {
         List<Producto> productos = productoService.getAllProductos();
         return ResponseEntity.ok(productos);
     }
     
-    // Crear un nuevo producto: POST http://localhost:9998/productos
+    // Crear un nuevo producto: POST http://localhost:9998/api/productos
     @PostMapping
     public ResponseEntity<?> crearProducto(@RequestBody Producto producto) {
         try {
@@ -73,7 +73,7 @@ public class ProductoController {
         }
     }
     
-    // Eliminar lógicamente un producto: DELETE http://localhost:9998/productos/{id}
+    // Eliminar lógicamente un producto: DELETE http://localhost:9998/api/productos/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarProducto(@PathVariable Integer id) {
         try {
@@ -103,7 +103,7 @@ public class ProductoController {
         }
     }
 
-    // Obtener productos activos: GET http://localhost:9998/productos/activos
+    // Obtener productos activos: GET http://localhost:9998/api/productos/activos
     @GetMapping("/activos")
     public ResponseEntity<List<Producto>> getProductosActivos() {
         List<Producto> productosActivos = productoService.getProductosActivos();

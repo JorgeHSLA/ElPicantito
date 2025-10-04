@@ -44,6 +44,9 @@ public class User {
     
     @Column(nullable = false)
     private String rol = "USER"; // USER, REPARTIDOR, ADMIN
+
+    @Column(nullable = false)
+    private Boolean activo = true;
     
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pedido> pedidosCliente = new ArrayList<>();

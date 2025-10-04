@@ -81,9 +81,5 @@ public class Adicional {
         }
     }
 
-    public Adicional(String string, String string2, double d, boolean b) {
-        //TODO Auto-generated constructor stub
-    }
-
 
 }

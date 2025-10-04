@@ -32,11 +32,6 @@ public class AutenticacionServiceImpl implements AutentificacionService {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        usuarioRepository.deleteById(id);
-    }
-
-    @Override
     public Optional<User> findByNombreUsuario(String nombreUsuario) {
         return usuarioRepository.findByNombreUsuario(nombreUsuario);
     }
@@ -174,5 +169,15 @@ public class AutenticacionServiceImpl implements AutentificacionService {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<User> findByRol(String rol) {
+        return usuarioRepository.findByRol(rol);
+    }
+
+    @Override
+    public List<User> findByRolAndEstado(String rol, String estado) {
+        return usuarioRepository.findByRolAndEstado(rol, estado);
     }
 }

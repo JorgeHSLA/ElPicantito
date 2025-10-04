@@ -1,125 +1,282 @@
+
 package com.picantito.picantito.controllers;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.picantito.picantito.entities.User;
 import com.picantito.picantito.service.AutentificacionService;
 
-import jakarta.servlet.http.HttpSession;
 
-@Controller
+
+@RestController
+@RequestMapping("/api/usuarios")
 public class UserController {
-
 
     @Autowired
     private AutentificacionService autentificacionService;
-
     
-    @PostMapping("/registry")
-    public String postAutentificacion(@ModelAttribute("user") User user, 
-                                     @RequestParam("password2") String password2,
-                                     HttpSession session,
-                                     RedirectAttributes redirectAttributes) {
-        try {
-            String result = autentificacionService.registrarUsuario(user, password2);
-            
-            if (result.equals("SUCCESS")) {
-                Optional<User> savedUser = autentificacionService.findByNombreUsuario(user.getNombreUsuario());
-                if (savedUser.isPresent()) {
-                    session.setAttribute("loggedUser", savedUser.get());
-                    redirectAttributes.addFlashAttribute("success", "¡Bienvenido! Tu cuenta ha sido creada exitosamente");
-                    return "redirect:/home";
-                }
-            } else {
-                redirectAttributes.addFlashAttribute("error", result);
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al registrar usuario");
-        }
-        
-        return "redirect:/registry";
-    }
-
-
+    // === LOGIN ===
+    // Login de usuario: http://localhost:9998/api/usuarios/login
     @PostMapping("/login")
-    public String postLogin(@ModelAttribute("user") User user, HttpSession session, RedirectAttributes redirectAttributes) {
-        
-        if (autentificacionService.authenticate(user.getNombreUsuario(), user.getContrasenia())) {
-            Optional<User> authenticatedUser = autentificacionService.findByNombreUsuario(user.getNombreUsuario());
-            if (authenticatedUser.isPresent()) {
-                session.setAttribute("loggedUser", authenticatedUser.get());
-                
-                if (authenticatedUser.get().isAdmin()) {
-                    return "redirect:/home";
-                } else {
-                    return "redirect:/home";
-                }
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+        try {
+            String nombreUsuario = credentials.get("nombreUsuario");
+            String contrasenia = credentials.get("contrasenia");
+            
+            // Validación básica
+            if (nombreUsuario == null || contrasenia == null) {
+                return ResponseEntity.badRequest().body("Nombre de usuario y contraseña son obligatorios");
             }
+            
+            // Buscar el usuario
+            Optional<User> optionalUser = autentificacionService.findByNombreUsuario(nombreUsuario);
+            
+            if (!optionalUser.isPresent()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Nombre de usuario no encontrado");
+            }
+            
+            User user = optionalUser.get();
+            
+            // Verificar si el usuario ha sido eliminado lógicamente
+            if ("ELIMINADO".equals(user.getRol())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("La cuenta ya no existe y no se puede volver a crear con ese correo");
+            }
+            
+            // Verificar contraseña
+            if (!user.getContrasenia().equals(contrasenia)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Contraseña incorrecta");
+            }
+            
+            // Login exitoso, devolver información del usuario (excepto contraseña)
+            user.setContrasenia(null); // No devolver la contraseña
+            
+            return ResponseEntity.ok()
+                    .body(Map.of(
+                        "mensaje", "Login exitoso",
+                        "usuario", user
+                    ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error durante el login: " + e.getMessage());
         }
-        
-        redirectAttributes.addFlashAttribute("error", "Credenciales incorrectas");
-        return "redirect:/login";
+    }
+
+    // === CREATE (Crear usuario) ===
+    // Crear un nuevo usuario: http://localhost:9998/api/usuarios
+    @PostMapping
+    public ResponseEntity<?> crearUsuario(@RequestBody User usuario) {
+        try {
+            // Validación básica
+            if (usuario.getNombreUsuario() == null || usuario.getNombreUsuario().trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("El nombre de usuario es obligatorio");
+            }
+            
+            // Verificar si ya existe un usuario con ese nombre o correo
+            Optional<User> existenteUsuario = autentificacionService.findByNombreUsuario(usuario.getNombreUsuario());
+            Optional<User> existenteCorreo = autentificacionService.findByCorreo(usuario.getCorreo());
+            
+            if (existenteUsuario.isPresent()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("El nombre de usuario ya está en uso");
+            }
+            
+            if (existenteCorreo.isPresent()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("El correo electrónico ya está registrado");
+            }
+            
+            // Verificar que el estado solo exista para repartidores
+            if (!"REPARTIDOR".equals(usuario.getRol()) && usuario.getEstado() != null) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("El estado solo puede ser asignado a repartidores");
+            }
+            
+            // Guardar el nuevo usuario
+            User nuevoUsuario = autentificacionService.save(usuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al crear usuario: " + e.getMessage());
+        }
     }
     
-
-    @PostMapping("/mi-perfil/update")
-    public String updatePerfil(@ModelAttribute("usuario") User usuario, 
-                              HttpSession session, RedirectAttributes redirectAttributes) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
-        if (loggedUser == null) {
-            return "redirect:/login";
-        }
-        
-        try {
-            String result = autentificacionService.edicionPerfil(loggedUser, usuario);
-            
-            if (result.equals("SUCCESS")) {
-                User updatedUser = autentificacionService.save(usuario);
-                session.setAttribute("loggedUser", updatedUser);
-                redirectAttributes.addFlashAttribute("success", "Perfil actualizado exitosamente");
-            } else {
-                redirectAttributes.addFlashAttribute("error", result);
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al actualizar el perfil");
-        }
-        
-        return "redirect:/mi-perfil";
-    }
-
-    @PostMapping("/mi-perfil/delete")
-    public String deletePerfil(HttpSession session, RedirectAttributes redirectAttributes) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
-        if (loggedUser == null) {
-            return "redirect:/login";
-        }
-        
-        try {
-            if (autentificacionService.ultimoAdmin(loggedUser) ) {
-                redirectAttributes.addFlashAttribute("error", "No puedes eliminar la única cuenta de administrador");
-                return "redirect:/mi-perfil";
-            }
-            
-            autentificacionService.deleteById(loggedUser.getId());
-            session.invalidate();
-            redirectAttributes.addFlashAttribute("success", "Cuenta eliminada exitosamente");
-            return "redirect:/home";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al eliminar la cuenta");
-            return "redirect:/mi-perfil";
+    
+    // === READ (Obtener usuario por ID) ===
+    // Obtener información de un usuario específico: http://localhost:9998/api/usuarios/{id}
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUsuarioById(@PathVariable Integer id) {
+        Optional<User> usuario = autentificacionService.findById(id);
+        if (usuario.isPresent()) {
+            return ResponseEntity.ok(usuario.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Usuario no encontrado con ID: " + id);
         }
     }
-
-    @GetMapping("/")
-    public String index() {
-        return "redirect:/home";
+    
+    // === READ POR TIPO DE USUARIO ===
+    // 1. Obtener usuarios de tipo ADMIN
+    // Obtener todos los usuarios administradores: http://localhost:9998/api/usuarios/tipo/admin
+    @GetMapping("/tipo/admin")
+    public ResponseEntity<List<User>> getUsuariosAdmin() {
+        List<User> admins = autentificacionService.findByRol("ADMIN");
+        return ResponseEntity.ok(admins);
+    }
+    
+    // 2. Obtener usuarios de tipo CLIENTE
+    // Obtener todos los usuarios clientes: http://localhost:9998/api/usuarios/tipo/cliente
+    @GetMapping("/tipo/cliente")
+    public ResponseEntity<List<User>> getUsuariosCliente() {
+        List<User> clientes = autentificacionService.findByRol("CLIENTE");
+        return ResponseEntity.ok(clientes);
+    }
+    
+    // 3. Obtener usuarios de tipo OPERADOR
+    // Obtener todos los usuarios operadores: http://localhost:9998/api/usuarios/tipo/operador
+    @GetMapping("/tipo/operador")
+    public ResponseEntity<List<User>> getUsuariosOperador() {
+        List<User> operadores = autentificacionService.findByRol("OPERADOR");
+        return ResponseEntity.ok(operadores);
+    }
+    
+    // 4. Obtener usuarios de tipo REPARTIDOR
+    // Obtener todos los usuarios repartidores: http://localhost:9998/api/usuarios/tipo/repartidor
+    @GetMapping("/tipo/repartidor")
+    public ResponseEntity<List<User>> getUsuariosRepartidor() {
+        List<User> repartidores = autentificacionService.findByRol("REPARTIDOR");
+        return ResponseEntity.ok(repartidores);
+    }
+    
+    // Obtener repartidores por estado: http://localhost:9998/api/usuarios/repartidores/estado/{estado}
+    @GetMapping("/repartidores/estado/{estado}")
+    public ResponseEntity<?> getRepartidoresPorEstado(@PathVariable String estado) {
+        List<User> repartidores = autentificacionService.findByRolAndEstado("REPARTIDOR", estado);
+        return ResponseEntity.ok(repartidores);
+    }
+    
+    // === UPDATE (Actualizar usuario) ===
+    // Actualizar información de un usuario: http://localhost:9998/api/usuarios/{id}
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarUsuario(@PathVariable Integer id, @RequestBody User usuario) {
+        try {
+            Optional<User> optionalUsuario = autentificacionService.findById(id);
+            if (!optionalUsuario.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Usuario no encontrado con ID: " + id);
+            }
+            
+            User usuarioExistente = optionalUsuario.get();
+            
+            // Verificar que el estado solo exista para repartidores
+            if (!"REPARTIDOR".equals(usuario.getRol()) && usuario.getEstado() != null) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Si no es repartidor no puede tener estado");
+            }
+            
+            // Aseguramos que el ID sea el correcto
+            usuario.setId(id);
+            
+            // Verificar si cambia el email o nombre de usuario para validar duplicados
+            if (!usuarioExistente.getNombreUsuario().equals(usuario.getNombreUsuario())) {
+                Optional<User> existente = autentificacionService.findByNombreUsuario(usuario.getNombreUsuario());
+                if (existente.isPresent() && !existente.get().getId().equals(id)) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body("El nombre de usuario ya está en uso");
+                }
+            }
+            
+            if (!usuarioExistente.getCorreo().equals(usuario.getCorreo())) {
+                Optional<User> existente = autentificacionService.findByCorreo(usuario.getCorreo());
+                if (existente.isPresent() && !existente.get().getId().equals(id)) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body("El correo electrónico ya está registrado");
+                }
+            }
+            
+            // Actualizar usuario
+            User usuarioActualizado = autentificacionService.save(usuario);
+            return ResponseEntity.ok(usuarioActualizado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar usuario: " + e.getMessage());
+        }
+    }
+    
+    // === DELETE (Eliminar usuario lógicamente) ===
+    // Eliminar usuario (marcado lógico): http://localhost:9998/api/usuarios/{id}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarUsuario(@PathVariable Integer id) {
+        try {
+            Optional<User> optionalUsuario = autentificacionService.findById(id);
+            if (!optionalUsuario.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Usuario no encontrado con ID: " + id);
+            }
+            
+            User usuario = optionalUsuario.get();
+            
+            // Guardar el rol anterior para informes
+            String rolAnterior = usuario.getRol();
+            
+            // Cambiar el rol a ELIMINADO
+            usuario.setRol("ELIMINADO");
+            
+            // Guardar el usuario con el rol actualizado
+            autentificacionService.save(usuario);
+            
+            return ResponseEntity.ok()
+                    .body(Map.of(
+                        "mensaje", "Usuario marcado como eliminado correctamente",
+                        "id", id,
+                        "rolAnterior", rolAnterior
+                    ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al eliminar usuario: " + e.getMessage());
+        }
+    }
+    
+    // Cambiar estado de repartidor: http://localhost:9998/api/usuarios/repartidor/{id}/estado/{estado}
+    @PutMapping("/repartidor/{id}/estado/{estado}")
+    public ResponseEntity<?> cambiarEstadoRepartidor(@PathVariable Integer id, @PathVariable String estado) {
+        try {
+            Optional<User> optionalUsuario = autentificacionService.findById(id);
+            if (!optionalUsuario.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Usuario no encontrado con ID: " + id);
+            }
+            
+            User usuario = optionalUsuario.get();
+            
+            // Verificar que sea repartidor
+            if (!"REPARTIDOR".equals(usuario.getRol())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("El usuario no es un repartidor");
+            }
+            
+            usuario.setEstado(estado);
+            autentificacionService.save(usuario);
+            
+            return ResponseEntity.ok()
+                    .body(Map.of(
+                        "mensaje", "Estado de repartidor actualizado correctamente", 
+                        "id", id, 
+                        "estado", estado
+                    ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar estado: " + e.getMessage());
+        }
     }
 }

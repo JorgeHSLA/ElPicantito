@@ -10,7 +10,6 @@ public interface AutentificacionService {
     List<User> findAll();
     Optional<User> findById(Integer id);
     User save(User user);
-    void deleteById(Integer id);
     
     // Autenticacion
     Optional<User> findByNombreUsuario(String nombreUsuario);
@@ -25,4 +24,6 @@ public interface AutentificacionService {
     String actualizarUsuario(User user);
     String edicionPerfil(User loggedUser, User usuario);
     boolean ultimoAdmin(User loggedUser);
+    List<User> findByRol(String rol);
+    List<User> findByRolAndEstado(String rol, String estado);
 }
