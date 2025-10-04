@@ -84,8 +84,8 @@ export class CheckoutSummaryComponent {
       // Si no está logueado, mostrar mensaje y redirigir al login
       const shouldLogin = confirm('Debes iniciar sesión para continuar con la compra. ¿Deseas ir al login?');
       if (shouldLogin) {
-        this.router.navigate(['/login'], { 
-          queryParams: { returnUrl: '/checkout-summary' } 
+        this.router.navigate(['/login'], {
+          queryParams: { returnUrl: '/checkout-summary' }
         });
       }
       return;

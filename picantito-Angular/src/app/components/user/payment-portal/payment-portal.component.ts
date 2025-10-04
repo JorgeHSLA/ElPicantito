@@ -23,7 +23,7 @@ export class PaymentPortalComponent {
   selectedPaymentMethod = signal<string>('');
   isProcessingPayment = signal(false);
   total = signal(0);
-  
+
   // Datos de tarjeta
   cardData = {
     number: '',
@@ -121,14 +121,14 @@ export class PaymentPortalComponent {
     try {
       // Simular procesamiento de pago
       await this.simulatePaymentProcess();
-      
+
       // Limpiar carrito después del pago exitoso
       this.cartService.clearCart();
-      
+
       // Mostrar mensaje de éxito y redirigir
       alert('¡Pago procesado exitosamente! Tu pedido ha sido confirmado.');
       this.router.navigate(['/home']);
-      
+
     } catch (error) {
       console.error('Error al procesar el pago:', error);
       alert('Error al procesar el pago. Por favor intenta de nuevo.');
@@ -139,40 +139,40 @@ export class PaymentPortalComponent {
 
   private validatePaymentData(): boolean {
     const method = this.selectedPaymentMethod();
-    
+
     switch (method) {
       case 'card':
-        if (!this.cardData.number || !this.cardData.expiryMonth || 
-            !this.cardData.expiryYear || !this.cardData.cvv || 
+        if (!this.cardData.number || !this.cardData.expiryMonth ||
+            !this.cardData.expiryYear || !this.cardData.cvv ||
             !this.cardData.holderName) {
           alert('Por favor completa todos los datos de la tarjeta');
           return false;
         }
         break;
-        
+
       case 'nequi':
         if (!this.nequiData.phoneNumber || !this.nequiData.email) {
           alert('Por favor completa los datos de Nequi');
           return false;
         }
         break;
-        
+
       case 'pse':
         if (!this.pseData.bank || !this.pseData.documentNumber || !this.pseData.email) {
           alert('Por favor completa los datos de PSE');
           return false;
         }
         break;
-        
+
       case 'cash':
         // No se requieren datos adicionales para efectivo
         break;
-        
+
       default:
         alert('Método de pago no válido');
         return false;
     }
-    
+
     return true;
   }
 
