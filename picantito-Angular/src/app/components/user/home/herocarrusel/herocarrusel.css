@@ -125,7 +125,7 @@
     color: var(--neutral-text);
     font-weight: 700;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-heading);
     letter-spacing: -0.5px;
 }
 
