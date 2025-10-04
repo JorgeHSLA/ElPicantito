@@ -146,16 +146,10 @@
 
                         <!-- Botón de comprar -->
                         <div class="mt-4">
-                            <button class="btn btn-success btn-lg w-100" (click)="processOrder()" [disabled]="isProcessingOrder() || cartItems().length === 0" [class.loading]="isProcessingOrder()">
-                <span *ngIf="!isProcessingOrder()">
-                  <i class="bi bi-credit-card me-2"></i>
-                  Realizar Pedido
-                </span>
-                <span *ngIf="isProcessingOrder()">
-                  <span class="spinner-border spinner-border-sm me-2"></span>
-                  Procesando...
-                </span>
-              </button>
+                            <button class="btn btn-success btn-lg w-100" (click)="processOrder()" [disabled]="cartItems().length === 0">
+                                <i class="bi bi-arrow-right-circle me-2"></i>
+                                Continuar al Pago
+                            </button>
                         </div>
 
                         <!-- Continuar comprando -->

@@ -1,0 +1,202 @@
+<div class="payment-container">
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="payment-header d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">
+                        <i class="bi bi-credit-card me-2 text-primary"></i> Portal de Pagos
+                    </h2>
+                    <button class="btn btn-outline-secondary" (click)="goBack()">
+            <i class="bi bi-arrow-left me-1"></i>
+            Volver al Resumen
+          </button>
+                </div>
+                <p class="text-muted mt-2">Selecciona tu método de pago preferido y completa la información</p>
+                <hr>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Métodos de Pago -->
+            <div class="col-lg-8 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="bi bi-wallet me-2"></i> Métodos de Pago
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Opciones de pago -->
+                        <div class="payment-methods">
+                            <div *ngFor="let method of paymentMethods" class="payment-method-option">
+                                <div class="form-check payment-option" [class.selected]="selectedPaymentMethod() === method.id" (click)="selectPaymentMethod(method.id)">
+                                    <input class="form-check-input" type="radio" [id]="method.id" [value]="method.id" [checked]="selectedPaymentMethod() === method.id">
+                                    <label class="form-check-label w-100" [for]="method.id">
+                    <div class="d-flex align-items-center">
+                      <i [class]="method.icon" class="payment-icon me-3"></i>
+                      <div>
+                        <div class="method-name">{{ method.name }}</div>
+                        <div class="method-description">{{ method.description }}</div>
+                      </div>
+                    </div>
+                  </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Formularios de datos según método seleccionado -->
+
+                        <!-- Tarjeta de Crédito/Débito -->
+                        <div *ngIf="selectedPaymentMethod() === 'card'" class="payment-form">
+                            <h6 class="mt-4 mb-3">Datos de la Tarjeta</h6>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="cardNumber" class="form-label">Número de Tarjeta *</label>
+                                    <input type="text" class="form-control" id="cardNumber" [(ngModel)]="cardData.number" placeholder="1234 5678 9012 3456" maxlength="19">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="expiryMonth" class="form-label">Mes de Vencimiento *</label>
+                                    <select class="form-select" id="expiryMonth" [(ngModel)]="cardData.expiryMonth">
+                    <option value="">Mes</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                  </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="expiryYear" class="form-label">Año de Vencimiento *</label>
+                                    <select class="form-select" id="expiryYear" [(ngModel)]="cardData.expiryYear">
+                    <option value="">Año</option>
+                    <option *ngFor="let year of getYearRange()" [value]="year">{{ year }}</option>
+                  </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="cvv" class="form-label">CVV *</label>
+                                    <input type="text" class="form-control" id="cvv" [(ngModel)]="cardData.cvv" placeholder="123" maxlength="4">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="holderName" class="form-label">Nombre del Titular *</label>
+                                    <input type="text" class="form-control" id="holderName" [(ngModel)]="cardData.holderName" placeholder="Como aparece en la tarjeta">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nequi -->
+                        <div *ngIf="selectedPaymentMethod() === 'nequi'" class="payment-form">
+                            <h6 class="mt-4 mb-3">Datos de Nequi</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nequiPhone" class="form-label">Número de Celular *</label>
+                                    <input type="tel" class="form-control" id="nequiPhone" [(ngModel)]="nequiData.phoneNumber" placeholder="300 123 4567">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="nequiEmail" class="form-label">Correo Electrónico *</label>
+                                    <input type="email" class="form-control" id="nequiEmail" [(ngModel)]="nequiData.email" placeholder="correo@ejemplo.com">
+                                </div>
+                            </div>
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i> Recibirás una notificación en tu app Nequi para autorizar el pago.
+                            </div>
+                        </div>
+
+                        <!-- PSE -->
+                        <div *ngIf="selectedPaymentMethod() === 'pse'" class="payment-form">
+                            <h6 class="mt-4 mb-3">Datos de PSE</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="pseBank" class="form-label">Banco *</label>
+                                    <select class="form-select" id="pseBank" [(ngModel)]="pseData.bank">
+                    <option value="">Selecciona tu banco</option>
+                    <option *ngFor="let bank of banks" [value]="bank">{{ bank }}</option>
+                  </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="docType" class="form-label">Tipo de Documento *</label>
+                                    <select class="form-select" id="docType" [(ngModel)]="pseData.documentType">
+                    <option value="CC">Cédula de Ciudadanía</option>
+                    <option value="CE">Cédula de Extranjería</option>
+                    <option value="NIT">NIT</option>
+                    <option value="TI">Tarjeta de Identidad</option>
+                  </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="docNumber" class="form-label">Número de Documento *</label>
+                                    <input type="text" class="form-control" id="docNumber" [(ngModel)]="pseData.documentNumber" placeholder="12345678">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="pseEmail" class="form-label">Correo Electrónico *</label>
+                                    <input type="email" class="form-control" id="pseEmail" [(ngModel)]="pseData.email" placeholder="correo@ejemplo.com">
+                                </div>
+                            </div>
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i> Serás redirigido al portal de tu banco para completar la transacción.
+                            </div>
+                        </div>
+
+                        <!-- Efectivo -->
+                        <div *ngIf="selectedPaymentMethod() === 'cash'" class="payment-form">
+                            <div class="alert alert-success mt-4">
+                                <i class="bi bi-cash me-2"></i>
+                                <strong>Pago en Efectivo</strong>
+                                <p class="mb-0 mt-2">Pagarás en efectivo al momento de la entrega. Asegúrate de tener el dinero exacto.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumen del Pedido -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0">
+                            <i class="bi bi-receipt me-2"></i> Resumen del Pago
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="payment-summary">
+                            <div class="summary-row d-flex justify-content-between">
+                                <span>Total a Pagar:</span>
+                                <span class="fw-bold text-success">${{ total() | number:'1.0-0' }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Botón de pagar -->
+                        <div class="mt-4">
+                            <button class="btn btn-success btn-lg w-100" (click)="processPayment()" [disabled]="!selectedPaymentMethod() || isProcessingPayment()" [class.loading]="isProcessingPayment()">
+                <span *ngIf="!isProcessingPayment()">
+                  <i class="bi bi-shield-check me-2"></i>
+                  Pagar Ahora
+                </span>
+                <span *ngIf="isProcessingPayment()">
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  Procesando Pago...
+                </span>
+              </button>
+                        </div>
+
+                        <!-- Seguridad -->
+                        <div class="security-info mt-3">
+                            <div class="text-center">
+                                <small class="text-muted">
+                  <i class="bi bi-shield-fill-check me-1"></i>
+                  Pago 100% seguro y protegido
+                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

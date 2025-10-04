@@ -37,6 +37,11 @@ export const routes: Routes = [
     path: 'checkout-summary',
     loadComponent: () => import('./components/user/checkout-summary/checkout-summary.component').then(m => m.CheckoutSummaryComponent)
   },
+  {
+    path: 'payment-portal',
+    loadComponent: () => import('./components/user/payment-portal/payment-portal.component').then(m => m.PaymentPortalComponent),
+    canActivate: [AuthGuard]
+  },
   // Rutas de administración
   {
     path: 'admin',

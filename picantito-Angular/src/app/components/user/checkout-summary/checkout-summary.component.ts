@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CartService, CartItem } from '../../../services/cart.service';
+import { AuthService } from '../../../services/auth.service';
 import { Producto } from '../../../models/producto';
 
 @Component({
@@ -28,6 +29,7 @@ export class CheckoutSummaryComponent {
 
   constructor(
     private cartService: CartService,
+    private authService: AuthService,
     private router: Router
   ) {
     // Verificar si hay items en el carrito
@@ -77,34 +79,20 @@ export class CheckoutSummaryComponent {
       return;
     }
 
-    this.isProcessingOrder.set(true);
-
-    try {
-      // Simular proceso de orden (aquí iría la llamada al backend)
-      await this.simulateOrderProcess();
-
-      // Limpiar carrito después de la compra exitosa
-      this.cartService.clearCart();
-
-      // Redirigir a página de confirmación o éxito
-      alert('¡Pedido realizado con éxito! Nos pondremos en contacto contigo pronto.');
-      this.router.navigate(['/home']);
-
-    } catch (error) {
-      console.error('Error al procesar la orden:', error);
-      alert('Error al procesar el pedido. Por favor intenta de nuevo.');
-    } finally {
-      this.isProcessingOrder.set(false);
+    // Validar si el usuario está logueado
+    if (!this.authService.isLoggedIn()) {
+      // Si no está logueado, mostrar mensaje y redirigir al login
+      const shouldLogin = confirm('Debes iniciar sesión para continuar con la compra. ¿Deseas ir al login?');
+      if (shouldLogin) {
+        this.router.navigate(['/login'], {
+          queryParams: { returnUrl: '/checkout-summary' }
+        });
+      }
+      return;
     }
-  }
 
-  // Simular proceso de orden
-  private simulateOrderProcess(): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 2000); // Simular 2 segundos de procesamiento
-    });
+    // Si está logueado, redirigir al portal de pagos
+    this.router.navigate(['/payment-portal']);
   }
 
   // Volver al carrito (cerrar esta página)
