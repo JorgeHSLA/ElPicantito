@@ -8,16 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.service.ProductoService;
+
 
 
 @Controller
@@ -30,7 +31,7 @@ public class ProductoController {
 
     // Mostrar información de una producto específica: http://localhost:9998/productos/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductoDetalle(@PathVariable Integer id) {
+    public ResponseEntity<?> getProducto(@PathVariable Integer id) {
         Optional<Producto> producto = productoService.getProductoById(id);
 
         if (producto.isPresent()) {
@@ -72,16 +73,42 @@ public class ProductoController {
         }
     }
     
-    // Asignar adicionales por IDs a un producto: PUT http://localhost:9998/productos/{id}/adicionales
-    @PutMapping("/{id}/adicionales")
-    public ResponseEntity<?> asignarAdicionales(@PathVariable Integer id, @RequestBody List<Integer> adicionalesIds) {
+    // Eliminar lógicamente un producto: DELETE http://localhost:9998/productos/{id}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarProducto(@PathVariable Integer id) {
         try {
-            Producto productoActualizado = productoService.asignarAdicionalesPorIds(id, adicionalesIds);
-            return ResponseEntity.ok(productoActualizado);
+            Optional<Producto> optionalProducto = productoService.getProductoById(id);
+            
+            if (optionalProducto.isPresent()) {
+                Producto producto = optionalProducto.get();
+                
+                // Cambiar a inactivo en lugar de eliminar
+                producto.setActivo(false);
+                
+                // Guardar el producto actualizado
+                productoService.saveProducto(producto);
+                
+                return ResponseEntity.ok()
+                        .body(Map.of(
+                            "mensaje", "Producto desactivado correctamente",
+                            "id", id
+                        ));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Producto no encontrado con ID: " + id);
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al asignar adicionales: " + e.getMessage());
+                    .body("Error al desactivar el producto: " + e.getMessage());
         }
     }
+
+    // Obtener productos activos: GET http://localhost:9998/productos/activos
+    @GetMapping("/activos")
+    public ResponseEntity<List<Producto>> getProductosActivos() {
+        List<Producto> productosActivos = productoService.getProductosActivos();
+        return ResponseEntity.ok(productosActivos);
+    }
+    
     
 }

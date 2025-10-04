@@ -1,16 +1,10 @@
 package com.picantito.picantito.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,23 +28,6 @@ public class Producto {
     private Boolean disponible;
     private Integer calificacion;
     private Boolean activo = true;
-
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PedidoProducto> pedidoProductos = new ArrayList<>();
-
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ProductoAdicional> productoAdicionales = new ArrayList<>();
-
-    public void setAdicionales(List<Adicional> adicionales) {
-        this.productoAdicionales.clear();
-        for (Adicional adicional : adicionales) {
-            ProductoAdicional pa = new ProductoAdicional();
-            pa.setProducto(this);
-            pa.setAdicional(adicional);
-            pa.setCantidadProducto(1); // valor por defecto
-            this.productoAdicionales.add(pa);
-        }
-    }
 
 
     public Producto(String nombre, String descripcion, double precio, String imagen, boolean disponible, int calificacion) {

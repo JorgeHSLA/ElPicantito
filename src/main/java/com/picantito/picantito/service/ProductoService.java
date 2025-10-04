@@ -12,7 +12,5 @@ public interface ProductoService {
     Producto saveProducto(Producto producto);
     String eliminarProducto(Integer id); // Cambiar void por String
     List<Producto> getProductosDisponibles();
-    
-    // Método para asignar adicionales por sus IDs
-    Producto asignarAdicionalesPorIds(Integer productoId, List<Integer> adicionalesIds);
+    List<Producto> getProductosActivos();
 }

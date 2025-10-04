@@ -1,15 +1,12 @@
 package com.picantito.picantito.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.picantito.picantito.entities.Adicional;
 import com.picantito.picantito.entities.Producto;
-import com.picantito.picantito.repository.AdicionalRepository;
 import com.picantito.picantito.repository.ProductRepository;
 
 
@@ -18,8 +15,6 @@ public class ProductoServiceImpl implements ProductoService {
     @Autowired
     private ProductRepository productoRepository;
     
-    @Autowired
-    private AdicionalRepository adicionalRepository;
 
     // CRUD Productoss
     @Override
@@ -37,8 +32,12 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.save(producto);
     }
 
+    @Override
+    public List<Producto> getProductosActivos() {
+        return productoRepository.findByActivoTrue();
+    }
 
-    // 
+    // eliminado logico
     @Override
     public String eliminarProducto(Integer id) {
         try {
@@ -69,28 +68,6 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.findByDisponibleTrue();
     }
     
-    @Override
-    public Producto asignarAdicionalesPorIds(Integer productoId, List<Integer> adicionalesIds) {
-        Optional<Producto> productoOpt = productoRepository.findById(productoId);
-        if (!productoOpt.isPresent()) {
-            throw new RuntimeException("Producto no encontrado con ID: " + productoId);
-        }
-        
-        Producto producto = productoOpt.get();
-        List<Adicional> adicionales = new ArrayList<>();
-        
-        for (Integer adicionalId : adicionalesIds) {
-            Optional<Adicional> adicionalOpt = adicionalRepository.findById(adicionalId);
-            if (adicionalOpt.isPresent()) {
-                adicionales.add(adicionalOpt.get());
-            }
-        }
-        
-        // Usar el método existente para asignar adicionales
-        producto.setAdicionales(adicionales);
-        
-        // Guardar y devolver el producto actualizado
-        return productoRepository.save(producto);
-    }
+
 
 }
