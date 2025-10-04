@@ -2,12 +2,14 @@ import { Component, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { CartService } from '../../../services/cart.service';
 import { SearchbarComponent } from '../searchbar/searchbar';
+import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, SearchbarComponent], // Asegurar que RouterModule esté aquí
+  imports: [CommonModule, RouterModule, SearchbarComponent, CartSidebarComponent],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
@@ -15,9 +17,11 @@ export class NavbarComponent {
   isLoggedIn = signal(false);
   isAdmin = signal(false);
   userName = signal('');
+  cartItemCount = signal(0);
 
   constructor(
     private authService: AuthService,
+    private cartService: CartService,
     private router: Router
   ) {
     // Effect para reaccionar a cambios en el usuario logueado
@@ -27,11 +31,20 @@ export class NavbarComponent {
       this.isAdmin.set(this.authService.isAdmin());
       this.userName.set(user?.nombreUsuario?.toString() || '');
     });
+
+    // Effect para reaccionar a cambios en el carrito
+    effect(() => {
+      this.cartItemCount.set(this.cartService.getTotalItems());
+    });
   }
 
   logout() {
     this.authService.logout();
     this.router.navigate(['/home']);
+  }
+
+  toggleCart() {
+    this.cartService.toggleCart();
   }
 
   onNavItemClick(route: string, event?: MouseEvent) {
