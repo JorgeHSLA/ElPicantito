@@ -19,12 +19,31 @@
    ========================= */
 .carousel-section {
     margin-top: -105px; 
-    padding-top: 70px;
+    padding-top: 0px;
     margin-bottom: 0;
     position: relative;
     overflow: hidden;
     z-index: 1;
     opacity: 1;
+}
+
+.carousel-section::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(120deg, 
+        var(--primary-color) 0%, 
+        #FF4500 15%, 
+        #FF6B35 30%, 
+        #FF8C42 45%, 
+        #FFA726 60%, 
+        #FFB74D 75%, 
+        #FFC107 85%, 
+        var(--accent-color) 100%);
+    z-index: -1;
 }
 
 .carousel-section .carousel {
@@ -61,8 +80,8 @@
           var(--accent-color) 100%);
   background-attachment: fixed;
 
-  padding: 4rem 0;
-  min-height: 65vh;
+  padding: 8rem 0 6rem 0;
+  min-height: 85vh;
   position: relative;
 }
 
