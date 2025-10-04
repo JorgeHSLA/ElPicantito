@@ -26,7 +26,8 @@ CREATE TABLE Productos (
     precioDeAdquisicion FLOAT,
     imagen VARCHAR(255),
     disponible BOOLEAN DEFAULT TRUE,
-    calificacion INTEGER
+    calificacion INTEGER,
+    activo BOOLEAN DEFAULT TRUE
 );
 
 -- ==========================
@@ -39,7 +40,8 @@ CREATE TABLE Adicionales (
     precioDeVenta FLOAT NOT NULL,
     precioDeAdquisicion FLOAT,
     cantidad INTEGER,
-    disponible BOOLEAN NOT NULL DEFAULT TRUE
+    disponible BOOLEAN NOT NULL DEFAULT TRUE,
+    activo BOOLEAN DEFAULT TRUE
 );
 
 -- ==========================
@@ -70,6 +72,7 @@ CREATE TABLE Pedidos (
     Direccion VARCHAR(255),
     FOREIGN KEY (Clientes_id) REFERENCES Usuarios(ID) ON DELETE CASCADE,
     FOREIGN KEY (Repartidor_id) REFERENCES Usuarios(ID) ON DELETE SET NULL
+
 );
 
 -- ==========================

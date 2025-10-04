@@ -2,7 +2,6 @@ package com.picantito.picantito.entities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,6 +33,7 @@ public class Producto {
     private String imagen;
     private Boolean disponible;
     private Integer calificacion;
+    private Boolean activo = true;
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PedidoProducto> pedidoProductos = new ArrayList<>();

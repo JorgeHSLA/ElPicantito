@@ -31,6 +31,8 @@ public class Adicional {
     private Float precioDeAdquisicion;
     private Integer cantidad;
     private Boolean disponible;
+    private Boolean activo = true;
+
 
     @OneToMany(mappedBy = "adicional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductoAdicional> productoAdicionales = new ArrayList<>();
