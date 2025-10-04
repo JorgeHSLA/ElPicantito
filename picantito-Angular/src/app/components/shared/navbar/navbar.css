@@ -98,20 +98,26 @@ header {
 /* Cart Link and Badge */
 .cart-link {
     position: relative;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.cart-link:hover .cart-badge {
+    transform: scale(1.1);
+    animation: pulse 1s infinite;
 }
 
 .cart-badge {
     position: absolute;
-    top: -8px;
-    right: -8px;
+    top: -6px;
+    right: -6px;
     background-color: var(--accent-color);
     color: #333;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 600;
-    padding: 2px 6px;
+    padding: 1px 4px;
     border-radius: 50%;
-    min-width: 18px;
-    height: 18px;
+    min-width: 16px;
+    height: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -343,6 +349,14 @@ header {
         height: 36px;
         padding: 7px;
     }
+    
+    .cart-badge {
+        top: -5px;
+        right: -5px;
+        min-width: 15px;
+        height: 15px;
+        font-size: 0.6rem;
+    }
 }
 
 @media (max-width: 576px) {
@@ -373,6 +387,15 @@ header {
         height: 34px;
         padding: 6px;
         margin: 0 1px;
+    }
+    
+    .cart-badge {
+        top: -4px;
+        right: -4px;
+        min-width: 14px;
+        height: 14px;
+        font-size: 0.55rem;
+        padding: 0px 3px;
     }
 }
 
