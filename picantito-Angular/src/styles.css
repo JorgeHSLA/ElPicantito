@@ -128,9 +128,84 @@
 
 /* Estilos globales */
 body {
-    background-color: var(--neutral-bg);
+    background-color: #3c2039; /* Color sólido nuevo */
     font-family: var(--font-body);
     font-weight: 500; /* Medium weight para mejor legibilidad */
+    color: var(--neutral-text);
+    min-height: 100vh;
+}
+
+/* Asegurar que el fondo sea continuo en toda la página */
+html {
+    background-color: #3c2039; /* Color sólido nuevo */
+}
+
+/* Asegurar que todos los componentes principales sean transparentes para mostrar el fondo unificado */
+.container, .container-fluid, .row, .col, [class*="col-"] {
+    background-color: transparent;
+}
+
+/* Landing page fondo uniforme */
+app-root, router-outlet, app-home {
+    background-color: transparent;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* Todas las secciones son transparentes para mostrar el fondo unificado */
+section, .section, .content, .main-content {
+    background-color: transparent;
+}
+
+/* Excepción: El hero mantiene su propia imagen */
+.carousel-section, .carousel-content {
+    background-color: transparent;
+}
+
+/* =========================
+   FONDO COMPARTIDO - LANDING TRANSPARENTE
+   ========================= */
+
+/* Hacer transparentes TODOS los componentes de la landing excepto hero, navbar y footer */
+.feature-card, 
+.card, .card-new,
+.build-your-taco-section,
+.menu-hero, .menu-stats,
+.about-section,
+.cta-section,
+.danger-zone,
+section:not(.carousel-section),
+.section:not(.carousel-section),
+.content:not(.carousel-content),
+.main-content,
+.container-landing,
+.landing-section {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Mantener hover effects pero sin fondos */
+.feature-card:hover,
+.card:hover, .card-new:hover,
+.cta-section:hover,
+.about-section ul li:hover {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Elementos que deben ser transparentes para mostrar el fondo morado */
+.bg-transparent-purple {
+    background-color: transparent !important;
+}
+
+/* Clase para forzar fondo morado uniforme */
+.bg-purple-uniform {
+    background-color: var(--primary-color) !important;
+}
+
+/* Elementos que necesitan fondo morado oscuro para contraste */
+.bg-purple-dark {
+    background-color: var(--primary-hover) !important;
     color: var(--neutral-text);
 }
 
@@ -189,29 +264,35 @@ p, span, div, a, button, input, textarea, select,
     letter-spacing: 0.3px; /* Espaciado menor para botones */
 }
 /* =========================
-   VARIABLES GLOBALES - Colores para Texto, Fondos, Bordes y Sombras
+   VARIABLES GLOBALES - Nuevo Esquema de Colores Landing
    ========================= */
 :root {
-    --primary-color: #FF5630;              /* Rojo/anaranjado principal */
-    --primary-hover: #b93d21;              /* Variante más oscura */
-    --primary-light: #FFB4A0;              /* Variante más clara */
+    --primary-color: #442142;              /* Morado principal - fondo */
+    --primary-hover: #2d1529;              /* Morado más oscuro */
+    --primary-light: #5a2d58;              /* Morado más claro */
 
-    --accent-color: #FFC107;               /* Amarillo secundario */
-    --accent-hover: #eea804;
+    --accent-color: #ED7E47;               /* Naranja apoyo principal */
+    --accent-hover: #d16935;               /* Naranja hover */
+    --accent-light: #f29a6b;               /* Naranja claro */
 
-    --error-color: #1E293B;                /* Azul oscuro para contraste/error */
-    --error-hover: #162032;
+    --secondary-color: #19695B;            /* Verde secundario */
+    --secondary-hover: #145249;            /* Verde hover */
+    --secondary-light: #2a8570;            /* Verde claro */
 
-    --neutral-bg: #FFFFFF;                 /* Fondo blanco */
-    --neutral-surface: #F5F5F5;            /* Gris claro */
+    --neutral-bg: #442142;                 /* Fondo morado */
+    --neutral-surface: #FFFFFF;            /* Superficie blanca */
     --neutral-border: #E0E0E0;
-    --neutral-text: #333333;               /* Gris oscuro para texto */
-    --neutral-text-light: #757575;
+    --neutral-text: #FFFFFF;               /* Texto blanco sobre morado */
+    --neutral-text-dark: #442142;          /* Texto morado sobre blanco */
+    --neutral-text-light: #E0E0E0;         /* Texto claro */
 
-    --shadow-light: 0 2px 8px rgba(0,0,0,0.1);
-    --shadow-medium: 0 4px 12px rgba(0,0,0,0.15);
-    --shadow-heavy: 0 8px 25px rgba(0,0,0,0.15);
+    --shadow-light: 0 2px 8px rgba(68, 33, 66, 0.1);
+    --shadow-medium: 0 4px 12px rgba(68, 33, 66, 0.15);
+    --shadow-heavy: 0 8px 25px rgba(68, 33, 66, 0.2);
+    --shadow-orange: 0 8px 25px rgba(237, 126, 71, 0.3);
+    --shadow-green: 0 8px 25px rgba(25, 105, 91, 0.3);
     --transition-fast: 0.3s ease;
+    --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     /* Tipografías */
     --font-primary: "Fira Sans", "Roboto", "Arial", sans-serif;
@@ -353,4 +434,317 @@ h1, h2, h3, h4, h5, h6,
 .normalize-accents-rough {
     font-family: var(--font-rough);
     letter-spacing: 0.75px;
+}
+
+/* =========================
+   CLASES DE COLORES PARA EL NUEVO DISEÑO
+   ========================= */
+
+/* Fondos */
+.bg-primary-purple {
+    background-color: var(--primary-color) !important;
+}
+
+.bg-accent-orange {
+    background-color: var(--accent-color) !important;
+}
+
+.bg-secondary-green {
+    background-color: var(--secondary-color) !important;
+}
+
+.bg-surface-white {
+    background-color: var(--neutral-surface) !important;
+}
+
+/* Gradientes sutiles que mantienen la base morada */
+.bg-gradient-purple {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%) !important;
+}
+
+.bg-gradient-purple-subtle {
+    background: linear-gradient(180deg, var(--primary-color) 0%, rgba(68, 33, 66, 0.95) 100%) !important;
+}
+
+.bg-gradient-orange {
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%) !important;
+}
+
+.bg-gradient-green {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-light) 100%) !important;
+}
+
+/* Textos */
+.text-primary-purple {
+    color: var(--primary-color) !important;
+}
+
+.text-accent-orange {
+    color: var(--accent-color) !important;
+}
+
+.text-secondary-green {
+    color: var(--secondary-color) !important;
+}
+
+.text-white {
+    color: var(--neutral-text) !important;
+}
+
+.text-dark {
+    color: var(--neutral-text-dark) !important;
+}
+
+/* Botones con nuevo esquema */
+.btn-primary-new {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-new:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(237, 126, 71, 0.3);
+}
+
+.btn-secondary-new {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary-new:hover {
+    background-color: var(--secondary-hover);
+    border-color: var(--secondary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(25, 105, 91, 0.3);
+}
+
+.btn-outline-new {
+    background-color: transparent;
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-new:hover {
+    background-color: var(--accent-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   COMPONENTES CON NUEVO DISEÑO
+   ========================= */
+
+/* Tarjetas con fondo morado más oscuro para contraste */
+.card-new {
+    background-color: var(--primary-hover); /* Morado más oscuro */
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(45, 21, 41, 0.3);
+    transition: all 0.3s ease;
+    color: var(--neutral-text); /* Texto blanco */
+}
+
+.card-new:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(45, 21, 41, 0.4);
+    background-color: #241018; /* Aún más oscuro en hover */
+}
+
+.card-new .card-title {
+    color: var(--accent-color); /* Títulos en naranja para contraste */
+    font-family: var(--font-heading);
+    letter-spacing: 0.5px;
+}
+
+.card-new .card-text {
+    color: var(--neutral-text); /* Texto blanco */
+    font-family: var(--font-body);
+}
+
+/* Tarjetas estándar también con morado oscuro */
+.card {
+    background-color: var(--primary-hover);
+    border: none;
+    color: var(--neutral-text);
+}
+
+.card .card-title {
+    color: var(--accent-color);
+}
+
+.card .card-text {
+    color: var(--neutral-text);
+}
+
+/* Sección hero/landing con fondo morado uniforme */
+.hero-section {
+    background-color: var(--primary-color);
+    min-height: 100vh;
+    color: var(--neutral-text);
+}
+
+.hero-title {
+    font-family: var(--font-rough);
+    color: var(--neutral-text);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.75px;
+}
+
+.hero-subtitle {
+    color: var(--neutral-text-light);
+    font-family: var(--font-body);
+    font-weight: 400;
+}
+
+/* Navbar con nuevo esquema */
+.navbar-new {
+    background: rgba(68, 33, 66, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(237, 126, 71, 0.2);
+}
+
+.navbar-new .nav-link {
+    color: var(--neutral-text) !important;
+    font-family: var(--font-body);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.navbar-new .nav-link:hover {
+    color: var(--accent-color) !important;
+    transform: translateY(-1px);
+}
+
+.navbar-brand-new {
+    color: var(--accent-color) !important;
+    font-family: var(--font-rough);
+    letter-spacing: 0.75px;
+    font-weight: 600;
+}
+
+/* Footer con nuevo esquema */
+.footer-new {
+    background-color: var(--primary-color);
+    color: var(--neutral-text);
+    border-top: 2px solid var(--accent-color);
+}
+
+.footer-new a {
+    color: var(--neutral-text-light);
+    transition: color 0.3s ease;
+}
+
+.footer-new a:hover {
+    color: var(--accent-color);
+}
+
+/* =========================
+   OVERRIDE PARA COMPONENTES QUE INTERFIEREN CON EL FONDO
+   ========================= */
+
+/* Remover fondos blancos por defecto */
+.bg-white, .bg-light {
+    background-color: transparent !important;
+    color: var(--neutral-text) !important;
+}
+
+/* Solo para casos específicos donde necesites blanco */
+.bg-white-important {
+    background-color: var(--neutral-surface) !important;
+    color: var(--neutral-text-dark) !important;
+}
+
+/* Cambiar todos los textos negros a blancos */
+.text-dark, .text-black {
+    color: var(--neutral-text) !important;
+}
+
+/* Texto por defecto blanco */
+p, span, div, h1, h2, h3, h4, h5, h6 {
+    color: var(--neutral-text);
+}
+
+/* Excepto en botones */
+.btn p, .btn span, .btn div, 
+.btn h1, .btn h2, .btn h3, .btn h4, .btn h5, .btn h6,
+.btn, .btn * {
+    color: inherit;
+}
+
+/* Cambiar text-muted a texto blanco claro */
+.text-muted {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Asegurar que elementos específicos usen texto blanco */
+.lead, .fw-semibold, .fw-bold,
+small, .small {
+    color: var(--neutral-text);
+}
+
+/* Bootstrap text utilities override */
+.text-secondary {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Elementos de lista y navegación */
+.nav-link, .dropdown-item,
+.list-group-item {
+    color: var(--neutral-text);
+}
+
+/* Bootstrap overrides para mantener el fondo morado */
+.container-fluid, .container, .row {
+    background-color: transparent;
+}
+
+/* Modales y dropdowns con fondo morado oscuro */
+.modal-content, .dropdown-menu {
+    background-color: var(--primary-hover);
+    color: var(--neutral-text);
+    border: 1px solid var(--accent-color);
+}
+
+.dropdown-item {
+    color: var(--neutral-text);
+}
+
+.dropdown-item:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+/* =========================
+   GIF LUCHADORES - ANCHO COMPLETO
+   ========================= */
+.luchadores-section {
+    background: transparent;
+    padding: 0;
+}
+
+.luchadores-section .container {
+    max-width: 100%;
+    padding: 0;
+}
+
+.luchadores-gif {
+    width: 100%;
+    height: auto;
+    display: block;
 }

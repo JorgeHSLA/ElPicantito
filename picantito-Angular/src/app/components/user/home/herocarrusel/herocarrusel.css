@@ -34,15 +34,10 @@
     left: 0;
     right: 0;
     height: 200px;
-    background: linear-gradient(120deg, 
-        var(--primary-color) 0%, 
-        #FF4500 15%, 
-        #FF6B35 30%, 
-        #FF8C42 45%, 
-        #FFA726 60%, 
-        #FFB74D 75%, 
-        #FFC107 85%, 
-        var(--accent-color) 100%);
+    background-image: url('/images/fondoMexicanosComiendoHero.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     z-index: -1;
 }
 
@@ -58,82 +53,42 @@
   align-items: center;
   justify-content: center;
 
-  /* Fondo degradado igual al de Thymeleaf */
-  background: linear-gradient(120deg, 
-      var(--neutral-bg) 0%, 
-      var(--neutral-surface) 25%, 
-      var(--primary-light) 50%, 
-      var(--accent-color) 75%,
-      var(--accent-hover) 90%,
-      var(--accent-color) 100%);
-  background-image: 
-      linear-gradient(120deg, 
-          var(--neutral-bg) 0%, 
-          var(--neutral-surface) 25%, 
-          var(--primary-light) 50%, 
-          var(--accent-color) 75%,
-          var(--accent-hover) 90%,
-          var(--accent-color) 100%),
-      linear-gradient(to right, 
-          transparent 0%, 
-          transparent 85%, 
-          var(--accent-color) 100%);
+  /* Fondo con imagen mexicana blurreada */
+  background-image: url('/images/fondoMexicanosComiendoHero.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   background-attachment: fixed;
+  position: relative;
 
   padding: 8rem 0 6rem 0;
   min-height: 85vh;
-  position: relative;
 }
 
-.carousel-content::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="20" cy="20" r="1" fill="%23ffffff" opacity="0.03"/><circle cx="80" cy="80" r="0.5" fill="%23ffffff" opacity="0.02"/><circle cx="40" cy="60" r="0.8" fill="%23ffffff" opacity="0.025"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    pointer-events: none;
-}
+/* Overlay removido - usando imagen ya procesada */
 
-.carousel-content::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at center right, 
-        rgba(255, 193, 7, 0.1) 0%, 
-        rgba(255, 86, 48, 0.08) 30%, 
-        transparent 60%),
-    linear-gradient(120deg, 
-        transparent 0%, 
-        rgba(255, 86, 48, 0.03) 40%, 
-        rgba(255, 193, 7, 0.05) 70%, 
-        rgba(255, 193, 7, 0.08) 100%);
-    pointer-events: none;
-    opacity: 0.6;
-}
+/* Overlay de gradientes removido - usando imagen ya procesada */
 
 .carousel-item {
     background-color: transparent;
     transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    z-index: 2; /* Por encima del overlay */
 }
 
 .carousel-item h2 {
-    color: var(--neutral-text);
+    color: white;
     font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.7); /* Sombra más fuerte para legibilidad */
     font-family: var(--font-heading);
     letter-spacing: -0.5px;
 }
 
 .carousel-item p {
-    color: var(--neutral-text-light);
+    color: white;
     font-size: 1.1rem;
     line-height: 1.6;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6); /* Sombra más fuerte para legibilidad */
 }
 
 .promo-image img {
@@ -173,17 +128,17 @@
 }
 
 .carousel-indicators .active {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
     opacity: 1;
     transform: scale(1.3);
-    box-shadow: 0 0 20px rgba(255, 86, 48, 0.4);
+    box-shadow: 0 0 20px rgba(237, 126, 71, 0.4);
 }
 
 .carousel-indicators .active::before {
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    background-color: var(--accent-color); /* Naranja sólido */
 }
 
 /* Botones de control rediseñados */
@@ -193,12 +148,12 @@
     height: 60px;
     top: 50%;
     transform: translateY(-50%);
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    background-color: var(--accent-color); /* Naranja sólido */
     border: none;
     border-radius: 50%;
     opacity: 0.9;
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    box-shadow: 0 8px 25px rgba(255, 86, 48, 0.3);
+    box-shadow: 0 8px 25px rgba(237, 126, 71, 0.3);
     backdrop-filter: blur(10px);
     z-index: 5;
 }
@@ -215,8 +170,8 @@
 .carousel-control-next:hover {
     opacity: 1;
     transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 12px 35px rgba(255, 86, 48, 0.4);
-    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    box-shadow: 0 12px 35px rgba(237, 126, 71, 0.4);
+    background-color: var(--accent-hover); /* Naranja hover */
 }
 
 .carousel-control-prev:active,

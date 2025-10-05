@@ -124,8 +124,7 @@
 /* Estilos adicionales desde carrusel.css */
 .recommended-carousel-section {
     padding: 4rem 0;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
+    background: transparent; /* Sin fondo - usar fondo compartido */
 }
 
 /* Headers y efectos de hover */

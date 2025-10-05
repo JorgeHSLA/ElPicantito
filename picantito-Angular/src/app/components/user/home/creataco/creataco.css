@@ -16,7 +16,8 @@
 
 /* Build taco section */
 .build-your-taco-section {
-    background: linear-gradient(45deg, #f8f9fa 0%, #e9ecef 100%);
+    background-color: #442142; /* Fondo morado uniforme */
+    color: white; /* Texto blanco */
 }
 
 .steps .badge {
