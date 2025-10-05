@@ -7,7 +7,7 @@ VALUES
 ('Operador de Prueba', 'operador1', '3005555555', 'operador@elpicantito.com', 'operador123', 'OPERADOR', null, true),
 ('Repartidor de Prueba', 'repartidor1', '3007777777', 'repartidor@elpicantito.com', 'repartidor123', 'REPARTIDOR', 'DISPONIBLE', true);
 
--- Insertar productos de prueba (tacos y bebidas)
+-- Insertar productos de prueba (tacos y bebidas)df
 INSERT INTO productos (nombre, descripcion, precio_de_venta, precio_de_adquisicion, imagen, disponible, calificacion, activo) 
 VALUES 
 -- TACOS
