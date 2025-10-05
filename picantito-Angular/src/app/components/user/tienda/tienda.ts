@@ -2,6 +2,8 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ProductCardComponent } from '../../shared/product-card/product-card.component';
+import { ProductoService } from '../../../services/tienda/producto.service';
+import { Producto } from '../../../models/producto';
 
 declare var bootstrap: any;
 
@@ -14,84 +16,43 @@ declare var bootstrap: any;
 })
 export class TiendaComponent implements OnInit, AfterViewInit {
   
-  // Datos de productos (simulados)
-  productos = [
-    {
-      id: 1,
-      nombre: 'Taco al Pastor',
-      descripcion: 'Taco tradicional de cerdo adobado con piña, cebolla y cilantro en tortilla de maíz.',
-      precio: 1.40,
-      imagen: 'https://lastaquerias.com/wp-content/uploads/2022/11/tacos-pastor-gaacc26fa8_1920.jpg',
-      disponible: true,
-      calificacion: 5,
-      categoria: 'Tacos'
-    },
-    {
-      id: 2,
-      nombre: 'Taco de Carne Asada',
-      descripcion: 'Carne de res asada a la parrilla con guacamole, cebolla y cilantro.',
-      precio: 1.55,
-      imagen: 'https://www.eatingonadime.com/wp-content/uploads/2024/03/carne-asada-1-square-1.jpg',
-      disponible: true,
-      calificacion: 5,
-      categoria: 'Tacos'
-    },
-    {
-      id: 3,
-      nombre: 'Taco de Suadero',
-      descripcion: 'Suaves trozos de suadero fritos en su jugo, servidos con salsa verde.',
-      precio: 1.50,
-      imagen: 'https://images.squarespace-cdn.com/content/v1/5a95f6d54611a0f9ec0a7f5e/1568912331542-701S75SMDWD3VQZI72OA/tacos-rey-del-suadero.jpg',
-      disponible: true,
-      calificacion: 5,
-      categoria: 'Tacos'
-    },
-    {
-      id: 4,
-      nombre: 'Taco de Carnitas',
-      descripcion: 'Cerdo cocido lentamente, servido con cebolla y cilantro.',
-      precio: 1.40,
-      imagen: 'https://okdiario.com/img/2022/04/30/tacos.jpg',
-      disponible: true,
-      calificacion: 5,
-      categoria: 'Tacos'
-    },
-    {
-      id: 5,
-      nombre: 'Taco de Barbacoa',
-      descripcion: 'Taco de barbacoa de borrego con salsa borracha.',
-      precio: 1.70,
-      imagen: 'https://images.squarespace-cdn.com/content/v1/56801b350e4c11744888ec37/1460472452918-SE8BPNUWMWCKTOPP1CHF/Lamb+Barbacoa+Tacos.jpg?format=1500w',
-      disponible: true,
-      calificacion: 5,
-      categoria: 'Tacos'
-    },
-    {
-      id: 6,
-      nombre: 'Taco de Birria',
-      descripcion: 'Taco de birria de res acompañado de consomé.',
-      precio: 1.80,
-      imagen: 'https://happyvegannie.com/wp-content/uploads/2023/09/birriatacos-1200x1200-2.jpg',
-      disponible: true,
-      calificacion: 5,
-      categoria: 'Tacos'
-    }
-  ];
+  // Datos de productos de la API
+  productos: Producto[] = [];
 
   // Filtros
   categoriaSeleccionada: string = 'Todos';
-  categorias = ['Todos', 'Tacos', 'Bebidas', 'Extras', 'Especiales'];
+  categorias = ['Todos', 'Disponibles', 'No Disponibles'];
   
   // Productos filtrados
-  productosFiltrados = [...this.productos];
+  productosFiltrados: Producto[] = [];
+  isLoading = true;
+  error: string | null = null;
 
   // Estado del usuario (simulado por ahora)
   loggedUser: any = null; // Aquí integrarás con tu servicio de autenticación
 
-  constructor() {}
+  constructor(private productoService: ProductoService) {}
 
   ngOnInit(): void {
-    this.filtrarProductos();
+    this.cargarProductos();
+  }
+
+  private cargarProductos(): void {
+    this.isLoading = true;
+    this.error = null;
+
+    this.productoService.getProductosActivos().subscribe({
+      next: (productos) => {
+        this.productos = productos;
+        this.filtrarProductos();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error cargando productos:', error);
+        this.error = 'Error al cargar los productos. Intenta de nuevo.';
+        this.isLoading = false;
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -115,9 +76,13 @@ export class TiendaComponent implements OnInit, AfterViewInit {
   private filtrarProductos(): void {
     if (this.categoriaSeleccionada === 'Todos') {
       this.productosFiltrados = [...this.productos];
-    } else {
+    } else if (this.categoriaSeleccionada === 'Disponibles') {
       this.productosFiltrados = this.productos.filter(producto => 
-        producto.categoria === this.categoriaSeleccionada
+        producto.disponible === true
+      );
+    } else if (this.categoriaSeleccionada === 'No Disponibles') {
+      this.productosFiltrados = this.productos.filter(producto => 
+        producto.disponible === false
       );
     }
   }

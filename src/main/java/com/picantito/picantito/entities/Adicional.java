@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,12 +35,15 @@ public class Adicional {
     private Boolean activo = true;
 
 
+    @JsonIgnore
     @OneToMany(mappedBy = "adicional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductoAdicional> productoAdicionales = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "adicional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PedidoProductoAdicional> pedidoProductoAdicionales = new ArrayList<>();
 
+    @JsonIgnore
     @Transient
     public List<Pedido> getPedidos() {
         return this.pedidoProductoAdicionales.stream()

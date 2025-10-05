@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthNavbarComponent } from '../../shared/auth-navbar/auth-navbar';
+import { AuthService } from '../../../services/auth.service';
 
 declare var bootstrap: any;
 
@@ -30,7 +31,10 @@ export class RegistryComponent implements OnInit, AfterViewInit {
   error: string | null = null;
   success: string | null = null;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     // Limpiar mensajes al inicializar
@@ -59,15 +63,32 @@ export class RegistryComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.error = null;
 
-    // Simular llamada a API (aquí integrarás con tu servicio de autenticación)
-    setTimeout(() => {
-      // Simulación de registro exitoso
-      this.success = '¡Cuenta creada exitosamente! Bienvenido a El Picantito';
-      setTimeout(() => {
-        this.router.navigate(['/home']);
-      }, 2000);
-      this.isLoading = false;
-    }, 2000);
+    // Crear el objeto usuario para la API
+    const nuevoUsuario = {
+      nombreCompleto: this.registryForm.nombreCompleto,
+      nombreUsuario: this.registryForm.nombreUsuario,
+      telefono: this.registryForm.telefono,
+      correo: this.registryForm.correo,
+      contrasenia: this.registryForm.password,
+      estado: 'ACTIVO',
+      rol: 'USER'
+    };
+
+    // Llamar a la API de registro
+    this.authService.crearUsuario(nuevoUsuario).subscribe({
+      next: (response: any) => {
+        this.success = '¡Cuenta creada exitosamente! Bienvenido a El Picantito';
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
+        this.isLoading = false;
+      },
+      error: (error: any) => {
+        console.error('Error en registro:', error);
+        this.error = error.error?.message || 'Error al crear la cuenta. Intenta de nuevo.';
+        this.isLoading = false;
+      }
+    });
   }
 
   private isValidForm(): boolean {

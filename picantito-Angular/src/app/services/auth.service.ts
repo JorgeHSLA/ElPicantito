@@ -1,12 +1,14 @@
 import { Injectable, signal } from '@angular/core';
-import { Cliente } from '../models/cliente';
-import { Administrador } from '../models/administrador';
+import { HttpClient } from '@angular/common/http';
+import { Observable, catchError, map, of } from 'rxjs';
 import { Usuario } from '../models/usuario';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly API_URL = 'http://localhost:9998/api/usuarios';
+  
   // Signal para el usuario logueado
   private loggedUserSignal = signal<Usuario | null>(null);
   
@@ -15,42 +17,29 @@ export class AuthService {
     return this.loggedUserSignal.asReadonly();
   }
 
-  // Datos quemados de usuarios
-  private usuarios: Usuario[] = [
-    {
-      id: 1,
-      nombreCompleto: 'Carlos López García',
-      nombreUsuario: 'carlos.lopez',
-      telefono: '3009876543',
-      correo: 'carlos@email.com',
-      contrasenia: 'password123'
-    } as Cliente,
-    {
-      id: 2,
-      nombreCompleto: 'Administrador Principal',
-      nombreUsuario: 'admin',
-      telefono: '3001234567',
-      correo: 'admin@elpicantito.com',
-      contrasenia: 'admin123'
-    } as Administrador
-  ];
-
-  constructor() {
+  constructor(private http: HttpClient) {
     // Verificar si hay usuario en localStorage al inicializar
     this.loadUserFromStorage();
   }
 
-  login(nombreUsuario: string, contrasenia: string): boolean {
-    const usuario = this.usuarios.find(u => 
-      u.nombreUsuario === nombreUsuario && u.contrasenia === contrasenia
+  login(nombreUsuario: string, contrasenia: string): Observable<boolean> {
+    const credentials = { nombreUsuario, contrasenia };
+    
+    return this.http.post<any>(`${this.API_URL}/login`, credentials).pipe(
+      map((response) => {
+        if (response && response.usuario) {
+          const usuario = response.usuario;
+          this.loggedUserSignal.set(usuario);
+          localStorage.setItem('loggedUser', JSON.stringify(usuario));
+          return true;
+        }
+        return false;
+      }),
+      catchError((error) => {
+        console.error('Error en login:', error);
+        return of(false);
+      })
     );
-
-    if (usuario) {
-      this.loggedUserSignal.set(usuario);
-      localStorage.setItem('loggedUser', JSON.stringify(usuario));
-      return true;
-    }
-    return false;
   }
 
   logout(): void {
@@ -60,11 +49,32 @@ export class AuthService {
 
   isAdmin(): boolean {
     const user = this.loggedUserSignal();
-    return user?.nombreUsuario === 'admin';
+    return user?.rol === 'ADMIN';
   }
 
   isLoggedIn(): boolean {
     return this.loggedUserSignal() !== null;
+  }
+
+  // Métodos adicionales para el CRUD de usuarios
+  crearUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.post<Usuario>(this.API_URL, usuario);
+  }
+
+  obtenerUsuario(id: number): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.API_URL}/${id}`);
+  }
+
+  actualizarUsuario(id: number, usuario: Usuario): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.API_URL}/${id}`, usuario);
+  }
+
+  eliminarUsuario(id: number): Observable<any> {
+    return this.http.delete(`${this.API_URL}/${id}`);
+  }
+
+  obtenerUsuariosPorRol(rol: string): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.API_URL}/tipo/${rol.toLowerCase()}`);
   }
 
   private loadUserFromStorage(): void {

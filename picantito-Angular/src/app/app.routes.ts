@@ -34,6 +34,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/user/sobre-nosotros/sobre-nosotros').then(m => m.SobreNosotrosComponent)
   },
   {
+    path: 'ejemplo-api',
+    loadComponent: () => import('./components/ejemplo-uso-api.component').then(m => m.EjemploUsoApiComponent)
+  },
+  {
     path: 'checkout-summary',
     loadComponent: () => import('./components/user/checkout-summary/checkout-summary.component').then(m => m.CheckoutSummaryComponent)
   },

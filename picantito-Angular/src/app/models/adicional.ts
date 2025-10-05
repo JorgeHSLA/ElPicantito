@@ -1,12 +1,13 @@
-import { Producto } from './producto';
-
 export interface Adicional {
   id?: number;
   nombre?: string;
   descripcion?: string;
-  precio?: number;
-  precioDeAdquisicion?: number; // Agregar esta propiedad que faltaba
-  cantidad?: number; // Agregar esta propiedad también
+  precioDeVenta?: number;
+  precioDeAdquisicion?: number;
+  cantidad?: number;
   disponible?: boolean;
-  productos?: Producto[];
+  activo?: boolean;
+  
+  // COMPATIBILIDAD HACIA ATRÁS - TEMPORAL
+  precio?: number; // Mapea a precioDeVenta
 }

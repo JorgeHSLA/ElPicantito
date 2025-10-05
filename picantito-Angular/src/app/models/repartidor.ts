@@ -1,14 +1,15 @@
 
 import { Usuario } from './usuario';
+
 export class Repartidor implements Usuario {
-
-    id?:number
-    nombreCompleto?:String  
-    nombreUsuario?:String  
-    telefono?:String  
-    correo?:String  
-    contrasenia?:String  
-    estado?:String  
-    pedidosRepartidor?:any[]
-
+  id?: number;
+  nombreCompleto?: string;
+  nombreUsuario?: string;
+  telefono?: string;
+  correo?: string;
+  contrasenia?: string;
+  rol?: string;
+  estado?: string;
+  activo?: boolean;
+  pedidosRepartidor?: any[];
 }

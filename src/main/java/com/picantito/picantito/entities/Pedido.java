@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,9 +43,11 @@ public class Pedido {
     @JoinColumn(name = "repartidor_id")
     private User repartidor;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PedidoProducto> pedidoProductos = new ArrayList<>();
 
+    @JsonIgnore
     @Transient
     public List<Adicional> getAdicionales() {
         return this.pedidoProductos.stream()

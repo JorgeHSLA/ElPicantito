@@ -32,18 +32,22 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    // Simular delay de autenticación
-    setTimeout(() => {
-      const loginSuccess = this.authService.login(this.nombreUsuario(), this.password());
-      
-      if (loginSuccess) {
-        this.router.navigate(['/home']);
-      } else {
-        this.errorMessage.set('Credenciales incorrectas');
+    // Usar la API real
+    this.authService.login(this.nombreUsuario(), this.password()).subscribe({
+      next: (success) => {
+        if (success) {
+          this.router.navigate(['/home']);
+        } else {
+          this.errorMessage.set('Credenciales incorrectas');
+        }
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error en login:', error);
+        this.errorMessage.set('Error al iniciar sesión. Intenta de nuevo.');
+        this.isLoading.set(false);
       }
-      
-      this.isLoading.set(false);
-    }, 1000);
+    });
   }
 
   updateNombreUsuario(value: string) {

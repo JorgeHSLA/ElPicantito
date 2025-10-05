@@ -1,11 +1,11 @@
 export interface Usuario {
-
-
-    id?:number, 
-    nombreCompleto?:String  ,
-    nombreUsuario?:String  ,
-    telefono?:String  ,
-    correo?:String  ,
-    contrasenia?:String  ,
-
+  id?: number;
+  nombreCompleto?: string;
+  nombreUsuario?: string;
+  telefono?: string;
+  correo?: string;
+  contrasenia?: string;
+  rol?: string;
+  estado?: string;
+  activo?: boolean;
 }

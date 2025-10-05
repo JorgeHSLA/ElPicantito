@@ -64,13 +64,14 @@ public class UserController {
                         .body("Contraseña incorrecta");
             }
             
-            // Login exitoso, devolver información del usuario (excepto contraseña)
-            user.setContrasenia(null); // No devolver la contraseña
+            // Login exitoso, devolver información del usuario usando DTO
+            com.picantito.picantito.dto.LoginResponseDTO loginResponse = 
+                new com.picantito.picantito.dto.LoginResponseDTO(user);
             
             return ResponseEntity.ok()
                     .body(Map.of(
                         "mensaje", "Login exitoso",
-                        "usuario", user
+                        "usuario", loginResponse
                     ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

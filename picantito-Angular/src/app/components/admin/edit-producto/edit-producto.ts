@@ -38,22 +38,35 @@ export class EditProductoComponent implements OnInit {
   }
 
   loadProducto(id: number) {
-    const producto = this.productoService.getProductoById(id);
-    if (producto) {
-      this.producto.set(producto);
-    } else {
-      console.error('Producto no encontrado');
-      this.router.navigate(['/admin/productos']);
-    }
+    this.productoService.getProductoById(id).subscribe({
+      next: (producto) => {
+        if (producto) {
+          this.producto.set(producto);
+        } else {
+          console.error('Producto no encontrado');
+          this.router.navigate(['/admin/productos']);
+        }
+      },
+      error: (error) => {
+        console.error('Error cargando producto:', error);
+        this.router.navigate(['/admin/productos']);
+      }
+    });
   }
 
   updateProducto() {
     try {
       const productoActualizado = this.producto();
       if (productoActualizado.id) {
-        this.productoService.updateProducto(productoActualizado.id, productoActualizado);
-        console.log('Producto actualizado exitosamente');
-        this.router.navigate(['/admin/productos']);
+        this.productoService.actualizarProducto(productoActualizado.id, productoActualizado).subscribe({
+          next: (resultado) => {
+            console.log('Producto actualizado exitosamente:', resultado);
+            this.router.navigate(['/admin/productos']);
+          },
+          error: (error) => {
+            console.error('Error al actualizar producto:', error);
+          }
+        });
       }
     } catch (error) {
       console.error('Error al actualizar producto:', error);

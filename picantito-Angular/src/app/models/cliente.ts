@@ -1,13 +1,14 @@
-import { Usuario } from './usuario'; // Importando Usuario desde la carpeta 'models'
+import { Usuario } from './usuario';
 
 export class Cliente implements Usuario {
-
-    id?:number
-    nombreCompleto?:String  
-    nombreUsuario?:String  
-    telefono?:String  
-    correo?:String  
-    contrasenia?:String  
-    pedidosCliente?:any[]
-
+  id?: number;
+  nombreCompleto?: string;
+  nombreUsuario?: string;
+  telefono?: string;
+  correo?: string;
+  contrasenia?: string;
+  rol?: string;
+  estado?: string;
+  activo?: boolean;
+  pedidosCliente?: any[];
 }

@@ -1,76 +1,79 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Adicional } from '../../models/adicional';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdicionalService {
+  private readonly API_URL = 'http://localhost:9998/api/adicional';
+
+  constructor(private http: HttpClient) {}
+
+  // Obtener todos los adicionales
+  getAllAdicionales(): Observable<Adicional[]> {
+    return this.http.get<Adicional[]>(this.API_URL);
+  }
+
+  // Obtener adicional por ID
+  getAdicionalById(id: number): Observable<Adicional> {
+    return this.http.get<Adicional>(`${this.API_URL}/${id}`);
+  }
+
+  // Crear nuevo adicional
+  crearAdicional(adicional: Adicional): Observable<Adicional> {
+    return this.http.post<Adicional>(this.API_URL, adicional);
+  }
+
+  // Actualizar adicional
+  actualizarAdicional(id: number, adicional: Adicional): Observable<Adicional> {
+    return this.http.put<Adicional>(`${this.API_URL}/${id}`, adicional);
+  }
+
+  // Eliminar adicional
+  eliminarAdicional(id: number): Observable<any> {
+    return this.http.delete(`${this.API_URL}/${id}`);
+  }
+
+  // ============== MÉTODOS DE COMPATIBILIDAD HACIA ATRÁS ==============
+  // Estos métodos son para mantener funcionando los componentes existentes
   
-  private readonly STORAGE_KEY = 'adicionales_picantito';
-
-  // Mover arriba para que exista antes de loadFromStorage
-  private adicionalesIniciales: Adicional[] = [
-    { id: 1, nombre: 'Queso Extra', descripcion: 'Queso cheddar adicional', precio: 2.50, disponible: true },
-    { id: 2, nombre: 'Aguacate', descripcion: 'Rebanadas de aguacate fresco', precio: 3.00, disponible: true },
-    { id: 3, nombre: 'Jalapeños', descripcion: 'Jalapeños en escabeche', precio: 1.75, disponible: true },
-    { id: 4, nombre: 'Salsa Picante', descripcion: 'Salsa picante casera', precio: 1.25, disponible: true },
-    { id: 5, nombre: 'Cebolla Caramelizada', descripcion: 'Cebolla caramelizada al sartén', precio: 1.50, disponible: false }
-  ];
-
-  private adicionales: Adicional[] = this.loadFromStorage();
-
-  constructor() {
-    if (!localStorage.getItem(this.STORAGE_KEY)) {
-      this.adicionales = [...this.adicionalesIniciales];
-      this.saveToStorage(this.adicionales);
-    }
-  }
-
-  private loadFromStorage(): Adicional[] {
-    try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [...this.adicionalesIniciales];
-    } catch (error) {
-      console.error('Error loading adicionales from storage', error);
-      return [...this.adicionalesIniciales];
-    }
-  }
-
-  private saveToStorage(data: Adicional[]): void {
-    try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data)); } catch (error) {
-      console.error('Error saving adicionales to storage', error);
-    }
-  }
-
-  // obtener lista
+  // Método síncrono que devuelve array vacío (temporal)
   getAdicionales(): Adicional[] {
-    return [...this.adicionales];
+    console.warn('getAdicionales() es un método deprecated. Use getAllAdicionales() Observable');
+    return [];
   }
 
-  // crear
-  saveAdicional(adicional: Adicional) {
-    const nuevoId = this.adicionales.length > 0 ? Math.max(...this.adicionales.map(a => a.id ?? 0)) + 1 : 1;
-    this.adicionales.push({ ...adicional, id: nuevoId });
-    this.saveToStorage(this.adicionales);
+  // Método para guardar adicional (mapea a crearAdicional)
+  saveAdicional(adicional: Adicional): void {
+    console.warn('saveAdicional() es un método deprecated. Use crearAdicional() Observable');
+    this.crearAdicional(adicional).subscribe({
+      next: (result) => console.log('Adicional creado:', result),
+      error: (error) => console.error('Error creando adicional:', error)
+    });
   }
 
-  // actualizar
-  updateAdicional(id: number, adicional: Adicional) {
-    const index = this.adicionales.findIndex(a => a.id === id);
-    if (index !== -1) {
-      this.adicionales[index] = { ...adicional, id };
-      this.saveToStorage(this.adicionales);
-    }
+  // Método para actualizar adicional (síncrono, temporal)
+  updateAdicional(id: number, adicional: Adicional): void {
+    console.warn('updateAdicional() es un método deprecated. Use actualizarAdicional() Observable');
+    this.actualizarAdicional(id, adicional).subscribe({
+      next: (result) => console.log('Adicional actualizado:', result),
+      error: (error) => console.error('Error actualizando adicional:', error)
+    });
   }
 
-  // eliminar
-  deleteAdicional(id: number) {
-    this.adicionales = this.adicionales.filter(a => a.id !== id);
-    this.saveToStorage(this.adicionales);
+  // Método para eliminar adicional (síncrono, temporal)
+  deleteAdicional(id: number): void {
+    console.warn('deleteAdicional() es un método deprecated. Use eliminarAdicional() Observable');
+    this.eliminarAdicional(id).subscribe({
+      next: (result) => console.log('Adicional eliminado:', result),
+      error: (error) => console.error('Error eliminando adicional:', error)
+    });
   }
 
-  resetToInitialData() {
-    this.adicionales = [...this.adicionalesIniciales];
-    this.saveToStorage(this.adicionales);
+  // Método para resetear datos (temporal, no hace nada)
+  resetToInitialData(): void {
+    console.warn('resetToInitialData() es un método deprecated sin implementación en API REST');
   }
 }
