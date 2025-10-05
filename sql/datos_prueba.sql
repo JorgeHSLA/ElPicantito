@@ -1,13 +1,13 @@
--- Insertar usuarios de prueba
+-- Insertar usuarios de prueba (PostgreSQL)
 INSERT INTO usuarios (nombre_completo, nombre_usuario, telefono, correo, contrasenia, rol, estado, activo) 
-ON CONFLICT (nombre_usuario) DO NOTHING
 VALUES 
 ('Administrador Principal', 'admin', '3001234567', 'admin@elpicantito.com', 'admin123', 'ADMIN', null, true),
 ('Cliente de Prueba', 'cliente1', '3009876543', 'cliente@email.com', 'cliente123', 'CLIENTE', null, true),
 ('Operador de Prueba', 'operador1', '3005555555', 'operador@elpicantito.com', 'operador123', 'OPERADOR', null, true),
-('Repartidor de Prueba', 'repartidor1', '3007777777', 'repartidor@elpicantito.com', 'repartidor123', 'REPARTIDOR', 'DISPONIBLE', true);
+('Repartidor de Prueba', 'repartidor1', '3007777777', 'repartidor@elpicantito.com', 'repartidor123', 'REPARTIDOR', 'DISPONIBLE', true)
+ON CONFLICT (nombre_usuario) DO NOTHING;
 
--- Insertar productos de prueba (tacos y bebidas)df
+-- Insertar productos de prueba (tacos y bebidas)
 INSERT INTO productos (nombre, descripcion, precio_de_venta, precio_de_adquisicion, imagen, disponible, calificacion, activo) 
 VALUES 
 -- TACOS
