@@ -15,7 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -47,27 +46,6 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PedidoProducto> pedidoProductos = new ArrayList<>();
 
-    @JsonIgnore
-    @Transient
-    public List<Adicional> getAdicionales() {
-        return this.pedidoProductos.stream()
-            .flatMap(pp -> pp.getPedidoProductoAdicionales().stream()
-                .map(PedidoProductoAdicional::getAdicional))
-            .toList();
-    }
 
-    public void setAdicionales(List<Adicional> adicionales) {
-        // Limpio todos los adicionales existentes
-        for (PedidoProducto pedidoProducto : this.pedidoProductos) {
-            pedidoProducto.getPedidoProductoAdicionales().clear();
-            for (Adicional adicional : adicionales) {
-                PedidoProductoAdicional ppa = new PedidoProductoAdicional();
-                ppa.setPedidoProducto(pedidoProducto);
-                ppa.setAdicional(adicional);
-                ppa.setCantidadAdicional(1); // valor por defecto
-                pedidoProducto.getPedidoProductoAdicionales().add(ppa);
-        }
-    }
-}
 
 }
