@@ -24,10 +24,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @Column(nullable = false)
+    @Column(name = "nombrecompleto", nullable = false)
     private String nombreCompleto;
-    
-    @Column(unique = true, nullable = false)
+
+    @Column(name = "nombreusuario", unique = true, nullable = false)
     private String nombreUsuario;
     
     @Column(nullable = false)
