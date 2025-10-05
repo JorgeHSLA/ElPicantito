@@ -22,6 +22,7 @@ import com.picantito.picantito.service.AdicionalService;
 
 @RestController
 @RequestMapping("/api/adicional")
+@CrossOrigin(origins = "http://localhost:4200") // Permitir solicitudes desde el frontend en localhost:4200
 public class AdicionalController {
     
     @Autowired
