@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ProductCardComponent } from '../../shared/product-card/product-card.component';
 import { ProductoService } from '../../../services/tienda/producto.service';
 import { Producto } from '../../../models/producto';
@@ -15,14 +15,14 @@ declare var bootstrap: any;
   styleUrls: ['./tienda.css']
 })
 export class TiendaComponent implements OnInit, AfterViewInit {
-  
+
   // Datos de productos de la API
   productos: Producto[] = [];
 
   // Filtros
   categoriaSeleccionada: string = 'Todos';
   categorias = ['Todos', 'Disponibles', 'No Disponibles'];
-  
+
   // Productos filtrados
   productosFiltrados: Producto[] = [];
   isLoading = true;
@@ -31,7 +31,7 @@ export class TiendaComponent implements OnInit, AfterViewInit {
   // Estado del usuario (simulado por ahora)
   loggedUser: any = null; // Aquí integrarás con tu servicio de autenticación
 
-  constructor(private productoService: ProductoService) {}
+  constructor(private productoService: ProductoService, private router: Router) {}
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -77,11 +77,11 @@ export class TiendaComponent implements OnInit, AfterViewInit {
     if (this.categoriaSeleccionada === 'Todos') {
       this.productosFiltrados = [...this.productos];
     } else if (this.categoriaSeleccionada === 'Disponibles') {
-      this.productosFiltrados = this.productos.filter(producto => 
+      this.productosFiltrados = this.productos.filter(producto =>
         producto.disponible === true
       );
     } else if (this.categoriaSeleccionada === 'No Disponibles') {
-      this.productosFiltrados = this.productos.filter(producto => 
+      this.productosFiltrados = this.productos.filter(producto =>
         producto.disponible === false
       );
     }
@@ -107,7 +107,9 @@ export class TiendaComponent implements OnInit, AfterViewInit {
   }
 
   crearTacoPersonalizado(): void {
-    console.log('Crear taco personalizado');
-    // Implementar navegación a creador de tacos
+    // Navegar al constructor de tacos personalizado
+    this.router.navigate(['/crear-taco']).then(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    });
   }
 }

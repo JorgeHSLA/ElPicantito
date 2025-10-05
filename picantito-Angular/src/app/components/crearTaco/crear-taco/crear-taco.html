@@ -1,1 +1,319 @@
-<p>crear-taco works!</p>
+<div class="crear-taco-container">
+    <!-- Header -->
+    <header class="taco-header">
+        <h1>
+            <i class="fas fa-utensils"></i> Crea Tu Taco Personalizado
+        </h1>
+        <p class="subtitle">Personaliza cada ingrediente y crea el taco perfecto para ti</p>
+    </header>
+
+    <!-- Loading State -->
+    <div *ngIf="loading()" class="loading-container">
+        <div class="spinner"></div>
+        <p>Cargando ingredientes...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error()" class="error-container">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>{{ error() }}</p>
+        <button (click)="cargarDatos()" class="btn btn-retry">
+      <i class="fas fa-redo"></i>
+      Reintentar
+    </button>
+    </div>
+
+    <!-- Success State -->
+    <div *ngIf="successMessage()" class="success-container">
+        <i class="fas fa-check-circle"></i>
+        <p>{{ successMessage() }}</p>
+        <div class="spinner-small"></div>
+        <p class="redirect-text">Redirigiendo al inicio...</p>
+    </div>
+
+    <!-- Main Content -->
+    <div *ngIf="!loading() && !error() && !successMessage()" class="taco-builder">
+
+        <!-- Navigation Tabs -->
+        <div class="builder-navigation">
+            <button (click)="cambiarSeccion('tortilla')" [class]="'nav-tab ' + (seccionActiva() === 'tortilla' ? 'active' : '')">
+        <i class="fas fa-circle"></i>
+        Tortilla
+      </button>
+            <button (click)="cambiarSeccion('proteina')" [class]="'nav-tab ' + (seccionActiva() === 'proteina' ? 'active' : '')">
+        <i class="fas fa-drumstick-bite"></i>
+        Proteína
+      </button>
+            <button (click)="cambiarSeccion('vegetales')" [class]="'nav-tab ' + (seccionActiva() === 'vegetales' ? 'active' : '')">
+        <i class="fas fa-carrot"></i>
+        Vegetales
+      </button>
+            <button (click)="cambiarSeccion('salsas')" [class]="'nav-tab ' + (seccionActiva() === 'salsas' ? 'active' : '')">
+        <i class="fas fa-fire"></i>
+        Salsas
+      </button>
+            <button (click)="cambiarSeccion('quesos')" [class]="'nav-tab ' + (seccionActiva() === 'quesos' ? 'active' : '')">
+        <i class="fas fa-cheese"></i>
+        Quesos
+      </button>
+            <button (click)="cambiarSeccion('extras')" [class]="'nav-tab ' + (seccionActiva() === 'extras' ? 'active' : '')">
+        <i class="fas fa-plus-circle"></i>
+        Extras
+      </button>
+        </div>
+
+        <div class="builder-content">
+            <!-- Left Panel - Ingredients Selection -->
+            <div class="ingredients-panel">
+
+                <!-- Tortillas Section -->
+                <div *ngIf="seccionActiva() === 'tortilla'" class="ingredient-section">
+                    <h2>
+                        <i class="fas fa-circle"></i> Elige tu Tortilla
+                    </h2>
+                    <p class="section-description">Selecciona la base perfecta para tu taco</p>
+
+                    <div class="tortilla-grid">
+                        <div *ngFor="let tortilla of tortillas()" class="tortilla-card" [class.selected]="tacoPersonalizado().tortilla?.id === tortilla.id" (click)="seleccionarTortilla(tortilla)">
+
+                            <div class="tortilla-image">
+                                <img [src]="tortilla.imagen || '/images/taco1.webp'" [alt]="tortilla.nombre" onerror="this.src='/images/taco1.webp'">
+                            </div>
+
+                            <div class="tortilla-info">
+                                <h3>{{ tortilla.nombre }}</h3>
+                                <p class="tortilla-description">{{ tortilla.descripcion }}</p>
+                                <div class="tortilla-price">
+                                    <span *ngIf="tortilla.precio === 0">Gratis</span>
+                                    <span *ngIf="tortilla.precio > 0">+${{ tortilla.precio | number:'1.2-2' }}</span>
+                                </div>
+                            </div>
+
+                            <div *ngIf="tacoPersonalizado().tortilla?.id === tortilla.id" class="selected-indicator">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proteínas Section -->
+                <div *ngIf="seccionActiva() === 'proteina'" class="ingredient-section">
+                    <h2>
+                        <i class="fas fa-drumstick-bite"></i> Elige tu Proteína
+                    </h2>
+                    <p class="section-description">Selecciona la proteína principal de tu taco</p>
+
+                    <div class="protein-grid">
+                        <div *ngFor="let proteina of proteinas()" class="protein-card" [class.selected]="tacoPersonalizado().proteina?.id === proteina.id" (click)="seleccionarProteina(proteina)">
+
+                            <div class="protein-image">
+                                <img [src]="proteina.imagen || '/images/taco1.webp'" [alt]="proteina.nombre" onerror="this.src='/images/taco1.webp'">
+                            </div>
+
+                            <div class="protein-info">
+                                <h3>{{ proteina.nombre }}</h3>
+                                <p class="protein-description">{{ proteina.descripcion }}</p>
+                                <div class="protein-price">
+                                    ${{ (proteina.precioDeVenta || proteina.precio || 0) | number:'1.2-2' }}
+                                </div>
+                            </div>
+
+                            <div *ngIf="tacoPersonalizado().proteina?.id === proteina.id" class="selected-indicator">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Adicionales por Categoría -->
+                <div *ngFor="let categoria of categoriasAdicionales()" [style.display]="seccionActiva() === categoria.nombre.toLowerCase() ? 'block' : 'none'" class="ingredient-section">
+
+                    <h2>
+                        <i [class]="categoria.icono"></i> {{ categoria.nombre }}
+                    </h2>
+                    <p class="section-description">{{ categoria.descripcion }}</p>
+
+                    <div class="adicionales-grid">
+                        <div *ngFor="let adicional of categoria.items" class="adicional-card" [class.selected]="esAdicionalSeleccionado(adicional.id!, categoria.nombre)">
+
+                            <div class="adicional-header">
+                                <div class="adicional-info">
+                                    <h4>{{ adicional.nombre }}</h4>
+                                    <p class="adicional-description">{{ adicional.descripcion }}</p>
+                                    <div class="adicional-price">
+                                        ${{ (adicional.precioDeVenta || adicional.precio || 0) | number:'1.2-2' }} c/u
+                                    </div>
+                                </div>
+
+                                <div class="adicional-controls">
+                                    <button *ngIf="!esAdicionalSeleccionado(adicional.id!, categoria.nombre)" (click)="toggleAdicional(adicional, categoria.nombre)" class="btn btn-add-adicional">
+                    <i class="fas fa-plus"></i>
+                    Agregar
+                  </button>
+
+                                    <div *ngIf="esAdicionalSeleccionado(adicional.id!, categoria.nombre)" class="quantity-controls">
+                                        <button (click)="cambiarCantidadAdicional(adicional.id!, getCantidadAdicional(adicional.id!, categoria.nombre) - 1, categoria.nombre)" class="btn btn-quantity">
+                      <i class="fas fa-minus"></i>
+                    </button>
+
+                                        <span class="quantity">{{ getCantidadAdicional(adicional.id!, categoria.nombre) }}</span>
+
+                                        <button (click)="cambiarCantidadAdicional(adicional.id!, getCantidadAdicional(adicional.id!, categoria.nombre) + 1, categoria.nombre)" class="btn btn-quantity">
+                      <i class="fas fa-plus"></i>
+                    </button>
+
+                                        <button (click)="removerAdicional(adicional.id!, categoria.nombre)" class="btn btn-remove">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Taco Preview -->
+            <div class="preview-panel">
+
+                <!-- Taco Visual Preview -->
+                <div class="taco-preview">
+                    <h2>
+                        <i class="fas fa-eye"></i> Vista Previa de tu Taco
+                    </h2>
+
+                    <div class="taco-visual">
+                        <div class="taco-image-container">
+                            <img src="/images/CreateTaco.jpg" alt="Taco en construcción" class="taco-base-image">
+
+                            <!-- Progress Indicators -->
+                            <div class="progress-indicators">
+                                <div class="progress-item" [class.completed]="tacoPersonalizado().tortilla">
+                                    <i class="fas fa-circle"></i>
+                                    <span>Tortilla</span>
+                                </div>
+                                <div class="progress-item" [class.completed]="tacoPersonalizado().proteina">
+                                    <i class="fas fa-drumstick-bite"></i>
+                                    <span>Proteína</span>
+                                </div>
+                                <div class="progress-item" [class.completed]="tacoPersonalizado().vegetales.length > 0">
+                                    <i class="fas fa-carrot"></i>
+                                    <span>Vegetales</span>
+                                </div>
+                                <div class="progress-item" [class.completed]="tacoPersonalizado().salsas.length > 0">
+                                    <i class="fas fa-fire"></i>
+                                    <span>Salsas</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Taco Summary -->
+                    <div class="taco-summary">
+                        <h3>Resumen de tu Taco</h3>
+
+                        <div class="summary-section">
+                            <h4>
+                                <i class="fas fa-circle"></i> Tortilla:
+                            </h4>
+                            <p *ngIf="tacoPersonalizado().tortilla; else noTortilla">
+                                {{ tacoPersonalizado().tortilla!.nombre }} -
+                                <span *ngIf="tacoPersonalizado().tortilla!.precio === 0">Gratis</span>
+                                <span *ngIf="tacoPersonalizado().tortilla!.precio > 0">${{ tacoPersonalizado().tortilla!.precio | number:'1.2-2' }}</span>
+                            </p>
+                            <ng-template #noTortilla>
+                                <p class="not-selected">No seleccionada</p>
+                            </ng-template>
+                        </div>
+
+                        <div class="summary-section">
+                            <h4>
+                                <i class="fas fa-drumstick-bite"></i> Proteína:
+                            </h4>
+                            <p *ngIf="tacoPersonalizado().proteina; else noProtein">
+                                {{ tacoPersonalizado().proteina!.nombre }} - ${{ (tacoPersonalizado().proteina!.precioDeVenta || tacoPersonalizado().proteina!.precio || 0) | number:'1.2-2' }}
+                            </p>
+                            <ng-template #noProtein>
+                                <p class="not-selected">No seleccionada</p>
+                            </ng-template>
+                        </div>
+
+                        <div class="summary-section" *ngIf="tacoPersonalizado().vegetales.length > 0">
+                            <h4>
+                                <i class="fas fa-carrot"></i> Vegetales:
+                            </h4>
+                            <div *ngFor="let item of tacoPersonalizado().vegetales" class="summary-item">
+                                <span>{{ item.adicional.nombre }} (x{{ item.cantidad }})</span>
+                                <span class="item-price">
+                  ${{ ((item.adicional.precioDeVenta || item.adicional.precio || 0) * item.cantidad) | number:'1.2-2' }}
+                </span>
+                            </div>
+                        </div>
+
+                        <div class="summary-section" *ngIf="tacoPersonalizado().salsas.length > 0">
+                            <h4>
+                                <i class="fas fa-fire"></i> Salsas:
+                            </h4>
+                            <div *ngFor="let item of tacoPersonalizado().salsas" class="summary-item">
+                                <span>{{ item.adicional.nombre }} (x{{ item.cantidad }})</span>
+                                <span class="item-price">
+                  ${{ ((item.adicional.precioDeVenta || item.adicional.precio || 0) * item.cantidad) | number:'1.2-2' }}
+                </span>
+                            </div>
+                        </div>
+
+                        <div class="summary-section" *ngIf="tacoPersonalizado().quesos.length > 0">
+                            <h4>
+                                <i class="fas fa-cheese"></i> Quesos:
+                            </h4>
+                            <div *ngFor="let item of tacoPersonalizado().quesos" class="summary-item">
+                                <span>{{ item.adicional.nombre }} (x{{ item.cantidad }})</span>
+                                <span class="item-price">
+                  ${{ ((item.adicional.precioDeVenta || item.adicional.precio || 0) * item.cantidad) | number:'1.2-2' }}
+                </span>
+                            </div>
+                        </div>
+
+                        <div class="summary-section" *ngIf="tacoPersonalizado().extras.length > 0">
+                            <h4>
+                                <i class="fas fa-plus-circle"></i> Extras:
+                            </h4>
+                            <div *ngFor="let item of tacoPersonalizado().extras" class="summary-item">
+                                <span>{{ item.adicional.nombre }} (x{{ item.cantidad }})</span>
+                                <span class="item-price">
+                  ${{ ((item.adicional.precioDeVenta || item.adicional.precio || 0) * item.cantidad) | number:'1.2-2' }}
+                </span>
+                            </div>
+                        </div>
+
+                        <!-- Total Price -->
+                        <div class="total-section">
+                            <h3>
+                                <i class="fas fa-calculator"></i> Total: ${{ tacoPersonalizado().precioTotal | number:'1.2-2' }}
+                            </h3>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button (click)="finalizarTaco()" [disabled]="!puedeAgregarAlCarrito" class="btn btn-primary btn-finalizar">
+              <i class="fas fa-shopping-cart"></i>
+              Agregar al Carrito
+            </button>
+
+                        <button (click)="cancelar()" class="btn btn-secondary btn-cancelar">
+              <i class="fas fa-arrow-left"></i>
+              Volver al Menú
+            </button>
+                    </div>
+
+                    <!-- Warning Message -->
+                    <div *ngIf="!puedeAgregarAlCarrito" class="warning-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Debes seleccionar una tortilla y una proteína para continuar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

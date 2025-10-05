@@ -25,6 +25,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/user/tienda/tienda').then(m => m.TiendaComponent)
   },
   {
+    path: 'crear-taco',
+    loadComponent: () => import('./components/crearTaco/crear-taco/crear-taco').then(m => m.CrearTaco)
+  },
+  {
     path: 'mi-perfil',
     loadComponent: () => import('./components/user/mi-perfil/mi-perfil').then(m => m.MiPerfilComponent),
     canActivate: [AuthGuard]

@@ -3,7 +3,6 @@ package com.picantito.picantito.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,10 +24,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @Column(nullable = false)
+    @Column(name = "nombrecompleto", nullable = false)
     private String nombreCompleto;
-    
-    @Column(unique = true, nullable = false)
+
+    @Column(name = "nombreusuario", unique = true, nullable = false)
     private String nombreUsuario;
     
     @Column(nullable = false)
@@ -48,12 +47,10 @@ public class User {
 
     @Column(nullable = false)
     private Boolean activo = true;
-    
-    @JsonIgnore
+
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pedido> pedidosCliente = new ArrayList<>();
     
-    @JsonIgnore
     @OneToMany(mappedBy = "repartidor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pedido> pedidosRepartidor = new ArrayList<>();
 
