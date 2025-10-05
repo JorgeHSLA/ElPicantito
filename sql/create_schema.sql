@@ -1,6 +1,4 @@
 -- Crear un esquema (puedes cambiar el nombre si quieres)
-CREATE SCHEMA IF NOT EXISTS pedidos_app;
-SET search_path TO pedidos_app;
 
 -- ==========================
 -- Tabla: Usuarios

@@ -19,7 +19,20 @@ public class ProductoServiceImpl implements ProductoService {
     // CRUD Productoss
     @Override
     public List<Producto> getAllProductos() {
-        return productoRepository.findAll();
+        System.out.println("ProductoServiceImpl: Ejecutando getAllProductos()");
+        List<Producto> productos = productoRepository.findAll();
+        System.out.println("ProductoServiceImpl: Productos encontrados: " + productos.size());
+        
+        if (productos.isEmpty()) {
+            System.out.println("ProductoServiceImpl: ALERTA - No se encontraron productos en la base de datos");
+        } else {
+            System.out.println("ProductoServiceImpl: Primer producto: " + productos.get(0).getNombre() + 
+                              ", ID: " + productos.get(0).getId() + 
+                              ", Activo: " + productos.get(0).getActivo() + 
+                              ", Disponible: " + productos.get(0).getDisponible());
+        }
+        
+        return productos;
     }
 
     @Override
@@ -34,7 +47,18 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public List<Producto> getProductosActivos() {
-        return productoRepository.findByActivoTrue();
+        System.out.println("ProductoServiceImpl: Ejecutando getProductosActivos()");
+        List<Producto> productosActivos = productoRepository.findByActivoTrue();
+        System.out.println("ProductoServiceImpl: Productos activos encontrados: " + productosActivos.size());
+        
+        if (productosActivos.isEmpty()) {
+            System.out.println("ProductoServiceImpl: ALERTA - No se encontraron productos activos en la base de datos");
+        } else {
+            System.out.println("ProductoServiceImpl: Primer producto activo: " + productosActivos.get(0).getNombre() + 
+                              ", ID: " + productosActivos.get(0).getId());
+        }
+        
+        return productosActivos;
     }
 
     // eliminado logico

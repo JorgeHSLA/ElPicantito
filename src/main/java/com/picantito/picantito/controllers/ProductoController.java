@@ -48,7 +48,12 @@ public class ProductoController {
     // Mostrar información de todos los productos: http://localhost:9998/api/productos
     @GetMapping
     public ResponseEntity<List<Producto>> getAllProductos() {
+        System.out.println("ProductoController: Recibida petición GET a /api/productos");
         List<Producto> productos = productoService.getAllProductos();
+        System.out.println("ProductoController: Devolviendo " + productos.size() + " productos al cliente");
+        if (productos.isEmpty()) {
+            System.out.println("ProductoController: ALERTA - Lista de productos vacía");
+        }
         return ResponseEntity.ok(productos);
     }
     
@@ -107,9 +112,15 @@ public class ProductoController {
     // Obtener productos activos: GET http://localhost:9998/api/productos/activos
     @GetMapping("/activos")
     public ResponseEntity<List<Producto>> getProductosActivos() {
+        System.out.println("ProductoController: Recibida petición GET a /api/productos/activos");
         List<Producto> productosActivos = productoService.getProductosActivos();
+        System.out.println("ProductoController: Devolviendo " + productosActivos.size() + " productos activos al cliente");
+        if (productosActivos.isEmpty()) {
+            System.out.println("ProductoController: ALERTA - Lista de productos activos vacía");
+        } else {
+            System.out.println("ProductoController: Primer producto activo: " + productosActivos.get(0).getNombre());
+        }
         return ResponseEntity.ok(productosActivos);
     }
-    
     
 }
