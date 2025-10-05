@@ -26,24 +26,139 @@
     font-style: normal;
 }
 
-/* Aquí puedes poner estilos globales también */
+/* Definir Fira Sans Regular */
+@font-face {
+    font-family: 'Fira Sans';
+    src: local('Fira Sans Regular'), 
+         url('assets/fonts/FiraSans-Regular.otf') format('opentype');
+    font-display: swap;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Definir Fira Sans Italic */
+@font-face {
+    font-family: 'Fira Sans';
+    src: local('Fira Sans Italic'), 
+         url('assets/fonts/FiraSans-Italic.otf') format('opentype');
+    font-display: swap;
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* Definir Fira Sans Light */
+@font-face {
+    font-family: 'Fira Sans';
+    src: local('Fira Sans Light'), 
+         url('assets/fonts/FiraSans-Light.otf') format('opentype');
+    font-display: swap;
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* Definir Fira Sans Light Italic */
+@font-face {
+    font-family: 'Fira Sans';
+    src: local('Fira Sans Light Italic'), 
+         url('assets/fonts/FiraSans-LightItalic.otf') format('opentype');
+    font-display: swap;
+    font-weight: 300;
+    font-style: italic;
+}
+
+/* Definir Fira Sans Medium */
+@font-face {
+    font-family: 'Fira Sans';
+    src: local('Fira Sans Medium'), 
+         url('assets/fonts/FiraSans-Medium.otf') format('opentype');
+    font-display: swap;
+    font-weight: 500;
+    font-style: normal;
+}
+
+/* Definir Fira Sans Medium Italic */
+@font-face {
+    font-family: 'Fira Sans';
+    src: local('Fira Sans Medium Italic'), 
+         url('assets/fonts/FiraSans-MediumItalic.otf') format('opentype');
+    font-display: swap;
+    font-weight: 500;
+    font-style: italic;
+}
+
+/* Definir Fira Sans SemiBold */
+@font-face {
+    font-family: 'Fira Sans';
+    src: local('Fira Sans SemiBold'), 
+         url('assets/fonts/FiraSans-SemiBold.otf') format('opentype');
+    font-display: swap;
+    font-weight: 600;
+    font-style: normal;
+}
+
+/* Definir Fira Sans SemiBold Italic */
+@font-face {
+    font-family: 'Fira Sans';
+    src: local('Fira Sans SemiBold Italic'), 
+         url('assets/fonts/FiraSans-SemiBoldItalic.otf') format('opentype');
+    font-display: swap;
+    font-weight: 600;
+    font-style: italic;
+}
+
+/* Definir Fira Sans Bold */
+@font-face {
+    font-family: 'Fira Sans';
+    src: local('Fira Sans Bold'), 
+         url('assets/fonts/FiraSans-Bold.otf') format('opentype');
+    font-display: swap;
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Definir Fira Sans Bold Italic */
+@font-face {
+    font-family: 'Fira Sans';
+    src: local('Fira Sans Bold Italic'), 
+         url('assets/fonts/FiraSans-BoldItalic.otf') format('opentype');
+    font-display: swap;
+    font-weight: 700;
+    font-style: italic;
+}
+
+/* Estilos globales */
 body {
     background-color: var(--neutral-bg);
-    font-family: var(--font-primary);
+    font-family: var(--font-body);
+    font-weight: 500; /* Medium weight para mejor legibilidad */
     color: var(--neutral-text);
 }
 
-/* Aplicar Cucciolo a elementos principales */
+/* Aplicar Cucciolo a títulos y elementos principales */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: 0.5px; /* Espaciado entre letras para Cucciolo */
 }
 
-p, span, div, a, button, input, textarea, select {
+/* Aplicar Fira Sans al resto del texto con peso Medium */
+p, span, div, a, button, input, textarea, select, 
+.card-text, .form-control, .btn, .nav-link, 
+.dropdown-item, .list-group-item, .table {
     font-family: var(--font-body);
+    font-weight: 500; /* Medium weight para mejor legibilidad */
 }
 
-.navbar-brand, .btn, .card-title, .display-1, .display-2, .display-3, .display-4 {
+/* Aplicar Cucciolo a títulos de elementos específicos */
+.navbar-brand, .card-title, .display-1, .display-2, .display-3, .display-4 {
     font-family: var(--font-heading);
+    letter-spacing: 0.5px; /* Espaciado entre letras */
+}
+
+/* Mantener Fira Sans en botones normales */
+.btn {
+    font-family: var(--font-body);
+    font-weight: 600; /* SemiBold para botones */
 }
 
 /* Clases especiales para Cucciolo Rough */
@@ -53,17 +168,25 @@ p, span, div, a, button, input, textarea, select {
 .brand-title,
 .special-heading {
     font-family: var(--font-rough) !important;
+    letter-spacing: 0.75px; /* Más espaciado para Cucciolo Rough */
 }
 
 /* Aplicar Cucciolo Rough a elementos destacados específicos */
 .carousel-item h2,
 .navbar-brand,
-.auth-title,
+.auth-title {
+    font-family: var(--font-rough);
+    letter-spacing: 0.75px;
+}
+
+/* Aplicar Cucciolo normal a badges y botones principales */
 .btn-primary,
 .btn-danger,
 .btn-success,
 .badge {
-    font-family: var(--font-rough);
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: 0.3px; /* Espaciado menor para botones */
 }
 /* =========================
    VARIABLES GLOBALES - Colores para Texto, Fondos, Bordes y Sombras
@@ -91,10 +214,10 @@ p, span, div, a, button, input, textarea, select {
     --transition-fast: 0.3s ease;
 
     /* Tipografías */
-    --font-primary: "Cucciolo", "Fredoka", "Quicksand", "Roboto", "Comic Sans MS", cursive, sans-serif;
-    --font-heading: "Cucciolo", "Fredoka", "Quicksand", "Playfair Display", "Georgia", serif;
-    --font-body: "Cucciolo", "Quicksand", "Roboto", "Arial", sans-serif;
-    --font-rough: "Cucciolo Rough", "Cucciolo", "Fredoka", "Quicksand", cursive, sans-serif;
+    --font-primary: "Fira Sans", "Roboto", "Arial", sans-serif;
+    --font-heading: "Cucciolo", "Playfair Display", "Georgia", "Times New Roman", serif;
+    --font-body: "Fira Sans", "Roboto", "Arial", sans-serif;
+    --font-rough: "Cucciolo Rough", "Cucciolo", "Playfair Display", "Georgia", "Times New Roman", serif;
 }
 
 /* =========================
@@ -122,4 +245,112 @@ p, span, div, a, button, input, textarea, select {
 
 .dropdown-item:hover::before {
     left: 100%;
+}
+
+/* =========================
+   CLASES TIPOGRÁFICAS ADICIONALES
+   ========================= */
+
+/* Clases para forzar el uso de tipografías específicas */
+.font-cucciolo {
+    font-family: var(--font-heading) !important;
+    letter-spacing: 0.5px;
+}
+
+.font-cucciolo-rough {
+    font-family: var(--font-rough) !important;
+    letter-spacing: 0.75px;
+}
+
+.font-fira-sans {
+    font-family: var(--font-body) !important;
+}
+
+/* Clases para forzar normalización de acentos */
+.no-accents {
+    font-family: var(--font-heading) !important;
+    letter-spacing: 0.5px;
+}
+
+.no-accents-rough {
+    font-family: var(--font-rough) !important;
+    letter-spacing: 0.75px;
+}
+
+/* Pesos específicos para Fira Sans */
+.fw-light {
+    font-weight: 300 !important;
+}
+
+.fw-normal {
+    font-weight: 400 !important;
+}
+
+.fw-medium {
+    font-weight: 500 !important;
+}
+
+.fw-semibold {
+    font-weight: 600 !important;
+}
+
+.fw-bold {
+    font-weight: 700 !important;
+}
+
+/* Asegurar que el texto del cuerpo use Fira Sans */
+.card-body, .modal-body, .accordion-body, 
+.alert, .tooltip, .popover, .toast {
+    font-family: var(--font-body);
+    font-weight: 500; /* Medium weight */
+}
+
+/* Elementos que necesitan más peso */
+.navbar-nav .nav-link, .dropdown-item, 
+.form-label, .input-group-text {
+    font-family: var(--font-body);
+    font-weight: 500; /* Medium weight */
+}
+
+/* Texto pequeño con peso ligero */
+.small, .text-muted, .form-text {
+    font-family: var(--font-body);
+    font-weight: 400; /* Regular weight para texto secundario */
+}
+
+/* Enlaces importantes con más peso */
+.nav-link:hover, .nav-link:focus,
+.btn-link, .link-primary {
+    font-weight: 600; /* SemiBold para interacciones */
+}
+
+/* =========================
+   SOLUCIÓN PARA ACENTOS - NORMALIZAR CARACTERES
+   ========================= */
+
+/* Configuración para normalizar automáticamente los acentos */
+h1, h2, h3, h4, h5, h6,
+.navbar-brand, .card-title, .display-1, .display-2, .display-3, .display-4,
+.cucciolo-rough, .hero-title, .promo-title, .brand-title, .special-heading,
+.carousel-item h2, .auth-title,
+.btn-primary, .btn-danger, .btn-success, .badge,
+.font-cucciolo, .font-cucciolo-rough {
+    /* Mantener Cucciolo pero normalizar caracteres */
+    font-feature-settings: "liga" 0; /* Desactivar ligaduras */
+    text-rendering: optimizeLegibility;
+    -webkit-font-feature-settings: "liga" 0;
+    -moz-font-feature-settings: "liga" 0;
+    -ms-font-feature-settings: "liga" 0;
+}
+
+/* Clase especial para normalizar acentos manualmente */
+.normalize-accents {
+    font-family: var(--font-heading);
+    letter-spacing: 0.5px;
+}
+
+/* Para elementos rough */
+.normalize-accents-rough {
+    font-family: var(--font-rough);
+    letter-spacing: 0.75px;
 }
