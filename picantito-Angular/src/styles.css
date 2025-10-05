@@ -731,8 +731,47 @@ small, .small {
 }
 
 /* =========================
-   GIF LUCHADORES - ANCHO COMPLETO
+   GIF LUCHADORES - CONFIGURACIONES
    ========================= */
+
+/* GIFs Horizontales - Grandes y Pegados */
+.luchadores-section-horizontal {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+}
+
+.luchadores-container-full {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.luchadores-row {
+    display: flex;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.luchadores-col {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.luchadores-gif-large {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+/* Estilos originales para compatibilidad */
 .luchadores-section {
     background: transparent;
     padding: 0;
