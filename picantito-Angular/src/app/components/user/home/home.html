@@ -3,36 +3,63 @@
 
 <!-- GIFs LUCHADORES HORIZONTALES PEGADOS -->
 <section class="luchadores-section-horizontal">
-  <div class="luchadores-container-full">
-    <div class="luchadores-row">
-      <div class="luchadores-col">
-        <img src="/images/luchadores.gif" alt="Luchadores mexicanos" class="luchadores-gif-large">
-      </div>
-      <div class="luchadores-col">
-        <img src="/images/luchadores.gif" alt="Luchadores mexicanos" class="luchadores-gif-large">
-      </div>
+    <div class="luchadores-container-full">
+        <div class="luchadores-row">
+            <div class="luchadores-col">
+                <img src="/images/luchadores1.gif" alt="Luchadores mexicanos" class="luchadores-gif-large">
+            </div>
+            <div class="luchadores-col">
+                <img src="/images/luchadores1.gif" alt="Luchadores mexicanos" class="luchadores-gif-large">
+            </div>
+            <div class="luchadores-col">
+                <img src="/images/luchadores1.gif" alt="Luchadores mexicanos" class="luchadores-gif-large">
+            </div>
+            <div class="luchadores-col">
+                <img src="/images/luchadores1.gif" alt="Luchadores mexicanos" class="luchadores-gif-large">
+            </div>
+        </div>
     </div>
-  </div>
 </section>
 
 <!-- CARACTERÍSTICAS -->
 <section class="features-section py-5 bg-purple-uniform">
-  <div class="container">
-    <div class="row text-center">
-      @for (feature of features; track feature.titulo) {
-        <div class="col-md-4 mb-4">
-          <app-feature-card [feature]="feature"></app-feature-card>
+    <div class="container">
+        <div class="row text-center">
+            @for (feature of features; track feature.titulo) {
+            <div class="col-md-4 mb-4">
+                <app-feature-card [feature]="feature"></app-feature-card>
+            </div>
+            }
         </div>
-      }
     </div>
-  </div>
 </section>
-
-<!-- MINI NOSOTROS -->
-<app-minisobre></app-minisobre>
 
 <!-- CREAR TU TACO -->
 <app-creataco></app-creataco>
 
 <!-- RECOMENDADOS -->
 <app-recomendados></app-recomendados>
+
+<!-- GIFs LUCHADORES ADICIONALES (ENTRE MINI NOSOTROS Y CREAR TACO) -->
+<section class="luchadores-section-horizontal">
+    <div class="luchadores-container-full">
+        <div class="luchadores-row">
+            <div class="luchadores-col">
+                <img src="/images/luchadores1.gif" alt="Luchadores mexicanos" class="luchadores-gif-large">
+            </div>
+            <div class="luchadores-col">
+                <img src="/images/luchadores1.gif" alt="Luchadores mexicanos" class="luchadores-gif-large">
+            </div>
+            <div class="luchadores-col">
+                <img src="/images/luchadores1.gif" alt="Luchadores mexicanos" class="luchadores-gif-large">
+            </div>
+            <div class="luchadores-col">
+                <img src="/images/luchadores1.gif" alt="Luchadores mexicanos" class="luchadores-gif-large">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- MINI NOSOTROS (MOVIDO A LA PARTE INFERIOR) -->
+<app-minisobre></app-minisobre>

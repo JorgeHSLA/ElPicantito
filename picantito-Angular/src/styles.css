@@ -1,176 +1,215 @@
-
 /* Importar fuentes de Google Fonts */
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
 
 /* Definir Cucciolo Normal */
+
 @font-face {
     font-family: 'Cucciolo';
-    src: local('Cucciolo'), 
-         url('assets/fonts/Cucciolo.otf') format('opentype'),
-         url('assets/fonts/Cucciolo.ttf') format('truetype');
+    src: local('Cucciolo'), url('assets/fonts/Cucciolo.otf') format('opentype'), url('assets/fonts/Cucciolo.ttf') format('truetype');
     font-display: swap;
     font-weight: normal;
     font-style: normal;
 }
+
 
 /* Definir Cucciolo Rough */
+
 @font-face {
     font-family: 'Cucciolo Rough';
-    src: local('Cucciolo Rough'), 
-         url('assets/fonts/Cucciolo-Rough.otf') format('opentype'),
-         url('assets/fonts/Cucciolo-Rough.ttf') format('truetype');
+    src: local('Cucciolo Rough'), url('assets/fonts/Cucciolo-Rough.otf') format('opentype'), url('assets/fonts/Cucciolo-Rough.ttf') format('truetype');
     font-display: swap;
     font-weight: normal;
     font-style: normal;
 }
 
+
 /* Definir Fira Sans Regular */
+
 @font-face {
     font-family: 'Fira Sans';
-    src: local('Fira Sans Regular'), 
-         url('assets/fonts/FiraSans-Regular.otf') format('opentype');
+    src: local('Fira Sans Regular'), url('assets/fonts/FiraSans-Regular.otf') format('opentype');
     font-display: swap;
     font-weight: 400;
     font-style: normal;
 }
+
 
 /* Definir Fira Sans Italic */
+
 @font-face {
     font-family: 'Fira Sans';
-    src: local('Fira Sans Italic'), 
-         url('assets/fonts/FiraSans-Italic.otf') format('opentype');
+    src: local('Fira Sans Italic'), url('assets/fonts/FiraSans-Italic.otf') format('opentype');
     font-display: swap;
     font-weight: 400;
     font-style: italic;
 }
 
+
 /* Definir Fira Sans Light */
+
 @font-face {
     font-family: 'Fira Sans';
-    src: local('Fira Sans Light'), 
-         url('assets/fonts/FiraSans-Light.otf') format('opentype');
+    src: local('Fira Sans Light'), url('assets/fonts/FiraSans-Light.otf') format('opentype');
     font-display: swap;
     font-weight: 300;
     font-style: normal;
 }
+
 
 /* Definir Fira Sans Light Italic */
+
 @font-face {
     font-family: 'Fira Sans';
-    src: local('Fira Sans Light Italic'), 
-         url('assets/fonts/FiraSans-LightItalic.otf') format('opentype');
+    src: local('Fira Sans Light Italic'), url('assets/fonts/FiraSans-LightItalic.otf') format('opentype');
     font-display: swap;
     font-weight: 300;
     font-style: italic;
 }
 
+
 /* Definir Fira Sans Medium */
+
 @font-face {
     font-family: 'Fira Sans';
-    src: local('Fira Sans Medium'), 
-         url('assets/fonts/FiraSans-Medium.otf') format('opentype');
+    src: local('Fira Sans Medium'), url('assets/fonts/FiraSans-Medium.otf') format('opentype');
     font-display: swap;
     font-weight: 500;
     font-style: normal;
 }
+
 
 /* Definir Fira Sans Medium Italic */
+
 @font-face {
     font-family: 'Fira Sans';
-    src: local('Fira Sans Medium Italic'), 
-         url('assets/fonts/FiraSans-MediumItalic.otf') format('opentype');
+    src: local('Fira Sans Medium Italic'), url('assets/fonts/FiraSans-MediumItalic.otf') format('opentype');
     font-display: swap;
     font-weight: 500;
     font-style: italic;
 }
 
+
 /* Definir Fira Sans SemiBold */
+
 @font-face {
     font-family: 'Fira Sans';
-    src: local('Fira Sans SemiBold'), 
-         url('assets/fonts/FiraSans-SemiBold.otf') format('opentype');
+    src: local('Fira Sans SemiBold'), url('assets/fonts/FiraSans-SemiBold.otf') format('opentype');
     font-display: swap;
     font-weight: 600;
     font-style: normal;
 }
+
 
 /* Definir Fira Sans SemiBold Italic */
+
 @font-face {
     font-family: 'Fira Sans';
-    src: local('Fira Sans SemiBold Italic'), 
-         url('assets/fonts/FiraSans-SemiBoldItalic.otf') format('opentype');
+    src: local('Fira Sans SemiBold Italic'), url('assets/fonts/FiraSans-SemiBoldItalic.otf') format('opentype');
     font-display: swap;
     font-weight: 600;
     font-style: italic;
 }
 
+
 /* Definir Fira Sans Bold */
+
 @font-face {
     font-family: 'Fira Sans';
-    src: local('Fira Sans Bold'), 
-         url('assets/fonts/FiraSans-Bold.otf') format('opentype');
+    src: local('Fira Sans Bold'), url('assets/fonts/FiraSans-Bold.otf') format('opentype');
     font-display: swap;
     font-weight: 700;
     font-style: normal;
 }
 
+
 /* Definir Fira Sans Bold Italic */
+
 @font-face {
     font-family: 'Fira Sans';
-    src: local('Fira Sans Bold Italic'), 
-         url('assets/fonts/FiraSans-BoldItalic.otf') format('opentype');
+    src: local('Fira Sans Bold Italic'), url('assets/fonts/FiraSans-BoldItalic.otf') format('opentype');
     font-display: swap;
     font-weight: 700;
     font-style: italic;
 }
 
+
 /* Estilos globales */
+
 body {
-    background-color: #3c2039; /* Color sólido nuevo */
+    background-color: #3c2039;
+    /* Color sólido nuevo */
     font-family: var(--font-body);
-    font-weight: 500; /* Medium weight para mejor legibilidad */
+    font-weight: 500;
+    /* Medium weight para mejor legibilidad */
     color: var(--neutral-text);
     min-height: 100vh;
 }
 
+
 /* Asegurar que el fondo sea continuo en toda la página */
+
 html {
-    background-color: #3c2039; /* Color sólido nuevo */
+    background-color: #3c2039;
+    /* Color sólido nuevo */
 }
 
+
 /* Asegurar que todos los componentes principales sean transparentes para mostrar el fondo unificado */
-.container, .container-fluid, .row, .col, [class*="col-"] {
+
+.container,
+.container-fluid,
+.row,
+.col,
+[class*="col-"] {
     background-color: transparent;
 }
 
+
 /* Landing page fondo uniforme */
-app-root, router-outlet, app-home {
+
+app-root,
+router-outlet,
+app-home {
     background-color: transparent;
     width: 100%;
     min-height: 100vh;
 }
 
+
 /* Todas las secciones son transparentes para mostrar el fondo unificado */
-section, .section, .content, .main-content {
+
+section,
+.section,
+.content,
+.main-content {
     background-color: transparent;
 }
 
+
 /* Excepción: El hero mantiene su propia imagen */
-.carousel-section, .carousel-content {
+
+.carousel-section,
+.carousel-content {
     background-color: transparent;
 }
+
 
 /* =========================
    FONDO COMPARTIDO - LANDING TRANSPARENTE
    ========================= */
 
+
 /* Hacer transparentes TODOS los componentes de la landing excepto hero, navbar y footer */
-.feature-card, 
-.card, .card-new,
+
+.feature-card,
+.card,
+.card-new,
 .build-your-taco-section,
-.menu-hero, .menu-stats,
+.menu-hero,
+.menu-stats,
 .about-section,
 .cta-section,
 .danger-zone,
@@ -184,69 +223,117 @@ section:not(.carousel-section),
     background-color: transparent !important;
 }
 
+
 /* Mantener hover effects pero sin fondos */
+
 .feature-card:hover,
-.card:hover, .card-new:hover,
+.card:hover,
+.card-new:hover,
 .cta-section:hover,
 .about-section ul li:hover {
     background: transparent !important;
     background-color: transparent !important;
 }
 
+
 /* Elementos que deben ser transparentes para mostrar el fondo morado */
+
 .bg-transparent-purple {
     background-color: transparent !important;
 }
 
+
 /* Clase para forzar fondo morado uniforme */
+
 .bg-purple-uniform {
     background-color: var(--primary-color) !important;
 }
 
+
 /* Elementos que necesitan fondo morado oscuro para contraste */
+
 .bg-purple-dark {
     background-color: var(--primary-hover) !important;
     color: var(--neutral-text);
 }
 
+
 /* Aplicar Cucciolo a títulos y elementos principales */
-h1, h2, h3, h4, h5, h6 {
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: var(--font-heading);
     font-weight: 400;
-    letter-spacing: 0.5px; /* Espaciado entre letras para Cucciolo */
+    letter-spacing: 0.5px;
+    /* Espaciado entre letras para Cucciolo */
 }
+
 
 /* Aplicar Fira Sans al resto del texto con peso Medium */
-p, span, div, a, button, input, textarea, select, 
-.card-text, .form-control, .btn, .nav-link, 
-.dropdown-item, .list-group-item, .table {
+
+p,
+span,
+div,
+a,
+button,
+input,
+textarea,
+select,
+.card-text,
+.form-control,
+.btn,
+.nav-link,
+.dropdown-item,
+.list-group-item,
+.table {
     font-family: var(--font-body);
-    font-weight: 500; /* Medium weight para mejor legibilidad */
+    font-weight: 500;
+    /* Medium weight para mejor legibilidad */
 }
+
 
 /* Aplicar Cucciolo a títulos de elementos específicos */
-.navbar-brand, .card-title, .display-1, .display-2, .display-3, .display-4 {
+
+.navbar-brand,
+.card-title,
+.display-1,
+.display-2,
+.display-3,
+.display-4 {
     font-family: var(--font-heading);
-    letter-spacing: 0.5px; /* Espaciado entre letras */
+    letter-spacing: 0.5px;
+    /* Espaciado entre letras */
 }
+
 
 /* Mantener Fira Sans en botones normales */
+
 .btn {
     font-family: var(--font-body);
-    font-weight: 600; /* SemiBold para botones */
+    font-weight: 600;
+    /* SemiBold para botones */
 }
 
+
 /* Clases especiales para Cucciolo Rough */
+
 .cucciolo-rough,
 .hero-title,
 .promo-title,
 .brand-title,
 .special-heading {
     font-family: var(--font-rough) !important;
-    letter-spacing: 0.75px; /* Más espaciado para Cucciolo Rough */
+    letter-spacing: 0.75px;
+    /* Más espaciado para Cucciolo Rough */
 }
 
+
 /* Aplicar Cucciolo Rough a elementos destacados específicos */
+
 .carousel-item h2,
 .navbar-brand,
 .auth-title {
@@ -254,38 +341,54 @@ p, span, div, a, button, input, textarea, select,
     letter-spacing: 0.75px;
 }
 
+
 /* Aplicar Cucciolo normal a badges y botones principales */
+
 .btn-primary,
 .btn-danger,
 .btn-success,
 .badge {
     font-family: var(--font-heading);
     font-weight: 400;
-    letter-spacing: 0.3px; /* Espaciado menor para botones */
+    letter-spacing: 0.3px;
+    /* Espaciado menor para botones */
 }
+
+
 /* =========================
    VARIABLES GLOBALES - Nuevo Esquema de Colores Landing
    ========================= */
+
 :root {
-    --primary-color: #442142;              /* Morado principal - fondo */
-    --primary-hover: #2d1529;              /* Morado más oscuro */
-    --primary-light: #5a2d58;              /* Morado más claro */
-
-    --accent-color: #ED7E47;               /* Naranja apoyo principal */
-    --accent-hover: #d16935;               /* Naranja hover */
-    --accent-light: #f29a6b;               /* Naranja claro */
-
-    --secondary-color: #19695B;            /* Verde secundario */
-    --secondary-hover: #145249;            /* Verde hover */
-    --secondary-light: #2a8570;            /* Verde claro */
-
-    --neutral-bg: #442142;                 /* Fondo morado */
-    --neutral-surface: #FFFFFF;            /* Superficie blanca */
+    --primary-color: #442142;
+    /* Morado principal - fondo */
+    --primary-hover: #2d1529;
+    /* Morado más oscuro */
+    --primary-light: #5a2d58;
+    /* Morado más claro */
+    --accent-color: #ED7E47;
+    /* Naranja apoyo principal */
+    --accent-hover: #d16935;
+    /* Naranja hover */
+    --accent-light: #f29a6b;
+    /* Naranja claro */
+    --secondary-color: #19695B;
+    /* Verde secundario */
+    --secondary-hover: #145249;
+    /* Verde hover */
+    --secondary-light: #2a8570;
+    /* Verde claro */
+    --neutral-bg: #442142;
+    /* Fondo morado */
+    --neutral-surface: #FFFFFF;
+    /* Superficie blanca */
     --neutral-border: #E0E0E0;
-    --neutral-text: #FFFFFF;               /* Texto blanco sobre morado */
-    --neutral-text-dark: #442142;          /* Texto morado sobre blanco */
-    --neutral-text-light: #E0E0E0;         /* Texto claro */
-
+    --neutral-text: #FFFFFF;
+    /* Texto blanco sobre morado */
+    --neutral-text-dark: #442142;
+    /* Texto morado sobre blanco */
+    --neutral-text-light: #E0E0E0;
+    /* Texto claro */
     --shadow-light: 0 2px 8px rgba(68, 33, 66, 0.1);
     --shadow-medium: 0 4px 12px rgba(68, 33, 66, 0.15);
     --shadow-heavy: 0 8px 25px rgba(68, 33, 66, 0.2);
@@ -293,7 +396,6 @@ p, span, div, a, button, input, textarea, select,
     --shadow-green: 0 8px 25px rgba(25, 105, 91, 0.3);
     --transition-fast: 0.3s ease;
     --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-
     /* Tipografías */
     --font-primary: "Fira Sans", "Roboto", "Arial", sans-serif;
     --font-heading: "Cucciolo", "Playfair Display", "Georgia", "Times New Roman", serif;
@@ -301,12 +403,15 @@ p, span, div, a, button, input, textarea, select,
     --font-rough: "Cucciolo Rough", "Cucciolo", "Playfair Display", "Georgia", "Times New Roman", serif;
 }
 
+
 /* =========================
    ESTILOS ESPECÍFICOS ADICIONALES
    (Solo para casos muy específicos)
    ========================= */
 
+
 /* Dropdown items específicos */
+
 .dropdown-item {
     transition: all 0.3s ease;
     position: relative;
@@ -328,11 +433,14 @@ p, span, div, a, button, input, textarea, select,
     left: 100%;
 }
 
+
 /* =========================
    CLASES TIPOGRÁFICAS ADICIONALES
    ========================= */
 
+
 /* Clases para forzar el uso de tipografías específicas */
+
 .font-cucciolo {
     font-family: var(--font-heading) !important;
     letter-spacing: 0.5px;
@@ -347,7 +455,9 @@ p, span, div, a, button, input, textarea, select,
     font-family: var(--font-body) !important;
 }
 
+
 /* Clases para forzar normalización de acentos */
+
 .no-accents {
     font-family: var(--font-heading) !important;
     letter-spacing: 0.5px;
@@ -358,7 +468,9 @@ p, span, div, a, button, input, textarea, select,
     letter-spacing: 0.75px;
 }
 
+
 /* Pesos específicos para Fira Sans */
+
 .fw-light {
     font-weight: 300 !important;
 }
@@ -379,68 +491,121 @@ p, span, div, a, button, input, textarea, select,
     font-weight: 700 !important;
 }
 
+
 /* Asegurar que el texto del cuerpo use Fira Sans */
-.card-body, .modal-body, .accordion-body, 
-.alert, .tooltip, .popover, .toast {
+
+.card-body,
+.modal-body,
+.accordion-body,
+.alert,
+.tooltip,
+.popover,
+.toast {
     font-family: var(--font-body);
-    font-weight: 500; /* Medium weight */
+    font-weight: 500;
+    /* Medium weight */
 }
+
 
 /* Elementos que necesitan más peso */
-.navbar-nav .nav-link, .dropdown-item, 
-.form-label, .input-group-text {
+
+.navbar-nav .nav-link,
+.dropdown-item,
+.form-label,
+.input-group-text {
     font-family: var(--font-body);
-    font-weight: 500; /* Medium weight */
+    font-weight: 500;
+    /* Medium weight */
 }
+
 
 /* Texto pequeño con peso ligero */
-.small, .text-muted, .form-text {
+
+.small,
+.text-muted,
+.form-text {
     font-family: var(--font-body);
-    font-weight: 400; /* Regular weight para texto secundario */
+    font-weight: 400;
+    /* Regular weight para texto secundario */
 }
 
+
 /* Enlaces importantes con más peso */
-.nav-link:hover, .nav-link:focus,
-.btn-link, .link-primary {
-    font-weight: 600; /* SemiBold para interacciones */
+
+.nav-link:hover,
+.nav-link:focus,
+.btn-link,
+.link-primary {
+    font-weight: 600;
+    /* SemiBold para interacciones */
 }
+
 
 /* =========================
    SOLUCIÓN PARA ACENTOS - NORMALIZAR CARACTERES
    ========================= */
 
+
 /* Configuración para normalizar automáticamente los acentos */
-h1, h2, h3, h4, h5, h6,
-.navbar-brand, .card-title, .display-1, .display-2, .display-3, .display-4,
-.cucciolo-rough, .hero-title, .promo-title, .brand-title, .special-heading,
-.carousel-item h2, .auth-title,
-.btn-primary, .btn-danger, .btn-success, .badge,
-.font-cucciolo, .font-cucciolo-rough {
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-brand,
+.card-title,
+.display-1,
+.display-2,
+.display-3,
+.display-4,
+.cucciolo-rough,
+.hero-title,
+.promo-title,
+.brand-title,
+.special-heading,
+.carousel-item h2,
+.auth-title,
+.btn-primary,
+.btn-danger,
+.btn-success,
+.badge,
+.font-cucciolo,
+.font-cucciolo-rough {
     /* Mantener Cucciolo pero normalizar caracteres */
-    font-feature-settings: "liga" 0; /* Desactivar ligaduras */
+    font-feature-settings: "liga" 0;
+    /* Desactivar ligaduras */
     text-rendering: optimizeLegibility;
     -webkit-font-feature-settings: "liga" 0;
     -moz-font-feature-settings: "liga" 0;
     -ms-font-feature-settings: "liga" 0;
 }
 
+
 /* Clase especial para normalizar acentos manualmente */
+
 .normalize-accents {
     font-family: var(--font-heading);
     letter-spacing: 0.5px;
 }
 
+
 /* Para elementos rough */
+
 .normalize-accents-rough {
     font-family: var(--font-rough);
     letter-spacing: 0.75px;
 }
 
+
 /* =========================
    CLASES DE COLORES PARA EL NUEVO DISEÑO
    ========================= */
 
+
 /* Fondos */
+
 .bg-primary-purple {
     background-color: var(--primary-color) !important;
 }
@@ -457,7 +622,9 @@ h1, h2, h3, h4, h5, h6,
     background-color: var(--neutral-surface) !important;
 }
 
+
 /* Gradientes sutiles que mantienen la base morada */
+
 .bg-gradient-purple {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%) !important;
 }
@@ -474,7 +641,9 @@ h1, h2, h3, h4, h5, h6,
     background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-light) 100%) !important;
 }
 
+
 /* Textos */
+
 .text-primary-purple {
     color: var(--primary-color) !important;
 }
@@ -495,7 +664,9 @@ h1, h2, h3, h4, h5, h6,
     color: var(--neutral-text-dark) !important;
 }
 
+
 /* Botones con nuevo esquema */
+
 .btn-primary-new {
     background-color: var(--accent-color);
     border-color: var(--accent-color);
@@ -546,38 +717,48 @@ h1, h2, h3, h4, h5, h6,
     transform: translateY(-2px);
 }
 
+
 /* =========================
    COMPONENTES CON NUEVO DISEÑO
    ========================= */
 
+
 /* Tarjetas con fondo morado más oscuro para contraste */
+
 .card-new {
-    background-color: var(--primary-hover); /* Morado más oscuro */
+    background-color: var(--primary-hover);
+    /* Morado más oscuro */
     border: none;
     border-radius: 15px;
     box-shadow: 0 8px 25px rgba(45, 21, 41, 0.3);
     transition: all 0.3s ease;
-    color: var(--neutral-text); /* Texto blanco */
+    color: var(--neutral-text);
+    /* Texto blanco */
 }
 
 .card-new:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(45, 21, 41, 0.4);
-    background-color: #241018; /* Aún más oscuro en hover */
+    background-color: #241018;
+    /* Aún más oscuro en hover */
 }
 
 .card-new .card-title {
-    color: var(--accent-color); /* Títulos en naranja para contraste */
+    color: var(--accent-color);
+    /* Títulos en naranja para contraste */
     font-family: var(--font-heading);
     letter-spacing: 0.5px;
 }
 
 .card-new .card-text {
-    color: var(--neutral-text); /* Texto blanco */
+    color: var(--neutral-text);
+    /* Texto blanco */
     font-family: var(--font-body);
 }
 
+
 /* Tarjetas estándar también con morado oscuro */
+
 .card {
     background-color: var(--primary-hover);
     border: none;
@@ -592,7 +773,9 @@ h1, h2, h3, h4, h5, h6,
     color: var(--neutral-text);
 }
 
+
 /* Sección hero/landing con fondo morado uniforme */
+
 .hero-section {
     background-color: var(--primary-color);
     min-height: 100vh;
@@ -612,7 +795,9 @@ h1, h2, h3, h4, h5, h6,
     font-weight: 400;
 }
 
+
 /* Navbar con nuevo esquema */
+
 .navbar-new {
     background: rgba(68, 33, 66, 0.95);
     backdrop-filter: blur(10px);
@@ -638,7 +823,9 @@ h1, h2, h3, h4, h5, h6,
     font-weight: 600;
 }
 
+
 /* Footer con nuevo esquema */
+
 .footer-new {
     background-color: var(--primary-color);
     color: var(--neutral-text);
@@ -654,68 +841,116 @@ h1, h2, h3, h4, h5, h6,
     color: var(--accent-color);
 }
 
+
 /* =========================
    OVERRIDE PARA COMPONENTES QUE INTERFIEREN CON EL FONDO
    ========================= */
 
+
 /* Remover fondos blancos por defecto */
-.bg-white, .bg-light {
+
+.bg-white,
+.bg-light {
     background-color: transparent !important;
     color: var(--neutral-text) !important;
 }
 
+
 /* Solo para casos específicos donde necesites blanco */
+
 .bg-white-important {
     background-color: var(--neutral-surface) !important;
     color: var(--neutral-text-dark) !important;
 }
 
+
 /* Cambiar todos los textos negros a blancos */
-.text-dark, .text-black {
+
+.text-dark,
+.text-black {
     color: var(--neutral-text) !important;
 }
 
+
 /* Texto por defecto blanco */
-p, span, div, h1, h2, h3, h4, h5, h6 {
+
+p,
+span,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     color: var(--neutral-text);
 }
 
+
 /* Excepto en botones */
-.btn p, .btn span, .btn div, 
-.btn h1, .btn h2, .btn h3, .btn h4, .btn h5, .btn h6,
-.btn, .btn * {
+
+.btn p,
+.btn span,
+.btn div,
+.btn h1,
+.btn h2,
+.btn h3,
+.btn h4,
+.btn h5,
+.btn h6,
+.btn,
+.btn * {
     color: inherit;
 }
 
+
 /* Cambiar text-muted a texto blanco claro */
+
 .text-muted {
     color: rgba(255, 255, 255, 0.7) !important;
 }
 
+
 /* Asegurar que elementos específicos usen texto blanco */
-.lead, .fw-semibold, .fw-bold,
-small, .small {
+
+.lead,
+.fw-semibold,
+.fw-bold,
+small,
+.small {
     color: var(--neutral-text);
 }
 
+
 /* Bootstrap text utilities override */
+
 .text-secondary {
     color: rgba(255, 255, 255, 0.7) !important;
 }
 
+
 /* Elementos de lista y navegación */
-.nav-link, .dropdown-item,
+
+.nav-link,
+.dropdown-item,
 .list-group-item {
     color: var(--neutral-text);
 }
 
+
 /* Bootstrap overrides para mantener el fondo morado */
-.container-fluid, .container, .row {
+
+.container-fluid,
+.container,
+.row {
     background-color: transparent;
 }
 
+
 /* Modales y dropdowns con fondo morado oscuro */
-.modal-content, .dropdown-menu {
+
+.modal-content,
+.dropdown-menu {
     background-color: var(--primary-hover);
     color: var(--neutral-text);
     border: 1px solid var(--accent-color);
@@ -730,11 +965,14 @@ small, .small {
     color: white;
 }
 
+
 /* =========================
    GIF LUCHADORES - CONFIGURACIONES
    ========================= */
 
+
 /* GIFs Horizontales - Grandes y Pegados */
+
 .luchadores-section-horizontal {
     background: transparent;
     padding: 0;
@@ -771,7 +1009,9 @@ small, .small {
     border: none;
 }
 
+
 /* Estilos originales para compatibilidad */
+
 .luchadores-section {
     background: transparent;
     padding: 0;
