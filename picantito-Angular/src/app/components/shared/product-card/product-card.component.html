@@ -21,7 +21,7 @@
                 <div class="price-and-action">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="price">
-                            <span class="h5 mb-0 text-success fw-bold">${{ (producto.precio || 0) | number:'1.2-2' }}</span>
+                            <span class="h5 mb-0 text-success fw-bold">${{ (producto.precio ?? producto.precioDeVenta ?? 0) | number:'1.2-2' }}</span>
                         </div>
                         <div class="action-buttons">
                             @if (producto.disponible) {
