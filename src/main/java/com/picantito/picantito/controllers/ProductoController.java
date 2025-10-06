@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -100,6 +101,26 @@ public class ProductoController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al eliminar el producto: " + e.getMessage());
+        }
+    }
+
+    
+    // Editar producto existente: PUT http://localhost:9998/api/productos/{id}
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarProducto(@PathVariable Integer id, @RequestBody Producto producto) {
+        try {
+            Optional<Producto> optionalProducto = productoService.getProductoById(id);
+            if (!optionalProducto.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Producto no encontrado con ID: " + id);
+            }
+            // Asegura que el ID sea el correcto
+            producto.setId(id);
+            Producto actualizado = productoService.saveProducto(producto);
+            return ResponseEntity.ok(actualizado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar producto: " + e.getMessage());
         }
     }
 

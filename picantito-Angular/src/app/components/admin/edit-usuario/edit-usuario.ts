@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar.component';
 import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar.component';
 import { Usuario } from '../../../models/usuario';
-import { AdministradorService } from '../../../services/usuarios/administrador.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-edit-usuario',
@@ -27,7 +27,7 @@ export class EditUsuarioComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private adminService: AdministradorService
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -36,17 +36,26 @@ export class EditUsuarioComponent implements OnInit {
   }
 
   loadUsuario(id: number) {
-    const u = this.adminService.getUserById(id);
-    if (!u) { this.router.navigate(['/admin/usuarios']); return; }
-    this.usuario.set({ ...u });
+    this.authService.obtenerUsuario(id).subscribe({
+      next: (usuario) => {
+        if (usuario) {
+          this.usuario.set(usuario);
+        } else {
+          this.router.navigate(['/admin/usuarios']);
+        }
+      },
+      error: () => this.router.navigate(['/admin/usuarios'])
+    });
   }
 
   updateUsuario() {
     try {
       const u = this.usuario();
       if (!u.id) return;
-      this.adminService.saveUsuario(u); // reutiliza lógica (update si hay id)
-      this.router.navigate(['/admin/usuarios']);
+      this.authService.actualizarUsuario(u.id, u).subscribe({
+        next: () => this.router.navigate(['/admin/usuarios']),
+        error: (error) => console.error('Error al actualizar usuario:', error)
+      });
     } catch {
       console.error('Error al actualizar usuario');
     }

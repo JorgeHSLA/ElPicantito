@@ -4,7 +4,9 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar.component';
 import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar.component';
+
 import { Adicional } from '../../../models/adicional';
+import { AdicionalService } from '../../../services/tienda/adicional.service';
 
 @Component({
   selector: 'app-edit-adicional',
@@ -22,33 +24,43 @@ export class EditAdicionalComponent implements OnInit {
     disponible: true
   });
 
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private adicionalService: AdicionalService
   ) {}
 
+
   ngOnInit() {
-    const id = this.route.snapshot.params['id'];
-    this.loadAdicional(id);
+    const id = +this.route.snapshot.params['id'];
+    if (id) this.loadAdicional(id);
   }
 
+
   loadAdicional(id: number) {
-    // Datos de ejemplo - aquí llamarías al servicio real
-    const adicionalEjemplo = {
-      id: id,
-      nombre: 'Queso Extra',
-      descripcion: 'Queso cheddar adicional',
-      precio: 2.50,
-      disponible: true
-    };
-    this.adicional.set(adicionalEjemplo);
+    this.adicionalService.getAdicionalById(id).subscribe({
+      next: (adicional) => {
+        if (adicional) {
+          this.adicional.set(adicional);
+        } else {
+          this.router.navigate(['/admin/adicionales']);
+        }
+      },
+      error: () => this.router.navigate(['/admin/adicionales'])
+    });
   }
+
 
   updateAdicional() {
     try {
-      console.log('Actualizando adicional:', this.adicional());
-      // Aquí llamarías al servicio para actualizar
-      this.router.navigate(['/admin/adicionales']);
+      const adicionalActualizado = this.adicional();
+      if (adicionalActualizado.id) {
+        this.adicionalService.actualizarAdicional(adicionalActualizado.id, adicionalActualizado).subscribe({
+          next: () => this.router.navigate(['/admin/adicionales']),
+          error: (error) => console.error('Error al actualizar adicional:', error)
+        });
+      }
     } catch (error) {
       console.error('Error al actualizar adicional:', error);
     }
