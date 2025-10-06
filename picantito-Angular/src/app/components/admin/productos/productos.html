@@ -61,7 +61,7 @@
                         (producto.descripcion.toString() | slice:0:50) + '...' : 
                         producto.descripcion }}
                   </td>
-                  <td>${{ producto.precio?.toFixed(2) }}</td>
+                  <td>${{ producto.precioDeVenta?.toFixed(2) }}</td>
                   <td>
                     {{ producto.calificacion }}/5
                     <span class="text-warning">★</span>
@@ -141,11 +141,11 @@
             </div>
             <div class="col-md-6">
               <div class="mb-3">
-                <label for="precio" class="form-label">Precio de Venta:</label>
-                <input type="number" step="0.01" class="form-control" id="precio" 
-                       [value]="nuevoProducto().precio"
-                       (input)="updateField('precio', +$any($event.target).value)"
-                       required>
+      <label for="precioDeVenta" class="form-label">Precio de Venta:</label>
+      <input type="number" step="0.01" class="form-control" id="precioDeVenta" 
+        [value]="nuevoProducto().precioDeVenta"
+        (input)="updateField('precioDeVenta', +$any($event.target).value)"
+        required>
               </div>
             </div>
           </div>

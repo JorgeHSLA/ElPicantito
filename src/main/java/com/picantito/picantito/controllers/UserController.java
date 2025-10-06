@@ -1,4 +1,3 @@
-
 package com.picantito.picantito.controllers;
 
 import java.util.List;
@@ -117,7 +116,14 @@ public class UserController {
         }
     }
     
-    
+    // === READ (Obtener todos los usuarios) ===
+    // Obtener todos los usuarios: http://localhost:9998/api/usuarios
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsuarios() {
+        List<User> usuarios = autentificacionService.findAll();
+        return ResponseEntity.ok(usuarios);
+    }
+
     // === READ (Obtener usuario por ID) ===
     // Obtener información de un usuario específico: http://localhost:9998/api/usuarios/{id}
     @GetMapping("/{id}")

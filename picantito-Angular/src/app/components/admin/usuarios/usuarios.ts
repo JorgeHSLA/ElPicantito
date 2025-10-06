@@ -6,7 +6,6 @@ import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar.com
 import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar.component';
 import { Usuario } from '../../../models/usuario';
 import { AuthService } from '../../../services/auth.service';
-import { AdministradorService } from '../../../services/usuarios/administrador.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -27,53 +26,45 @@ export class UsuariosComponent implements OnInit {
   successMessage = signal('');
   errorMessage = signal('');
 
-  constructor(private authService: AuthService, private adminService: AdministradorService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.loadUsuarios();
   }
 
   loadUsuarios() {
-    // Cargar desde el servicio (signal readonly)
-    try {
-      this.usuarios.set(this.adminService.getUsuarios()());
-    } catch {
-      this.errorMessage.set('No se pudieron cargar los usuarios');
-    }
+    this.authService.getAllUsuarios().subscribe({
+      next: (usuarios) => this.usuarios.set(usuarios),
+      error: () => this.errorMessage.set('No se pudieron cargar los usuarios')
+    });
   }
 
   saveUsuario() {
-    try {
-      const usuario = this.nuevoUsuario();
-      if (!usuario.nombreCompleto || !usuario.nombreUsuario || !usuario.correo) {
-        this.errorMessage.set('Complete los campos obligatorios');
-        return;
-      }
-      this.adminService.saveUsuario(usuario);
-      this.successMessage.set('Usuario guardado exitosamente');
-      this.loadUsuarios();
-      this.resetForm();
-      // Cerrar modal manualmente si Bootstrap (opcional)
-      const modalEl = document.getElementById('nuevoUsuarioModal');
-      if (modalEl) {
-        // @ts-ignore
-        const modal = bootstrap?.Modal?.getInstance(modalEl) || new (window as any).bootstrap.Modal(modalEl);
-        modal.hide();
-      }
-    } catch {
-      this.errorMessage.set('Error al guardar el usuario');
+    const usuario = this.nuevoUsuario();
+    if (!usuario.nombreCompleto || !usuario.nombreUsuario || !usuario.correo) {
+      this.errorMessage.set('Complete los campos obligatorios');
+      return;
     }
+    this.authService.crearUsuario(usuario).subscribe({
+      next: () => {
+        this.successMessage.set('Usuario guardado exitosamente');
+        this.loadUsuarios();
+        this.resetForm();
+        this.closeModal();
+      },
+      error: () => this.errorMessage.set('Error al guardar el usuario')
+    });
   }
 
   deleteUsuario(id: number) {
     if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
-    try {
-      this.adminService.deleteUsuario(id);
-      this.successMessage.set('Usuario eliminado');
-      this.loadUsuarios();
-    } catch {
-      this.errorMessage.set('Error al eliminar el usuario');
-    }
+    this.authService.eliminarUsuario(id).subscribe({
+      next: () => {
+        this.successMessage.set('Usuario eliminado');
+        this.loadUsuarios();
+      },
+      error: () => this.errorMessage.set('Error al eliminar el usuario')
+    });
   }
 
   resetForm() {
@@ -82,5 +73,13 @@ export class UsuariosComponent implements OnInit {
 
   updateUsuarioField(field: keyof Usuario, value: any) {
     this.nuevoUsuario.update(u => ({ ...u, [field]: value }));
+  }
+
+  private closeModal() {
+    const modal = document.getElementById('nuevoUsuarioModal');
+    const modalInstance = (window as any).bootstrap?.Modal?.getInstance(modal);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
   }
 }

@@ -54,7 +54,7 @@
                     <td>{{ adicional.id }}</td>
                     <td>{{ adicional.nombre }}</td>
                     <td>{{ adicional.descripcion }}</td>
-                    <td>${{ adicional.precio?.toFixed(2) }}</td>
+                    <td>${{ adicional.precioDeVenta?.toFixed(2) }}</td>
                     <td>
                       @if (adicional.disponible) {
                         <span class="badge bg-success">Disponible</span>
@@ -114,11 +114,11 @@
           </div>
           
           <div class="mb-3">
-            <label for="precio" class="form-label">Precio:</label>
-            <input type="number" step="0.01" class="form-control" id="precio" 
-                   [value]="nuevoAdicional().precio"
-                   (input)="updateAdicionalField('precio', +$any($event.target).value)"
-                   required>
+       <label for="precioDeVenta" class="form-label">Precio de Venta:</label>
+       <input type="number" step="0.01" class="form-control" id="precioDeVenta" 
+         [value]="nuevoAdicional().precioDeVenta"
+         (input)="updateAdicionalField('precioDeVenta', +$any($event.target).value)"
+         required>
           </div>
           
           <div class="mb-3">

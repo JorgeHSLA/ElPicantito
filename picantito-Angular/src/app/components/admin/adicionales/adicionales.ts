@@ -19,7 +19,7 @@ export class AdicionalesComponent implements OnInit {
   nuevoAdicional = signal<Adicional>({
     nombre: '',
     descripcion: '',
-    precio: 0,
+    precioDeVenta: 0,
     disponible: true
   });
   
@@ -33,29 +33,38 @@ export class AdicionalesComponent implements OnInit {
   }
 
   loadAdicionales() {
-    this.adicionales.set(this.adicionalService.getAdicionales());
+    this.adicionalService.getAllAdicionales().subscribe({
+      next: (adicionales) => this.adicionales.set(adicionales),
+      error: () => this.errorMessage.set('Error al cargar adicionales')
+    });
   }
 
   saveAdicional() {
-    try {
-      this.adicionalService.saveAdicional(this.nuevoAdicional());
-      this.successMessage.set('Adicional guardado exitosamente');
-      this.loadAdicionales();
-      this.resetForm();
-    } catch (error) {
-      this.errorMessage.set('Error al guardar el adicional');
+    let adicional = this.nuevoAdicional();
+    // Compatibilidad: si solo hay 'precio', pásalo a 'precioDeVenta'
+    if (adicional.precio && !adicional.precioDeVenta) {
+      adicional = { ...adicional, precioDeVenta: adicional.precio };
     }
+    this.adicionalService.crearAdicional(adicional).subscribe({
+      next: () => {
+        this.successMessage.set('Adicional guardado exitosamente');
+        this.loadAdicionales();
+        this.resetForm();
+        this.closeModal();
+      },
+      error: () => this.errorMessage.set('Error al guardar el adicional')
+    });
   }
 
   deleteAdicional(id: number) {
     if (confirm('¿Estás seguro de eliminar este adicional?')) {
-      try {
-        this.adicionalService.deleteAdicional(id);
-        this.successMessage.set('Adicional eliminado exitosamente');
-        this.loadAdicionales();
-      } catch (error) {
-        this.errorMessage.set('Error al eliminar el adicional');
-      }
+      this.adicionalService.eliminarAdicional(id).subscribe({
+        next: () => {
+          this.successMessage.set('Adicional eliminado exitosamente');
+          this.loadAdicionales();
+        },
+        error: () => this.errorMessage.set('Error al eliminar el adicional')
+      });
     }
   }
 
@@ -63,7 +72,7 @@ export class AdicionalesComponent implements OnInit {
     this.nuevoAdicional.set({
       nombre: '',
       descripcion: '',
-      precio: 0,
+      precioDeVenta: 0,
       disponible: true
     });
   }
@@ -73,5 +82,13 @@ export class AdicionalesComponent implements OnInit {
       ...adicional,
       [field]: value
     }));
+  }
+
+  private closeModal() {
+    const modal = document.getElementById('nuevoAdicionalModal');
+    const modalInstance = (window as any).bootstrap?.Modal?.getInstance(modal);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
   }
 }

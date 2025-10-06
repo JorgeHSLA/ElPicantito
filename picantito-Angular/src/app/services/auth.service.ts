@@ -22,6 +22,11 @@ export class AuthService {
     this.loadUserFromStorage();
   }
 
+  // Obtener todos los usuarios
+  getAllUsuarios(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(this.API_URL);
+  }
+
   login(nombreUsuario: string, contrasenia: string): Observable<boolean> {
     const credentials = { nombreUsuario, contrasenia };
     

@@ -19,7 +19,7 @@ export class ProductosComponent implements OnInit {
   nuevoProducto = signal<Producto>({
     nombre: '',
     descripcion: '',
-    precio: 0,
+    precioDeVenta: 0,
     precioDeAdquisicion: 0,
     imagen: '',
     calificacion: 5,
@@ -36,30 +36,38 @@ export class ProductosComponent implements OnInit {
   }
 
   loadProductos() {
-    this.productos.set(this.productoService.getProductos());
+    this.productoService.getAllProductos().subscribe({
+      next: (productos) => this.productos.set(productos),
+      error: () => this.errorMessage.set('Error al cargar productos')
+    });
   }
 
   saveProducto() {
-    try {
-      const producto = this.nuevoProducto();
-      this.productoService.addProducto(producto);
-      this.successMessage.set('Producto guardado exitosamente');
-      this.loadProductos();
-      this.resetForm();
-      this.closeModal();
-    } catch (error) {
-      this.errorMessage.set('Error al guardar producto');
+    let producto = this.nuevoProducto();
+    // Compatibilidad: si solo hay 'precio', pásalo a 'precioDeVenta'
+    if (producto.precio && !producto.precioDeVenta) {
+      producto = { ...producto, precioDeVenta: producto.precio };
     }
+    this.productoService.crearProducto(producto).subscribe({
+      next: () => {
+        this.successMessage.set('Producto guardado exitosamente');
+        this.loadProductos();
+        this.resetForm();
+        this.closeModal();
+      },
+      error: () => this.errorMessage.set('Error al guardar producto')
+    });
   }
 
   deleteProducto(id: number) {
     if (confirm('¿Estás seguro de eliminar este producto?')) {
-      if (this.productoService.deleteProducto(id)) {
-        this.successMessage.set('Producto eliminado exitosamente');
-        this.loadProductos();
-      } else {
-        this.errorMessage.set('Error al eliminar producto');
-      }
+      this.productoService.eliminarProducto(id).subscribe({
+        next: () => {
+          this.successMessage.set('Producto eliminado exitosamente');
+          this.loadProductos();
+        },
+        error: () => this.errorMessage.set('Error al eliminar producto')
+      });
     }
   }
 
@@ -67,7 +75,7 @@ export class ProductosComponent implements OnInit {
     this.nuevoProducto.set({
       nombre: '',
       descripcion: '',
-      precio: 0,
+      precioDeVenta: 0,
       precioDeAdquisicion: 0,
       imagen: '',
       calificacion: 5,

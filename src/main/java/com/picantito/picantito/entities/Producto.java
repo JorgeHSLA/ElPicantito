@@ -22,7 +22,9 @@ public class Producto {
     private String nombre;
 
     private String descripcion;
+    @Column(name = "preciodeventa")
     private Float precioDeVenta;
+    @Column(name = "preciodeadquisicion")
     private Float precioDeAdquisicion;
     private String imagen;
     private Boolean disponible;
