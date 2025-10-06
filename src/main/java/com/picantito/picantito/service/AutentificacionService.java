@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.picantito.picantito.entities.User;
 
 public interface AutentificacionService {
+    String eliminarUsuario(Integer id);
     // CRUD Usuarios
     List<User> findAll();
     Optional<User> findById(Integer id);

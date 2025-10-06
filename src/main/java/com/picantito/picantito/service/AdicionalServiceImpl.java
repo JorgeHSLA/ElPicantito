@@ -37,23 +37,13 @@ public class AdicionalServiceImpl implements AdicionalService {
         try {
             Optional<Adicional> optionalAdicional = getAdicionalById(id);
             if (optionalAdicional.isPresent()) {
-                Adicional adicional = optionalAdicional.get();
-                
-                // Marcar como eliminado usando precioDeAdquisicion = -1
-                adicional.setPrecioDeAdquisicion(-1.0f);
-                
-                // También marcamos como no disponible para doble seguridad
-                adicional.setDisponible(false);
-                
-                // Guardar el adicional con su nuevo estado
-                adicionalRepository.save(adicional);
-                
+                adicionalRepository.deleteById(id);
                 return "SUCCESS";
             } else {
                 return "Adicional no encontrado con ID: " + id;
             }
         } catch (Exception e) {
-            return "No se puede marcar el adicional como eliminado. Error: " + e.getMessage();
+            return "No se puede eliminar el adicional. Error: " + e.getMessage();
         }
     }
 

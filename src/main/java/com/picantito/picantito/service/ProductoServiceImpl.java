@@ -67,23 +67,13 @@ public class ProductoServiceImpl implements ProductoService {
         try {
             Optional<Producto> optionalProducto = getProductoById(id);
             if (optionalProducto.isPresent()) {
-                Producto producto = optionalProducto.get();
-                
-                // Marcar como eliminado usando precioDeAdquisicion = -1
-                producto.setPrecioDeAdquisicion(-1.0f);
-                
-                // También podemos marcar como no disponible para doble seguridad
-                producto.setDisponible(false);
-                
-                // Guardar el producto con su nuevo estado
-                productoRepository.save(producto);
-                
+                productoRepository.deleteById(id);
                 return "SUCCESS";
             } else {
                 return "Producto no encontrado con ID: " + id;
             }
         } catch (Exception e) {
-            return "No se puede marcar el producto como eliminado. Error: " + e.getMessage();
+            return "No se puede eliminar el producto. Error: " + e.getMessage();
         }
     }
     

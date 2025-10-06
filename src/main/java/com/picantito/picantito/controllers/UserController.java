@@ -227,29 +227,20 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarUsuario(@PathVariable Integer id) {
         try {
-            Optional<User> optionalUsuario = autentificacionService.findById(id);
-            if (!optionalUsuario.isPresent()) {
+            String resultado = autentificacionService.eliminarUsuario(id);
+            if ("SUCCESS".equals(resultado)) {
+                return ResponseEntity.ok()
+                        .body(Map.of(
+                            "mensaje", "Usuario eliminado correctamente",
+                            "id", id
+                        ));
+            } else if (resultado != null && resultado.startsWith("Usuario no encontrado")) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Usuario no encontrado con ID: " + id);
+                        .body(resultado);
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(resultado);
             }
-            
-            User usuario = optionalUsuario.get();
-            
-            // Guardar el rol anterior para informes
-            String rolAnterior = usuario.getRol();
-            
-            // Cambiar el rol a ELIMINADO
-            usuario.setRol("ELIMINADO");
-            
-            // Guardar el usuario con el rol actualizado
-            autentificacionService.save(usuario);
-            
-            return ResponseEntity.ok()
-                    .body(Map.of(
-                        "mensaje", "Usuario marcado como eliminado correctamente",
-                        "id", id,
-                        "rolAnterior", rolAnterior
-                    ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al eliminar usuario: " + e.getMessage());

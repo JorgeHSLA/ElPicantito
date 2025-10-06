@@ -147,20 +147,16 @@ public class AdicionalController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarAdicional(@PathVariable Integer id) {
         try {
-            Optional<Adicional> optionalAdicional = adicionalService.getAdicionalById(id);
-            if (!optionalAdicional.isPresent()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Adicional no encontrado con ID: " + id);
-            }
-            
             String resultado = adicionalService.eliminarAdicional(id);
-            
             if ("SUCCESS".equals(resultado)) {
                 return ResponseEntity.ok()
                         .body(Map.of(
                             "mensaje", "Adicional eliminado correctamente",
                             "id", id
                         ));
+            } else if (resultado != null && resultado.startsWith("Adicional no encontrado")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(resultado);
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(resultado);

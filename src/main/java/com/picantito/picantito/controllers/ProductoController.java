@@ -83,29 +83,23 @@ public class ProductoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarProducto(@PathVariable Integer id) {
         try {
-            Optional<Producto> optionalProducto = productoService.getProductoById(id);
-            
-            if (optionalProducto.isPresent()) {
-                Producto producto = optionalProducto.get();
-                
-                // Cambiar a inactivo en lugar de eliminar
-                producto.setActivo(false);
-                
-                // Guardar el producto actualizado
-                productoService.saveProducto(producto);
-                
+            String resultado = productoService.eliminarProducto(id);
+            if ("SUCCESS".equals(resultado)) {
                 return ResponseEntity.ok()
                         .body(Map.of(
-                            "mensaje", "Producto desactivado correctamente",
+                            "mensaje", "Producto eliminado correctamente",
                             "id", id
                         ));
-            } else {
+            } else if (resultado != null && resultado.startsWith("Producto no encontrado")) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Producto no encontrado con ID: " + id);
+                        .body(resultado);
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(resultado);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al desactivar el producto: " + e.getMessage());
+                    .body("Error al eliminar el producto: " + e.getMessage());
         }
     }
 

@@ -158,6 +158,21 @@ public class AutenticacionServiceImpl implements AutentificacionService {
     }
 
     @Override
+    public String eliminarUsuario(Integer id) {
+        try {
+            Optional<User> optionalUsuario = findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuarioRepository.deleteById(id);
+                return "SUCCESS";
+            } else {
+                return "Usuario no encontrado con ID: " + id;
+            }
+        } catch (Exception e) {
+            return "No se puede eliminar el usuario. Error: " + e.getMessage();
+        }
+    }
+
+    @Override
     public boolean ultimoAdmin(User loggedUser){
         if (loggedUser.isAdmin()) {
             long adminCount = this.findAll().stream()
