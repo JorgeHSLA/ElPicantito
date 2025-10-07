@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.picantito.picantito.entities.Adicional;
+import com.picantito.picantito.entities.ProductoAdicional;
 import com.picantito.picantito.repository.AdicionalRepository;
+import com.picantito.picantito.repository.ProductoAdicionalRepository;
+
 
 
 @Service
@@ -15,6 +18,9 @@ public class AdicionalServiceImpl implements AdicionalService {
 
     @Autowired
     private AdicionalRepository adicionalRepository;
+
+    @Autowired
+    private ProductoAdicionalRepository productoAdicionalRepository;
 
     // CRUD Adicionales
     @Override
@@ -72,5 +78,10 @@ public class AdicionalServiceImpl implements AdicionalService {
     @Override
     public List<Adicional> getAdicionalesDisponiblesParaProducto(Integer productoId) {
         return adicionalRepository.findAvailableForProduct(productoId);
+    }
+
+    @Override
+    public List<ProductoAdicional> getProductoAdicionales() {
+        return productoAdicionalRepository.findAll();
     }
 }

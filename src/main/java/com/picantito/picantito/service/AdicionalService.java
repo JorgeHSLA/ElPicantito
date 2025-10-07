@@ -17,4 +17,5 @@ public interface AdicionalService {
     void updateAdicional(Integer productoId, Adicional adicional);    
     List<Adicional> getAdicionalesDisponiblesParaProducto(Integer productoId);
     List<ProductoAdicional> getProductoAdicionales();
+    
 }
