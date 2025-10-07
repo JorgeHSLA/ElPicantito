@@ -19,13 +19,13 @@ export class SobreNosotrosComponent implements OnInit, AfterViewInit {
     {
       imagen: 'https://cdn1.matadornetwork.com/blogs/2/2018/08/historia-del-taco-mexicano-shutterstock_405319411.jpg',
       alt: 'Viaje a México',
-      titulo: 'El Viaje que lo Cambió Todo',
+      titulo: 'El Viaje que lo Cambio Todo',
       descripcion: 'En 2019, durante un intercambio académico en México, descubrimos los auténticos sabores de la comida callejera mexicana. Cada taco era una explosión de sabores que jamás habíamos experimentado en Colombia.'
     },
     {
       imagen: 'https://hotelesb3.com/wp-content/uploads/2023/02/Gastronomia-Colombiana.jpg',
       alt: 'Pasión por cocinar',
-      titulo: 'La Pasión por Compartir',
+      titulo: 'La Pasion por Compartir',
       descripcion: 'Al regresar a Colombia, nos dimos cuenta de que estos sabores auténticos no existían aquí. Decidimos aprender las técnicas tradicionales y traer esa experiencia gastronómica a nuestro país.'
     },
     {

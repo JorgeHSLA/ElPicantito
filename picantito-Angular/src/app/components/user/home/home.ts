@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     },
     {
       icon: 'bi bi-clock-fill',
-      titulo: 'Preparación Rápida',
+      titulo: 'Preparacion Rapida',
       descripcion: 'Tus tacos listos en minutos sin comprometer la calidad y el sabor tradicional.'
     },
     {
