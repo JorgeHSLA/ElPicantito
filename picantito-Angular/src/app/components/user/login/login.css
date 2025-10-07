@@ -11,6 +11,8 @@
     padding: 20px; /* Reducir padding para pantallas pequeñas */
     box-sizing: border-box;
     background-image: url('./loginImage.png');
+    /* Texto por defecto en negro dentro de la sección */
+    color: #000 !important;
 }
 
  .alert-info {
@@ -19,4 +21,55 @@
 }
 .alert {
       background-color: rgba(255, 255, 255, 0.596);
-} 
+}
+
+/* Evitar letras blancas heredadas sin afectar íconos/colores específicos */
+.auth-wrapper .text-white,
+.auth-wrapper .text-light,
+.auth-wrapper .link-light,
+.auth-wrapper [style*="color: rgb(255, 255, 255)"] {
+    color: #000 !important;
+    text-shadow: none !important;
+}
+
+/* Títulos y subtítulos */
+.form-label {
+    color: #000 !important;
+}
+
+/* Contenido de alerts (incluye strong y small) */
+.auth-wrapper .alert,
+.auth-wrapper .alert strong,
+.auth-wrapper .alert small {
+    color: #000 !important;
+}
+
+/* Placeholders legibles en negro/gris oscuro */
+.auth-wrapper .form-control::placeholder {
+    color: #495057 !important; /* gris oscuro de Bootstrap */
+    opacity: 1;
+}
+
+/* Botón outline que podía volverse texto blanco con temas oscuros */
+.auth-wrapper .btn.btn-outline-warning {
+    color: #000 !important;
+    border-color: #000 !important;
+    background-color: transparent !important;
+}
+.auth-wrapper .btn.btn-outline-warning:hover,
+.auth-wrapper .btn.btn-outline-warning:focus {
+    color: #000 !important;
+    background-color: #ffc107 !important; /* amarillo */
+    border-color: #ffc107 !important;
+}
+
+/* Botón principal (amarillo) con texto negro dentro del login */
+.auth-wrapper .btn.btn-warning {
+    color: #000 !important;
+}
+
+/* Excepción solicitada: títulos en blanco en la sección de login */
+.auth-wrapper .auth-title,
+.auth-wrapper .auth-sub {
+    color: #fff !important;
+}
