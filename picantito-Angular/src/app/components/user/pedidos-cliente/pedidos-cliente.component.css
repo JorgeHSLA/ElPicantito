@@ -1,0 +1,27 @@
+/* Reutiliza estilos globales; solo ajustes sutiles de layout */
+
+.menu-hero {
+    background: transparent !important;
+}
+
+
+/* Delineado y elevación para las cards de Mis Pedidos */
+
+.taco-card {
+    border: 2px solid rgba(255, 255, 255, 0.22) !important;
+    border-radius: 15px;
+    background: linear-gradient(180deg, rgba(45, 21, 41, 0.82), rgba(45, 21, 41, 0.92)) !important;
+    color: var(--neutral-text);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(237, 126, 71, 0.06);
+    transition: border-color 0.25s ease, box-shadow 0.3s ease, transform 0.25s ease;
+}
+
+.taco-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    box-shadow: 0 16px 44px rgba(0, 0, 0, 0.45), 0 6px 16px rgba(237, 126, 71, 0.12);
+}
+
+.taco-card .card-title {
+    color: var(--accent-color);
+}

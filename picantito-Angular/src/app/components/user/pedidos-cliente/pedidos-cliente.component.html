@@ -1,0 +1,95 @@
+<!-- HERO SECTION similar a tienda/menu -->
+<section class="menu-hero py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-2">Mis <span class="text-warning">Pedidos</span></h1>
+                <p class="lead text-muted mb-0">Historial de compras y estado actual de tus órdenes.</p>
+            </div>
+        </div>
+    </div>
+    <hr class="mt-4 mb-0" style="opacity:.1">
+</section>
+
+<main class="container py-4">
+    <div *ngIf="loading()" class="text-center py-5">
+        <div class="spinner-border text-warning" role="status"></div>
+        <p class="mt-3">Cargando pedidos...</p>
+    </div>
+
+    <div *ngIf="!loading() && error()" class="alert alert-danger">
+        {{ error() }}
+    </div>
+
+    <div *ngIf="!loading() && !error() && pedidos().length === 0" class="alert alert-info">
+        No hay pedidos asociados a este cliente todavía.
+    </div>
+
+    <div *ngIf="!loading() && pedidos().length > 0" class="row g-4">
+        <div class="col-md-6 col-lg-4" *ngFor="let p of pedidos()">
+            <div class="card taco-card h-100 border-0 overflow-hidden position-relative">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="card-title mb-0">Pedido #{{ p.id }}</h5>
+                        <span class="badge bg-warning text-dark">{{ p.estado || 'PENDIENTE' }}</span>
+                    </div>
+                    <p class="card-text mb-2">
+                        <i class="bi bi-calendar-event me-1"></i>
+                        <strong>Solicitado:</strong> {{ p.fechaSolicitud ? (p.fechaSolicitud | date:'mediumDate') : '—' }}
+                    </p>
+                    <p class="card-text mb-2">
+                        <i class="bi bi-truck me-1"></i>
+                        <strong>Entrega:</strong> {{ p.fechaEntrega ? (p.fechaEntrega | date:'mediumDate') : '—' }}
+                    </p>
+                    <p class="card-text mb-3">
+                        <i class="bi bi-cash-stack me-1"></i>
+                        <strong>Total:</strong> ${{ (p.precio ?? p.precioDeVenta ?? 0) | number:'1.2-2' }}
+                    </p>
+                    <div class="mt-auto">
+                        <button class="btn btn-outline-warning w-100" disabled>
+              <i class="bi bi-receipt-cutoff me-1"></i> Ver detalle (próximamente)
+            </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- Encabezado con estilo similar a tienda/menu -->
+<section class="menu-hero py-5 bg-light">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-2">Mis <span class="text-warning">Pedidos</span></h1>
+        <p class="lead text-muted">Consulta el historial de pedidos asociados a tu cuenta.</p>
+    </div>
+</section>
+
+<main class="container py-4">
+    <div *ngIf="loading()" class="alert alert-info">Cargando pedidos...</div>
+    <div *ngIf="!loading() && error()" class="alert alert-danger">{{ error() }}</div>
+
+    <div *ngIf="!loading() && !error()">
+        <div class="row g-4">
+            <div class="col-12" *ngIf="pedidos().length === 0">
+                <div class="alert alert-warning">No tienes pedidos registrados.</div>
+            </div>
+
+            <div class="col-lg-6 col-xl-4" *ngFor="let p of pedidos()">
+                <div class="card taco-card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title fw-bold mb-0">Pedido #{{ p.id }}</h5>
+                            <span class="badge bg-warning text-dark">{{ p.estado || 'PENDIENTE' }}</span>
+                        </div>
+                        <p class="card-text mb-1"><strong>Dirección:</strong> {{ p.direccion || '—' }}</p>
+                        <p class="card-text mb-1"><strong>Fecha solicitud:</strong> {{ p.fechaSolicitud | date:'medium' }}</p>
+                        <p class="card-text mb-3"><strong>Fecha entrega:</strong> {{ p.fechaEntrega | date:'medium' }}</p>
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <span class="h5 text-success mb-0">${{ (p.precio ?? p.precioDeVenta ?? 0) | number:'1.2-2' }}</span>
+                            <a class="btn btn-outline-warning btn-sm">Ver detalle</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
