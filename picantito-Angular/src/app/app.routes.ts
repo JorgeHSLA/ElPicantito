@@ -42,6 +42,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/user/sobre-nosotros/sobre-nosotros').then(m => m.SobreNosotrosComponent)
   },
   {
+    path: 'cliente/:clienteId/pedidos',
+    loadComponent: () => import('./components/user/pedidos-cliente/pedidos-cliente.component').then(m => m.PedidosClienteComponent),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'ejemplo-api',
     loadComponent: () => import('./components/ejemplo-uso-api.component').then(m => m.EjemploUsoApiComponent)
   },

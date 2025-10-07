@@ -17,6 +17,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn = signal(false);
   isAdmin = signal(false);
   userName = signal('');
+  userId = signal<number | null>(null);
   isScrolled = signal(false);
   cartItemCount = signal(0);
 
@@ -31,6 +32,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.isLoggedIn.set(!!user);
       this.isAdmin.set(this.authService.isAdmin());
       this.userName.set(user?.nombreUsuario?.toString() || '');
+      this.userId.set(user?.id ?? null);
     });
 
     // Effect para reaccionar a cambios en el carrito
@@ -59,11 +61,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     const shouldBeScrolled = scrollPosition > 80;  // Aumenté el umbral para mejor efecto
     this.isScrolled.set(shouldBeScrolled);
-    
+
     // Apply scroll classes to navbar
     const navbarContainer = document.querySelector('.floating-navbar-container');
     const navbar = document.querySelector('.navBarExtra');
-    
+
     if (shouldBeScrolled) {
       navbarContainer?.classList.add('scrolled');
       navbar?.classList.add('scrolled');
@@ -128,5 +130,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
         window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
       });
     }, 0);
+  }
+
+  goToMyOrders(event?: MouseEvent) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    const id = this.userId();
+    if (!id) {
+      return;
+    }
+    this.onNavItemClick(`/cliente/${id}/pedidos`);
   }
 }
