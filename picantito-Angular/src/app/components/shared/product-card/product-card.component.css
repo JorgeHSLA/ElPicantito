@@ -1,16 +1,28 @@
 /* Puedes agregar estilos personalizados aquí o dejarlo vacío para usar los globales */
 
+
 /* Animaciones y estilos de la tarjeta */
+
 .taco-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.25s ease, border-color 0.25s ease;
     border-radius: 15px;
     overflow: hidden;
     cursor: pointer;
+    /* Fondo solicitado */
+    background-color: #c13d76be !important;
+    /* antes: #f14d94 */
+    /* Borde visible aun con .border-0 de Bootstrap */
+    border: 2px solid rgba(255, 255, 255, 0.22) !important;
+    /* Texto por defecto en claro para buen contraste */
+    color: #ffffff;
 }
 
 .taco-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background-color: #a83467 !important;
+    /* aún más oscuro en hover */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.35) !important;
 }
 
 .card-img-container {
@@ -40,4 +52,24 @@
 
 .action-buttons .btn:hover {
     transform: translateY(-2px);
+}
+
+
+/* Contraste del contenido sobre el fondo rosa */
+
+.taco-card .card-title {
+    color: #ffffff;
+}
+
+.taco-card .card-text,
+.taco-card .text-muted {
+    color: #ffffff !important;
+    opacity: 0.92;
+}
+
+
+/* Separación visual de la imagen */
+
+.taco-card .card-img-top {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
