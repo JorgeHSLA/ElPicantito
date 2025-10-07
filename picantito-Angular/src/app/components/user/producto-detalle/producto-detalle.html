@@ -1,0 +1,227 @@
+<!-- BREADCRUMB -->
+<section class="breadcrumb-section bg-light py-3">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a routerLink="/home" class="text-decoration-none">Inicio</a></li>
+                <li class="breadcrumb-item"><a routerLink="/tienda" class="text-decoration-none">Tienda</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ producto?.nombre || 'Producto' }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- LOADING STATE -->
+@if (isLoading) {
+    <div class="container py-5">
+        <div class="text-center">
+            <div class="spinner-border text-warning" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3 text-muted">Cargando producto...</p>
+        </div>
+    </div>
+}
+
+<!-- ERROR STATE -->
+@if (error && !isLoading) {
+    <div class="container py-5">
+        <div class="alert alert-danger text-center" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            {{ error }}
+        </div>
+        <div class="text-center">
+            <button (click)="volverATienda()" class="btn btn-warning">
+                <i class="bi bi-arrow-left me-2"></i>Volver a la tienda
+            </button>
+        </div>
+    </div>
+}
+
+<!-- PRODUCTO DETALLE -->
+@if (producto && !isLoading) {
+    <main class="container py-5">
+        <div class="row g-4">
+            <!-- IMAGEN DEL PRODUCTO -->
+            <div class="col-lg-6">
+                <div class="producto-imagen-container">
+                    <img [src]="producto.imagen || '/images/taco1.webp'" 
+                         [alt]="producto.nombre" 
+                         class="img-fluid rounded-4 shadow-lg"
+                         onerror="this.src='/images/taco1.webp'">
+                    
+                    <!-- Badge de disponibilidad -->
+                    <div class="position-absolute top-0 start-0 m-3">
+                        @if (producto.disponible) {
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle me-1"></i>Disponible
+                            </span>
+                        } @else {
+                            <span class="badge bg-danger">
+                                <i class="bi bi-x-circle me-1"></i>No Disponible
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFORMACIÓN DEL PRODUCTO -->
+            <div class="col-lg-6">
+                <div class="producto-info">
+                    <!-- Nombre del producto -->
+                    <h1 class="display-5 fw-bold mb-3">{{ producto.nombre }}</h1>
+
+                    <!-- Calificación -->
+                    <div class="rating mb-3">
+                        @for (star of getStarsArray(producto.calificacion); track $index) {
+                            <i class="bi bi-star-fill text-warning"></i>
+                        }
+                        @for (emptyStar of getEmptyStarsArray(producto.calificacion); track $index) {
+                            <i class="bi bi-star text-warning"></i>
+                        }
+                        <span class="ms-2 text-muted">({{ producto.calificacion || 0 }}/5)</span>
+                    </div>
+
+                    <!-- Descripción -->
+                    <p class="lead text-muted mb-4">
+                        {{ producto.descripcion || 'Delicioso taco preparado con ingredientes frescos y auténticas recetas mexicanas.' }}
+                    </p>
+
+                    <!-- Precio -->
+                    <div class="precio-container mb-4">
+                        <h2 class="text-warning fw-bold mb-0">
+                            ${{ producto.precioDeVenta?.toLocaleString('es-CO') || 0 }} COP
+                        </h2>
+                        <small class="text-muted">Precio por unidad</small>
+                    </div>
+
+                    <!-- Separador -->
+                    <hr class="my-4">
+
+                    <!-- Control de cantidad -->
+                    <div class="cantidad-section mb-4">
+                        <label class="form-label fw-semibold">Cantidad:</label>
+                        <div class="input-group cantidad-input" style="max-width: 150px;">
+                            <button class="btn btn-outline-warning" 
+                                    type="button" 
+                                    (click)="decrementarCantidad()"
+                                    [disabled]="cantidad <= 1">
+                                <i class="bi bi-dash"></i>
+                            </button>
+                            <input type="text" 
+                                   class="form-control text-center" 
+                                   [value]="cantidad" 
+                                   readonly>
+                            <button class="btn btn-outline-warning" 
+                                    type="button" 
+                                    (click)="incrementarCantidad()"
+                                    [disabled]="cantidad >= 99">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Total -->
+                    <div class="total-section mb-4">
+                        <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3">
+                            <span class="fw-semibold">Total:</span>
+                            <span class="h4 text-warning fw-bold mb-0">
+                                ${{ getPrecioTotal().toLocaleString('es-CO') }} COP
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="action-buttons d-grid gap-3">
+                        <button class="btn btn-warning btn-lg" 
+                                (click)="agregarAlCarrito()"
+                                [disabled]="!producto.disponible">
+                            <i class="bi bi-cart-plus me-2"></i>
+                            {{ producto.disponible ? 'Agregar al carrito' : 'No disponible' }}
+                        </button>
+                        
+                        <button class="btn btn-outline-secondary" (click)="volverATienda()">
+                            <i class="bi bi-arrow-left me-2"></i>Seguir comprando
+                        </button>
+                    </div>
+
+                    <!-- Información adicional -->
+                    <div class="info-adicional mt-4">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body">
+                                <h6 class="fw-semibold mb-3">
+                                    <i class="bi bi-info-circle me-2"></i>Información adicional
+                                </h6>
+                                <ul class="list-unstyled mb-0 small">
+                                    <li class="mb-2">
+                                        <i class="bi bi-check-circle text-success me-2"></i>
+                                        Ingredientes 100% frescos
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-check-circle text-success me-2"></i>
+                                        Preparación tradicional mexicana
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-check-circle text-success me-2"></i>
+                                        Entrega rápida y segura
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-circle text-success me-2"></i>
+                                        Personalización disponible
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRODUCTOS RELACIONADOS -->
+        @if (productosRelacionados.length > 0) {
+            <section class="productos-relacionados mt-5 pt-5">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h3 class="fw-bold">También te podría gustar</h3>
+                        <p class="text-muted">Otros productos que nuestros clientes adoran</p>
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    @for (productoRel of productosRelacionados; track productoRel.id) {
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card producto-relacionado-card h-100 border-0 shadow-sm">
+                                <div class="card-img-container position-relative" style="cursor: pointer;"
+                                     (click)="verProductoRelacionado(productoRel.id)">
+                                    <img [src]="productoRel.imagen || '/images/taco1.webp'" 
+                                         class="card-img-top" 
+                                         [alt]="productoRel.nombre"
+                                         style="height: 200px; object-fit: cover;"
+                                         onerror="this.src='/images/taco1.webp'">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ productoRel.nombre }}</h5>
+                                    <div class="rating mb-2">
+                                        @for (star of getStarsArray(productoRel.calificacion); track $index) {
+                                            <i class="bi bi-star-fill text-warning"></i>
+                                        }
+                                        @for (emptyStar of getEmptyStarsArray(productoRel.calificacion); track $index) {
+                                            <i class="bi bi-star text-warning"></i>
+                                        }
+                                    </div>
+                                    <p class="text-warning fw-bold mb-2">
+                                        ${{ productoRel.precioDeVenta?.toLocaleString('es-CO') || 0 }} COP
+                                    </p>
+                                    <button class="btn btn-sm btn-outline-warning w-100"
+                                            (click)="verProductoRelacionado(productoRel.id)">
+                                        Ver producto
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+    </main>
+}

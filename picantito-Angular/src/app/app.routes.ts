@@ -25,6 +25,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/user/tienda/tienda').then(m => m.TiendaComponent)
   },
   {
+    path: 'producto/:id',
+    loadComponent: () => import('./components/user/producto-detalle/producto-detalle').then(m => m.ProductoDetalleComponent)
+  },
+  {
     path: 'crear-taco',
     loadComponent: () => import('./components/crearTaco/crear-taco/crear-taco').then(m => m.CrearTaco)
   },

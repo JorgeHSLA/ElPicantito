@@ -99,6 +99,9 @@ export class TiendaComponent implements OnInit, AfterViewInit {
   // Navegación y acciones
   navigateToProduct(productId: number): void {
     console.log('Navegando a producto:', productId);
+    this.router.navigate(['/producto', productId]).then(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    });
   }
 
   agregarAlCarrito(producto: any): void {

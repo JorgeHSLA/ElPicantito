@@ -1,0 +1,209 @@
+/* Importar estilos base */
+@import '../../../assets/styles/styles.css';
+@import '../../../assets/styles/css/dark-hc.css';
+
+/* Estilos específicos para producto detalle */
+
+.breadcrumb-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.breadcrumb-item a {
+    color: var(--accent-color);
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-item a:hover {
+    color: #d39e00;
+}
+
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+.producto-imagen-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #f8f9fa;
+}
+
+.producto-imagen-container img {
+    width: 100%;
+    height: auto;
+    max-height: 600px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.producto-imagen-container:hover img {
+    transform: scale(1.05);
+}
+
+.producto-info {
+    padding: 1rem;
+}
+
+.rating i {
+    font-size: 1.2rem;
+}
+
+.precio-container {
+    background: rgba(255, 193, 7, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.cantidad-input .btn {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    transition: all 0.3s ease;
+}
+
+.cantidad-input .btn:hover:not(:disabled) {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.cantidad-input .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.cantidad-input input {
+    border-color: var(--accent-color);
+    font-weight: 600;
+}
+
+.total-section {
+    border: 2px solid var(--accent-color);
+    border-radius: 10px;
+    background: white;
+}
+
+.action-buttons .btn-warning {
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.action-buttons .btn-warning:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+}
+
+.action-buttons .btn-outline-secondary {
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.action-buttons .btn-outline-secondary:hover {
+    transform: translateY(-2px);
+}
+
+.info-adicional .card {
+    transition: transform 0.3s ease;
+}
+
+.info-adicional .card:hover {
+    transform: translateY(-5px);
+}
+
+.productos-relacionados {
+    border-top: 2px solid #e9ecef;
+}
+
+.producto-relacionado-card {
+    transition: all 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.producto-relacionado-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.producto-relacionado-card .card-img-container {
+    overflow: hidden;
+}
+
+.producto-relacionado-card .card-img-container img {
+    transition: transform 0.3s ease;
+}
+
+.producto-relacionado-card:hover .card-img-container img {
+    transform: scale(1.1);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.producto-info,
+.producto-imagen-container {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .producto-imagen-container img {
+        max-height: 400px;
+    }
+    
+    .producto-info {
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .display-5 {
+        font-size: 2rem;
+    }
+    
+    .producto-imagen-container img {
+        max-height: 300px;
+    }
+    
+    .rating i {
+        font-size: 1rem;
+    }
+    
+    .action-buttons {
+        position: sticky;
+        bottom: 0;
+        background: white;
+        padding: 1rem 0;
+        z-index: 100;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .breadcrumb-section {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+    
+    .producto-imagen-container {
+        background: #2d2d2d;
+    }
+    
+    .total-section {
+        background: #1a1a1a;
+    }
+    
+    .info-adicional .card {
+        background: #2d2d2d !important;
+        color: #f8f9fa;
+    }
+}
