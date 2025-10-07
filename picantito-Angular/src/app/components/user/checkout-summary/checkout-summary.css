@@ -2,15 +2,29 @@
 
 .checkout-container {
     min-height: 100vh;
-    background-color: #f8f9fa;
+    background-color: #2d1529;
 }
 
 
 /* Header */
 
 .checkout-header h2 {
-    color: #333;
+    color: #ffffff;
     font-weight: 600;
+}
+
+.checkout-header .btn-outline-secondary {
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+.checkout-header .btn-outline-secondary:hover {
+    background-color: #ffffff;
+    color: #2d1529;
+}
+
+.checkout-header hr {
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 
@@ -30,7 +44,7 @@
 
 .product-name {
     font-weight: 600;
-    color: #333;
+    color: #000000;
     margin-bottom: 0.5rem;
 }
 
@@ -42,10 +56,20 @@
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    color: #000000 !important;
+}
+
+.product-item .text-muted {
+    color: #000000 !important;
 }
 
 .product-price {
     font-size: 1rem;
+    color: #000000;
+}
+
+.product-price .text-muted {
+    color: #000000 !important;
 }
 
 
@@ -58,6 +82,11 @@
 .quantity-input {
     width: 60px;
     text-align: center;
+    color: #000000;
+}
+
+.product-item .form-label {
+    color: #000000;
 }
 
 
@@ -80,6 +109,7 @@
 .order-summary .summary-row {
     margin-bottom: 0.75rem;
     font-size: 1rem;
+    color: #000000;
 }
 
 .order-summary .total {
@@ -87,6 +117,7 @@
     border-top: 2px solid #dee2e6;
     padding-top: 0.75rem;
     margin-top: 0.75rem;
+    color: #000000;
 }
 
 
@@ -95,11 +126,29 @@
 .card {
     border: none;
     border-radius: 12px;
+    background-color: #ffffff;
 }
 
 .card-header {
     border-radius: 12px 12px 0 0 !important;
     border-bottom: 1px solid #e9ecef;
+    background-color: #f8f9fa !important;
+    color: #2d1529;
+}
+
+.card-header h5,
+.card-header h6 {
+    color: #2d1529;
+}
+
+.card-body {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.card-body span,
+.card-body strong {
+    color: #000000;
 }
 
 
@@ -108,6 +157,40 @@
 .btn {
     border-radius: 8px;
     transition: all 0.3s ease;
+}
+
+.btn-outline-secondary {
+    color: #000000;
+    border-color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #ffffff;
+}
+
+.btn-outline-warning {
+    color: #000000;
+    border-color: #ffc107;
+    background-color: transparent;
+}
+
+.btn-outline-warning:hover {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000000;
+}
+
+.btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #ffffff;
 }
 
 .btn-success.btn-lg {
@@ -168,7 +251,12 @@
 
 .form-label {
     font-weight: 500;
-    color: #495057;
+    color: #442142;
+}
+
+.form-control {
+    color: #333;
+    background-color: #ffffff;
 }
 
 

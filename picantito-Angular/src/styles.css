@@ -139,7 +139,7 @@
 /* Estilos globales */
 
 body {
-    background-color: #3c2039;
+    background-color: #2d1529;
     /* Color sólido nuevo */
     font-family: var(--font-body);
     font-weight: 500;
@@ -152,7 +152,7 @@ body {
 /* Asegurar que el fondo sea continuo en toda la página */
 
 html {
-    background-color: #3c2039;
+    background-color: #2d1529;
     /* Color sólido nuevo */
 }
 
