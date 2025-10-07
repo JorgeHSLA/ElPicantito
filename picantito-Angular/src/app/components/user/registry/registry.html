@@ -18,16 +18,16 @@
         
         <!-- Mostrar mensajes de error -->
         <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
-          <i class="bi bi-exclamation-triangle me-2"></i>
-          {{ error }}
-          <button type="button" class="btn-close" (click)="clearMessages()"></button>
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <strong>Error:</strong> {{ error }}
+          <button type="button" class="btn-close" (click)="clearMessages()" aria-label="Cerrar"></button>
         </div>
         
         <!-- Mostrar mensajes de éxito -->
         <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
-          <i class="bi bi-check-circle me-2"></i>
-          {{ success }}
-          <button type="button" class="btn-close" (click)="clearMessages()"></button>
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <strong>¡Éxito!</strong> {{ success }}
+          <button type="button" class="btn-close" (click)="clearMessages()" aria-label="Cerrar"></button>
         </div>
         
         <form (ngSubmit)="onSubmit()" novalidate class="form-dark-text">
