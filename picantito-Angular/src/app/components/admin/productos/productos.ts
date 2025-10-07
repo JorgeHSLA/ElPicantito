@@ -37,7 +37,13 @@ export class ProductosComponent implements OnInit {
 
   loadProductos() {
     this.productoService.getAllProductos().subscribe({
-      next: (productos) => this.productos.set(productos),
+      next: (productos) => {
+        // Ordenar productos por ID de forma ascendente
+        const productosOrdenados = [...productos].sort((a, b) => {
+          return (a.id || 0) - (b.id || 0);
+        });
+        this.productos.set(productosOrdenados);
+      },
       error: () => this.errorMessage.set('Error al cargar productos')
     });
   }
