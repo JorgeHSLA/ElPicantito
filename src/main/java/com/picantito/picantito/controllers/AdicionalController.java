@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.picantito.picantito.entities.Adicional;
+import com.picantito.picantito.entities.ProductoAdicional;
 import com.picantito.picantito.service.AdicionalService;
 
 @RestController
@@ -194,4 +195,13 @@ public class AdicionalController {
         List<Adicional> adicionales = adicionalService.getAdicionalesDisponiblesParaProducto(productoId);
         return ResponseEntity.ok(adicionales);
     }
+
+
+    @GetMapping("/productoAdicionales")
+    public ResponseEntity<List<ProductoAdicional>> getProductoAdicionales() {
+        List<ProductoAdicional> productoAdicionales = adicionalService.getProductoAdicionales();
+        return ResponseEntity.ok(productoAdicionales);
+    }
+
+
 }
