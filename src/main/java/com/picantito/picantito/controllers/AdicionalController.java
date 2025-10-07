@@ -203,6 +203,11 @@ public class AdicionalController {
         return ResponseEntity.ok(productoAdicionales);
     }
 
+    @GetMapping("/productoAdicionales/{productoId}")
+    public ResponseEntity<List<ProductoAdicional>> getProductoAdicionalesByProductId(@PathVariable Integer productoId) {
+        List<ProductoAdicional> productoAdicionales = adicionalService.getProductoAdicionalesByProductoId(productoId);
+        return ResponseEntity.ok(productoAdicionales);
+    }
     
 
 }

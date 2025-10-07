@@ -84,4 +84,9 @@ public class AdicionalServiceImpl implements AdicionalService {
     public List<ProductoAdicional> getProductoAdicionales() {
         return productoAdicionalRepository.findAll();
     }
+
+        @Override
+    public List<ProductoAdicional> getProductoAdicionalesByProductoId(Integer productoId) {
+        return productoAdicionalRepository.findByProductoId(productoId);
+    }
 }
