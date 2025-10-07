@@ -250,7 +250,11 @@
 .tortilla-price {
     font-size: 1.1rem;
     font-weight: bold;
-    color: #ff6b35;
+    color: #000;
+}
+
+.tortilla-price span {
+    color: #000;
 }
 
 
@@ -314,7 +318,11 @@
 .protein-price {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #ff6b35;
+    color: #000;
+}
+
+.protein-price span {
+    color: #000;
 }
 
 .selected-indicator {
@@ -366,9 +374,13 @@
 }
 
 .adicional-price {
-    color: #ff6b35;
+    color: #000;
     font-weight: bold;
     font-size: 1rem;
+}
+
+.adicional-price span {
+    color: #000;
 }
 
 .adicional-controls {
@@ -474,7 +486,7 @@
 }
 
 .taco-summary h3 {
-    color: #333;
+    color: #000;
     margin-bottom: 20px;
     font-size: 1.4rem;
 }
@@ -498,12 +510,17 @@
     margin-right: 8px;
 }
 
+.summary-section p {
+    color: #000;
+}
+
 .summary-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 5px 0;
     border-bottom: 1px solid #dee2e6;
+    color: #000;
 }
 
 .summary-item:last-child {
@@ -512,11 +529,11 @@
 
 .item-price {
     font-weight: bold;
-    color: #ff6b35;
+    color: #000;
 }
 
 .not-selected {
-    color: #999;
+    color: #000;
     font-style: italic;
     margin: 0;
 }

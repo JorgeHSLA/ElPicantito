@@ -63,7 +63,12 @@ export class AuthService {
 
   // Métodos adicionales para el CRUD de usuarios
   crearUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(this.API_URL, usuario);
+    return this.http.post<Usuario>(this.API_URL, usuario).pipe(
+      catchError((error) => {
+        console.error('Error al crear usuario:', error);
+        throw error;
+      })
+    );
   }
 
   obtenerUsuario(id: number): Observable<Usuario> {

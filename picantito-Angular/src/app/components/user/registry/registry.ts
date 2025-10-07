@@ -64,19 +64,22 @@ export class RegistryComponent implements OnInit, AfterViewInit {
     this.error = null;
 
     // Crear el objeto usuario para la API
+    // Nota: El estado debe ser null para usuarios normales (solo para repartidores)
     const nuevoUsuario = {
       nombreCompleto: this.registryForm.nombreCompleto,
       nombreUsuario: this.registryForm.nombreUsuario,
       telefono: this.registryForm.telefono,
       correo: this.registryForm.correo,
       contrasenia: this.registryForm.password,
-      estado: 'ACTIVO',
-      rol: 'USER'
+      estado: null, // El backend solo acepta estado para repartidores
+      rol: 'USER',
+      activo: true
     };
 
     // Llamar a la API de registro
     this.authService.crearUsuario(nuevoUsuario).subscribe({
       next: (response: any) => {
+        console.log('Usuario creado exitosamente:', response);
         this.success = '¡Cuenta creada exitosamente! Bienvenido a El Picantito';
         setTimeout(() => {
           this.router.navigate(['/login']);
@@ -85,7 +88,16 @@ export class RegistryComponent implements OnInit, AfterViewInit {
       },
       error: (error: any) => {
         console.error('Error en registro:', error);
-        this.error = error.error?.message || 'Error al crear la cuenta. Intenta de nuevo.';
+        // Manejar diferentes tipos de errores
+        if (error.status === 409) {
+          this.error = error.error || 'El nombre de usuario o correo ya está en uso';
+        } else if (error.error && typeof error.error === 'string') {
+          this.error = error.error;
+        } else if (error.error?.message) {
+          this.error = error.error.message;
+        } else {
+          this.error = 'Error al crear la cuenta. Intenta de nuevo.';
+        }
         this.isLoading = false;
       }
     });
