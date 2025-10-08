@@ -47,7 +47,13 @@ export class AdicionalesComponent implements OnInit {
 
   loadAdicionales() {
     this.adicionalService.getAllAdicionales().subscribe({
-      next: (adicionales) => this.adicionales.set(adicionales),
+      next: (adicionales) => {
+        // Ordenar adicionales por ID de forma ascendente
+        const adicionalesOrdenados = [...adicionales].sort((a, b) => {
+          return (a.id || 0) - (b.id || 0);
+        });
+        this.adicionales.set(adicionalesOrdenados);
+      },
       error: () => this.errorMessage.set('Error al cargar adicionales')
     });
   }
