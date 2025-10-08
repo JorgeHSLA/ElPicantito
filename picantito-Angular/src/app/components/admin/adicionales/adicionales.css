@@ -17,3 +17,72 @@
   background-color: #138496;
   border-color: #117a8b;
 }
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+td span {
+  color: #212529 !important;
+}
+
+.btn-outline-info {
+  color: #17a2b8;
+  border-color: #17a2b8;
+}
+
+.btn-outline-info:hover {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  color: #fff;
+}
+
+.productos-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.producto-item-modal {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6 !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.producto-item-modal:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd !important;
+  transform: translateX(3px);
+}
+
+.producto-item-modal h6 {
+  color: #212529 !important;
+  font-weight: 600;
+}
+
+.producto-item-modal small {
+  color: #6c757d !important;
+  font-size: 0.8rem;
+}
+
+.producto-item-modal .bi-box-seam {
+  font-size: 1.2rem;
+  color: #0d6efd !important;
+}
+
+.productos-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.productos-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.productos-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.productos-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

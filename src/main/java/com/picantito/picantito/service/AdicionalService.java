@@ -18,5 +18,8 @@ public interface AdicionalService {
     List<Adicional> getAdicionalesDisponiblesParaProducto(Integer productoId);
     List<ProductoAdicional> getProductoAdicionales();
     List<ProductoAdicional> getProductoAdicionalesByProductoId(Integer productoId);
+    List<ProductoAdicional> getProductoAdicionalesByAdicionalId(Integer adicionalId);
+    ProductoAdicional crearProductoAdicional(Integer productoId, Integer adicionalId);
+    String eliminarProductoAdicional(Integer productoId, Integer adicionalId);
     
 }

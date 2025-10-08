@@ -1,0 +1,205 @@
+<app-admin-navbar></app-admin-navbar>
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- SIDEBAR -->
+    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <app-admin-sidebar></app-admin-sidebar>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Gestión Producto-Adicional</h1>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearRelacionModal">
+          <i class="bi bi-plus-circle me-2"></i>Nueva Relación
+        </button>
+      </div>
+
+      <!-- ALERTAS -->
+      @if (successMessage()) {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <span>{{ successMessage() }}</span>
+          <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
+        </div>
+      }
+      @if (errorMessage()) {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <span>{{ errorMessage() }}</span>
+          <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+        </div>
+      }
+
+      <!-- TABLA DE RELACIONES PRODUCTO-ADICIONAL -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Relaciones Producto-Adicional</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID Relación</th>
+                  <th>Producto</th>
+                  <th>Adicional</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (relacion of productoAdicionales(); track relacion.id) {
+                  <tr>
+                    <td>{{ relacion.id }}</td>
+                    <td>
+                      <strong>{{ getNombreProducto(relacion.productoId!) }}</strong>
+                      <br>
+                      <small class="text-muted">ID: {{ relacion.productoId }}</small>
+                    </td>
+                    <td>
+                      <strong>{{ getNombreAdicional(relacion.adicionalId!) }}</strong>
+                      <br>
+                      <small class="text-muted">ID: {{ relacion.adicionalId }}</small>
+                    </td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-danger"
+                              (click)="eliminarRelacion(relacion.productoId!, relacion.adicionalId!)"
+                              title="Eliminar relación">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                }
+                @if (productoAdicionales().length === 0) {
+                  <tr>
+                    <td colspan="4" class="text-center text-muted">No hay relaciones registradas</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESUMEN POR PRODUCTOS -->
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">Productos y sus Adicionales</h6>
+            </div>
+            <div class="card-body">
+              @for (producto of productos(); track producto.id) {
+                @let adicionalesProducto = getAdicionalesDeProducto(producto.id!);
+                <div class="mb-3 p-3 border rounded">
+                  <h6 class="mb-2">{{ producto.nombre }}</h6>
+                  @if (adicionalesProducto.length > 0) {
+                    <div class="d-flex flex-wrap gap-1">
+                      @for (rel of adicionalesProducto; track rel.id) {
+                        <span class="badge bg-primary">
+                          {{ getNombreAdicional(rel.adicionalId!) }}
+                        </span>
+                      }
+                    </div>
+                  } @else {
+                    <span class="text-muted">Sin adicionales</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">Adicionales y sus Productos</h6>
+            </div>
+            <div class="card-body">
+              @for (adicional of adicionales(); track adicional.id) {
+                @let productosAdicional = getProductosDeAdicional(adicional.id!);
+                <div class="mb-3 p-3 border rounded">
+                  <h6 class="mb-2">{{ adicional.nombre }}</h6>
+                  @if (productosAdicional.length > 0) {
+                    <div class="d-flex flex-wrap gap-1">
+                      @for (rel of productosAdicional; track rel.id) {
+                        <span class="badge bg-success">
+                          {{ getNombreProducto(rel.productoId!) }}
+                        </span>
+                      }
+                    </div>
+                  } @else {
+                    <span class="text-muted">Sin productos asociados</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL CREAR NUEVA RELACIÓN -->
+<div class="modal fade" id="crearRelacionModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crear Nueva Relación Producto-Adicional</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form (ngSubmit)="crearRelacion()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="producto" class="form-label">Seleccionar Producto:</label>
+            <select class="form-select" id="producto" 
+                    [value]="selectedProductoId() || ''"
+                    (change)="selectedProductoId.set(+$any($event.target).value || null)"
+                    required>
+              <option value="">-- Seleccione un producto --</option>
+              @for (producto of productos(); track producto.id) {
+                <option [value]="producto.id">{{ producto.nombre }}</option>
+              }
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label for="adicional" class="form-label">Seleccionar Adicional:</label>
+            <select class="form-select" id="adicional"
+                    [value]="selectedAdicionalId() || ''"
+                    (change)="selectedAdicionalId.set(+$any($event.target).value || null)"
+                    required>
+              <option value="">-- Seleccione un adicional --</option>
+              @for (adicional of adicionales(); track adicional.id) {
+                <option [value]="adicional.id">{{ adicional.nombre }} - ${{ adicional.precioDeVenta?.toFixed(2) }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Vista previa de la relación -->
+          @if (selectedProductoId() && selectedAdicionalId()) {
+            <div class="alert alert-info">
+              <h6>Vista previa:</h6>
+              <p class="mb-1"><strong>Producto:</strong> {{ getNombreProducto(selectedProductoId()!) }}</p>
+              <p class="mb-0"><strong>Adicional:</strong> {{ getNombreAdicional(selectedAdicionalId()!) }}</p>
+              
+              @if (productoTieneAdicional(selectedProductoId()!, selectedAdicionalId()!)) {
+                <div class="alert alert-warning mt-2 mb-0">
+                  <i class="bi bi-exclamation-triangle me-2"></i>
+                  Esta relación ya existe
+                </div>
+              }
+            </div>
+          }
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success" 
+                  [disabled]="!selectedProductoId() || !selectedAdicionalId() || productoTieneAdicional(selectedProductoId()!, selectedAdicionalId()!)">
+            Crear Relación
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

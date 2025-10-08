@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Adicional } from '../../models/adicional';
+import { ProductoAdicional } from '../../models/producto-adicional';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,58 @@ export class AdicionalService {
   // Eliminar adicional
   eliminarAdicional(id: number): Observable<any> {
     return this.http.delete(`${this.API_URL}/${id}`);
+  }
+
+  // ============== MÉTODOS ESPECÍFICOS PARA PRODUCTOS Y ADICIONALES ==============
+  
+  // Obtener adicionales disponibles
+  getAdicionalesDisponibles(): Observable<Adicional[]> {
+    return this.http.get<Adicional[]>(`${this.API_URL}/disponibles`);
+  }
+
+  // Obtener adicionales sin asignar a productos
+  getAdicionalesSinAsignar(): Observable<Adicional[]> {
+    return this.http.get<Adicional[]>(`${this.API_URL}/sin-asignar`);
+  }
+
+  // Obtener adicionales por producto
+  getAdicionalesPorProducto(productoId: number): Observable<Adicional[]> {
+    return this.http.get<Adicional[]>(`${this.API_URL}/producto/${productoId}`);
+  }
+
+  // Obtener adicionales disponibles para un producto específico
+  getAdicionalesDisponiblesParaProducto(productoId: number): Observable<Adicional[]> {
+    return this.http.get<Adicional[]>(`${this.API_URL}/disponibles-para-producto/${productoId}`);
+  }
+
+  // Obtener todas las relaciones producto-adicional
+  getProductoAdicionales(): Observable<ProductoAdicional[]> {
+    return this.http.get<ProductoAdicional[]>(`${this.API_URL}/productoAdicionales`);
+  }
+
+  // Obtener relaciones producto-adicional por ID de producto
+  getProductoAdicionalesByProductoId(productoId: number): Observable<ProductoAdicional[]> {
+    return this.http.get<ProductoAdicional[]>(`${this.API_URL}/productoAdicionales/${productoId}`);
+  }
+
+  // Obtener relaciones producto-adicional por ID de adicional
+  getProductoAdicionalesByAdicionalId(adicionalId: number): Observable<ProductoAdicional[]> {
+    return this.http.get<ProductoAdicional[]>(`${this.API_URL}/productoAdicionales/by-adicional/${adicionalId}`);
+  }
+
+  // ============== MÉTODOS CRUD PARA RELACIONES PRODUCTO-ADICIONAL ==============
+  
+  // Crear nueva relación producto-adicional
+  crearProductoAdicional(productoId: number, adicionalId: number): Observable<ProductoAdicional> {
+    return this.http.post<ProductoAdicional>(`${this.API_URL}/productoAdicionales`, {
+      productoId: productoId,
+      adicionalId: adicionalId
+    });
+  }
+
+  // Eliminar relación producto-adicional
+  eliminarProductoAdicional(productoId: number, adicionalId: number): Observable<any> {
+    return this.http.delete(`${this.API_URL}/productoAdicionales/${productoId}/${adicionalId}`);
   }
 
   // ============== MÉTODOS DE COMPATIBILIDAD HACIA ATRÁS ==============

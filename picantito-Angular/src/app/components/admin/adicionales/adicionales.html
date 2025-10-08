@@ -45,6 +45,7 @@
                   <th>Descripción</th>
                   <th>Precio</th>
                   <th>Disponible</th>
+                  <th>Productos Asociados</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -63,6 +64,18 @@
                       }
                     </td>
                     <td>
+                      @let productosAsoc = getProductosAsociadosAAdicional(adicional.id!);
+                      @if (productosAsoc.length > 0) {
+                        <button class="btn btn-sm btn-outline-info" 
+                                (click)="mostrarProductosAsociados(adicional.id!)">
+                          <i class="bi bi-eye me-1"></i>
+                          Ver ({{ productosAsoc.length }})
+                        </button>
+                      } @else {
+                        <span class="text-muted">Sin productos</span>
+                      }
+                    </td>
+                    <td>
                       <a [routerLink]="['/admin/adicionales/edit', adicional.id]" 
                          class="btn btn-sm btn-outline-primary me-1">
                         <i class="bi bi-pencil"></i>
@@ -76,7 +89,7 @@
                 }
                 @if (adicionales().length === 0) {
                   <tr>
-                    <td colspan="6" class="text-center text-muted">No hay adicionales registrados</td>
+                    <td colspan="7" class="text-center text-muted">No hay adicionales registrados</td>
                   </tr>
                 }
               </tbody>
@@ -137,6 +150,47 @@
           <button type="submit" class="btn btn-info">Guardar Adicional</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PRODUCTOS ASOCIADOS -->
+<div class="modal fade" id="productosAsociadosModal" tabindex="-1">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-box-seam text-primary me-2"></i>
+          Productos Asociados
+          @if (getNombreAdicionalSeleccionado()) {
+            <small class="text-muted">- {{ getNombreAdicionalSeleccionado() }}</small>
+          }
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        @if (productosAsociados().length > 0) {
+          <div class="productos-list">
+            @for (relacion of productosAsociados(); track relacion.id) {
+              <div class="producto-item-modal d-flex align-items-center py-2 px-3 mb-2 border rounded">
+                <i class="bi bi-box-seam text-primary me-3"></i>
+                <div class="flex-grow-1">
+                  <h6 class="mb-0 text-dark">{{ getNombreProducto(relacion.productoId!) }}</h6>
+                  <small class="text-muted">ID: {{ relacion.productoId }}</small>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="text-center text-muted py-4">
+            <i class="bi bi-inbox display-4"></i>
+            <p class="mt-2">No hay productos asociados a este adicional</p>
+          </div>
+        }
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
     </div>
   </div>
 </div>

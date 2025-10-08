@@ -5,7 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { AdminNavbarComponent } from '../../shared/admin-navbar/admin-navbar.component';
 import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar.component';
 import { Adicional } from '../../../models/adicional';
+import { ProductoAdicional } from '../../../models/producto-adicional';
+import { Producto } from '../../../models/producto';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
+import { ProductoService } from '../../../services/tienda/producto.service';
 
 @Component({
   selector: 'app-adicionales',
@@ -16,6 +19,8 @@ import { AdicionalService } from '../../../services/tienda/adicional.service';
 })
 export class AdicionalesComponent implements OnInit {
   adicionales = signal<Adicional[]>([]);
+  productoAdicionales = signal<ProductoAdicional[]>([]);
+  productos = signal<Producto[]>([]);
   nuevoAdicional = signal<Adicional>({
     nombre: '',
     descripcion: '',
@@ -23,13 +28,21 @@ export class AdicionalesComponent implements OnInit {
     disponible: true
   });
   
+  selectedAdicionalId = signal<number | null>(null);
+  productosAsociados = signal<ProductoAdicional[]>([]);
+  
   successMessage = signal('');
   errorMessage = signal('');
 
-  constructor(private adicionalService: AdicionalService) {}
+  constructor(
+    private adicionalService: AdicionalService,
+    private productoService: ProductoService
+  ) {}
 
   ngOnInit() {
+    this.loadProductos();
     this.loadAdicionales();
+    this.loadProductoAdicionales();
   }
 
   loadAdicionales() {
@@ -41,7 +54,6 @@ export class AdicionalesComponent implements OnInit {
 
   saveAdicional() {
     let adicional = this.nuevoAdicional();
-    // Compatibilidad: si solo hay 'precio', pásalo a 'precioDeVenta'
     if (adicional.precio && !adicional.precioDeVenta) {
       adicional = { ...adicional, precioDeVenta: adicional.precio };
     }
@@ -86,6 +98,73 @@ export class AdicionalesComponent implements OnInit {
 
   private closeModal() {
     const modal = document.getElementById('nuevoAdicionalModal');
+    const modalInstance = (window as any).bootstrap?.Modal?.getInstance(modal);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+  }
+
+  loadProductos() {
+    this.productoService.getAllProductos().subscribe({
+      next: (productos) => {
+        console.log('Productos cargados en adicionales:', productos); // Debug
+        this.productos.set(productos);
+      },
+      error: (error) => {
+        console.error('Error al cargar productos:', error); // Debug
+        this.errorMessage.set('Error al cargar productos');
+      }
+    });
+  }
+  loadProductoAdicionales() {
+    this.adicionalService.getProductoAdicionales().subscribe({
+      next: (relaciones) => {
+        console.log('Relaciones producto-adicional cargadas:', relaciones); // Debug
+        this.productoAdicionales.set(relaciones);
+      },
+      error: (error) => {
+        console.error('Error al cargar relaciones:', error); // Debug
+        this.errorMessage.set('Error al cargar relaciones producto-adicional');
+      }
+    });
+  }
+
+  getProductosAsociadosAAdicional(adicionalId: number): ProductoAdicional[] {
+    const asociados = this.productoAdicionales().filter(pa => pa.adicionalId === adicionalId);
+    console.log(`Productos asociados al adicional ${adicionalId}:`, asociados); // Debug
+    return asociados;
+  }
+
+  getNombreProducto(productoId: number): string {
+    const producto = this.productos().find(p => p.id === productoId);
+    if (producto) {
+      return producto.nombre || `Producto ${productoId}`;
+    }
+    console.log('Producto no encontrado:', productoId, 'en lista:', this.productos()); // Debug
+    return `Producto ID: ${productoId}`;
+  }
+
+  getNombreAdicionalSeleccionado(): string {
+    if (!this.selectedAdicionalId()) return '';
+    const adicional = this.adicionales().find(a => a.id === this.selectedAdicionalId());
+    return adicional?.nombre || '';
+  }
+
+  mostrarProductosAsociados(adicionalId: number) {
+    this.selectedAdicionalId.set(adicionalId);
+    this.adicionalService.getProductoAdicionalesByAdicionalId(adicionalId).subscribe({
+      next: (relaciones) => {
+        this.productosAsociados.set(relaciones);
+        const modal = document.getElementById('productosAsociadosModal');
+        const modalInstance = new (window as any).bootstrap.Modal(modal);
+        modalInstance.show();
+      },
+      error: () => this.errorMessage.set('Error al cargar productos asociados')
+    });
+  }
+
+  private closeProductosModal() {
+    const modal = document.getElementById('productosAsociadosModal');
     const modalInstance = (window as any).bootstrap?.Modal?.getInstance(modal);
     if (modalInstance) {
       modalInstance.hide();
