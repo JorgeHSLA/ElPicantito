@@ -1,12 +1,12 @@
 #servicios
 services:
-    chatbot:
-      build:
-        context: chatbot/          # ruta donde está tu Dockerfile
-        dockerfile: Dockerfile
-      container_name: elpicantito-chat
-      ports:
-        - "8501:8501"
+    # chatbot:
+    #   build:
+    #     context: chatbot/          # ruta donde está tu Dockerfile
+    #     dockerfile: Dockerfile
+    #   container_name: elpicantito-chat
+    #   ports:
+    #     - "8501:8501"
       
   #crear bases de datos 
     db:
