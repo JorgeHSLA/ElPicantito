@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductoService } from '../../../services/tienda/producto.service';
+import { AdicionalService } from '../../../services/tienda/adicional.service';
 import { Producto } from '../../../models/producto';
+import { Adicional } from '../../../models/adicional';
+import { ProductoAdicional } from '../../../models/producto-adicional';
 
 @Component({
   selector: 'app-producto-detalle',
@@ -19,11 +22,16 @@ export class ProductoDetalleComponent implements OnInit {
 
   // Productos relacionados (simulados por ahora)
   productosRelacionados: Producto[] = [];
+  
+  // Adicionales del producto
+  adicionales: Adicional[] = [];
+  adicionalesLoading = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private productoService: ProductoService
+    private productoService: ProductoService,
+    private adicionalService: AdicionalService
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +54,7 @@ export class ProductoDetalleComponent implements OnInit {
         this.producto = producto;
         this.isLoading = false;
         this.cargarProductosRelacionados();
+        this.cargarAdicionales(id);
       },
       error: (error) => {
         console.error('Error cargando producto:', error);
@@ -65,6 +74,42 @@ export class ProductoDetalleComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error cargando productos relacionados:', error);
+      }
+    });
+  }
+
+  private cargarAdicionales(productoId: number): void {
+    this.adicionalesLoading = true;
+    
+    // Obtener las relaciones producto-adicional para este producto
+    this.adicionalService.getProductoAdicionalesByProductoId(productoId).subscribe({
+      next: (relaciones: ProductoAdicional[]) => {
+        // Para cada relación, obtener los datos completos del adicional
+        const adicionalesIds = relaciones.map(rel => rel.adicionalId);
+        
+        if (adicionalesIds.length > 0) {
+          this.adicionalService.getAllAdicionales().subscribe({
+            next: (todosAdicionales: Adicional[]) => {
+              this.adicionales = todosAdicionales.filter(adicional => 
+                adicionalesIds.includes(adicional.id || 0) && adicional.disponible
+              );
+              this.adicionalesLoading = false;
+            },
+            error: () => {
+              console.error('Error cargando adicionales');
+              this.adicionales = [];
+              this.adicionalesLoading = false;
+            }
+          });
+        } else {
+          this.adicionales = [];
+          this.adicionalesLoading = false;
+        }
+      },
+      error: () => {
+        console.error('Error cargando relaciones producto-adicional');
+        this.adicionales = [];
+        this.adicionalesLoading = false;
       }
     });
   }
