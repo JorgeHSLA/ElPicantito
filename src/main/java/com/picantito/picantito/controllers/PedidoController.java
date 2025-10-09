@@ -59,9 +59,13 @@ public class PedidoController {
     @PostMapping
     public ResponseEntity<?> crearPedido(@RequestBody CrearPedidoDTO pedidoDTO) {
         try {
+            if (pedidoDTO.getRepartidorId() != null) {
+                return new ResponseEntity<>("error, el repartidor debe ser nulo para crear un pedido:", HttpStatus.BAD_REQUEST);
+            }
             System.out.println("Recibido DTO: " + pedidoDTO);
             Pedido nuevoPedido = pedidoService.crearPedido(pedidoDTO);
             PedidoResponseDTO responseDTO = pedidoMapper.toDTO(nuevoPedido);
+            
             return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         } catch (Exception e) {
             System.err.println("Error creando pedido: " + e.getMessage());
