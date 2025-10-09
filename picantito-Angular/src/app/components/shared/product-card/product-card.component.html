@@ -2,7 +2,7 @@
     <div class="row g-0 h-100">
         <div class="col-12">
             <div class="card-img-container position-relative" style="height: 200px;">
-                <img #img [src]="producto.imagen" (error)="img.src='/images/taco1.webp'" class="card-img-top w-100 h-100" style="object-fit: cover;" [alt]="producto.nombre">
+                <img #img [src]="producto.imagen" class="card-img-top w-100 h-100" style="object-fit: cover;" [alt]="producto.nombre">
                 <!-- Badge de disponibilidad -->
                 @if (!producto.disponible) {
                 <span class="position-absolute top-0 end-0 badge bg-secondary m-2">

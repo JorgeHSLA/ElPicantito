@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.picantito.picantito.entities.Adicional;
+import com.picantito.picantito.entities.ProductoAdicional;
 
 public interface AdicionalService {
     List<Adicional> getAllAdicionales();
@@ -15,4 +16,10 @@ public interface AdicionalService {
     List<Adicional> getAdicionalesSinAsignar();
     void updateAdicional(Integer productoId, Adicional adicional);    
     List<Adicional> getAdicionalesDisponiblesParaProducto(Integer productoId);
+    List<ProductoAdicional> getProductoAdicionales();
+    List<ProductoAdicional> getProductoAdicionalesByProductoId(Integer productoId);
+    List<ProductoAdicional> getProductoAdicionalesByAdicionalId(Integer adicionalId);
+    ProductoAdicional crearProductoAdicional(Integer productoId, Integer adicionalId);
+    String eliminarProductoAdicional(Integer productoId, Integer adicionalId);
+    
 }

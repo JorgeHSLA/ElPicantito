@@ -34,7 +34,13 @@ export class UsuariosComponent implements OnInit {
 
   loadUsuarios() {
     this.authService.getAllUsuarios().subscribe({
-      next: (usuarios) => this.usuarios.set(usuarios),
+      next: (usuarios) => {
+        // Ordenar usuarios por ID de forma ascendente
+        const usuariosOrdenados = [...usuarios].sort((a, b) => {
+          return (a.id || 0) - (b.id || 0);
+        });
+        this.usuarios.set(usuariosOrdenados);
+      },
       error: () => this.errorMessage.set('No se pudieron cargar los usuarios')
     });
   }

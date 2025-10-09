@@ -46,7 +46,4 @@ public class Pedido {
     @JsonIgnore
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PedidoProducto> pedidoProductos = new ArrayList<>();
-
-
-
 }

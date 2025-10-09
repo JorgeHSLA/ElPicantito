@@ -7,7 +7,7 @@ export interface Usuario {
   contrasenia?: string;
   password?: string;
   rol?: string;
-  estado?: string;
+  estado?: string | null; // Permitir null para usuarios normales
   activo?: boolean;
   fechaRegistro?: string;
   pedidosRealizados?: number;

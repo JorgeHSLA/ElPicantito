@@ -23,4 +23,12 @@ public class ProductoAdicional {
     @MapsId("productoId")
     @JoinColumn(name = "producto_id")
     private Producto producto;
+
+    public Integer getProductoId() {
+        return this.id != null ? this.id.getProductoId() : null;
+    }
+
+    public Integer getAdicionalId() {
+        return this.id != null ? this.id.getAdicionalId() : null;
+    }
 }

@@ -41,7 +41,8 @@
 <!-- PRODUCTO DETALLE -->
 @if (producto && !isLoading) {
     <main class="container py-5">
-        <div class="row g-4">
+        <!-- SECCIÓN SUPERIOR: Imagen y información básica en dos columnas -->
+        <div class="row g-4 mb-5">
             <!-- IMAGEN DEL PRODUCTO -->
             <div class="col-lg-6">
                 <div class="producto-imagen-container">
@@ -65,9 +66,9 @@
                 </div>
             </div>
 
-            <!-- INFORMACIÓN DEL PRODUCTO -->
+            <!-- INFORMACIÓN BÁSICA DEL PRODUCTO -->
             <div class="col-lg-6">
-                <div class="producto-info">
+                <div class="producto-info-basica">
                     <!-- Nombre del producto -->
                     <h1 class="display-5 fw-bold mb-3">{{ producto.nombre }}</h1>
 
@@ -95,11 +96,8 @@
                         <small class="text-muted">Precio por unidad</small>
                     </div>
 
-                    <!-- Separador -->
-                    <hr class="my-4">
-
                     <!-- Control de cantidad -->
-                    <div class="cantidad-section mb-4">
+                    <div class="cantidad-section">
                         <label class="form-label fw-semibold">Cantidad:</label>
                         <div class="input-group cantidad-input" style="max-width: 150px;">
                             <button class="btn btn-outline-warning" 
@@ -120,17 +118,99 @@
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- SECCIÓN UNIFICADA: Adicionales, Total y Botones en toda la anchura -->
+        <div class="seccion-unificada">
+            <!-- ADICIONALES DISPONIBLES -->
+            @if (adicionales.length > 0 || adicionalesLoading) {
+                <section class="adicionales-section mb-5">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h3 class="fw-bold">
+                                <i class="bi bi-plus-circle text-warning me-2"></i>
+                                Adicionales disponibles
+                            </h3>
+                            <p class="text-muted">Personaliza tu orden con estos deliciosos adicionales</p>
+                        </div>
+                    </div>
+
+                    @if (adicionalesLoading) {
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-warning" role="status">
+                                <span class="visually-hidden">Cargando adicionales...</span>
+                            </div>
+                        </div>
+                    } @else {
+                        <div class="adicionales-scroll-container">
+                            <div class="adicionales-horizontal d-flex gap-3 pb-3" style="overflow-x: auto;">
+                                @for (adicional of adicionales; track adicional.id) {
+                                    <div class="adicional-card flex-shrink-0">
+                                        <div class="card h-100 border-0 shadow-sm adicional-item">
+                                            <div class="card-body text-center p-4">
+                                                <!-- Icono del adicional -->
+                                                <div class="adicional-icon mb-3">
+                                                    <i class="bi bi-plus-circle-fill text-warning" style="font-size: 2.5rem;"></i>
+                                                </div>
+                                                
+                                                <!-- Nombre del adicional -->
+                                                <h5 class="card-title fw-bold mb-2">{{ adicional.nombre }}</h5>
+                                                
+                                                <!-- Descripción -->
+                                                <p class="card-text text-muted small mb-3" style="min-height: 40px;">
+                                                    {{ adicional.descripcion || 'Delicioso adicional para tu orden' }}
+                                                </p>
+                                                
+                                                <!-- Precio -->
+                                                <div class="precio-adicional mb-3">
+                                                    <span class="h5 text-warning fw-bold">
+                                                        +${{ adicional.precioDeVenta?.toLocaleString('es-CO') || 0 }}
+                                                    </span>
+                                                    <small class="d-block text-muted">COP</small>
+                                                </div>
+                                                
+                                                <!-- Botón de agregar -->
+                                                <button class="btn btn-outline-warning btn-sm w-100" 
+                                                        [disabled]="!adicional.disponible">
+                                                    <i class="bi bi-plus me-1"></i>
+                                                    {{ adicional.disponible ? 'Agregar' : 'No disponible' }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Indicador de scroll -->
+                        @if (adicionales.length > 3) {
+                            <div class="text-center mt-2">
+                                <small class="text-muted">
+                                    <i class="bi bi-arrow-left-right me-1"></i>
+                                    Desliza para ver más adicionales
+                                </small>
+                            </div>
+                        }
+                    }
+                </section>
+            }
+
+            <!-- TOTAL Y BOTONES DE ACCIÓN -->
+            <div class="row g-4">
+                <div class="col-lg-8">
                     <!-- Total -->
                     <div class="total-section mb-4">
-                        <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3">
-                            <span class="fw-semibold">Total:</span>
-                            <span class="h4 text-warning fw-bold mb-0">
+                        <div class="d-flex justify-content-between align-items-center p-4 bg-light rounded-3">
+                            <span class="h5 fw-semibold mb-0">Total:</span>
+                            <span class="h3 text-warning fw-bold mb-0">
                                 ${{ getPrecioTotal().toLocaleString('es-CO') }} COP
                             </span>
                         </div>
                     </div>
-
+                </div>
+                <div class="col-lg-4">
                     <!-- Botones de acción -->
                     <div class="action-buttons d-grid gap-3">
                         <button class="btn btn-warning btn-lg" 
@@ -144,38 +224,11 @@
                             <i class="bi bi-arrow-left me-2"></i>Seguir comprando
                         </button>
                     </div>
-
-                    <!-- Información adicional -->
-                    <div class="info-adicional mt-4">
-                        <div class="card border-0 bg-light">
-                            <div class="card-body">
-                                <h6 class="fw-semibold mb-3">
-                                    <i class="bi bi-info-circle me-2"></i>Información adicional
-                                </h6>
-                                <ul class="list-unstyled mb-0 small">
-                                    <li class="mb-2">
-                                        <i class="bi bi-check-circle text-success me-2"></i>
-                                        Ingredientes 100% frescos
-                                    </li>
-                                    <li class="mb-2">
-                                        <i class="bi bi-check-circle text-success me-2"></i>
-                                        Preparación tradicional mexicana
-                                    </li>
-                                    <li class="mb-2">
-                                        <i class="bi bi-check-circle text-success me-2"></i>
-                                        Entrega rápida y segura
-                                    </li>
-                                    <li>
-                                        <i class="bi bi-check-circle text-success me-2"></i>
-                                        Personalización disponible
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
+
+
 
         <!-- PRODUCTOS RELACIONADOS -->
         @if (productosRelacionados.length > 0) {

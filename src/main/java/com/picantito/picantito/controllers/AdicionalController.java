@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.picantito.picantito.entities.Adicional;
+import com.picantito.picantito.entities.ProductoAdicional;
 import com.picantito.picantito.service.AdicionalService;
 
 @RestController
@@ -194,4 +195,62 @@ public class AdicionalController {
         List<Adicional> adicionales = adicionalService.getAdicionalesDisponiblesParaProducto(productoId);
         return ResponseEntity.ok(adicionales);
     }
+
+
+    @GetMapping("/productoAdicionales")
+    public ResponseEntity<List<ProductoAdicional>> getProductoAdicionales() {
+        List<ProductoAdicional> productoAdicionales = adicionalService.getProductoAdicionales();
+        return ResponseEntity.ok(productoAdicionales);
+    }
+
+    @GetMapping("/productoAdicionales/{productoId}")
+    public ResponseEntity<List<ProductoAdicional>> getProductoAdicionalesByProductId(@PathVariable Integer productoId) {
+        List<ProductoAdicional> productoAdicionales = adicionalService.getProductoAdicionalesByProductoId(productoId);
+        return ResponseEntity.ok(productoAdicionales);
+    }
+
+    @GetMapping("/productoAdicionales/by-adicional/{adicionalId}")
+    public ResponseEntity<List<ProductoAdicional>> getProductoAdicionalesByAdicionalId(@PathVariable Integer adicionalId) {
+        List<ProductoAdicional> productoAdicionales = adicionalService.getProductoAdicionalesByAdicionalId(adicionalId);
+        return ResponseEntity.ok(productoAdicionales);
+    }
+
+    @PostMapping("/productoAdicionales")
+    public ResponseEntity<?> crearProductoAdicional(@RequestBody Map<String, Integer> request) {
+        try {
+            Integer productoId = request.get("productoId");
+            Integer adicionalId = request.get("adicionalId");
+            
+            if (productoId == null || adicionalId == null) {
+                return ResponseEntity.badRequest().body("productoId y adicionalId son requeridos");
+            }
+            
+            ProductoAdicional resultado = adicionalService.crearProductoAdicional(productoId, adicionalId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al crear relación producto-adicional: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/productoAdicionales/{productoId}/{adicionalId}")
+    public ResponseEntity<?> eliminarProductoAdicional(@PathVariable Integer productoId, @PathVariable Integer adicionalId) {
+        try {
+            String resultado = adicionalService.eliminarProductoAdicional(productoId, adicionalId);
+            if ("SUCCESS".equals(resultado)) {
+                return ResponseEntity.ok()
+                        .body(Map.of(
+                            "mensaje", "Relación eliminada correctamente",
+                            "productoId", productoId,
+                            "adicionalId", adicionalId
+                        ));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultado);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al eliminar relación: " + e.getMessage());
+        }
+    }
+
 }

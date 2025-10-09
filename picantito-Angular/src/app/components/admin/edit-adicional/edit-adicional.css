@@ -12,3 +12,119 @@
   border-color: var(--primary-color);
   box-shadow: 0 0 0 0.2rem rgba(255, 86, 48, 0.25);
 }
+
+.productos-asociados-section {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  padding: 1rem;
+}
+
+.productos-container {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.producto-item {
+  background-color: #ffffff !important;
+  border: 1px solid #e9ecef !important;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 0.25rem;
+}
+
+.producto-item:hover {
+  background-color: #f1f3f4 !important;
+  border-color: #adb5bd !important;
+  transform: translateX(2px);
+}
+
+.producto-item:last-child {
+  margin-bottom: 0;
+}
+
+.producto-item .text-dark {
+  color: #212529 !important;
+  font-weight: 500;
+}
+
+.btn-sm.p-1 {
+  padding: 0.125rem 0.25rem !important;
+  border-width: 1px;
+  border-radius: 0.2rem;
+}
+
+.btn-sm.p-1 i {
+  font-size: 0.75rem;
+}
+
+.form-label.text-muted.small {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.estado-vacio {
+  color: #6c757d !important;
+  font-size: 0.875rem;
+}
+
+.resumen-rapido {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+}
+
+.resumen-rapido small {
+  font-size: 0.75rem;
+  color: #6c757d !important;
+}
+
+.resumen-rapido i {
+  margin-right: 0.25rem;
+}
+
+hr.my-4 {
+  border-color: #dee2e6;
+  opacity: 0.5;
+}
+
+h6 i.text-primary {
+  color: #0d6efd !important;
+}
+
+.productos-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.productos-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.productos-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.productos-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+@media (max-width: 767.98px) {
+  .productos-container {
+    max-height: 120px;
+  }
+  
+  .producto-item {
+    padding: 0.5rem !important;
+  }
+  
+  .resumen-rapido {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+}
