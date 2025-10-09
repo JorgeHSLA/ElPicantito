@@ -18,6 +18,7 @@ public interface AutentificacionService {
     boolean existsByNombreUsuario(String nombreUsuario);
     boolean existsByCorreo(String correo);
     boolean authenticate(String nombreUsuario, String password);
+    boolean authenticateNonDelivery(String nombreUsuario, String password);
     
     // Métodos de negocio con validaciones completas
     String registrarUsuario(User user, String password2);

@@ -64,6 +64,12 @@ public class UserController {
                         .body("La cuenta ya no existe y no se puede volver a crear con ese correo");
             }
             
+            // Verificar si es un repartidor (nueva validación)
+            if ("REPARTIDOR".equals(user.getRol())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Los repartidores no pueden iniciar sesión a través de esta interfaz");
+            }
+            
             // Verificar contraseña
             if (!user.getContrasenia().equals(contrasenia)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

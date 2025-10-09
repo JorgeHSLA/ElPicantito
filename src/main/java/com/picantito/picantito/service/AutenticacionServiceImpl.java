@@ -59,6 +59,22 @@ public class AutenticacionServiceImpl implements AutentificacionService {
         }
         return false;
     }
+    
+    /**
+     * Autentica un usuario y verifica que no sea un repartidor
+     * @param nombreUsuario Nombre de usuario
+     * @param password Contraseña
+     * @return true si las credenciales son correctas y el usuario NO es un repartidor, false en caso contrario
+     */
+    public boolean authenticateNonDelivery(String nombreUsuario, String password) {
+        Optional<User> user = findByNombreUsuario(nombreUsuario);
+        if (user.isPresent()) {
+            User foundUser = user.get();
+            // Verificar que la contraseña sea correcta Y el usuario NO sea un repartidor
+            return foundUser.getContrasenia().equals(password) && !"REPARTIDOR".equals(foundUser.getRol());
+        }
+        return false;
+    }
 
     @Override
     public String registrarUsuario(User user, String password2) {
