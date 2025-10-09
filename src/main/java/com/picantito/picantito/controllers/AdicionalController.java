@@ -198,27 +198,28 @@ public class AdicionalController {
     }
 
 
-    // Endpoint que devuelve solo los IDs usando DTOs
+    // Obtener todas las relaciones producto-adicional (solo IDs): http://localhost:9998/api/adicional/productoAdicionales
     @GetMapping("/productoAdicionales")
     public ResponseEntity<List<ProductoAdicionalIdDTO>> getProductoAdicionalesIds() {
         List<ProductoAdicionalIdDTO> productoAdicionales = adicionalService.getProductoAdicionalesIds();
         return ResponseEntity.ok(productoAdicionales);
     }
     
-    // Endpoint que devuelve solo los IDs por producto usando DTOs
+    // Obtener relaciones producto-adicional por ID de producto (solo IDs): http://localhost:9998/api/adicional/productoAdicionales/{productoId}
     @GetMapping("/productoAdicionales/{productoId}")
     public ResponseEntity<List<ProductoAdicionalIdDTO>> getProductoAdicionalesIdsByProductId(@PathVariable Integer productoId) {
         List<ProductoAdicionalIdDTO> productoAdicionales = adicionalService.getProductoAdicionalesIdsByProductoId(productoId);
         return ResponseEntity.ok(productoAdicionales);
     }
     
-    // Endpoint que devuelve solo los IDs por adicional usando DTOs
+    // Obtener relaciones producto-adicional por ID de adicional (solo IDs): http://localhost:9998/api/adicional/productoAdicionales/by-adicional/{adicionalId}
     @GetMapping("/productoAdicionales/by-adicional/{adicionalId}")
     public ResponseEntity<List<ProductoAdicionalIdDTO>> getProductoAdicionalesIdsByAdicionalId(@PathVariable Integer adicionalId) {
         List<ProductoAdicionalIdDTO> productoAdicionales = adicionalService.getProductoAdicionalesIdsByAdicionalId(adicionalId);
         return ResponseEntity.ok(productoAdicionales);
     }
 
+    // Crear una nueva relación producto-adicional: http://localhost:9998/api/adicional/productoAdicionales
     @PostMapping("/productoAdicionales")
     public ResponseEntity<?> crearProductoAdicional(@RequestBody Map<String, Integer> request) {
         try {
@@ -237,6 +238,7 @@ public class AdicionalController {
         }
     }
 
+    // Eliminar una relación producto-adicional: http://localhost:9998/api/adicional/productoAdicionales/{productoId}/{adicionalId}
     @DeleteMapping("/productoAdicionales/{productoId}/{adicionalId}")
     public ResponseEntity<?> eliminarProductoAdicional(@PathVariable Integer productoId, @PathVariable Integer adicionalId) {
         try {

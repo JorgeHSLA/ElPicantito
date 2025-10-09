@@ -18,8 +18,8 @@ import com.picantito.picantito.entities.Pedido;
 import com.picantito.picantito.service.PedidoService;
 @RestController
 @RequestMapping("/api/pedidos")
-@CrossOrigin(originPatterns = "*", allowCredentials = "false") // Para desarrollo - permite todos los orígenes
-// @CrossOrigin(origins = "http://localhost:4200") // Solo para Angular
+//@CrossOrigin(originPatterns = "*", allowCredentials = "false") // Para desarrollo - permite todos los orígenes
+@CrossOrigin(origins = "http://localhost:4200") // Solo para Angular
 public class PedidoController {
 
     @Autowired
