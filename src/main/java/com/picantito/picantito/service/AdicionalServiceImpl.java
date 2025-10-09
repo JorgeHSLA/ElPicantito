@@ -2,10 +2,12 @@ package com.picantito.picantito.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.picantito.picantito.dto.ProductoAdicionalIdDTO;
 import com.picantito.picantito.entities.Adicional;
 import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.entities.ProductoAdicional;
@@ -86,19 +88,35 @@ public class AdicionalServiceImpl implements AdicionalService {
         return adicionalRepository.findAvailableForProduct(productoId);
     }
 
+    // Implementación de los métodos con DTOs
     @Override
-    public List<ProductoAdicional> getProductoAdicionales() {
-        return productoAdicionalRepository.findAll();
+    public List<ProductoAdicionalIdDTO> getProductoAdicionalesIds() {
+        List<ProductoAdicional> productoAdicionales = productoAdicionalRepository.findAll();
+        return productoAdicionales.stream()
+                .map(pa -> new ProductoAdicionalIdDTO(
+                        pa.getProducto().getId(),
+                        pa.getAdicional().getId()))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<ProductoAdicional> getProductoAdicionalesByProductoId(Integer productoId) {
-        return productoAdicionalRepository.findByProductoId(productoId);
+    public List<ProductoAdicionalIdDTO> getProductoAdicionalesIdsByProductoId(Integer productoId) {
+        List<ProductoAdicional> productoAdicionales = productoAdicionalRepository.findByProductoId(productoId);
+        return productoAdicionales.stream()
+                .map(pa -> new ProductoAdicionalIdDTO(
+                        pa.getProducto().getId(),
+                        pa.getAdicional().getId()))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<ProductoAdicional> getProductoAdicionalesByAdicionalId(Integer adicionalId) {
-        return productoAdicionalRepository.findByAdicionalId(adicionalId);
+    public List<ProductoAdicionalIdDTO> getProductoAdicionalesIdsByAdicionalId(Integer adicionalId) {
+        List<ProductoAdicional> productoAdicionales = productoAdicionalRepository.findByAdicionalId(adicionalId);
+        return productoAdicionales.stream()
+                .map(pa -> new ProductoAdicionalIdDTO(
+                        pa.getProducto().getId(),
+                        pa.getAdicional().getId()))
+                .collect(Collectors.toList());
     }
 
     @Override

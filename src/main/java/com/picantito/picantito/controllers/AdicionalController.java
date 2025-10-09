@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.picantito.picantito.dto.ProductoAdicionalIdDTO;
 import com.picantito.picantito.entities.Adicional;
 import com.picantito.picantito.entities.ProductoAdicional;
 import com.picantito.picantito.service.AdicionalService;
@@ -197,21 +198,24 @@ public class AdicionalController {
     }
 
 
+    // Endpoint que devuelve solo los IDs usando DTOs
     @GetMapping("/productoAdicionales")
-    public ResponseEntity<List<ProductoAdicional>> getProductoAdicionales() {
-        List<ProductoAdicional> productoAdicionales = adicionalService.getProductoAdicionales();
+    public ResponseEntity<List<ProductoAdicionalIdDTO>> getProductoAdicionalesIds() {
+        List<ProductoAdicionalIdDTO> productoAdicionales = adicionalService.getProductoAdicionalesIds();
         return ResponseEntity.ok(productoAdicionales);
     }
-
+    
+    // Endpoint que devuelve solo los IDs por producto usando DTOs
     @GetMapping("/productoAdicionales/{productoId}")
-    public ResponseEntity<List<ProductoAdicional>> getProductoAdicionalesByProductId(@PathVariable Integer productoId) {
-        List<ProductoAdicional> productoAdicionales = adicionalService.getProductoAdicionalesByProductoId(productoId);
+    public ResponseEntity<List<ProductoAdicionalIdDTO>> getProductoAdicionalesIdsByProductId(@PathVariable Integer productoId) {
+        List<ProductoAdicionalIdDTO> productoAdicionales = adicionalService.getProductoAdicionalesIdsByProductoId(productoId);
         return ResponseEntity.ok(productoAdicionales);
     }
-
+    
+    // Endpoint que devuelve solo los IDs por adicional usando DTOs
     @GetMapping("/productoAdicionales/by-adicional/{adicionalId}")
-    public ResponseEntity<List<ProductoAdicional>> getProductoAdicionalesByAdicionalId(@PathVariable Integer adicionalId) {
-        List<ProductoAdicional> productoAdicionales = adicionalService.getProductoAdicionalesByAdicionalId(adicionalId);
+    public ResponseEntity<List<ProductoAdicionalIdDTO>> getProductoAdicionalesIdsByAdicionalId(@PathVariable Integer adicionalId) {
+        List<ProductoAdicionalIdDTO> productoAdicionales = adicionalService.getProductoAdicionalesIdsByAdicionalId(adicionalId);
         return ResponseEntity.ok(productoAdicionales);
     }
 
