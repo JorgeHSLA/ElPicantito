@@ -39,19 +39,31 @@ public class PedidoServiceImpl implements PedidoService {
     
     @Autowired
     private PedidoProductoAdicionalRepository pedidoProductoAdicionalRepository;
+    
+    @Override
+    public Pedido getPedidoById(Integer id) {
+        return pedidoRepository.findById(id).orElse(null);
+    }
 
-
+    @Override
     public List<Pedido> getPedidosByCliente(Integer clienteId) {
         List<Pedido> pedidos = pedidoRepository.findByClienteId(clienteId);
         return(pedidos);
     }
 
+    @Override
     public List<Pedido> getPedidosByRepartidor( Integer repartidorId) {
         List<Pedido> pedidos = pedidoRepository.findByRepartidorId(repartidorId);
         return (pedidos);
     }
     
-    @Transactional
+    @Override
+    public List<Pedido> getAllPedidos() {
+        return pedidoRepository.findAll();
+    }
+    
+    @Override
+    @Transactional //  operaciones se realizan en una sola transacción de base de datos, lo que significa:
     public Pedido crearPedido(CrearPedidoDTO pedidoDTO) {
         // Crear el pedido principal
         Pedido pedido = new Pedido();
@@ -59,32 +71,76 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setPrecioDeAdquisicion(pedidoDTO.getPrecioDeAdquisicion());
         pedido.setFechaEntrega(pedidoDTO.getFechaEntrega());
         pedido.setFechaSolicitud(new Timestamp(System.currentTimeMillis()));
-        pedido.setEstado(pedidoDTO.getEstado());
+        pedido.setEstado(pedidoDTO.getEstado() != null ? pedidoDTO.getEstado() : "PENDIENTE");
         pedido.setDireccion(pedidoDTO.getDireccion());
         
-        // Asignar cliente y repartidor
-        pedido.setCliente(usuarioRepository.findById(pedidoDTO.getClienteId()).orElseThrow());
+        // Validar y asignar cliente
+        var clienteOpt = usuarioRepository.findById(pedidoDTO.getClienteId());
+        if (!clienteOpt.isPresent()) {
+            throw new RuntimeException("Cliente no encontrado con ID: " + pedidoDTO.getClienteId());
+        }
+        var cliente = clienteOpt.get();
+        if (!"CLIENTE".equals(cliente.getRol()) && !"ADMIN".equals(cliente.getRol()) && !"USER".equals(cliente.getRol())) {
+            throw new RuntimeException("El usuario con ID " + pedidoDTO.getClienteId() + 
+                                      " no tiene un rol válido para crear pedidos (CLIENTE, ADMIN o USER)");
+        }
+        pedido.setCliente(cliente);
+        
+        // Validar y asignar repartidor si existe
         if (pedidoDTO.getRepartidorId() != null) {
-            pedido.setRepartidor(usuarioRepository.findById(pedidoDTO.getRepartidorId()).orElseThrow());
+            var repartidorOpt = usuarioRepository.findById(pedidoDTO.getRepartidorId());
+            if (!repartidorOpt.isPresent()) {
+                throw new RuntimeException("Repartidor no encontrado con ID: " + pedidoDTO.getRepartidorId());
+            }
+            var repartidor = repartidorOpt.get();
+            if (!"REPARTIDOR".equals(repartidor.getRol())) {
+                throw new RuntimeException("El usuario con ID " + pedidoDTO.getRepartidorId() + 
+                                          " no tiene el rol de REPARTIDOR");
+            }
+            pedido.setRepartidor(repartidor);
         }
         
         // Guardar pedido
         pedido = pedidoRepository.save(pedido);
         
         // Crear productos del pedido
-        if (pedidoDTO.getProductos() != null) {
+        if (pedidoDTO.getProductos() != null && !pedidoDTO.getProductos().isEmpty()) {
             for (PedidoProductoDTO productoDTO : pedidoDTO.getProductos()) {
+                // Validar que el producto existe
+                var productoOpt = productoRepository.findById(productoDTO.getProductoId());
+                if (!productoOpt.isPresent()) {
+                    throw new RuntimeException("Producto no encontrado con ID: " + productoDTO.getProductoId());
+                }
+                
+                // Validar cantidad
+                if (productoDTO.getCantidadProducto() == null || productoDTO.getCantidadProducto() <= 0) {
+                    throw new RuntimeException("La cantidad del producto debe ser mayor a cero");
+                }
+                
                 PedidoProducto pedidoProducto = new PedidoProducto();
                 pedidoProducto.setPedido(pedido);
-                pedidoProducto.setProducto(productoRepository.findById(productoDTO.getProductoId()).orElseThrow());
+                pedidoProducto.setProducto(productoOpt.get());
                 pedidoProducto.setCantidadProducto(productoDTO.getCantidadProducto());
                 
                 // Guardar pedido producto
                 pedidoProducto = pedidoProductoRepository.save(pedidoProducto);
                 
                 // Crear adicionales si existen
-                if (productoDTO.getAdicionales() != null) {
+                if (productoDTO.getAdicionales() != null && !productoDTO.getAdicionales().isEmpty()) {
                     for (var adicionalDTO : productoDTO.getAdicionales()) {
+                        // Validar que el adicional existe
+                        var adicionalOpt = adicionalRepository.findById(adicionalDTO.getAdicionalId());
+                        if (!adicionalOpt.isPresent()) {
+                            throw new RuntimeException("Adicional no encontrado con ID: " + adicionalDTO.getAdicionalId());
+                        }
+                        
+                        var adicional = adicionalOpt.get(); // Obtener el objeto adicional
+                        
+                        // Validar cantidad
+                        if (adicionalDTO.getCantidadAdicional() == null || adicionalDTO.getCantidadAdicional() <= 0) {
+                            throw new RuntimeException("La cantidad del adicional debe ser mayor a cero");
+                        }
+                        
                         PedidoProductoAdicional pedidoProductoAdicional = new PedidoProductoAdicional();
                         
                         // Crear el ID compuesto
@@ -94,14 +150,17 @@ public class PedidoServiceImpl implements PedidoService {
                         
                         pedidoProductoAdicional.setId(id);
                         pedidoProductoAdicional.setPedidoProducto(pedidoProducto);
+                        pedidoProductoAdicional.setAdicional(adicional); // Establecer la referencia al objeto Adicional
                         pedidoProductoAdicional.setCantidadAdicional(adicionalDTO.getCantidadAdicional());
                         
+                        // Guardar el adicional del producto
                         pedidoProductoAdicionalRepository.save(pedidoProductoAdicional);
                     }
                 }
             }
         }
         
+        // Recargar el pedido completo para asegurar que todos los datos estén actualizados
         return pedidoRepository.findById(pedido.getId()).orElse(pedido);
     }
 }

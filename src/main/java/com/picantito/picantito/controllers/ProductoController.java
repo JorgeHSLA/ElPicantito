@@ -25,7 +25,8 @@ import com.picantito.picantito.service.ProductoService;
 
 @RestController
 @RequestMapping("/api/productos")
-@CrossOrigin(origins = "http://localhost:4200") // Permitir solicitudes desde el frontend en localhost:4200
+//@CrossOrigin(origins = "http://localhost:4200") // Permitir solicitudes desde el frontend en localhost:4200
+@CrossOrigin(originPatterns = "*", allowCredentials = "false") // Para desarrollo - permite todos los orígenes
 public class ProductoController {
 
     @Autowired

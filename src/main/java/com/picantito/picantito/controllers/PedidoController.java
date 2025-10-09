@@ -14,41 +14,72 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.picantito.picantito.dto.CrearPedidoDTO;
+import com.picantito.picantito.dto.response.PedidoResponseDTO;
 import com.picantito.picantito.entities.Pedido;
+import com.picantito.picantito.mapper.PedidoMapper;
 import com.picantito.picantito.service.PedidoService;
 @RestController
 @RequestMapping("/api/pedidos")
-//@CrossOrigin(originPatterns = "*", allowCredentials = "false") // Para desarrollo - permite todos los orígenes
-@CrossOrigin(origins = "http://localhost:4200") // Solo para Angular
+@CrossOrigin(originPatterns = "*", allowCredentials = "false") // Para desarrollo - permite todos los orígenes
+//@CrossOrigin(origins = "http://localhost:4200") // Solo para Angular
 public class PedidoController {
 
     @Autowired
     private PedidoService pedidoService;
+    
+    @Autowired
+    private PedidoMapper pedidoMapper;
 
+    // Obtener todos los pedidos de un cliente: http://localhost:9998/api/pedidos/cliente/{clienteId}
     @GetMapping("/cliente/{clienteId}")
-    public ResponseEntity<List<Pedido>> getPedidosByCliente(@PathVariable Integer clienteId) {
+    public ResponseEntity<List<PedidoResponseDTO>> getPedidosByCliente(@PathVariable Integer clienteId) {
         List<Pedido> pedidos = pedidoService.getPedidosByCliente(clienteId);
-        return ResponseEntity.ok(pedidos);
+        List<PedidoResponseDTO> pedidosDTO = pedidoMapper.toListDTO(pedidos);
+        return ResponseEntity.ok(pedidosDTO);
     }
 
+    // Obtener todos los pedidos de un repartidor: http://localhost:9998/api/pedidos/repartidor/{repartidorId}
     @GetMapping("/repartidor/{repartidorId}")
-    public ResponseEntity<List<Pedido>> getPedidosByRepartidor(@PathVariable Integer repartidorId) {
+    public ResponseEntity<List<PedidoResponseDTO>> getPedidosByRepartidor(@PathVariable Integer repartidorId) {
         List<Pedido> pedidos = pedidoService.getPedidosByRepartidor(repartidorId);
-        return ResponseEntity.ok(pedidos);
+        List<PedidoResponseDTO> pedidosDTO = pedidoMapper.toListDTO(pedidos);
+        return ResponseEntity.ok(pedidosDTO);
+    }
+    
+    // Obtener todos los pedidos: http://localhost:9998/api/pedidos
+    @GetMapping
+    public ResponseEntity<List<PedidoResponseDTO>> getAllPedidos() {
+        List<Pedido> pedidos = pedidoService.getAllPedidos();
+        List<PedidoResponseDTO> pedidosDTO = pedidoMapper.toListDTO(pedidos);
+        return ResponseEntity.ok(pedidosDTO);
     }
 
 
+    // Crear un nuevo pedido: http://localhost:9998/api/pedidos
     @PostMapping
     public ResponseEntity<?> crearPedido(@RequestBody CrearPedidoDTO pedidoDTO) {
         try {
             System.out.println("Recibido DTO: " + pedidoDTO);
             Pedido nuevoPedido = pedidoService.crearPedido(pedidoDTO);
-            return new ResponseEntity<>(nuevoPedido, HttpStatus.CREATED);
+            PedidoResponseDTO responseDTO = pedidoMapper.toDTO(nuevoPedido);
+            return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         } catch (Exception e) {
             System.err.println("Error creando pedido: " + e.getMessage());
-            e.printStackTrace();
+            // Log del error (reemplazar por logger adecuado)
+            System.err.println("Stacktrace: " + e);
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+    
+    // Obtener un pedido por su ID: http://localhost:9998/api/pedidos/{id}
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPedidoById(@PathVariable Integer id) {
+        Pedido pedido = pedidoService.getPedidoById(id);
+        if (pedido == null) {
+            return new ResponseEntity<>("Pedido no encontrado con ID: " + id, HttpStatus.NOT_FOUND);
+        }
+        PedidoResponseDTO pedidoDTO = pedidoMapper.toDTO(pedido);
+        return ResponseEntity.ok(pedidoDTO);
     }
 
 }

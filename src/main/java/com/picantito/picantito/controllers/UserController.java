@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.picantito.picantito.dto.response.UserResponseDTO;
 import com.picantito.picantito.entities.User;
+import com.picantito.picantito.mapper.UserMapper;
 import com.picantito.picantito.service.AutentificacionService;
 
 
@@ -29,6 +31,9 @@ public class UserController {
 
     @Autowired
     private AutentificacionService autentificacionService;
+    
+    @Autowired
+    private UserMapper userMapper;
     
     // === LOGIN ===
     // Login de usuario: http://localhost:9998/api/usuarios/login
@@ -66,13 +71,12 @@ public class UserController {
             }
             
             // Login exitoso, devolver información del usuario usando DTO
-            com.picantito.picantito.dto.LoginResponseDTO loginResponse = 
-                new com.picantito.picantito.dto.LoginResponseDTO(user);
+            UserResponseDTO userDTO = userMapper.toDTO(user);
             
             return ResponseEntity.ok()
                     .body(Map.of(
                         "mensaje", "Login exitoso",
-                        "usuario", loginResponse
+                        "usuario", userDTO
                     ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -109,7 +113,8 @@ public class UserController {
             
             // Guardar el nuevo usuario
             User nuevoUsuario = autentificacionService.save(usuario);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
+            UserResponseDTO userDTO = userMapper.toDTO(nuevoUsuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al crear usuario: " + e.getMessage());
@@ -119,9 +124,10 @@ public class UserController {
     // === READ (Obtener todos los usuarios) ===
     // Obtener todos los usuarios: http://localhost:9998/api/usuarios
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsuarios() {
+    public ResponseEntity<List<UserResponseDTO>> getAllUsuarios() {
         List<User> usuarios = autentificacionService.findAll();
-        return ResponseEntity.ok(usuarios);
+        List<UserResponseDTO> userDTOs = userMapper.toListDTO(usuarios);
+        return ResponseEntity.ok(userDTOs);
     }
 
     // === READ (Obtener usuario por ID) ===
@@ -130,7 +136,8 @@ public class UserController {
     public ResponseEntity<?> getUsuarioById(@PathVariable Integer id) {
         Optional<User> usuario = autentificacionService.findById(id);
         if (usuario.isPresent()) {
-            return ResponseEntity.ok(usuario.get());
+            UserResponseDTO userDTO = userMapper.toDTO(usuario.get());
+            return ResponseEntity.ok(userDTO);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Usuario no encontrado con ID: " + id);
@@ -141,40 +148,40 @@ public class UserController {
     // 1. Obtener usuarios de tipo ADMIN
     // Obtener todos los usuarios administradores: http://localhost:9998/api/usuarios/tipo/admin
     @GetMapping("/tipo/admin")
-    public ResponseEntity<List<User>> getUsuariosAdmin() {
+    public ResponseEntity<List<UserResponseDTO>> getUsuariosAdmin() {
         List<User> admins = autentificacionService.findByRol("ADMIN");
-        return ResponseEntity.ok(admins);
+        return ResponseEntity.ok(userMapper.toListDTO(admins));
     }
     
     // 2. Obtener usuarios de tipo CLIENTE
     // Obtener todos los usuarios clientes: http://localhost:9998/api/usuarios/tipo/cliente
     @GetMapping("/tipo/cliente")
-    public ResponseEntity<List<User>> getUsuariosCliente() {
+    public ResponseEntity<List<UserResponseDTO>> getUsuariosCliente() {
         List<User> clientes = autentificacionService.findByRol("CLIENTE");
-        return ResponseEntity.ok(clientes);
+        return ResponseEntity.ok(userMapper.toListDTO(clientes));
     }
     
     // 3. Obtener usuarios de tipo OPERADOR
     // Obtener todos los usuarios operadores: http://localhost:9998/api/usuarios/tipo/operador
     @GetMapping("/tipo/operador")
-    public ResponseEntity<List<User>> getUsuariosOperador() {
+    public ResponseEntity<List<UserResponseDTO>> getUsuariosOperador() {
         List<User> operadores = autentificacionService.findByRol("OPERADOR");
-        return ResponseEntity.ok(operadores);
+        return ResponseEntity.ok(userMapper.toListDTO(operadores));
     }
     
     // 4. Obtener usuarios de tipo REPARTIDOR
     // Obtener todos los usuarios repartidores: http://localhost:9998/api/usuarios/tipo/repartidor
     @GetMapping("/tipo/repartidor")
-    public ResponseEntity<List<User>> getUsuariosRepartidor() {
+    public ResponseEntity<List<UserResponseDTO>> getUsuariosRepartidor() {
         List<User> repartidores = autentificacionService.findByRol("REPARTIDOR");
-        return ResponseEntity.ok(repartidores);
+        return ResponseEntity.ok(userMapper.toListDTO(repartidores));
     }
     
     // Obtener repartidores por estado: http://localhost:9998/api/usuarios/repartidores/estado/{estado}
     @GetMapping("/repartidores/estado/{estado}")
     public ResponseEntity<?> getRepartidoresPorEstado(@PathVariable String estado) {
         List<User> repartidores = autentificacionService.findByRolAndEstado("REPARTIDOR", estado);
-        return ResponseEntity.ok(repartidores);
+        return ResponseEntity.ok(userMapper.toListDTO(repartidores));
     }
     
     // === UPDATE (Actualizar usuario) ===
@@ -215,7 +222,8 @@ public class UserController {
             
             // Actualizar usuario
             User usuarioActualizado = autentificacionService.save(usuario);
-            return ResponseEntity.ok(usuarioActualizado);
+            UserResponseDTO userDTO = userMapper.toDTO(usuarioActualizado);
+            return ResponseEntity.ok(userDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al actualizar usuario: " + e.getMessage());

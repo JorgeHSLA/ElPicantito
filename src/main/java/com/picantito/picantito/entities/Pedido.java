@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,11 +29,22 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Float precioDeVenta;
+    @Column(name = "precioDeAdquisicion")
     private Float precioDeAdquisicion;
+
+    @Column(name = "precioDeVenta")
+    private Float precioDeVenta;
+
+    @Column(name = "fechaEntrega")
     private Timestamp fechaEntrega;
+    
+    @Column(name = "fechaSolicitud")
     private Timestamp fechaSolicitud;
+    
+    @Column(name = "estado")
     private String estado;
+    
+    @Column(name = "direccion")
     private String direccion;
 
     @ManyToOne
