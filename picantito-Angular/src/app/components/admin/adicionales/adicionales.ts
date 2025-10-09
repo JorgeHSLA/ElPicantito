@@ -25,7 +25,10 @@ export class AdicionalesComponent implements OnInit {
     nombre: '',
     descripcion: '',
     precioDeVenta: 0,
-    disponible: true
+    precioDeAdquisicion: 0,
+    cantidad: 0,
+    disponible: true,
+    activo: true
   });
   
   selectedAdicionalId = signal<number | null>(null);
@@ -60,9 +63,36 @@ export class AdicionalesComponent implements OnInit {
 
   saveAdicional() {
     let adicional = this.nuevoAdicional();
+    
+    // Validaciones básicas
+    if (!adicional.nombre || adicional.nombre.trim() === '') {
+      this.errorMessage.set('El nombre del adicional es requerido');
+      return;
+    }
+    
+    if (!adicional.precioDeVenta || adicional.precioDeVenta <= 0) {
+      this.errorMessage.set('El precio de venta debe ser mayor a cero');
+      return;
+    }
+    
+    if (!adicional.precioDeAdquisicion || adicional.precioDeAdquisicion <= 0) {
+      this.errorMessage.set('El precio de adquisición debe ser mayor a cero');
+      return;
+    }
+    
+    if (!adicional.cantidad || adicional.cantidad <= 0) {
+      this.errorMessage.set('La cantidad debe ser mayor a cero');
+      return;
+    }
+    
+    // Compatibilidad hacia atrás
     if (adicional.precio && !adicional.precioDeVenta) {
       adicional = { ...adicional, precioDeVenta: adicional.precio };
     }
+    
+    // Limpiar mensaje de error previo
+    this.errorMessage.set('');
+    
     this.adicionalService.crearAdicional(adicional).subscribe({
       next: () => {
         this.successMessage.set('Adicional guardado exitosamente');
@@ -70,7 +100,16 @@ export class AdicionalesComponent implements OnInit {
         this.resetForm();
         this.closeModal();
       },
-      error: () => this.errorMessage.set('Error al guardar el adicional')
+      error: (error) => {
+        console.error('Error completo:', error);
+        let mensaje = 'Error al guardar el adicional';
+        if (error.error && typeof error.error === 'string') {
+          mensaje = error.error;
+        } else if (error.message) {
+          mensaje = error.message;
+        }
+        this.errorMessage.set(mensaje);
+      }
     });
   }
 
@@ -91,7 +130,10 @@ export class AdicionalesComponent implements OnInit {
       nombre: '',
       descripcion: '',
       precioDeVenta: 0,
-      disponible: true
+      precioDeAdquisicion: 0,
+      cantidad: 0,
+      disponible: true,
+      activo: true
     });
   }
 

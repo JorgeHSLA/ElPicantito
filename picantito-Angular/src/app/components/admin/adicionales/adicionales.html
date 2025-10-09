@@ -43,9 +43,11 @@
                   <th>ID</th>
                   <th>Nombre</th>
                   <th>Descripción</th>
-                  <th>Precio</th>
-                  <th>Disponible</th>
-                  <th>Productos Asociados</th>
+                  <th>Precio Costo</th>
+                  <th>Precio Venta</th>
+                  <th>Cantidad</th>
+                  <th>Estado</th>
+                  <th>Productos</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -55,7 +57,15 @@
                     <td>{{ adicional.id }}</td>
                     <td>{{ adicional.nombre }}</td>
                     <td>{{ adicional.descripcion }}</td>
-                    <td>${{ adicional.precioDeVenta?.toFixed(2) }}</td>
+                    <td class="text-muted">${{ adicional.precioDeAdquisicion?.toFixed(2) || '0.00' }}</td>
+                    <td class="text-success fw-bold">${{ adicional.precioDeVenta?.toFixed(2) || '0.00' }}</td>
+                    <td>
+                      @if ((adicional.cantidad || 0) > 0) {
+                        <span class="badge bg-info">{{ adicional.cantidad }}</span>
+                      } @else {
+                        <span class="badge bg-warning">Sin stock</span>
+                      }
+                    </td>
                     <td>
                       @if (adicional.disponible) {
                         <span class="badge bg-success">Disponible</span>
@@ -89,7 +99,7 @@
                 }
                 @if (adicionales().length === 0) {
                   <tr>
-                    <td colspan="7" class="text-center text-muted">No hay adicionales registrados</td>
+                    <td colspan="9" class="text-center text-muted">No hay adicionales registrados</td>
                   </tr>
                 }
               </tbody>
@@ -126,12 +136,36 @@
                       (input)="updateAdicionalField('descripcion', $any($event.target).value)"></textarea>
           </div>
           
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="precioDeAdquisicion" class="form-label">Precio de Adquisición:</label>
+                <input type="number" step="0.01" class="form-control" id="precioDeAdquisicion" 
+                       [value]="nuevoAdicional().precioDeAdquisicion"
+                       (input)="updateAdicionalField('precioDeAdquisicion', +$any($event.target).value)"
+                       required>
+                <small class="text-muted">Costo del adicional</small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="precioDeVenta" class="form-label">Precio de Venta:</label>
+                <input type="number" step="0.01" class="form-control" id="precioDeVenta" 
+                       [value]="nuevoAdicional().precioDeVenta"
+                       (input)="updateAdicionalField('precioDeVenta', +$any($event.target).value)"
+                       required>
+                <small class="text-muted">Precio al cliente</small>
+              </div>
+            </div>
+          </div>
+          
           <div class="mb-3">
-       <label for="precioDeVenta" class="form-label">Precio de Venta:</label>
-       <input type="number" step="0.01" class="form-control" id="precioDeVenta" 
-         [value]="nuevoAdicional().precioDeVenta"
-         (input)="updateAdicionalField('precioDeVenta', +$any($event.target).value)"
-         required>
+            <label for="cantidad" class="form-label">Cantidad en Inventario:</label>
+            <input type="number" class="form-control" id="cantidad" 
+                   [value]="nuevoAdicional().cantidad"
+                   (input)="updateAdicionalField('cantidad', +$any($event.target).value)"
+                   required>
+            <small class="text-muted">Unidades disponibles en inventario</small>
           </div>
           
           <div class="mb-3">
@@ -140,7 +174,7 @@
                      [checked]="nuevoAdicional().disponible"
                      (change)="updateAdicionalField('disponible', $any($event.target).checked)">
               <label class="form-check-label" for="disponible">
-                Adicional disponible
+                Adicional disponible para venta
               </label>
             </div>
           </div>
