@@ -2,6 +2,7 @@ package com.picantito.picantito.service;
 
 import java.util.List;
 
+import com.picantito.picantito.dto.AsignarRepartidorDTO;
 import com.picantito.picantito.dto.CrearPedidoDTO;
 import com.picantito.picantito.entities.Pedido;
 
@@ -14,7 +15,9 @@ public interface PedidoService {
     public Pedido crearPedido(CrearPedidoDTO pedidoDTO);
     
     public List<Pedido> getAllPedidos();
-    
+
+    public Pedido asignarRepartidor(AsignarRepartidorDTO asignacionDTO);
+
     /**
      * Obtiene un pedido por su ID
      * @param id ID del pedido a buscar
