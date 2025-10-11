@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.picantito.picantito.dto.AsignarRepartidorDTO;
 import com.picantito.picantito.dto.CrearPedidoDTO;
 import com.picantito.picantito.dto.response.PedidoResponseDTO;
 import com.picantito.picantito.entities.Pedido;
@@ -69,6 +70,27 @@ public class PedidoController {
             return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         } catch (Exception e) {
             System.err.println("Error creando pedido: " + e.getMessage());
+            // Log del error (reemplazar por logger adecuado)
+            System.err.println("Stacktrace: " + e);
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+        @PostMapping
+    public ResponseEntity<?> asignarRepartidor(@RequestBody AsignarRepartidorDTO asignancionDTO) {
+        try {
+            if (asignancionDTO.getRepartidorId() == null) {
+                return new ResponseEntity<>("error, el id de repartidor no puede ser nulo para asignar un repartidor:", HttpStatus.BAD_REQUEST);
+            }else if(asignancionDTO.getPedidoId() == null){
+                return new ResponseEntity<>("error, el id de pedido no puede ser nulo para asignar un repartidor:", HttpStatus.BAD_REQUEST);
+            }
+            System.out.println("Recibido DTO: " + asignancionDTO);
+            Pedido pedidoModificado = pedidoService.asignarRepartidor(asignancionDTO);
+            PedidoResponseDTO responseDTO = pedidoMapper.toDTO(pedidoModificado);
+
+            return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+        } catch (Exception e) {
+            System.err.println("Error asignando repartidor al pedido: " + e.getMessage());
             // Log del error (reemplazar por logger adecuado)
             System.err.println("Stacktrace: " + e);
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.picantito.picantito.dto.AsignarRepartidorDTO;
 import com.picantito.picantito.dto.CrearPedidoDTO;
 import com.picantito.picantito.dto.PedidoProductoDTO;
 import com.picantito.picantito.entities.Pedido;
@@ -163,4 +164,34 @@ public class PedidoServiceImpl implements PedidoService {
         // Recargar el pedido completo para asegurar que todos los datos estén actualizados
         return pedidoRepository.findById(pedido.getId()).orElse(pedido);
     }
+
+
+    @Override
+    public Pedido asignarRepartidor(AsignarRepartidorDTO asignacionDTO){
+
+        // Validar que el pedido existe
+        var pedidoOpt = pedidoRepository.findById(asignacionDTO.getPedidoId());
+        if (!pedidoOpt.isPresent()) {
+            throw new RuntimeException("Pedido no encontrado con ID: " + asignacionDTO.getPedidoId());
+        }
+
+        // Validar que el repartidor existe
+        var repartidorOpt = usuarioRepository.findById(asignacionDTO.getRepartidorId());
+        if (!repartidorOpt.isPresent()) {
+            throw new RuntimeException("Repartidor no encontrado con ID: " + asignacionDTO.getRepartidorId());
+        }
+        if (!"REPARTIDOR".equals(repartidorOpt.get().getRol())) {
+            throw new RuntimeException("El usuario con ID " + asignacionDTO.getRepartidorId() + 
+                                      " no tiene el rol de REPARTIDOR");
+        }
+
+        // Asignar repartidor al pedido
+        Pedido pedido = pedidoOpt.get();
+        pedido.setRepartidor(repartidorOpt.get());
+
+        // Guardar cambios
+        return pedidoRepository.save(pedido);
+    }
+
+
 }
