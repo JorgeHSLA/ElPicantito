@@ -91,6 +91,12 @@ export class PaymentPortalComponent {
     private authService: AuthService,
     private router: Router
   ) {
+    // Verificar autenticación
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
     // Verificar que hay productos en el carrito
     const cartItems = this.cartService.getCartItems()();
     if (cartItems.length === 0) {

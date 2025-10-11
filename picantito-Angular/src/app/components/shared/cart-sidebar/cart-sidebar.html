@@ -16,15 +16,26 @@
 
     <!-- Contenido del carrito -->
     <div class="cart-content">
-        <!-- Carrito vacío -->
-        <div *ngIf="cartItems().length === 0" class="empty-cart">
+        <!-- Usuario no autenticado -->
+        <div *ngIf="!isAuthenticated()" class="empty-cart text-center">
+            <i class="bi bi-person-x empty-cart-icon text-warning"></i>
+            <h6>Inicia sesión para usar el carrito</h6>
+            <p class="text-muted mb-3">Necesitas iniciar sesión para agregar productos al carrito</p>
+            <button type="button" class="btn btn-primary btn-sm" (click)="goToLogin()">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                Iniciar Sesión
+            </button>
+        </div>
+
+        <!-- Carrito vacío (solo si está autenticado) -->
+        <div *ngIf="isAuthenticated() && cartItems().length === 0" class="empty-cart">
             <i class="bi bi-cart-x empty-cart-icon"></i>
             <h6>Tu carrito está vacío</h6>
             <p class="text-muted">Agrega algunos productos para empezar</p>
         </div>
 
-        <!-- Items del carrito -->
-        <div *ngIf="cartItems().length > 0" class="cart-items">
+        <!-- Items del carrito (solo si está autenticado) -->
+        <div *ngIf="isAuthenticated() && cartItems().length > 0" class="cart-items">
             <div *ngFor="let item of cartItems()" class="cart-item">
                 <div class="item-image">
                     <img [src]="item.producto.imagen || '/images/taco1.webp'" [alt]="item.producto.nombre" class="product-image">
@@ -58,8 +69,8 @@
         </div>
     </div>
 
-    <!-- Footer del carrito -->
-    <div *ngIf="cartItems().length > 0" class="cart-footer">
+    <!-- Footer del carrito (solo si está autenticado y tiene productos) -->
+    <div *ngIf="isAuthenticated() && cartItems().length > 0" class="cart-footer">
         <div class="cart-summary">
             <div class="summary-row">
                 <span>Subtotal:</span>

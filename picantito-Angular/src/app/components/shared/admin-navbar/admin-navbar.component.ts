@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-admin-navbar',
@@ -155,7 +156,8 @@ export class AdminNavbarComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cartService: CartService
   ) {
     const user = this.authService.loggedUser();
     this.userName.set(user?.nombreUsuario?.toString() || 'Admin');
@@ -163,6 +165,7 @@ export class AdminNavbarComponent {
 
   logout() {
     this.authService.logout();
+    this.cartService.clearCartOnLogout();
     this.router.navigate(['/home']);
   }
 }

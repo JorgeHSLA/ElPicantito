@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
+import { CartService } from '../../../services/cart.service';
 import { Usuario } from '../../../models/usuario';
 
 declare var bootstrap: any;
@@ -19,6 +20,7 @@ declare var bootstrap: any;
 export class MiPerfilComponent implements OnInit, AfterViewInit {
   authService = inject(AuthService);
   router = inject(Router);
+  cartService = inject(CartService);
 
   usuario: Usuario = {};
   isLoading = false;
@@ -125,6 +127,7 @@ export class MiPerfilComponent implements OnInit, AfterViewInit {
         this.success = 'Cuenta eliminada exitosamente';
         this.closeDeleteModal();
         this.authService.logout();
+        this.cartService.clearCartOnLogout();
         setTimeout(() => {
           this.router.navigate(['/home']);
         }, 2000);
@@ -142,7 +145,7 @@ export class MiPerfilComponent implements OnInit, AfterViewInit {
   navigateToAbout(): void { this.router.navigate(['/sobre-nosotros']); }
   navigateToHome(): void { this.router.navigate(['/home']); }
   navigateToAdmin(): void { if (this.usuario.rol === 'ADMIN') { this.router.navigate(['/admin']); } }
-  logout(): void { this.authService.logout(); this.router.navigate(['/home']); }
+  logout(): void { this.authService.logout(); this.cartService.clearCartOnLogout(); this.router.navigate(['/home']); }
   isAdmin(): boolean { return this.usuario.rol === 'ADMIN'; }
   clearMessages(): void { this.error = null; this.success = null; }
 }

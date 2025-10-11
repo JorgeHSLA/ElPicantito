@@ -50,6 +50,8 @@ export class AuthService {
   logout(): void {
     this.loggedUserSignal.set(null);
     localStorage.removeItem('loggedUser');
+    // Limpiar también el carrito al cerrar sesión
+    localStorage.removeItem('cart');
   }
 
   isAdmin(): boolean {

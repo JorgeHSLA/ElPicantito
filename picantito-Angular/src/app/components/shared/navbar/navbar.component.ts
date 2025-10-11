@@ -77,6 +77,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
+    this.cartService.clearCartOnLogout();
     this.router.navigate(['/home']);
   }
 

@@ -37,6 +37,17 @@
                 </button> }
                         </div>
                     </div>
+                    <!-- Mensaje de login requerido -->
+                    @if (showLoginMessage()) {
+                    <div class="alert alert-info mt-2 mb-0 d-flex align-items-center justify-content-between" (click)="$event.stopPropagation()">
+                        <small>
+                            <i class="bi bi-info-circle me-2"></i>
+                            Debes iniciar sesión para agregar productos
+                        </small>
+                        <button type="button" class="btn btn-sm btn-outline-primary ms-2" (click)="goToLogin()">
+                            Iniciar Sesión
+                        </button>
+                    </div> }
                 </div>
             </div>
         </div>

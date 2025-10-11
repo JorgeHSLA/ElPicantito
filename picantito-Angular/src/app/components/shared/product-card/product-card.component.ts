@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { CartService } from '../../../services/cart.service';
 import { Producto } from '../../../models/producto';
 
@@ -16,8 +17,9 @@ export class ProductCardComponent {
   @Output() verProducto = new EventEmitter<any>();
 
   isAdding = signal(false);
+  showLoginMessage = signal(false);
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private router: Router) {}
 
   getStarsArray(calificacion: number | undefined): any[] {
     const rating = calificacion || 0;
@@ -35,17 +37,33 @@ export class ProductCardComponent {
     if (this.producto.id && this.producto.disponible) {
       this.isAdding.set(true);
 
-      // Agregar al carrito usando el servicio
-      this.cartService.addToCart(this.producto, 1);
+      // Intentar agregar al carrito
+      const added = this.cartService.addToCart(this.producto, 1);
 
-      // Emitir evento para compatibilidad con otros componentes
-      this.agregar.emit(this.producto);
+      if (added) {
+        // Si se agregó exitosamente, emitir evento
+        this.agregar.emit(this.producto);
 
-      // Mostrar feedback visual por un momento
-      setTimeout(() => {
+        // Mostrar feedback visual por un momento
+        setTimeout(() => {
+          this.isAdding.set(false);
+        }, 800);
+      } else {
+        // Si no se pudo agregar (usuario no autenticado), mostrar mensaje
         this.isAdding.set(false);
-      }, 800);
+        this.showLoginMessage.set(true);
+
+        // Ocultar el mensaje después de 3 segundos
+        setTimeout(() => {
+          this.showLoginMessage.set(false);
+        }, 3000);
+      }
     }
+  }
+
+  // Método para redirigir al login
+  goToLogin() {
+    this.router.navigate(['/login']);
   }
 
   onVerProducto() {

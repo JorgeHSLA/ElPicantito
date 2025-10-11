@@ -2,6 +2,7 @@ import { Component, effect, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { CartService, CartItem } from '../../../services/cart.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-cart-sidebar',
@@ -17,8 +18,13 @@ export class CartSidebarComponent {
   subtotal = signal(0);
   domicilioCost = signal(0);
   total = signal(0);
+  isAuthenticated = signal(false);
 
-  constructor(private cartService: CartService, private router: Router) {
+  constructor(
+    private cartService: CartService, 
+    private router: Router,
+    private authService: AuthService
+  ) {
     // Suscribirse a cambios del carrito
     effect(() => {
       this.cartItems.set(this.cartService.getCartItems()());
@@ -31,6 +37,11 @@ export class CartSidebarComponent {
     // Suscribirse a la visibilidad del carrito
     effect(() => {
       this.isVisible.set(this.cartService.isCartVisible()());
+    });
+
+    // Suscribirse al estado de autenticación
+    effect(() => {
+      this.isAuthenticated.set(this.authService.isLoggedIn());
     });
   }
 
@@ -62,5 +73,10 @@ export class CartSidebarComponent {
     // Cerrar el carrito y navegar a la página de resumen
     this.cartService.closeCart();
     this.router.navigate(['/checkout-summary']);
+  }
+
+  goToLogin() {
+    this.cartService.closeCart();
+    this.router.navigate(['/login']);
   }
 }

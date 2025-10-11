@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Producto } from '../models/producto';
+import { AuthService } from './auth.service';
 
 export interface CartItem {
   producto: Producto;
@@ -14,8 +15,13 @@ export class CartService {
   private isCartOpen = signal(false);
   private readonly DOMICILIO_COST = 5000;
 
-  constructor() {
+  constructor(private authService: AuthService) {
     this.loadCartFromStorage();
+    
+    // Limpiar carrito si el usuario no está autenticado
+    if (!this.authService.isLoggedIn()) {
+      this.cartItems.set([]);
+    }
   }
 
   // Getters para los signals
@@ -41,7 +47,12 @@ export class CartService {
   }
 
   // Agregar producto al carrito
-  addToCart(producto: Producto, cantidad: number = 1) {
+  addToCart(producto: Producto, cantidad: number = 1): boolean {
+    // Verificar si el usuario está autenticado
+    if (!this.authService.isLoggedIn()) {
+      return false; // Retornar false si no está autenticado
+    }
+
     const currentItems = this.cartItems();
     const existingItemIndex = currentItems.findIndex(item => item.producto.id === producto.id);
 
@@ -54,16 +65,27 @@ export class CartService {
     }
 
     this.saveCartToStorage();
+    return true; // Retornar true si se agregó exitosamente
   }
 
   // Remover producto del carrito
   removeFromCart(productoId: number) {
+    // Verificar autenticación antes de remover
+    if (!this.authService.isLoggedIn()) {
+      return;
+    }
+    
     this.cartItems.update(items => items.filter(item => item.producto.id !== productoId));
     this.saveCartToStorage();
   }
 
   // Actualizar cantidad de un producto
   updateQuantity(productoId: number, cantidad: number) {
+    // Verificar autenticación antes de actualizar
+    if (!this.authService.isLoggedIn()) {
+      return;
+    }
+
     if (cantidad <= 0) {
       this.removeFromCart(productoId);
       return;
@@ -81,6 +103,11 @@ export class CartService {
 
   // Limpiar carrito
   clearCart() {
+    // Verificar autenticación antes de limpiar
+    if (!this.authService.isLoggedIn()) {
+      return;
+    }
+    
     this.cartItems.set([]);
     this.saveCartToStorage();
   }
@@ -105,6 +132,17 @@ export class CartService {
   // Obtener total final
   getTotal(): number {
     return this.getSubtotal() + this.getDomicilioCost();
+  }
+
+  // Verificar si el usuario está autenticado
+  isUserAuthenticated(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  // Limpiar carrito cuando se cierre sesión (llamado externamente)
+  clearCartOnLogout(): void {
+    this.cartItems.set([]);
+    localStorage.removeItem('cart');
   }
 
   // Guardar en localStorage

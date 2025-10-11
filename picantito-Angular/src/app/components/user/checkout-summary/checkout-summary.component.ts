@@ -32,6 +32,12 @@ export class CheckoutSummaryComponent {
     private authService: AuthService,
     private router: Router
   ) {
+    // Verificar autenticación
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
     // Verificar si hay items en el carrito
     effect(() => {
       const items = this.cartService.getCartItems()();
