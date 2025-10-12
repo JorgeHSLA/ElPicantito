@@ -10,8 +10,8 @@
             <i class="bi bi-cart3 me-2"></i> Carrito de Compras
         </h5>
         <button type="button" class="btn-close-cart" (click)="closeCart()" aria-label="Cerrar carrito">
-      <i class="bi bi-x-lg"></i>
-    </button>
+            <i class="bi bi-x-lg"></i>
+        </button>
     </div>
 
     <!-- Contenido del carrito -->
@@ -27,14 +27,14 @@
             </button>
         </div>
 
-        <!-- Carrito vacío (solo si está autenticado) -->
+        <!-- Carrito vacío -->
         <div *ngIf="isAuthenticated() && cartItems().length === 0" class="empty-cart">
             <i class="bi bi-cart-x empty-cart-icon"></i>
             <h6>Tu carrito está vacío</h6>
             <p class="text-muted">Agrega algunos productos para empezar</p>
         </div>
 
-        <!-- Items del carrito (solo si está autenticado) -->
+        <!-- Items del carrito -->
         <div *ngIf="isAuthenticated() && cartItems().length > 0" class="cart-items">
             <div *ngFor="let item of cartItems()" class="cart-item">
                 <div class="item-image">
@@ -43,59 +43,74 @@
 
                 <div class="item-details">
                     <h6 class="item-name">{{ item.producto.nombre }}</h6>
-                    <p class="item-price">${{ (item.producto.precio || 0) | number:'1.0-0' }}</p>
+                    <p class="item-price">${{ (item.producto.precioDeVenta || item.producto.precio || 0) | number:'1.0-0' }}</p>
+
+                    <!-- Adicionales si existen -->
+                    <div *ngIf="item.adicionales && item.adicionales.length > 0" class="adicionales-info">
+                        <small class="text-muted d-block mb-1">Adicionales:</small>
+                        <div *ngFor="let adicional of item.adicionales" class="adicional-item">
+                            <small class="text-secondary">
+                                • {{ adicional.adicional.nombre }} ({{ adicional.cantidad }}x) 
+                                +${{ (adicional.adicional.precioDeVenta || adicional.adicional.precio || 0) | number:'1.0-0' }}
+                            </small>
+                        </div>
+                    </div>
 
                     <!-- Controles de cantidad -->
                     <div class="quantity-controls">
-                        <button type="button" class="btn-quantity" (click)="updateQuantity(item.producto.id!, item.cantidad - 1)">
-              <i class="bi bi-dash"></i>
-            </button>
+                        <button type="button" class="btn-quantity" (click)="updateQuantity(item.id, item.cantidad - 1)">
+                            <i class="bi bi-dash"></i>
+                        </button>
                         <span class="quantity">{{ item.cantidad }}</span>
-                        <button type="button" class="btn-quantity" (click)="updateQuantity(item.producto.id!, item.cantidad + 1)">
-              <i class="bi bi-plus"></i>
-            </button>
+                        <button type="button" class="btn-quantity" (click)="updateQuantity(item.id, item.cantidad + 1)">
+                            <i class="bi bi-plus"></i>
+                        </button>
                     </div>
                 </div>
 
                 <div class="item-actions">
                     <div class="item-total">
-                        ${{ ((item.producto.precio || 0) * item.cantidad) | number:'1.0-0' }}
+                        ${{ item.subtotal | number:'1.0-0' }}
                     </div>
-                    <button type="button" class="btn-remove" (click)="removeItem(item.producto.id!)" title="Eliminar producto">
-            <i class="bi bi-trash"></i>
-          </button>
+                    <button type="button" class="btn-remove" (click)="removeItem(item.id)" title="Eliminar producto">
+                        <i class="bi bi-trash"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer del carrito (solo si está autenticado y tiene productos) -->
+    <!-- Footer del carrito -->
     <div *ngIf="isAuthenticated() && cartItems().length > 0" class="cart-footer">
         <div class="cart-summary">
             <div class="summary-row">
-                <span>Subtotal:</span>
-                <span class="fw-bold">${{ subtotal() | number:'1.0-0' }}</span>
+                <span>Productos:</span>
+                <span class="fw-bold">${{ cartSummary()?.subtotalProductos || 0 | number:'1.0-0' }}</span>
+            </div>
+            <div class="summary-row">
+                <span>Adicionales:</span>
+                <span class="fw-bold">${{ cartSummary()?.subtotalAdicionales || 0 | number:'1.0-0' }}</span>
             </div>
             <div class="summary-row">
                 <span>Domicilio:</span>
-                <span class="fw-bold">${{ domicilioCost() | number:'1.0-0' }}</span>
+                <span class="fw-bold">$5.000</span>
             </div>
             <div class="summary-row total">
                 <span>Total:</span>
-                <span class="fw-bold">${{ total() | number:'1.0-0' }}</span>
+                <span class="fw-bold">${{ (cartSummary()?.total || 0) + 5000 | number:'1.0-0' }}</span>
             </div>
         </div>
 
         <div class="cart-actions">
             <button type="button" class="btn btn-outline-danger btn-sm mb-2" (click)="clearCart()">
-        <i class="bi bi-trash me-1"></i>
-        Vaciar carrito
-      </button>
+                <i class="bi bi-trash me-1"></i>
+                Vaciar carrito
+            </button>
 
             <button type="button" class="btn btn-primary btn-checkout" (click)="proceedToCheckout()">
-        <i class="bi bi-credit-card me-2"></i>
-        Proceder a Comprar
-      </button>
+                <i class="bi bi-credit-card me-2"></i>
+                Proceder a Comprar
+            </button>
         </div>
     </div>
 </div>

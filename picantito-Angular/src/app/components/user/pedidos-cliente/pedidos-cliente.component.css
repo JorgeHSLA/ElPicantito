@@ -25,3 +25,62 @@
 .taco-card .card-title {
     color: var(--accent-color);
 }
+
+/* Estilos específicos para pedidos */
+.pedido-card {
+    transition: all 0.3s ease;
+}
+
+.pedido-card:hover {
+    transform: translateY(-2px);
+}
+
+.pedido-info {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.productos-pedido {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.producto-item {
+    padding: 0.5rem 0;
+}
+
+.adicionales-mini {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 0.25rem 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.pedido-footer {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+/* Estados de pedidos */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+}
+
+/* Botones específicos */
+.btn-sm {
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.btn-outline-primary:hover {
+    background: rgba(13, 110, 253, 0.1);
+}
+
+.btn-outline-danger:hover {
+    background: rgba(220, 53, 69, 0.1);
+}
+
+.btn-outline-warning:hover {
+    background: rgba(255, 193, 7, 0.1);
+}

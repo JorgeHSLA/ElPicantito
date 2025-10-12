@@ -1,4 +1,4 @@
-<!-- HERO SECTION similar a tienda/menu -->
+<!-- HERO SECTION -->
 <section class="menu-hero py-5">
     <div class="container">
         <div class="row align-items-center">
@@ -12,80 +12,152 @@
 </section>
 
 <main class="container py-4">
+    <!-- Loading State -->
     <div *ngIf="loading()" class="text-center py-5">
-        <div class="spinner-border text-warning" role="status"></div>
-        <p class="mt-3">Cargando pedidos...</p>
+        <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3">Cargando tus pedidos...</p>
     </div>
 
-    <div *ngIf="!loading() && error()" class="alert alert-danger">
+    <!-- Error State -->
+    <div *ngIf="!loading() && error()" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
         {{ error() }}
     </div>
 
-    <div *ngIf="!loading() && !error() && pedidos().length === 0" class="alert alert-info">
-        No hay pedidos asociados a este cliente todavía.
+    <!-- Empty State -->
+    <div *ngIf="!loading() && !error() && pedidos().length === 0" class="text-center py-5">
+        <i class="bi bi-bag-x display-1 text-muted mb-3"></i>
+        <h3>No tienes pedidos aún</h3>
+        <p class="text-muted mb-4">¡Haz tu primer pedido y disfruta de nuestros deliciosos tacos!</p>
+        <a routerLink="/tienda" class="btn btn-warning">
+            <i class="bi bi-shop me-2"></i>
+            Explorar Tienda
+        </a>
     </div>
 
-    <div *ngIf="!loading() && pedidos().length > 0" class="row g-4">
-        <div class="col-md-6 col-lg-4" *ngFor="let p of pedidos()">
-            <div class="card taco-card h-100 border-0 overflow-hidden position-relative">
-                <div class="card-body d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h5 class="card-title mb-0">Pedido #{{ p.id }}</h5>
-                        <span class="badge bg-warning text-dark">{{ p.estado || 'PENDIENTE' }}</span>
-                    </div>
-                    <p class="card-text mb-2">
-                        <i class="bi bi-calendar-event me-1"></i>
-                        <strong>Solicitado:</strong> {{ p.fechaSolicitud ? (p.fechaSolicitud | date:'mediumDate') : '—' }}
-                    </p>
-                    <p class="card-text mb-2">
-                        <i class="bi bi-truck me-1"></i>
-                        <strong>Entrega:</strong> {{ p.fechaEntrega ? (p.fechaEntrega | date:'mediumDate') : '—' }}
-                    </p>
-                    <p class="card-text mb-3">
-                        <i class="bi bi-cash-stack me-1"></i>
-                        <strong>Total:</strong> ${{ (p.precio ?? p.precioDeVenta ?? 0) | number:'1.2-2' }}
-                    </p>
-                    <div class="mt-auto">
-                        <button class="btn btn-outline-warning w-100" disabled>
-              <i class="bi bi-receipt-cutoff me-1"></i> Ver detalle (próximamente)
-            </button>
-                    </div>
+    <!-- Pedidos List -->
+    <div *ngIf="!loading() && !error() && pedidos().length > 0">
+        
+        <!-- Filtros por estado -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-funnel me-2"></i>
+                    Filtrar por estado
+                </h5>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-outline-warning btn-sm">
+                        Todos ({{ pedidos().length }})
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        Pendientes ({{ getPedidosPorEstado('PENDIENTE').length }})
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm">
+                        En Proceso ({{ getPedidosPorEstado('PREPARANDO').length }})
+                    </button>
+                    <button class="btn btn-outline-success btn-sm">
+                        Entregados ({{ getPedidosPorEstado('ENTREGADO').length }})
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
-</main>
-<!-- Encabezado con estilo similar a tienda/menu -->
-<section class="menu-hero py-5 bg-light">
-    <div class="container">
-        <h1 class="display-5 fw-bold mb-2">Mis <span class="text-warning">Pedidos</span></h1>
-        <p class="lead text-muted">Consulta el historial de pedidos asociados a tu cuenta.</p>
-    </div>
-</section>
 
-<main class="container py-4">
-    <div *ngIf="loading()" class="alert alert-info">Cargando pedidos...</div>
-    <div *ngIf="!loading() && error()" class="alert alert-danger">{{ error() }}</div>
-
-    <div *ngIf="!loading() && !error()">
+        <!-- Lista de Pedidos -->
         <div class="row g-4">
-            <div class="col-12" *ngIf="pedidos().length === 0">
-                <div class="alert alert-warning">No tienes pedidos registrados.</div>
-            </div>
-
-            <div class="col-lg-6 col-xl-4" *ngFor="let p of pedidos()">
-                <div class="card taco-card border-0 shadow-sm h-100">
-                    <div class="card-body d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="card-title fw-bold mb-0">Pedido #{{ p.id }}</h5>
-                            <span class="badge bg-warning text-dark">{{ p.estado || 'PENDIENTE' }}</span>
+            <div class="col-lg-6 col-xl-4" *ngFor="let pedido of pedidos(); index as i">
+                <div class="card h-100 border-0 shadow-sm pedido-card">
+                    <div class="card-body">
+                        <!-- Header del pedido -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title fw-bold mb-0">
+                                <i class="bi bi-receipt me-2"></i>
+                                Pedido #{{ pedido.id }}
+                            </h5>
+                            <span [class]="getEstadoClass(pedido.estado)">
+                                {{ pedido.estado }}
+                            </span>
                         </div>
-                        <p class="card-text mb-1"><strong>Dirección:</strong> {{ p.direccion || '—' }}</p>
-                        <p class="card-text mb-1"><strong>Fecha solicitud:</strong> {{ p.fechaSolicitud | date:'medium' }}</p>
-                        <p class="card-text mb-3"><strong>Fecha entrega:</strong> {{ p.fechaEntrega | date:'medium' }}</p>
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="h5 text-success mb-0">${{ (p.precio ?? p.precioDeVenta ?? 0) | number:'1.2-2' }}</span>
-                            <a class="btn btn-outline-warning btn-sm">Ver detalle</a>
+
+                        <!-- Información básica -->
+                        <div class="pedido-info mb-3">
+                            <p class="card-text mb-2">
+                                <i class="bi bi-calendar-event me-2 text-muted"></i>
+                                <strong>Solicitado:</strong> 
+                                <br><small class="text-muted ms-4">{{ formatearFecha(pedido.fechaSolicitud) }}</small>
+                            </p>
+                            <p class="card-text mb-2">
+                                <i class="bi bi-truck me-2 text-muted"></i>
+                                <strong>Entrega:</strong> 
+                                <br><small class="text-muted ms-4">{{ formatearFecha(pedido.fechaEntrega) }}</small>
+                            </p>
+                            <p class="card-text mb-2">
+                                <i class="bi bi-geo-alt me-2 text-muted"></i>
+                                <strong>Dirección:</strong> 
+                                <br><small class="text-muted ms-4">{{ pedido.direccion }}</small>
+                            </p>
+                        </div>
+
+                        <!-- Productos del pedido -->
+                        <div class="productos-pedido mb-3">
+                            <h6 class="fw-bold text-primary mb-2">
+                                <i class="bi bi-bag me-1"></i>
+                                Productos ({{ pedido.productos.length || 0 }})
+                            </h6>
+                            <div *ngIf="pedido.productos && pedido.productos.length > 0" class="productos-list">
+                                <div *ngFor="let prod of pedido.productos; let last = last" class="producto-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <span class="fw-semibold">{{ prod.nombreProducto }}</span>
+                                            <small class="text-muted d-block">Cantidad: {{ prod.cantidadProducto }}</small>
+                                            
+                                            <!-- Adicionales -->
+                                            <div *ngIf="prod.adicionales && prod.adicionales.length > 0" class="adicionales-mini mt-1">
+                                                <small class="text-primary fw-bold">Adicionales:</small>
+                                                <div *ngFor="let adic of prod.adicionales" class="ms-2">
+                                                    <small class="text-secondary">
+                                                        • {{ adic.nombreAdicional }} ({{ adic.cantidadAdicional }}x)
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr *ngIf="!last" class="my-2">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total y acciones -->
+                        <div class="pedido-footer">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="fw-bold">Total:</span>
+                                <span class="h5 text-success fw-bold mb-0">
+                                    {{ formatearMoneda(pedido.precioDeVenta) }}
+                                </span>
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary btn-sm" (click)="verDetalles(pedido.id)">
+                                    <i class="bi bi-eye me-1"></i>
+                                    Ver Detalles
+                                </button>
+                                
+                                <div class="d-flex gap-2" *ngIf="pedido.estado !== 'CANCELADO' && pedido.estado !== 'ENTREGADO'">
+                                    <button 
+                                        class="btn btn-outline-danger btn-sm flex-fill" 
+                                        (click)="cancelarPedido(pedido.id)"
+                                        [disabled]="!puedeSerCancelado(pedido)">
+                                        <i class="bi bi-x-circle me-1"></i>
+                                        Cancelar
+                                    </button>
+                                    <button class="btn btn-outline-warning btn-sm flex-fill" (click)="reordenar(pedido)">
+                                        <i class="bi bi-arrow-repeat me-1"></i>
+                                        Reordenar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

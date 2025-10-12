@@ -2,7 +2,7 @@ import { Component, effect, signal, OnInit, OnDestroy, HostListener } from '@ang
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-import { CartService } from '../../../services/cart.service';
+import { CarritoService } from '../../../services/carrito.service';
 import { SearchbarComponent } from '../searchbar/searchbar';
 import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
 
@@ -23,7 +23,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private cartService: CartService,
+    private carritoService: CarritoService,
     private router: Router
   ) {
     // Effect para reaccionar a cambios en el usuario logueado
@@ -37,7 +37,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     // Effect para reaccionar a cambios en el carrito
     effect(() => {
-      this.cartItemCount.set(this.cartService.getTotalItems());
+      this.cartItemCount.set(this.carritoService.getCantidadTotal());
     });
   }
 
@@ -77,12 +77,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
-    this.cartService.clearCartOnLogout();
+    this.carritoService.limpiarCarritoCompleto();
     this.router.navigate(['/home']);
   }
 
   toggleCart() {
-    this.cartService.toggleCart();
+    this.carritoService.toggleCart();
+  }
+
+  // Método temporal para debugging - limpiar sistema completo
+  debugLimpiarSistema() {
+    console.log('🔧 DEBUG: Limpiando sistema completo desde navbar...');
+    this.carritoService.limpiarTodoElSistema();
   }
 
   onNavItemClick(route: string, event?: MouseEvent) {

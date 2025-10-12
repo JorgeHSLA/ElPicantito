@@ -310,6 +310,27 @@
     }
 }
 
+/* Estilos para adicionales */
+.adicionales-list {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.adicional-item {
+    padding-left: 0.25rem;
+    margin-bottom: 0.1rem;
+}
+
+.adicional-item small {
+    font-size: 0.75rem;
+    line-height: 1.2;
+}
+
+/* Mejorar el espaciado del cart-item cuando hay adicionales */
+.cart-item .item-details {
+    padding-right: 0.5rem;
+}
+
 @media (max-width: 480px) {
     .cart-header {
         padding: 1rem;
@@ -326,5 +347,15 @@
     .item-image {
         width: 50px;
         height: 50px;
+    }
+    
+    /* Ajustes para adicionales en móvil */
+    .adicionales-list {
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .adicional-item small {
+        font-size: 0.7rem;
     }
 }

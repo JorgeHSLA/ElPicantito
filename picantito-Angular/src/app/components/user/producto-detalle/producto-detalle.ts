@@ -1,18 +1,21 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductoService } from '../../../services/tienda/producto.service';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
 import { CartService } from '../../../services/cart.service';
+import { CarritoService } from '../../../services/carrito.service';
 import { AuthService } from '../../../services/auth.service';
 import { Producto } from '../../../models/producto';
 import { Adicional } from '../../../models/adicional';
 import { ProductoAdicional } from '../../../models/producto-adicional';
+import { AdicionalSeleccionado } from '../../../models/cart-item';
 
 @Component({
   selector: 'app-producto-detalle',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './producto-detalle.html',
   styleUrls: ['./producto-detalle.css']
 })
@@ -29,6 +32,9 @@ export class ProductoDetalleComponent implements OnInit {
   adicionales: Adicional[] = [];
   adicionalesLoading = false;
 
+  // Control de adicionales seleccionados
+  adicionalesSeleccionados: Map<number, number> = new Map(); // adicionalId -> cantidad
+
   // Signals para el manejo de estados
   isAdding = signal(false);
   showLoginMessage = signal(false);
@@ -39,6 +45,7 @@ export class ProductoDetalleComponent implements OnInit {
     private productoService: ProductoService,
     private adicionalService: AdicionalService,
     private cartService: CartService,
+    private carritoService: CarritoService, // Nuevo servicio
     private authService: AuthService
   ) {}
 
@@ -140,7 +147,56 @@ export class ProductoDetalleComponent implements OnInit {
     return (this.producto?.precioDeVenta || 0) * this.cantidad;
   }
 
-  // Método para agregar al carrito
+  // ==================== MÉTODOS PARA MANEJO DE ADICIONALES ====================
+
+  // Agregar/quitar adicional
+  toggleAdicional(adicional: Adicional): void {
+    const cantidad = this.adicionalesSeleccionados.get(adicional.id!) || 0;
+    if (cantidad > 0) {
+      this.adicionalesSeleccionados.delete(adicional.id!);
+    } else {
+      this.adicionalesSeleccionados.set(adicional.id!, 1);
+    }
+  }
+
+  // Actualizar cantidad de adicional
+  actualizarCantidadAdicional(adicionalId: number, cantidad: number): void {
+    if (cantidad <= 0) {
+      this.adicionalesSeleccionados.delete(adicionalId);
+    } else {
+      this.adicionalesSeleccionados.set(adicionalId, cantidad);
+    }
+  }
+
+  // Obtener cantidad de adicional seleccionado
+  getCantidadAdicional(adicionalId: number): number {
+    return this.adicionalesSeleccionados.get(adicionalId) || 0;
+  }
+
+  // Verificar si un adicional está seleccionado
+  isAdicionalSeleccionado(adicionalId: number): boolean {
+    return this.adicionalesSeleccionados.has(adicionalId);
+  }
+
+  // Calcular precio total con adicionales
+  calcularPrecioTotal(): number {
+    const precioBase = (this.producto?.precioDeVenta || this.producto?.precio || 0) * this.cantidad;
+    
+    let precioAdicionales = 0;
+    this.adicionalesSeleccionados.forEach((cantidadAdicional, adicionalId) => {
+      const adicional = this.adicionales.find(a => a.id === adicionalId);
+      if (adicional) {
+        const precioAdicional = adicional.precioDeVenta || adicional.precio || 0;
+        precioAdicionales += precioAdicional * cantidadAdicional * this.cantidad;
+      }
+    });
+
+    return precioBase + precioAdicionales;
+  }
+
+  // ==================== MÉTODO PRINCIPAL PARA AGREGAR AL CARRITO ====================
+
+  // Método para agregar al carrito (NUEVO SISTEMA con adicionales)
   agregarAlCarrito(): void {
     if (this.producto && this.producto.disponible) {
       this.isAdding.set(true);
@@ -157,23 +213,49 @@ export class ProductoDetalleComponent implements OnInit {
         return;
       }
 
-      // Agregar al carrito
-      const added = this.cartService.addToCart(this.producto, this.cantidad);
+      // Preparar adicionales seleccionados para el nuevo sistema
+      const adicionalesParaCarrito: AdicionalSeleccionado[] = [];
+      this.adicionalesSeleccionados.forEach((cantidad, adicionalId) => {
+        const adicional = this.adicionales.find(a => a.id === adicionalId);
+        if (adicional && cantidad > 0) {
+          const precioAdicional = adicional.precioDeVenta || adicional.precio || 0;
+          adicionalesParaCarrito.push({
+            adicional: adicional,
+            cantidad: cantidad,
+            subtotal: precioAdicional * cantidad
+          });
+        }
+      });
+
+      // USAR SIEMPRE EL NUEVO SISTEMA (CarritoService)
+      this.carritoService.agregarItemConAdicionales(
+        this.producto, 
+        this.cantidad, 
+        adicionalesParaCarrito
+      );
       
-      if (added) {
-        console.log(`Agregando ${this.cantidad} unidades de ${this.producto.nombre} al carrito`);
-        
-        // Mostrar feedback visual por un momento
-        setTimeout(() => {
-          this.isAdding.set(false);
-        }, 1000);
-        
-        // Abrir el carrito para mostrar el producto agregado
-        this.cartService.openCart();
+      if (adicionalesParaCarrito.length > 0) {
+        console.log(`Agregando ${this.cantidad} unidades de ${this.producto.nombre} con ${adicionalesParaCarrito.length} adicionales al carrito`);
       } else {
-        this.isAdding.set(false);
+        console.log(`Agregando ${this.cantidad} unidades de ${this.producto.nombre} al carrito (sin adicionales)`);
       }
+      
+      // Mostrar feedback visual por un momento
+      setTimeout(() => {
+        this.isAdding.set(false);
+      }, 1000);
+      
+      // Abrir el carrito para mostrar el producto agregado
+      this.carritoService.showCart();
+      
+      // Limpiar selección de adicionales para próxima compra
+      this.limpiarSeleccionAdicionales();
     }
+  }
+
+  // Limpiar selección de adicionales
+  limpiarSeleccionAdicionales(): void {
+    this.adicionalesSeleccionados.clear();
   }
 
   // Método para ir al login

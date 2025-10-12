@@ -2,9 +2,10 @@ import { Component, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CartService, CartItem } from '../../../services/cart.service';
+import { CarritoService } from '../../../services/carrito.service';
+import { PedidoManagerService } from '../../../services/tienda/pedido-manager.service';
 import { AuthService } from '../../../services/auth.service';
-import { Producto } from '../../../models/producto';
+import { CartItem, CartSummary } from '../../../models/cart-item';
 
 @Component({
   selector: 'app-checkout-summary',
@@ -15,8 +16,9 @@ import { Producto } from '../../../models/producto';
 })
 export class CheckoutSummaryComponent {
   cartItems = signal<CartItem[]>([]);
+  cartSummary = signal<CartSummary | null>(null);
   subtotal = signal(0);
-  domicilioCost = signal(0);
+  domicilioCost = signal(5000); // Costo fijo de domicilio
   total = signal(0);
   isProcessingOrder = signal(false);
 
@@ -24,11 +26,16 @@ export class CheckoutSummaryComponent {
   customerInfo = {
     direccion: '',
     telefono: '',
-    observaciones: ''
+    observaciones: '',
+    fechaEntrega: ''
   };
 
+  erroresValidacion: string[] = [];
+  minDateTime = '';
+
   constructor(
-    private cartService: CartService,
+    private carritoService: CarritoService,
+    private pedidoManager: PedidoManagerService,
     private authService: AuthService,
     private router: Router
   ) {
@@ -38,68 +45,121 @@ export class CheckoutSummaryComponent {
       return;
     }
 
-    // Verificar si hay items en el carrito
+    // Configurar fecha mínima (hoy + 1 hora)
+    const now = new Date();
+    now.setHours(now.getHours() + 1);
+    this.minDateTime = now.toISOString().slice(0, 16);
+
+    // Effect para manejar items del carrito (solo sistema nuevo)
     effect(() => {
-      const items = this.cartService.getCartItems()();
-      if (items.length === 0) {
-        // Si no hay items, redirigir a la tienda
-        this.router.navigate(['/tienda']);
+      const items = this.carritoService.cartItems();
+      const summary = this.carritoService.getCartSummary();
+      
+      this.cartItems.set(items);
+      this.cartSummary.set(summary);
+
+      if (summary) {
+        this.subtotal.set(summary.total);
+        this.total.set(summary.total + this.domicilioCost());
       } else {
-        this.cartItems.set(items);
-        this.subtotal.set(this.cartService.getSubtotal());
-        this.domicilioCost.set(this.cartService.getDomicilioCost());
-        this.total.set(this.cartService.getTotal());
+        this.subtotal.set(0);
+        this.total.set(this.domicilioCost());
+      }
+
+      // Si no hay items, redirigir a tienda
+      if (items.length === 0) {
+        this.router.navigate(['/tienda']);
+      }
+    });
+  }
+
+  confirmarPedido() {
+    console.log('🚀 INICIANDO CONFIRMACIÓN DE PEDIDO...');
+    
+    this.erroresValidacion = [];
+    
+    // Validar dirección
+    if (!this.customerInfo.direccion.trim()) {
+      this.erroresValidacion.push('La dirección de entrega es obligatoria');
+    }
+
+    // Validar pedido
+    const summary = this.cartSummary();
+    console.log('📋 Resumen del carrito:', summary);
+    
+    if (summary) {
+      const validacion = this.pedidoManager.validarPedido(summary);
+      console.log('✅ Validación del pedido:', validacion);
+      
+      if (!validacion.valido) {
+        this.erroresValidacion.push(...validacion.errores);
+      }
+    } else {
+      this.erroresValidacion.push('El carrito está vacío');
+    }
+
+    if (this.erroresValidacion.length > 0) {
+      console.log('❌ Errores de validación:', this.erroresValidacion);
+      return;
+    }
+
+    console.log('🔄 Procesando pedido...');
+    this.isProcessingOrder.set(true);
+
+    // Usar siempre el nuevo sistema
+    this.pedidoManager.procesarPedidoDesdeCarrito(
+      this.customerInfo.direccion.trim(),
+      this.customerInfo.fechaEntrega || undefined
+    ).subscribe({
+      next: (pedidoCreado) => {
+        console.log('✅ Pedido creado exitosamente:', pedidoCreado);
+        
+        // Limpiar carrito después del pedido exitoso
+        this.carritoService.limpiarCarritoCompleto();
+        
+        alert(`¡Pedido confirmado! 
+        Número de pedido: ${pedidoCreado.id}
+        Total: ${this.formatearMoneda((summary!.total) + this.domicilioCost())}
+        
+        Recibirás una confirmación pronto.`);
+        
+        this.router.navigate(['/rastreo-pedido'], { 
+          queryParams: { pedidoId: pedidoCreado.id } 
+        });
+      },
+      error: (error) => {
+        console.error('❌ Error al procesar pedido:', error);
+        this.erroresValidacion.push('Error al procesar el pedido. Intenta nuevamente.');
+        this.isProcessingOrder.set(false);
       }
     });
   }
 
   // Actualizar cantidad de un producto
-  updateQuantity(productoId: number, cantidad: number) {
-    if (cantidad <= 0) {
-      this.removeItem(productoId);
-    } else {
-      this.cartService.updateQuantity(productoId, cantidad);
-    }
+  actualizarCantidad(itemId: string, cantidad: number) {
+    console.log('🔄 Actualizando cantidad:', itemId, cantidad);
+    this.carritoService.actualizarCantidadCartItem(itemId, cantidad);
   }
 
-  // Eliminar producto del carrito
-  removeItem(productoId: number) {
-    this.cartService.removeFromCart(productoId);
+  // Alias para compatibilidad con HTML existente
+  updateNewCartQuantity(itemId: string, cantidad: number) {
+    this.actualizarCantidad(itemId, cantidad);
   }
 
-  // Agregar adicional (placeholder para funcionalidad futura)
-  editAdicionales(producto: Producto) {
-    // TODO: Implementar modal o navegación para editar adicionales
-    console.log('Editar adicionales para:', producto.nombre);
+  // Eliminar item del carrito
+  eliminarItem(itemId: string) {
+    console.log('🗑️ Eliminando item:', itemId);
+    this.carritoService.removerCartItem(itemId);
   }
 
-  // Procesar la orden de compra
-  async processOrder() {
-    if (this.cartItems().length === 0) {
-      return;
-    }
-
-    // Validar información del cliente
-    if (!this.customerInfo.direccion.trim() || !this.customerInfo.telefono.trim()) {
-      alert('Por favor completa la dirección y teléfono para continuar.');
-      return;
-    }
-
-    // Validar si el usuario está logueado
-    if (!this.authService.isLoggedIn()) {
-      // Si no está logueado, mostrar mensaje y redirigir al login
-      const shouldLogin = confirm('Debes iniciar sesión para continuar con la compra. ¿Deseas ir al login?');
-      if (shouldLogin) {
-        this.router.navigate(['/login'], {
-          queryParams: { returnUrl: '/checkout-summary' }
-        });
-      }
-      return;
-    }
-
-    // Si está logueado, redirigir al portal de pagos
-    this.router.navigate(['/payment-portal']);
+  // Alias para compatibilidad con HTML existente
+  removeNewCartItem(itemId: string) {
+    this.eliminarItem(itemId);
   }
+
+  // ==================== MÉTODOS AUXILIARES ====================
+
+  // ==================== MÉTODOS DE NAVEGACIÓN ====================
 
   // Volver al carrito (cerrar esta página)
   goBackToCart() {
@@ -109,5 +169,23 @@ export class CheckoutSummaryComponent {
   // Continuar comprando
   continueShopping() {
     this.router.navigate(['/tienda']);
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
+
+  goToTienda() {
+    this.router.navigate(['/tienda']);
+  }
+
+  // ==================== UTILIDADES ====================
+
+  formatearMoneda(valor: number): string {
+    return this.pedidoManager.formatearMoneda(valor);
+  }
+
+  getTotalWithDelivery(): number {
+    return (this.cartSummary()?.total || 0) + this.domicilioCost();
   }
 }
