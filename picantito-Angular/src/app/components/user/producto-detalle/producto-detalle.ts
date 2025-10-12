@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductoService } from '../../../services/tienda/producto.service';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
+import { CartService } from '../../../services/cart.service';
+import { AuthService } from '../../../services/auth.service';
 import { Producto } from '../../../models/producto';
 import { Adicional } from '../../../models/adicional';
 import { ProductoAdicional } from '../../../models/producto-adicional';
@@ -27,11 +29,17 @@ export class ProductoDetalleComponent implements OnInit {
   adicionales: Adicional[] = [];
   adicionalesLoading = false;
 
+  // Signals para el manejo de estados
+  isAdding = signal(false);
+  showLoginMessage = signal(false);
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private productoService: ProductoService,
-    private adicionalService: AdicionalService
+    private adicionalService: AdicionalService,
+    private cartService: CartService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -134,14 +142,43 @@ export class ProductoDetalleComponent implements OnInit {
 
   // Método para agregar al carrito
   agregarAlCarrito(): void {
-    if (this.producto) {
-      console.log(`Agregando ${this.cantidad} unidades de ${this.producto.nombre} al carrito`);
-      // Aquí implementarás la lógica del carrito de compras
-      // Por ejemplo: this.carritoService.agregarProducto(this.producto, this.cantidad);
+    if (this.producto && this.producto.disponible) {
+      this.isAdding.set(true);
+
+      // Verificar si el usuario está autenticado
+      if (!this.authService.isLoggedIn()) {
+        this.isAdding.set(false);
+        this.showLoginMessage.set(true);
+        
+        // Ocultar el mensaje después de 5 segundos
+        setTimeout(() => {
+          this.showLoginMessage.set(false);
+        }, 5000);
+        return;
+      }
+
+      // Agregar al carrito
+      const added = this.cartService.addToCart(this.producto, this.cantidad);
       
-      // Mostrar mensaje de confirmación (puedes usar un toast o modal)
-      alert(`Se agregaron ${this.cantidad} unidades al carrito`);
+      if (added) {
+        console.log(`Agregando ${this.cantidad} unidades de ${this.producto.nombre} al carrito`);
+        
+        // Mostrar feedback visual por un momento
+        setTimeout(() => {
+          this.isAdding.set(false);
+        }, 1000);
+        
+        // Abrir el carrito para mostrar el producto agregado
+        this.cartService.openCart();
+      } else {
+        this.isAdding.set(false);
+      }
     }
+  }
+
+  // Método para ir al login
+  goToLogin(): void {
+    this.router.navigate(['/login']);
   }
 
   // Método para volver a la tienda

@@ -213,13 +213,20 @@
                 <div class="col-lg-4">
                     <!-- Botones de acción -->
                     <div class="action-buttons d-grid gap-3">
-                        <button class="btn btn-warning btn-lg" 
+                        <button class="btn btn-lg" 
+                                [class.btn-warning]="!isAdding() && producto.disponible"
+                                [class.btn-success]="isAdding() && producto.disponible"
+                                [class.btn-secondary]="!producto.disponible"
                                 (click)="agregarAlCarrito()"
-                                [disabled]="!producto.disponible">
-                            <i class="bi bi-cart-plus me-2"></i>
-                            {{ producto.disponible ? 'Agregar al carrito' : 'No disponible' }}
+                                [disabled]="!producto.disponible || isAdding()">
+                            @if (isAdding()) {
+                                <i class="bi bi-check-circle me-2"></i>¡Agregado al carrito!
+                            } @else {
+                                <i class="bi bi-cart-plus me-2"></i>
+                                {{ producto.disponible ? 'Agregar al carrito' : 'No disponible' }}
+                            }
                         </button>
-                        
+
                         <button class="btn btn-outline-secondary" (click)="volverATienda()">
                             <i class="bi bi-arrow-left me-2"></i>Seguir comprando
                         </button>
@@ -278,3 +285,94 @@
         }
     </main>
 }
+
+<!-- MODAL DE LOGIN REQUERIDO -->
+@if (showLoginMessage()) {
+  <div class="modal-backdrop-custom">
+    <div class="modal-custom animate__animated animate__fadeInDown">
+      <div class="modal-header-custom">
+        <h5 class="modal-title-custom">
+          <i class="bi bi-person-circle me-2" style="color: #ff6b35;"></i>
+          Inicia sesión para continuar
+        </h5>
+        <button type="button" class="btn-close" aria-label="Cerrar" (click)="showLoginMessage.set(false)"></button>
+      </div>
+      <div class="modal-body-custom">
+        <p class="mb-3" style="color: #2c3e50; font-weight: 500; line-height: 1.5;">Debes iniciar sesión para agregar productos al carrito.</p>
+        <button class="btn btn-login-modal w-100" (click)="goToLogin()">
+          <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<style>
+.modal-backdrop-custom {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(44, 62, 80, 0.4);
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-custom {
+  background: linear-gradient(135deg, #fef9f5 0%, #fdf6f0 100%);
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 32px rgba(255, 107, 53, 0.2);
+  border: 2px solid rgba(255, 107, 53, 0.2);
+  max-width: 350px;
+  width: 90vw;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  position: relative;
+  animation: fadeInDown 0.3s;
+}
+.modal-header-custom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.modal-title-custom {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+.modal-body-custom {
+  font-size: 1rem;
+  color: #34495e;
+  font-weight: 500;
+}
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  color: #95a5a6;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+.btn-close:hover {
+  background: rgba(255, 107, 53, 0.1);
+  color: #ff6b35;
+}
+.btn-login-modal {
+  background: linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+}
+.btn-login-modal:hover {
+  background: linear-gradient(135deg, #e55a2b 0%, #d14d20 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.35);
+  color: #fff;
+}
+</style>
