@@ -76,7 +76,7 @@ public class PedidoController {
         }
     }
 
-        @PostMapping
+    @PostMapping("/asignar-repartidor")
     public ResponseEntity<?> asignarRepartidor(@RequestBody AsignarRepartidorDTO asignancionDTO) {
         try {
             if (asignancionDTO.getRepartidorId() == null) {
