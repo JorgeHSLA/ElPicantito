@@ -22,9 +22,9 @@ export class DragAndDrop {
 
   // Categorías de ingredientes
   private tortillas: Item[] = [
-    { idAdcional: 1, nombre: 'Tortilla de Maíz', image: '/images/crearTaco/tortillas/maiz.jpg', precio: 5, cantidad: 1 },
-    { idAdcional: 2, nombre: 'Tortilla de Harina', image: '/images/crearTaco/tortillas/harina.jpg', precio: 6, cantidad: 1 },
-    { idAdcional: 3, nombre: 'Tortilla Integral', image: '/images/crearTaco/tortillas/integral.jpg', precio: 7, cantidad: 1 }
+    { idAdcional: 1, nombre: 'Tortilla de Maíz', image: '/images/crearTaco/tortillas/tortilla.png', precio: 5, cantidad: 1 },
+    { idAdcional: 2, nombre: 'Tortilla de Harina', image: '/images/crearTaco/tortillas/tortilla.png', precio: 6, cantidad: 1 },
+    { idAdcional: 3, nombre: 'Tortilla Integral', image: '/images/crearTaco/tortillas/tortilla.png', precio: 7, cantidad: 1 }
   ];
 
   private proteinas: Item[] = [
