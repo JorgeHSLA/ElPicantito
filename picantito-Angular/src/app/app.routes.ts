@@ -33,6 +33,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/crearTaco/crear-taco/crear-taco').then(m => m.CrearTaco)
   },
   {
+    path: 'drag-and-drop',
+    loadComponent: () => import('./components/crearTaco/drag-and-drop/drag-and-drop').then(m => m.DragAndDrop)
+  },
+  {
     path: 'mi-perfil',
     loadComponent: () => import('./components/user/mi-perfil/mi-perfil').then(m => m.MiPerfilComponent),
     canActivate: [AuthGuard]
