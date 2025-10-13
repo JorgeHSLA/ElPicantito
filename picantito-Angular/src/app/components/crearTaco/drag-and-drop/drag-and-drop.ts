@@ -68,22 +68,44 @@ export class DragAndDrop {
 
     switch(category) {
       case 'tortilla':
-        // Para tortillas, solo mostrar las que no están en done
+        // Para tortillas, mostrar todas MENOS la que está actualmente en done
+        const currentTortillaInDone = doneItems.find(
+          item => item.idAdcional! >= 1 && item.idAdcional! <= 3
+        );
+        
         availableItems = this.tortillas.filter(
-          tortilla => !doneItems.some(done => done.idAdcional === tortilla.idAdcional)
+          tortilla => tortilla.idAdcional !== currentTortillaInDone?.idAdcional
         );
         break;
       case 'proteína':
-        // Para proteínas, mostrar todas (se pueden repetir)
-        availableItems = [...this.proteinas];
+        // Para proteínas, mostrar todas MENOS las que ya están en done
+        const doneProteinIds = doneItems
+          .filter(item => item.idAdcional! >= 4 && item.idAdcional! <= 8)
+          .map(item => item.idAdcional);
+        
+        availableItems = this.proteinas.filter(
+          proteina => !doneProteinIds.includes(proteina.idAdcional)
+        );
         break;
       case 'salsa':
-        // Para salsas, mostrar todas (se pueden repetir)
-        availableItems = [...this.salsas];
+        // Para salsas, mostrar todas MENOS las que ya están en done
+        const doneSalsaIds = doneItems
+          .filter(item => item.idAdcional! >= 9 && item.idAdcional! <= 13)
+          .map(item => item.idAdcional);
+        
+        availableItems = this.salsas.filter(
+          salsa => !doneSalsaIds.includes(salsa.idAdcional)
+        );
         break;
       case 'extras':
-        // Para extras, mostrar todas (se pueden repetir)
-        availableItems = [...this.extras];
+        // Para extras, mostrar todas MENOS las que ya están en done
+        const doneExtraIds = doneItems
+          .filter(item => item.idAdcional! >= 14 && item.idAdcional! <= 16)
+          .map(item => item.idAdcional);
+        
+        availableItems = this.extras.filter(
+          extra => !doneExtraIds.includes(extra.idAdcional)
+        );
         break;
     }
 
@@ -158,24 +180,66 @@ export class DragAndDrop {
         this.done.set(items);
       }
     } else {
-      // Transferir entre listas diferentes - SIEMPRE mover, nunca copiar
-      const sourceItems = [...event.previousContainer.data];
-      const targetItems = [...event.container.data];
+      const currentStepValue = this.currentStep();
       
-      transferArrayItem(
-        sourceItems,
-        targetItems,
-        event.previousIndex,
-        event.currentIndex
-      );
-      
-      // Actualizar ambos signals
+      // Transferir entre listas diferentes
       if(event.previousContainer.id === 'todoList') {
         // De TODO a DONE
-        this.todo.set(sourceItems);
-        this.done.set(targetItems);
+        const item = event.previousContainer.data[event.previousIndex];
+        
+        if (currentStepValue === 'tortilla') {
+          // Para tortillas: solo una permitida, reemplazar si ya existe
+          const doneItems = this.done();
+          
+          // Buscar si ya hay una tortilla en done
+          const previousTortilla = doneItems.find(
+            doneItem => doneItem.idAdcional! >= 1 && doneItem.idAdcional! <= 3
+          );
+          
+          // Remover cualquier tortilla existente de done
+          const filteredDone = doneItems.filter(
+            doneItem => !(doneItem.idAdcional! >= 1 && doneItem.idAdcional! <= 3)
+          );
+          
+          // Agregar la nueva tortilla a done
+          this.done.set([...filteredDone, item]);
+          
+          // Actualizar todo: remover la seleccionada y agregar la anterior si existía
+          const sourceItems = [...event.previousContainer.data];
+          sourceItems.splice(event.previousIndex, 1);
+          
+          if (previousTortilla) {
+            sourceItems.push(previousTortilla);
+          }
+          
+          this.todo.set(sourceItems);
+        } else {
+          // Para otros ingredientes: permitir múltiples
+          const sourceItems = [...event.previousContainer.data];
+          const targetItems = [...event.container.data];
+          
+          transferArrayItem(
+            sourceItems,
+            targetItems,
+            event.previousIndex,
+            event.currentIndex
+          );
+          
+          this.todo.set(sourceItems);
+          this.done.set(targetItems);
+        }
       } else {
         // De DONE a TODO
+        const sourceItems = [...event.previousContainer.data];
+        const targetItems = [...event.container.data];
+        
+        transferArrayItem(
+          sourceItems,
+          targetItems,
+          event.previousIndex,
+          event.currentIndex
+        );
+        
         this.done.set(sourceItems);
         this.todo.set(targetItems);
       }
