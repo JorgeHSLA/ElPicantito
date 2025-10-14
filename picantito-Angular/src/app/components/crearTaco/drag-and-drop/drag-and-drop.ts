@@ -5,6 +5,7 @@ import { AdicionalService } from '../../../services/tienda/adicional.service';
 import { ProductoService } from '../../../services/tienda/producto.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Adicional } from '../../../models/adicional';
 @Component({
   selector: 'app-drag-and-drop',
   imports: [CommonModule, CdkDropList, CdkDrag],
@@ -20,6 +21,9 @@ export class DragAndDrop {
   totalPrice = signal<number>(0);
   canGoToNextStep = signal<boolean>(false);
 
+  adcionales =signal<Adicional[]>([]);
+  
+
   // Categorías de ingredientes
   private tortillas: Item[] = [
     { idAdcional: 1, nombre: 'Tortilla de Maíz', image: '/images/crearTaco/tortillas/tortilla.png', precio: 5, cantidad: 1 },
@@ -28,7 +32,7 @@ export class DragAndDrop {
   ];
 
   private proteinas: Item[] = [
-    { idAdcional: 4, nombre: 'Carne Asada', image: '/images/crearTaco/proteinas/carne-asada.jpg', precio: 25, cantidad: 1 },
+    { idAdcional: 4, nombre: 'CarneAsada', image: '/images/crearTaco/proteinas/carne-asada.jpg', precio: 25, cantidad: 1 },
     { idAdcional: 5, nombre: 'Pollo', image: '/images/crearTaco/proteinas/pollo.jpg', precio: 20, cantidad: 1 },
     { idAdcional: 6, nombre: 'Pastor', image: '/images/crearTaco/proteinas/pastor.jpg', precio: 22, cantidad: 1 },
     { idAdcional: 7, nombre: 'Carnitas', image: '/images/crearTaco/proteinas/carnitas.jpg', precio: 23, cantidad: 1 },
@@ -36,7 +40,7 @@ export class DragAndDrop {
   ];
 
   private salsas: Item[] = [
-    { idAdcional: 9, nombre: 'Salsa Verde', image: '/images/crearTaco/salsas/verde.jpg', precio: 3, cantidad: 1 },
+    { idAdcional: 9,  nombre: 'Salsa Verde', image: '/images/crearTaco/salsas/verde.jpg', precio: 3, cantidad: 1 },
     { idAdcional: 10, nombre: 'Salsa Roja', image: '/images/crearTaco/salsas/roja.jpg', precio: 3, cantidad: 1 },
     { idAdcional: 11, nombre: 'Salsa Habanera', image: '/images/crearTaco/salsas/habanera.jpg', precio: 4, cantidad: 1 },
     { idAdcional: 12, nombre: 'Salsa Chipotle', image: '/images/crearTaco/salsas/chipotle.jpg', precio: 4, cantidad: 1 },
@@ -170,84 +174,85 @@ export class DragAndDrop {
   drop(event: CdkDragDrop<Item[]>) {
     if(event.previousContainer === event.container) {
       // Reordenar dentro de la misma lista
-      const items = [...event.container.data];
+      let items = [...event.container.data];
       moveItemInArray(items, event.previousIndex, event.currentIndex);
-      
-      // Actualizar el signal correspondiente
-      if(event.container.id === 'todoList') {
-        this.todo.set(items);
-      } else {
+      // Si es la lista done, aseguramos que la tortilla quede de primera
+      if(event.container.id === 'doneList') {
+        items = this.sortDoneWithTortillaFirst(items);
         this.done.set(items);
+      } else {
+        this.todo.set(items);
       }
     } else {
       const currentStepValue = this.currentStep();
-      
       // Transferir entre listas diferentes
       if(event.previousContainer.id === 'todoList') {
         // De TODO a DONE
         const item = event.previousContainer.data[event.previousIndex];
-        
         if (currentStepValue === 'tortilla') {
           // Para tortillas: solo una permitida, reemplazar si ya existe
           const doneItems = this.done();
-          
           // Buscar si ya hay una tortilla en done
           const previousTortilla = doneItems.find(
             doneItem => doneItem.idAdcional! >= 1 && doneItem.idAdcional! <= 3
           );
-          
           // Remover cualquier tortilla existente de done
           const filteredDone = doneItems.filter(
             doneItem => !(doneItem.idAdcional! >= 1 && doneItem.idAdcional! <= 3)
           );
-          
-          // Agregar la nueva tortilla a done
-          this.done.set([...filteredDone, item]);
-          
+          // Agregar la nueva tortilla a done y ordenar
+          const newDone = this.sortDoneWithTortillaFirst([item, ...filteredDone]);
+          this.done.set(newDone);
           // Actualizar todo: remover la seleccionada y agregar la anterior si existía
           const sourceItems = [...event.previousContainer.data];
           sourceItems.splice(event.previousIndex, 1);
-          
           if (previousTortilla) {
             sourceItems.push(previousTortilla);
           }
-          
           this.todo.set(sourceItems);
         } else {
           // Para otros ingredientes: permitir múltiples
           const sourceItems = [...event.previousContainer.data];
-          const targetItems = [...event.container.data];
-          
+          let targetItems = [...event.container.data];
           transferArrayItem(
             sourceItems,
             targetItems,
             event.previousIndex,
             event.currentIndex
           );
-          
+          // Ordenar done para que la tortilla quede de primera
+          targetItems = this.sortDoneWithTortillaFirst(targetItems);
           this.todo.set(sourceItems);
           this.done.set(targetItems);
         }
       } else {
         // De DONE a TODO
-        const sourceItems = [...event.previousContainer.data];
+        let sourceItems = [...event.previousContainer.data];
         const targetItems = [...event.container.data];
-        
         transferArrayItem(
           sourceItems,
           targetItems,
           event.previousIndex,
           event.currentIndex
         );
-        
+        // Ordenar done para que la tortilla quede de primera
+        sourceItems = this.sortDoneWithTortillaFirst(sourceItems);
         this.done.set(sourceItems);
         this.todo.set(targetItems);
       }
-      
       // Actualizar precio y validar paso
       this.calculateTotalPrice();
       this.updateCanGoToNextStep();
     }
+  }
+
+  /**
+   * Ordena la lista done para que la tortilla (idAdcional 1-3) quede siempre de primera
+   */
+  private sortDoneWithTortillaFirst(items: Item[]): Item[] {
+    const tortillas = items.filter(i => i.idAdcional! >= 1 && i.idAdcional! <= 3);
+    const others = items.filter(i => !(i.idAdcional! >= 1 && i.idAdcional! <= 3));
+    return [...tortillas, ...others];
   }
 
   clearTaco() {
