@@ -46,6 +46,20 @@ public class ProductoController {
                                 .body("Producto no encontrado");
         }
     }
+
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<?> getProductoByName(@PathVariable String name) {
+        Optional<Producto> producto = productoService.getProductoByName(name);
+
+        if (producto.isPresent()) {
+            // Simplemente devolvemos el producto directamente, sin adicionales
+            return ResponseEntity.ok(producto.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                .body("Producto no encontrado con ese nombre");
+        }
+    }
     
     // Mostrar información de todos los productos: http://localhost:9998/api/productos
     @GetMapping

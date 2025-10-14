@@ -82,6 +82,17 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.findByDisponibleTrue();
     }
     
+    @Override
+    public Optional<Producto> getProductoByName(String nombre) {
+        System.out.println("ProductoServiceImpl: Ejecutando getProductoByName() con nombre: " + nombre);
+        Optional<Producto> producto = productoRepository.findByNombre(nombre);
+        if (producto.isPresent()) {
+            System.out.println("ProductoServiceImpl: Producto encontrado: " + producto.get().getNombre());
+        } else {
+            System.out.println("ProductoServiceImpl: No se encontró ningún producto con el nombre exacto: " + nombre);
+        }
+        return producto;
+    }
 
 
 }

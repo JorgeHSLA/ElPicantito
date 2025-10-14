@@ -5,35 +5,41 @@ import java.util.Map;
 
 public interface EstadisticaService {
 
-    // Total de ventas por día (para graficar líneas o barras)
-    Map<String, Double> ventasPorDia();
+    // Total de ventas por día (para graficar líneas o barras) (string el dia, float la suma del valor de las ventas)
+    Map<String, Float> ventasPorDia();
 
-    // Productos más vendidos (para gráfico de barras o pie)
-    Map<String, Long> productosMasVendidos();
 
-    // Total de pedidos por cliente (para análisis de consumo)
-    Map<String, Long> pedidosPorCliente();
+    // Mejores clientes (lista de ids de clientes que más han comprado)
+    List<Integer> mejoresClientes();
 
-    // Asociación simple de productos (para red de relaciones)
-    Map<String, List<String>> productosAsociados();
 
-    // ingredientes mas consumidos
-    Map<String, Long> ingredientesMasConsumidos();
+    // Productos menos vendidos 
+    List<Integer> productosMenosVendidos();
 
-    // recomendaciones de productos que no valen la pena
-    List<String> productosNoRecomendados();
+    // Productos más vendidos 
+    List<Integer> productosMasVendidos();
 
-    // recomendaciones de productos que valen la pena
-    List<String> productosRecomendados();
+    // lista de ids de adicionales más consumidos
+    List<Integer> AdicionalesMasConsumidos();
 
-    // mejores horas de venta, para grafica de percentiles
-    Map<Integer, Long> ventasPorHora();
+    // lista de ids de adicionales menos consumidos
+    List<Integer> AdicionalesMenosConsumidos();
+
+    // recomendaciones de productos que no valen la pena en ids (los que generan menos ganancias)
+    List<Integer> productosNoRecomendados();
+
+    // recomendaciones de productos que valen la pena en ids (los que generan más ganancias)
+    List<Integer> productosRecomendados();
 
     // Ingresos acumulados (para curva de crecimiento)
-    Double ingresosTotales();
+    Float ingresosTotales();
 
+    // Ingresos netos (después de costos y gastos)
+    Float ingresosNetos();
 
-    // EL string es el nombre de producto Long la cantidad
+    // Número total de pedidos
+    Integer totalPedidos();
+    
 
     
 }

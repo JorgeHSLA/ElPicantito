@@ -1,0 +1,345 @@
+.taco-builder-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    color: #d84315;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #5d4037;
+    font-weight: 500;
+}
+
+.builder-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Panel de ingredientes */
+.ingredients-panel,
+.taco-panel {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.panel-header {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.step-indicator {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 1rem;
+    text-transform: capitalize;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.total-price {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Navegación entre pasos */
+.step-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: #fff9f5;
+    border-bottom: 2px solid #ffe0d2;
+}
+
+.step-info {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+    color: #d84315;
+    font-size: 1rem;
+}
+
+.nav-btn {
+    padding: 0.6rem 1.2rem;
+    border: 2px solid #ff6b35;
+    border-radius: 8px;
+    background: white;
+    color: #ff6b35;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.nav-btn:hover:not(:disabled) {
+    background: #ff6b35;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 107, 53, 0.3);
+}
+
+.nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    border-color: #ccc;
+    color: #ccc;
+}
+
+.btn-next {
+    margin-left: 1rem;
+}
+
+.btn-prev {
+    margin-right: 1rem;
+}
+
+/* Listas */
+.ingredients-list,
+.taco-list {
+    padding: 1.5rem;
+    min-height: 400px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Tarjetas de ingredientes */
+.ingredient-card,
+.taco-ingredient {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    transition: all 0.3s ease;
+}
+
+.ingredient-card:hover,
+.taco-ingredient:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-color: #ff6b35;
+}
+
+.ingredient-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.ingredient-icon {
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.taco-ingredient .ingredient-icon {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.ingredient-info {
+    flex: 1;
+}
+
+.ingredient-info h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.price {
+    color: #ff6b35;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.drag-indicator {
+    color: #999;
+    font-size: 1.5rem;
+    cursor: grab;
+}
+
+/* Estado mientras se arrastra */
+.cdk-drag-preview {
+    opacity: 0.8;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging .ingredient-card:not(.cdk-drag-placeholder),
+.cdk-drop-list-dragging .taco-ingredient:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0.3;
+    border: 2px dashed #ff6b35;
+    background: transparent;
+}
+
+/* Mensajes vacíos */
+.empty-message,
+.empty-taco {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #999;
+}
+
+.info-message {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-left: 4px solid #2196f3;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.info-message p {
+    margin: 0;
+    color: #1565c0;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.empty-taco {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+}
+
+.taco-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+.empty-taco p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.hint {
+    color: #ff6b35 !important;
+    font-weight: 600;
+    font-size: 0.9rem !important;
+}
+
+/* Botones de acción */
+.action-buttons {
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    border-top: 2px solid #f0f0f0;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+    color: #666;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .builder-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .header h1 {
+        font-size: 2rem;
+    }
+}
+
+/* Scrollbar personalizada */
+.ingredients-list::-webkit-scrollbar,
+.taco-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ingredients-list::-webkit-scrollbar-track,
+.taco-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.ingredients-list::-webkit-scrollbar-thumb,
+.taco-list::-webkit-scrollbar-thumb {
+    background: #ff6b35;
+    border-radius: 10px;
+}
+
+.ingredients-list::-webkit-scrollbar-thumb:hover,
+.taco-list::-webkit-scrollbar-thumb:hover {
+    background: #d84315;
+}

@@ -13,4 +13,5 @@ public interface ProductoService {
     String eliminarProducto(Integer id); // Cambiar void por String
     List<Producto> getProductosDisponibles();
     List<Producto> getProductosActivos();
+    Optional<Producto> getProductoByName(String nombre);
 }
