@@ -21,11 +21,7 @@ public class EstadisticaController {
     @Autowired
     private EstadisticaService estadisticaService;
 
-    /**
-     * Endpoint: GET /api/estadisticas/ventas-por-dia
-     * Obtiene el total de ventas agrupadas por día
-     * @return Map con fechas (String) y montos de venta (Float)
-     */
+    // Obtener ventas por día: http://localhost:9998/api/estadisticas/ventas-por-dia
     @GetMapping("/ventas-por-dia")
     public ResponseEntity<Map<String, Float>> getVentasPorDia() {
         try {
@@ -36,11 +32,7 @@ public class EstadisticaController {
         }
     }
 
-    /**
-     * Endpoint: GET /api/estadisticas/mejores-clientes
-     * Obtiene los mejores clientes (los que más han comprado)
-     * @return Lista de IDs de clientes
-     */
+    // Obtener mejores clientes: http://localhost:9998/api/estadisticas/mejores-clientes
     @GetMapping("/mejores-clientes")
     public ResponseEntity<List<Integer>> getMejoresClientes() {
         try {
@@ -51,11 +43,7 @@ public class EstadisticaController {
         }
     }
 
-    /**
-     * Endpoint: GET /api/estadisticas/productos-menos-vendidos
-     * Obtiene los productos menos vendidos
-     * @return Lista de IDs de productos
-     */
+    // Obtener productos menos vendidos: http://localhost:9998/api/estadisticas/productos-menos-vendidos
     @GetMapping("/productos-menos-vendidos")
     public ResponseEntity<List<Integer>> getProductosMenosVendidos() {
         try {
@@ -66,11 +54,7 @@ public class EstadisticaController {
         }
     }
 
-    /**
-     * Endpoint: GET /api/estadisticas/productos-mas-vendidos
-     * Obtiene los productos más vendidos
-     * @return Lista de IDs de productos
-     */
+    // Obtener productos más vendidos: http://localhost:9998/api/estadisticas/productos-mas-vendidos
     @GetMapping("/productos-mas-vendidos")
     public ResponseEntity<List<Integer>> getProductosMasVendidos() {
         try {
@@ -81,11 +65,7 @@ public class EstadisticaController {
         }
     }
 
-    /**
-     * Endpoint: GET /api/estadisticas/adicionales-mas-consumidos
-     * Obtiene los adicionales más consumidos
-     * @return Lista de IDs de adicionales
-     */
+    // Obtener adicionales más consumidos: http://localhost:9998/api/estadisticas/adicionales-mas-consumidos
     @GetMapping("/adicionales-mas-consumidos")
     public ResponseEntity<List<Integer>> getAdicionalesMasConsumidos() {
         try {
@@ -96,11 +76,7 @@ public class EstadisticaController {
         }
     }
 
-    /**
-     * Endpoint: GET /api/estadisticas/adicionales-menos-consumidos
-     * Obtiene los adicionales menos consumidos
-     * @return Lista de IDs de adicionales
-     */
+    // Obtener adicionales menos consumidos: http://localhost:9998/api/estadisticas/adicionales-menos-consumidos
     @GetMapping("/adicionales-menos-consumidos")
     public ResponseEntity<List<Integer>> getAdicionalesMenosConsumidos() {
         try {
@@ -111,11 +87,7 @@ public class EstadisticaController {
         }
     }
 
-    /**
-     * Endpoint: GET /api/estadisticas/productos-no-recomendados
-     * Obtiene productos que generan menos ganancias
-     * @return Lista de IDs de productos
-     */
+    // Obtener productos no recomendados: http://localhost:9998/api/estadisticas/productos-no-recomendados
     @GetMapping("/productos-no-recomendados")
     public ResponseEntity<List<Integer>> getProductosNoRecomendados() {
         try {
@@ -126,11 +98,7 @@ public class EstadisticaController {
         }
     }
 
-    /**
-     * Endpoint: GET /api/estadisticas/productos-recomendados
-     * Obtiene productos que generan más ganancias
-     * @return Lista de IDs de productos
-     */
+    // Obtener productos recomendados: http://localhost:9998/api/estadisticas/productos-recomendados
     @GetMapping("/productos-recomendados")
     public ResponseEntity<List<Integer>> getProductosRecomendados() {
         try {
@@ -141,11 +109,7 @@ public class EstadisticaController {
         }
     }
 
-    /**
-     * Endpoint: GET /api/estadisticas/ingresos-totales
-     * Obtiene los ingresos totales acumulados
-     * @return Monto total de ingresos (Float)
-     */
+    // Obtener ingresos totales: http://localhost:9998/api/estadisticas/ingresos-totales
     @GetMapping("/ingresos-totales")
     public ResponseEntity<Float> getIngresosTotales() {
         try {
@@ -156,11 +120,7 @@ public class EstadisticaController {
         }
     }
 
-    /**
-     * Endpoint: GET /api/estadisticas/ingresos-netos
-     * Obtiene los ingresos netos (después de costos)
-     * @return Monto neto de ingresos (Float)
-     */
+    // Obtener ingresos netos: http://localhost:9998/api/estadisticas/ingresos-netos
     @GetMapping("/ingresos-netos")
     public ResponseEntity<Float> getIngresosNetos() {
         try {
@@ -171,11 +131,7 @@ public class EstadisticaController {
         }
     }
 
-    /**
-     * Endpoint: GET /api/estadisticas/total-pedidos
-     * Obtiene el número total de pedidos realizados
-     * @return Número total de pedidos (Integer)
-     */
+    // Obtener total de pedidos: http://localhost:9998/api/estadisticas/total-pedidos
     @GetMapping("/total-pedidos")
     public ResponseEntity<Integer> getTotalPedidos() {
         try {
@@ -186,29 +142,5 @@ public class EstadisticaController {
         }
     }
 
-    /**
-     * Endpoint: GET /api/estadisticas/resumen
-     * Obtiene un resumen completo de todas las estadísticas
-     * @return Objeto con todas las estadísticas
-     */
-    @GetMapping("/resumen")
-    public ResponseEntity<Map<String, Object>> getResumen() {
-        try {
-            Map<String, Object> resumen = new java.util.HashMap<>();
-            resumen.put("ventasPorDia", estadisticaService.ventasPorDia());
-            resumen.put("mejoresClientes", estadisticaService.mejoresClientes());
-            resumen.put("productosMasVendidos", estadisticaService.productosMasVendidos());
-            resumen.put("productosMenosVendidos", estadisticaService.productosMenosVendidos());
-            resumen.put("adicionalesMasConsumidos", estadisticaService.AdicionalesMasConsumidos());
-            resumen.put("adicionalesMenosConsumidos", estadisticaService.AdicionalesMenosConsumidos());
-            resumen.put("productosRecomendados", estadisticaService.productosRecomendados());
-            resumen.put("productosNoRecomendados", estadisticaService.productosNoRecomendados());
-            resumen.put("ingresosTotales", estadisticaService.ingresosTotales());
-            resumen.put("ingresosNetos", estadisticaService.ingresosNetos());
-            resumen.put("totalPedidos", estadisticaService.totalPedidos());
-            return ResponseEntity.ok(resumen);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
+
 }
