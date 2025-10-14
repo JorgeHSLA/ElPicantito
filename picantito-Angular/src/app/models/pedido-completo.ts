@@ -2,7 +2,7 @@ export interface PedidoProductoAdicional {
   adicionalId: number;
   nombreAdicional: string;
   cantidadAdicional: number;
-  precio?: number; // Para calcular subtotales
+  precioAdicional?: number; // Para calcular subtotales
 }
 
 export interface PedidoProducto {
@@ -10,7 +10,7 @@ export interface PedidoProducto {
   productoId: number;
   nombreProducto: string;
   cantidadProducto: number;
-  precio?: number; // Para calcular subtotales
+  precioProducto?: number; // Para calcular subtotales
   adicionales: PedidoProductoAdicional[];
 }
 

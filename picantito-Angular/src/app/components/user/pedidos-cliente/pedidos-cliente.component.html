@@ -111,6 +111,9 @@
                                         <div class="flex-grow-1">
                                             <span class="fw-semibold">{{ prod.nombreProducto }}</span>
                                             <small class="text-muted d-block">Cantidad: {{ prod.cantidadProducto }}</small>
+                                            <small class="text-success fw-bold d-block" *ngIf="prod.precioProducto">
+                                                Precio: {{ formatearMoneda(prod.precioProducto) }} c/u
+                                            </small>
                                             
                                             <!-- Adicionales -->
                                             <div *ngIf="prod.adicionales && prod.adicionales.length > 0" class="adicionales-mini mt-1">
@@ -118,8 +121,14 @@
                                                 <div *ngFor="let adic of prod.adicionales" class="ms-2">
                                                     <small class="text-secondary">
                                                         • {{ adic.nombreAdicional }} ({{ adic.cantidadAdicional }}x)
+                                                        <span *ngIf="adic.precioAdicional" class="text-success"> - {{ formatearMoneda(adic.precioAdicional) }} c/u</span>
                                                     </small>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-bold text-success" *ngIf="prod.precioProducto">
+                                                {{ formatearMoneda(calcularSubtotalProducto(prod)) }}
                                             </div>
                                         </div>
                                     </div>

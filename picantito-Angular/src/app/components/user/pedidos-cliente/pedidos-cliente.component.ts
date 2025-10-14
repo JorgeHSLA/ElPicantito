@@ -116,4 +116,21 @@ export class PedidosClienteComponent implements OnInit {
   puedeSerCancelado(pedido: PedidoCompleto): boolean {
     return ['PENDIENTE', 'PREPARANDO'].includes(pedido.estado.toUpperCase());
   }
+
+  calcularSubtotalProducto(producto: any): number {
+    if (!producto.precioProducto) return 0;
+    
+    let subtotal = producto.precioProducto * producto.cantidadProducto;
+    
+    // Agregar precio de adicionales
+    if (producto.adicionales && producto.adicionales.length > 0) {
+      for (const adicional of producto.adicionales) {
+        if (adicional.precioAdicional) {
+          subtotal += adicional.precioAdicional * adicional.cantidadAdicional;
+        }
+      }
+    }
+    
+    return subtotal;
+  }
 }

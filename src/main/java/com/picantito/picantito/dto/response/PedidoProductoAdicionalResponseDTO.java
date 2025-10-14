@@ -7,4 +7,5 @@ public class PedidoProductoAdicionalResponseDTO {
     private Integer adicionalId;
     private String nombreAdicional;
     private Integer cantidadAdicional;
+    private Double precioAdicional;
 }
