@@ -193,5 +193,61 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoRepository.save(pedido);
     }
 
+    @Override
+    public Pedido actualizarEstado(Integer id, String estado) {
+        // Validar que el pedido existe
+        var pedidoOpt = pedidoRepository.findById(id);
+        if (!pedidoOpt.isPresent()) {
+            return null;
+        }
+
+        // Actualizar estado
+        Pedido pedido = pedidoOpt.get();
+        pedido.setEstado(estado);
+
+        // Guardar cambios
+        return pedidoRepository.save(pedido);
+    }
+
+    @Override
+    public Pedido asignarRepartidorVerificado(AsignarRepartidorDTO asignacionDTO) {
+        // Validar que el pedido existe
+        var pedidoOpt = pedidoRepository.findById(asignacionDTO.getPedidoId());
+        if (!pedidoOpt.isPresent()) {
+            throw new RuntimeException("Pedido no encontrado con ID: " + asignacionDTO.getPedidoId());
+        }
+
+        Pedido pedido = pedidoOpt.get();
+
+        // Verificar que el pedido no tenga un repartidor ya asignado
+        if (pedido.getRepartidor() != null) {
+            throw new RuntimeException("El pedido ya tiene un repartidor asignado");
+        }
+
+        // Validar que el repartidor existe
+        var repartidorOpt = usuarioRepository.findById(asignacionDTO.getRepartidorId());
+        if (!repartidorOpt.isPresent()) {
+            throw new RuntimeException("Repartidor no encontrado con ID: " + asignacionDTO.getRepartidorId());
+        }
+
+        var repartidor = repartidorOpt.get();
+
+        // Verificar que tenga el rol de REPARTIDOR
+        if (!"REPARTIDOR".equals(repartidor.getRol())) {
+            throw new RuntimeException("El usuario con ID " + asignacionDTO.getRepartidorId() + 
+                                      " no tiene el rol de REPARTIDOR");
+        }
+
+        // Verificar que el repartidor esté "DISPONIBLE"
+        if (!"DISPONIBLE".equals(repartidor.getEstado())) {
+            throw new RuntimeException("El repartidor no está disponible. Estado actual: " + repartidor.getEstado());
+        }
+
+        // Asignar repartidor al pedido
+        pedido.setRepartidor(repartidor);
+
+        // Guardar cambios
+        return pedidoRepository.save(pedido);
+    }
 
 }

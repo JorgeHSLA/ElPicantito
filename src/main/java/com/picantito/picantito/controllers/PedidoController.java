@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -107,5 +108,43 @@ public class PedidoController {
         PedidoResponseDTO pedidoDTO = pedidoMapper.toDTO(pedido);
         return ResponseEntity.ok(pedidoDTO);
     }
+
+    // Actualizar estado de un pedido: http://localhost:9998/api/pedidos/{id}/estado
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<?> actualizarEstadoPedido(@PathVariable Integer id, @RequestBody String estado) {
+        try {
+            Pedido pedido = pedidoService.actualizarEstado(id, estado);
+            if (pedido == null) {
+                return new ResponseEntity<>("Pedido no encontrado con ID: " + id, HttpStatus.NOT_FOUND);
+            }
+            PedidoResponseDTO responseDTO = pedidoMapper.toDTO(pedido);
+            return ResponseEntity.ok(responseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar estado del pedido: " + e.getMessage());
+        }
+    }
+
+    // Asignar repartidor a un pedido con verificaciones: http://localhost:9998/api/pedidos/asignar-repartidor-verificado
+    @PutMapping("/asignar-repartidor-verificado")
+    public ResponseEntity<?> asignarRepartidorVerificado(@RequestBody AsignarRepartidorDTO asignacionDTO) {
+        try {
+            if (asignacionDTO.getRepartidorId() == null) {
+                return new ResponseEntity<>("Error: el id de repartidor no puede ser nulo", HttpStatus.BAD_REQUEST);
+            }
+            if (asignacionDTO.getPedidoId() == null) {
+                return new ResponseEntity<>("Error: el id de pedido no puede ser nulo", HttpStatus.BAD_REQUEST);
+            }
+            System.out.println("Recibido DTO: " + asignacionDTO);
+            Pedido pedidoModificado = pedidoService.asignarRepartidorVerificado(asignacionDTO);
+            PedidoResponseDTO responseDTO = pedidoMapper.toDTO(pedidoModificado);
+            return ResponseEntity.ok(responseDTO);
+        } catch (Exception e) {
+            System.err.println("Error asignando repartidor al pedido: " + e.getMessage());
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    
 
 }
