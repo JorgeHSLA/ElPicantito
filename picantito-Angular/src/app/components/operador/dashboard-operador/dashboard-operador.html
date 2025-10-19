@@ -1,0 +1,166 @@
+<div class="container-fluid py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="mb-3">
+        <i class="bi bi-speedometer2 me-2"></i>
+        Dashboard de Operador
+      </h2>
+      
+      <!-- Error -->
+      <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ error }}
+        <button type="button" class="btn-close" (click)="error = null"></button>
+      </div>
+
+      <!-- Loading spinner -->
+      <div *ngIf="loading" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estadísticas -->
+  <div *ngIf="!loading" class="row g-4 mb-4">
+    <!-- Total de pedidos -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card text-white bg-primary shadow">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-title text-white-50 mb-1">Total Pedidos</h6>
+              <h2 class="mb-0">{{ estadisticas.total }}</h2>
+            </div>
+            <div class="fs-1 opacity-50">
+              <i class="bi bi-cart-check"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pedidos recibidos -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card text-white bg-info shadow">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-title text-white-50 mb-1">Recibidos</h6>
+              <h2 class="mb-0">{{ estadisticas.recibidos }}</h2>
+            </div>
+            <div class="fs-1 opacity-50">
+              <i class="bi bi-inbox"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pedidos en preparación -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card text-white bg-warning shadow">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-title text-white-50 mb-1">En Preparación</h6>
+              <h2 class="mb-0">{{ estadisticas.cocinando }}</h2>
+            </div>
+            <div class="fs-1 opacity-50">
+              <i class="bi bi-fire"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pedidos enviados -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card text-white bg-success shadow">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-title text-white-50 mb-1">En Camino</h6>
+              <h2 class="mb-0">{{ estadisticas.enviados }}</h2>
+            </div>
+            <div class="fs-1 opacity-50">
+              <i class="bi bi-truck"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pedidos entregados -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card text-dark bg-light shadow">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-title text-muted mb-1">Entregados</h6>
+              <h2 class="mb-0">{{ estadisticas.entregados }}</h2>
+            </div>
+            <div class="fs-1 opacity-25">
+              <i class="bi bi-check-circle"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Repartidores disponibles -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card text-white bg-secondary shadow">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-title text-white-50 mb-1">Repartidores</h6>
+              <h2 class="mb-0">{{ estadisticas.repartidoresDisponibles }}</h2>
+              <small class="text-white-50">Disponibles</small>
+            </div>
+            <div class="fs-1 opacity-50">
+              <i class="bi bi-person-badge"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accesos rápidos -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">
+            <i class="bi bi-lightning-charge me-2"></i>
+            Accesos Rápidos
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <a [routerLink]="['/operador/gestion-pedidos']" class="btn btn-lg btn-primary w-100 d-flex align-items-center justify-content-between">
+                <span>
+                  <i class="bi bi-kanban me-2"></i>
+                  Gestionar Pedidos
+                </span>
+                <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-lg btn-outline-primary w-100 d-flex align-items-center justify-content-between" (click)="cargarEstadisticas()">
+                <span>
+                  <i class="bi bi-arrow-clockwise me-2"></i>
+                  Actualizar Datos
+                </span>
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

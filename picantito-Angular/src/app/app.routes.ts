@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
+import { OperadorGuard } from './guards/operador-guard';
 
 export const routes: Routes = [
   {
@@ -105,6 +106,26 @@ export const routes: Routes = [
       {
         path: 'usuarios/edit/:id',
         loadComponent: () => import('./components/admin/edit-usuario/edit-usuario').then(m => m.EditUsuarioComponent)
+      }
+    ]
+  },
+  // Rutas de operador
+  {
+    path: 'operador',
+    canActivate: [OperadorGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./components/operador/dashboard-operador/dashboard-operador').then(m => m.DashboardOperador)
+      },
+      {
+        path: 'gestion-pedidos',
+        loadComponent: () => import('./components/operador/gestion-pedidos/gestion-pedidos').then(m => m.GestionPedidos)
       }
     ]
   }

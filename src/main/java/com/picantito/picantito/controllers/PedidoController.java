@@ -1,12 +1,14 @@
 package com.picantito.picantito.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -113,6 +115,27 @@ public class PedidoController {
     @PutMapping("/{id}/estado")
     public ResponseEntity<?> actualizarEstadoPedido(@PathVariable Integer id, @RequestBody String estado) {
         try {
+            Pedido pedido = pedidoService.actualizarEstado(id, estado);
+            if (pedido == null) {
+                return new ResponseEntity<>("Pedido no encontrado con ID: " + id, HttpStatus.NOT_FOUND);
+            }
+            PedidoResponseDTO responseDTO = pedidoMapper.toDTO(pedido);
+            return ResponseEntity.ok(responseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar estado del pedido: " + e.getMessage());
+        }
+    }
+
+    // Actualizar estado de un pedido (PATCH con JSON): http://localhost:9998/api/pedidos/{id}/estado
+    @PatchMapping("/{id}/estado")
+    public ResponseEntity<?> actualizarEstadoPedidoPatch(@PathVariable Integer id, @RequestBody Map<String, String> body) {
+        try {
+            String estado = body.get("estado");
+            if (estado == null || estado.trim().isEmpty()) {
+                return new ResponseEntity<>("El estado no puede estar vacío", HttpStatus.BAD_REQUEST);
+            }
+            
             Pedido pedido = pedidoService.actualizarEstado(id, estado);
             if (pedido == null) {
                 return new ResponseEntity<>("Pedido no encontrado con ID: " + id, HttpStatus.NOT_FOUND);

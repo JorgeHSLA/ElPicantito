@@ -1,0 +1,163 @@
+<div class="container-fluid py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="mb-3">Gestión de Pedidos</h2>
+      
+      <!-- Mensajes de error y éxito -->
+      <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ error }}
+        <button type="button" class="btn-close" (click)="error = null"></button>
+      </div>
+
+      <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        {{ successMessage }}
+        <button type="button" class="btn-close" (click)="successMessage = null"></button>
+      </div>
+
+      <!-- Loading spinner -->
+      <div *ngIf="loading" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2">Procesando...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pedidos por estado -->
+  <div *ngIf="!loading" class="row">
+    <div *ngFor="let estado of estadosOrdenados" class="col-md-6 col-lg-3 mb-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header" [ngClass]="getColorEstado(estado)">
+          <h5 class="mb-0 text-white">
+            <i class="bi bi-clock-history me-2"></i>
+            {{ estadosLabels[estado] }}
+            <span class="badge bg-light text-dark ms-2">{{ pedidosPorEstado[estado].length }}</span>
+          </h5>
+        </div>
+        
+        <div class="card-body p-0" style="max-height: 600px; overflow-y: auto;">
+          <div *ngIf="pedidosPorEstado[estado].length === 0" class="p-3 text-center text-muted">
+            <i class="bi bi-inbox fs-3"></i>
+            <p class="mb-0 mt-2">No hay pedidos en este estado</p>
+          </div>
+
+          <div *ngFor="let pedido of pedidosPorEstado[estado]" class="border-bottom">
+            <div class="p-3">
+              <!-- Encabezado del pedido -->
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <h6 class="mb-1">
+                    <strong>Pedido #{{ pedido.id }}</strong>
+                  </h6>
+                  <small class="text-muted">
+                    <i class="bi bi-calendar3 me-1"></i>
+                    {{ formatearFecha(pedido.fechaSolicitud) }}
+                  </small>
+                </div>
+                <span class="badge rounded-pill" [ngClass]="getColorEstado(pedido.estado)">
+                  {{ pedido.estado }}
+                </span>
+              </div>
+
+              <!-- Información del cliente -->
+              <div class="mb-2">
+                <small class="text-muted">
+                  <i class="bi bi-person me-1"></i>
+                  Cliente: {{ pedido.clienteNombre || 'N/A' }}
+                </small>
+              </div>
+
+              <!-- Dirección -->
+              <div class="mb-2" *ngIf="pedido.direccion">
+                <small class="text-muted">
+                  <i class="bi bi-geo-alt me-1"></i>
+                  {{ pedido.direccion }}
+                </small>
+              </div>
+
+              <!-- Productos del pedido -->
+              <div class="mb-2">
+                <small class="fw-bold">Productos:</small>
+                <ul class="list-unstyled mb-0 ms-3">
+                  <li *ngFor="let producto of pedido.productos" class="small">
+                    <i class="bi bi-dot"></i>
+                    {{ producto.cantidadProducto }}x {{ producto.nombreProducto }}
+                    <span *ngIf="producto.adicionales && producto.adicionales.length > 0" class="text-muted">
+                      ({{ producto.adicionales.length }} adicionales)
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Total -->
+              <div class="mb-3">
+                <strong class="text-success">
+                  Total: {{ formatearMoneda(pedido.precioDeVenta) }}
+                </strong>
+              </div>
+
+              <!-- Repartidor asignado -->
+              <div *ngIf="pedido.repartidorNombre" class="mb-2">
+                <small class="badge bg-secondary">
+                  <i class="bi bi-truck me-1"></i>
+                  Repartidor: {{ pedido.repartidorNombre }}
+                </small>
+              </div>
+
+              <!-- Selector de repartidor (solo cuando está cocinando) -->
+              <div *ngIf="pedido.estado.toLowerCase() === 'cocinando' && repartidoresDisponibles.length > 0" class="mb-3">
+                <label class="form-label small mb-1">Asignar repartidor:</label>
+                <select 
+                  class="form-select form-select-sm" 
+                  [(ngModel)]="repartidorSeleccionado[pedido.id]"
+                  [disabled]="loading">
+                  <option [ngValue]="null">Seleccionar repartidor...</option>
+                  <option *ngFor="let repartidor of repartidoresDisponibles" [ngValue]="repartidor.id">
+                    {{ repartidor.nombreCompleto }} ({{ repartidor.estado }})
+                  </option>
+                </select>
+              </div>
+
+              <!-- Alerta si no hay repartidores disponibles -->
+              <div *ngIf="pedido.estado.toLowerCase() === 'cocinando' && repartidoresDisponibles.length === 0" class="alert alert-warning py-2 mb-3">
+                <small>
+                  <i class="bi bi-exclamation-triangle me-1"></i>
+                  No hay repartidores disponibles
+                </small>
+              </div>
+
+              <!-- Botón para avanzar estado -->
+              <div class="d-grid" *ngIf="puedeAvanzar(pedido.estado)">
+                <button 
+                  class="btn btn-sm"
+                  [ngClass]="{
+                    'btn-primary': pedido.estado.toLowerCase() === 'recibido',
+                    'btn-warning': pedido.estado.toLowerCase() === 'cocinando',
+                    'btn-info': pedido.estado.toLowerCase() === 'enviado'
+                  }"
+                  (click)="avanzarEstado(pedido)"
+                  [disabled]="loading">
+                  <i class="bi bi-arrow-right-circle me-1"></i>
+                  <span *ngIf="pedido.estado.toLowerCase() === 'recibido'">Iniciar Preparación</span>
+                  <span *ngIf="pedido.estado.toLowerCase() === 'cocinando'">Enviar Pedido</span>
+                  <span *ngIf="pedido.estado.toLowerCase() === 'enviado'">Marcar como Entregado</span>
+                </button>
+              </div>
+
+              <!-- Fecha de entrega -->
+              <div *ngIf="pedido.estado.toLowerCase() === 'entregado' && pedido.fechaEntrega" class="mt-2">
+                <small class="text-success">
+                  <i class="bi bi-check-circle-fill me-1"></i>
+                  Entregado: {{ formatearFecha(pedido.fechaEntrega) }}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
