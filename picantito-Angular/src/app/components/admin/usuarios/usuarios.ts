@@ -21,7 +21,9 @@ export class UsuariosComponent implements OnInit {
     nombreUsuario: '',
     telefono: '',
     correo: '',
-    contrasenia: ''
+    contrasenia: '',
+    rol: 'USER',
+    activo: true
   });
   successMessage = signal('');
   errorMessage = signal('');
@@ -47,10 +49,16 @@ export class UsuariosComponent implements OnInit {
 
   saveUsuario() {
     const usuario = this.nuevoUsuario();
-    if (!usuario.nombreCompleto || !usuario.nombreUsuario || !usuario.correo) {
-      this.errorMessage.set('Complete los campos obligatorios');
+    if (!usuario.nombreCompleto || !usuario.nombreUsuario || !usuario.correo || !usuario.contrasenia) {
+      this.errorMessage.set('Complete todos los campos obligatorios');
       return;
     }
+    
+    // Asegurar que tenga un rol válido
+    if (!usuario.rol) {
+      usuario.rol = 'USER';
+    }
+    
     this.authService.crearUsuario(usuario).subscribe({
       next: () => {
         this.successMessage.set('Usuario guardado exitosamente');
@@ -58,7 +66,11 @@ export class UsuariosComponent implements OnInit {
         this.resetForm();
         this.closeModal();
       },
-      error: () => this.errorMessage.set('Error al guardar el usuario')
+      error: (err) => {
+        console.error('Error al guardar:', err);
+        const errorMsg = err.error?.message || err.error || 'Error al guardar el usuario';
+        this.errorMessage.set(errorMsg);
+      }
     });
   }
 
@@ -66,15 +78,27 @@ export class UsuariosComponent implements OnInit {
     if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
     this.authService.eliminarUsuario(id).subscribe({
       next: () => {
-        this.successMessage.set('Usuario eliminado');
+        this.successMessage.set('Usuario eliminado exitosamente');
         this.loadUsuarios();
       },
-      error: () => this.errorMessage.set('Error al eliminar el usuario')
+      error: (err) => {
+        console.error('Error al eliminar:', err);
+        const errorMsg = err.error?.message || err.error || 'Error al eliminar el usuario';
+        this.errorMessage.set(errorMsg);
+      }
     });
   }
 
   resetForm() {
-    this.nuevoUsuario.set({ nombreCompleto: '', nombreUsuario: '', telefono: '', correo: '', contrasenia: '' });
+    this.nuevoUsuario.set({ 
+      nombreCompleto: '', 
+      nombreUsuario: '', 
+      telefono: '', 
+      correo: '', 
+      contrasenia: '',
+      rol: 'USER',
+      activo: true
+    });
   }
 
   updateUsuarioField(field: keyof Usuario, value: any) {

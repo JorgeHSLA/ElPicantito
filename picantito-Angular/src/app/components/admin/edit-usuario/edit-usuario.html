@@ -17,6 +17,20 @@
         </a>
       </div>
 
+      <!-- ALERTAS -->
+      @if (successMessage()) {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <span>{{ successMessage() }}</span>
+          <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
+        </div>
+      }
+      @if (errorMessage()) {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <span>{{ errorMessage() }}</span>
+          <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+        </div>
+      }
+
       <!-- FORMULARIO DE EDICIÓN -->
       <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -73,6 +87,19 @@
                   <input type="password" class="form-control" id="contrasenia" 
                          [value]="usuario().contrasenia"
                          (input)="updateField('contrasenia', $any($event.target).value)">
+                </div>
+                
+                <div class="mb-3">
+                  <label for="rol" class="form-label">Rol:</label>
+                  <select class="form-select" id="rol"
+                          [value]="usuario().rol || 'USER'"
+                          (change)="updateField('rol', $any($event.target).value)"
+                          required>
+                    <option value="USER">Usuario</option>
+                    <option value="ADMIN">Administrador</option>
+                    <option value="OPERADOR">Operador</option>
+                    <option value="REPARTIDOR">Repartidor</option>
+                  </select>
                 </div>
                 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">

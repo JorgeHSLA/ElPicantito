@@ -58,8 +58,12 @@
                     <td>{{ usuario.telefono }}</td>
                     <td>{{ usuario.correo }}</td>
                     <td>
-                      @if (usuario.nombreUsuario === 'admin') {
+                      @if (usuario.rol === 'ADMIN') {
                         <span class="badge bg-danger">Admin</span>
+                      } @else if (usuario.rol === 'OPERADOR') {
+                        <span class="badge bg-warning">Operador</span>
+                      } @else if (usuario.rol === 'REPARTIDOR') {
+                        <span class="badge bg-info">Repartidor</span>
                       } @else {
                         <span class="badge bg-primary">Usuario</span>
                       }
@@ -140,6 +144,19 @@
                    [value]="nuevoUsuario().contrasenia"
                    (input)="updateUsuarioField('contrasenia', $any($event.target).value)"
                    required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="rol" class="form-label">Rol:</label>
+            <select class="form-select" id="rol"
+                    [value]="nuevoUsuario().rol || 'USER'"
+                    (change)="updateUsuarioField('rol', $any($event.target).value)"
+                    required>
+              <option value="USER">Usuario</option>
+              <option value="ADMIN">Administrador</option>
+              <option value="OPERADOR">Operador</option>
+              <option value="REPARTIDOR">Repartidor</option>
+            </select>
           </div>
         </div>
         <div class="modal-footer">

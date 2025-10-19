@@ -72,7 +72,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setPrecioDeAdquisicion(pedidoDTO.getPrecioDeAdquisicion());
         pedido.setFechaEntrega(pedidoDTO.getFechaEntrega());
         pedido.setFechaSolicitud(new Timestamp(System.currentTimeMillis()));
-        pedido.setEstado(pedidoDTO.getEstado() != null ? pedidoDTO.getEstado() : "PENDIENTE");
+        pedido.setEstado(pedidoDTO.getEstado() != null ? pedidoDTO.getEstado() : "RECIBIDO");
         pedido.setDireccion(pedidoDTO.getDireccion());
         
         // Validar y asignar cliente

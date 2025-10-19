@@ -21,8 +21,13 @@ export class EditUsuarioComponent implements OnInit {
     nombreUsuario: '',
     telefono: '',
     correo: '',
-    contrasenia: ''
+    contrasenia: '',
+    rol: 'USER',
+    activo: true
   });
+  
+  errorMessage = signal('');
+  successMessage = signal('');
 
   constructor(
     private route: ActivatedRoute,
@@ -41,24 +46,41 @@ export class EditUsuarioComponent implements OnInit {
         if (usuario) {
           this.usuario.set(usuario);
         } else {
-          this.router.navigate(['/admin/usuarios']);
+          this.errorMessage.set('Usuario no encontrado');
+          setTimeout(() => this.router.navigate(['/admin/usuarios']), 2000);
         }
       },
-      error: () => this.router.navigate(['/admin/usuarios'])
+      error: (err) => {
+        console.error('Error al cargar usuario:', err);
+        this.errorMessage.set('Error al cargar el usuario');
+        setTimeout(() => this.router.navigate(['/admin/usuarios']), 2000);
+      }
     });
   }
 
   updateUsuario() {
-    try {
-      const u = this.usuario();
-      if (!u.id) return;
-      this.authService.actualizarUsuario(u.id, u).subscribe({
-        next: () => this.router.navigate(['/admin/usuarios']),
-        error: (error) => console.error('Error al actualizar usuario:', error)
-      });
-    } catch {
-      console.error('Error al actualizar usuario');
+    const u = this.usuario();
+    if (!u.id) {
+      this.errorMessage.set('ID de usuario no válido');
+      return;
     }
+    
+    if (!u.nombreCompleto || !u.nombreUsuario || !u.correo) {
+      this.errorMessage.set('Complete todos los campos obligatorios');
+      return;
+    }
+    
+    this.authService.actualizarUsuario(u.id, u).subscribe({
+      next: () => {
+        this.successMessage.set('Usuario actualizado exitosamente');
+        setTimeout(() => this.router.navigate(['/admin/usuarios']), 1500);
+      },
+      error: (err) => {
+        console.error('Error al actualizar usuario:', err);
+        const errorMsg = err.error?.message || err.error || 'Error al actualizar el usuario';
+        this.errorMessage.set(errorMsg);
+      }
+    });
   }
 
   updateField(field: keyof Usuario, value: any) {
