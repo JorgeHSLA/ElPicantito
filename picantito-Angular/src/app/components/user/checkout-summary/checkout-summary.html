@@ -143,15 +143,6 @@
                                       required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="fechaEntrega" class="form-label">Fecha de entrega preferida</label>
-                            <input type="datetime-local" 
-                                   class="form-control" 
-                                   id="fechaEntrega" 
-                                   [(ngModel)]="customerInfo.fechaEntrega"
-                                   [min]="minDateTime">
-                            <small class="form-text text-muted">Si no especificas, entregaremos lo antes posible</small>
-                        </div>
-                        <div class="mb-3">
                             <label for="telefono" class="form-label">Teléfono *</label>
                             <input type="tel" 
                                    class="form-control" 
@@ -190,14 +181,10 @@
                                     <span>Adicionales:</span>
                                     <span>{{ formatearMoneda(cartSummary()!.subtotalAdicionales) }}</span>
                                 </div>
-                                <div class="summary-row d-flex justify-content-between">
-                                    <span>Domicilio:</span>
-                                    <span>{{ formatearMoneda(domicilioCost()) }}</span>
-                                </div>
                                 <hr>
                                 <div class="summary-row total d-flex justify-content-between">
                                     <strong>Total a Pagar:</strong>
-                                    <strong class="text-success">{{ formatearMoneda(cartSummary()!.total + domicilioCost()) }}</strong>
+                                    <strong class="text-success">{{ formatearMoneda(cartSummary()!.total) }}</strong>
                                 </div>
                             </div>
                         </div>

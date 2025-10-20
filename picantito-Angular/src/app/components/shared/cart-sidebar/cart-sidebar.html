@@ -91,13 +91,9 @@
                 <span>Adicionales:</span>
                 <span class="fw-bold">${{ cartSummary()?.subtotalAdicionales || 0 | number:'1.0-0' }}</span>
             </div>
-            <div class="summary-row">
-                <span>Domicilio:</span>
-                <span class="fw-bold">$5.000</span>
-            </div>
             <div class="summary-row total">
                 <span>Total:</span>
-                <span class="fw-bold">${{ (cartSummary()?.total || 0) + 5000 | number:'1.0-0' }}</span>
+                <span class="fw-bold">${{ cartSummary()?.total || 0 | number:'1.0-0' }}</span>
             </div>
         </div>
 

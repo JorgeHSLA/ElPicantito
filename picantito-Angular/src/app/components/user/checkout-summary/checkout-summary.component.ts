@@ -18,7 +18,6 @@ export class CheckoutSummaryComponent {
   cartItems = signal<CartItem[]>([]);
   cartSummary = signal<CartSummary | null>(null);
   subtotal = signal(0);
-  domicilioCost = signal(5000); // Costo fijo de domicilio
   total = signal(0);
   isProcessingOrder = signal(false);
 
@@ -26,12 +25,10 @@ export class CheckoutSummaryComponent {
   customerInfo = {
     direccion: '',
     telefono: '',
-    observaciones: '',
-    fechaEntrega: ''
+    observaciones: ''
   };
 
   erroresValidacion: string[] = [];
-  minDateTime = '';
 
   constructor(
     private carritoService: CarritoService,
@@ -45,11 +42,6 @@ export class CheckoutSummaryComponent {
       return;
     }
 
-    // Configurar fecha mínima (hoy + 1 hora)
-    const now = new Date();
-    now.setHours(now.getHours() + 1);
-    this.minDateTime = now.toISOString().slice(0, 16);
-
     // Effect para manejar items del carrito (solo sistema nuevo)
     effect(() => {
       const items = this.carritoService.cartItems();
@@ -60,10 +52,10 @@ export class CheckoutSummaryComponent {
 
       if (summary) {
         this.subtotal.set(summary.total);
-        this.total.set(summary.total + this.domicilioCost());
+        this.total.set(summary.total);
       } else {
         this.subtotal.set(0);
-        this.total.set(this.domicilioCost());
+        this.total.set(0);
       }
 
       // Si no hay items, redirigir a tienda
@@ -106,10 +98,9 @@ export class CheckoutSummaryComponent {
     console.log('🔄 Procesando pedido...');
     this.isProcessingOrder.set(true);
 
-    // Usar siempre el nuevo sistema
+    // Usar siempre el nuevo sistema (sin fecha de entrega)
     this.pedidoManager.procesarPedidoDesdeCarrito(
-      this.customerInfo.direccion.trim(),
-      this.customerInfo.fechaEntrega || undefined
+      this.customerInfo.direccion.trim()
     ).subscribe({
       next: (pedidoCreado) => {
         console.log('✅ Pedido creado exitosamente:', pedidoCreado);
@@ -119,7 +110,7 @@ export class CheckoutSummaryComponent {
         
         alert(`¡Pedido confirmado! 
         Número de pedido: ${pedidoCreado.id}
-        Total: ${this.formatearMoneda((summary!.total) + this.domicilioCost())}
+        Total: ${this.formatearMoneda(summary!.total)}
         
         Recibirás una confirmación pronto.`);
         
@@ -185,7 +176,7 @@ export class CheckoutSummaryComponent {
     return this.pedidoManager.formatearMoneda(valor);
   }
 
-  getTotalWithDelivery(): number {
-    return (this.cartSummary()?.total || 0) + this.domicilioCost();
+  getTotal(): number {
+    return this.cartSummary()?.total || 0;
   }
 }

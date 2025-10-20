@@ -13,7 +13,6 @@ export interface CartItem {
 export class CartService {
   private cartItems = signal<CartItem[]>([]);
   private isCartOpen = signal(false);
-  private readonly DOMICILIO_COST = 5000;
 
   constructor(private authService: AuthService) {
     this.loadCartFromStorage();
@@ -124,14 +123,9 @@ export class CartService {
     );
   }
 
-  // Obtener costo de domicilio
-  getDomicilioCost(): number {
-    return this.cartItems().length > 0 ? this.DOMICILIO_COST : 0;
-  }
-
   // Obtener total final
   getTotal(): number {
-    return this.getSubtotal() + this.getDomicilioCost();
+    return this.getSubtotal();
   }
 
   // Verificar si el usuario está autenticado

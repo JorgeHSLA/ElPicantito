@@ -153,8 +153,8 @@ export class RastreoPedidoComponent implements OnInit {
         }
       ],
       subtotal: 40000,
-      delivery: 5000,
-      total: 45000,
+      delivery: 0,
+      total: 40000,
       paymentMethod: 'Tarjeta de Crédito'
     };
 

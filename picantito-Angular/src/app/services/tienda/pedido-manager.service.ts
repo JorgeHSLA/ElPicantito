@@ -17,7 +17,7 @@ export class PedidoManagerService {
   /**
    * Procesar pedido desde el carrito actual
    */
-  procesarPedidoDesdeCarrito(direccion: string, fechaEntrega?: string): Observable<PedidoCompleto> {
+  procesarPedidoDesdeCarrito(direccion: string): Observable<PedidoCompleto> {
     const summary = this.carritoService.getCartSummary();
     
     if (summary.items.length === 0) {
@@ -39,21 +39,27 @@ export class PedidoManagerService {
       }))
     }));
 
+    // La fecha de entrega se calcula automáticamente en el backend (1 hora después)
+    const fechaEntregaFinal = this.convertirATimestampSQL(this.getDefaultFechaEntrega());
+
     const pedidoRequest: CrearPedidoRequest = {
       direccion,
       clienteId: usuario.id,
-      fechaEntrega: fechaEntrega || this.getDefaultFechaEntrega(),
+      fechaEntrega: fechaEntregaFinal,
       productos
     };
 
+    console.log('📤 Enviando pedido al backend:', pedidoRequest);
+
     return this.pedidoRestService.crearPedido(pedidoRequest).pipe(
       map(pedidoCreado => {
+        console.log('✅ Pedido creado exitosamente en el backend:', pedidoCreado);
         // Limpiar carrito después de crear el pedido exitosamente
         this.carritoService.limpiarCarritoCompleto();
         return pedidoCreado;
       }),
       catchError(error => {
-        console.error('Error al procesar pedido:', error);
+        console.error('❌ Error al procesar pedido:', error);
         return throwError(() => new Error('Error al procesar el pedido. Intente nuevamente.'));
       })
     );
@@ -159,6 +165,22 @@ export class PedidoManagerService {
     const ahora = new Date();
     const fechaEntrega = new Date(ahora.getTime() + 60 * 60 * 1000); // 1 hora después
     return fechaEntrega.toISOString();
+  }
+
+  /**
+   * Convertir fecha ISO a formato Timestamp SQL (yyyy-MM-dd HH:mm:ss)
+   */
+  private convertirATimestampSQL(fechaISO: string): string {
+    const fecha = new Date(fechaISO);
+    
+    const year = fecha.getFullYear();
+    const month = String(fecha.getMonth() + 1).padStart(2, '0');
+    const day = String(fecha.getDate()).padStart(2, '0');
+    const hours = String(fecha.getHours()).padStart(2, '0');
+    const minutes = String(fecha.getMinutes()).padStart(2, '0');
+    const seconds = String(fecha.getSeconds()).padStart(2, '0');
+    
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
   /**

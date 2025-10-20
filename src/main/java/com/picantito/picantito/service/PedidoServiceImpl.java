@@ -66,13 +66,32 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     @Transactional //  operaciones se realizan en una sola transacción de base de datos, lo que significa:
     public Pedido crearPedido(CrearPedidoDTO pedidoDTO) {
+        System.out.println("Creando pedido - DTO recibido: " + pedidoDTO);
+        
         // Crear el pedido principal
         Pedido pedido = new Pedido();
-        pedido.setPrecioDeVenta(pedidoDTO.getPrecioDeVenta());
-        pedido.setPrecioDeAdquisicion(pedidoDTO.getPrecioDeAdquisicion());
-        pedido.setFechaEntrega(pedidoDTO.getFechaEntrega());
+        
+        // Inicializar precios (se calcularán después con los productos)
+        Float precioDeVenta = 0.0f;
+        Float precioDeAdquisicion = 0.0f;
+        
+        // Fecha de solicitud es siempre ahora
         pedido.setFechaSolicitud(new Timestamp(System.currentTimeMillis()));
-        pedido.setEstado(pedidoDTO.getEstado() != null ? pedidoDTO.getEstado() : "RECIBIDO");
+        
+        // Fecha de entrega: convertir desde String si viene
+        Timestamp fechaEntrega = pedidoDTO.getFechaEntregaAsTimestamp();
+        if (fechaEntrega != null) {
+            pedido.setFechaEntrega(fechaEntrega);
+        } else {
+            // Por defecto: 1 hora después de la solicitud
+            Timestamp fechaEntregaPorDefecto = new Timestamp(System.currentTimeMillis() + (60 * 60 * 1000));
+            pedido.setFechaEntrega(fechaEntregaPorDefecto);
+        }
+        
+        System.out.println("Fecha solicitud: " + pedido.getFechaSolicitud());
+        System.out.println("Fecha entrega: " + pedido.getFechaEntrega());
+        
+        pedido.setEstado(pedidoDTO.getEstado() != null ? pedidoDTO.getEstado().toUpperCase() : "RECIBIDO");
         pedido.setDireccion(pedidoDTO.getDireccion());
         
         // Validar y asignar cliente
@@ -101,11 +120,14 @@ public class PedidoServiceImpl implements PedidoService {
             pedido.setRepartidor(repartidor);
         }
         
-        // Guardar pedido
+        // Guardar pedido primero para obtener su ID
         pedido = pedidoRepository.save(pedido);
+        System.out.println("💾 Pedido guardado con ID: " + pedido.getId());
         
-        // Crear productos del pedido
+        // Crear productos del pedido y calcular precios
         if (pedidoDTO.getProductos() != null && !pedidoDTO.getProductos().isEmpty()) {
+            System.out.println("🛒 Procesando " + pedidoDTO.getProductos().size() + " productos...");
+            
             for (PedidoProductoDTO productoDTO : pedidoDTO.getProductos()) {
                 // Validar que el producto existe
                 var productoOpt = productoRepository.findById(productoDTO.getProductoId());
@@ -113,21 +135,39 @@ public class PedidoServiceImpl implements PedidoService {
                     throw new RuntimeException("Producto no encontrado con ID: " + productoDTO.getProductoId());
                 }
                 
+                var producto = productoOpt.get();
+                
                 // Validar cantidad
                 if (productoDTO.getCantidadProducto() == null || productoDTO.getCantidadProducto() <= 0) {
                     throw new RuntimeException("La cantidad del producto debe ser mayor a cero");
                 }
                 
+                // Calcular precio de este producto
+                if (producto.getPrecioDeVenta() != null) {
+                    float subtotal = producto.getPrecioDeVenta() * productoDTO.getCantidadProducto();
+                    precioDeVenta += subtotal;
+                    System.out.println("Producto: " + producto.getNombre() + 
+                                     " - Precio: " + producto.getPrecioDeVenta() + 
+                                     " x " + productoDTO.getCantidadProducto() + 
+                                     " = " + subtotal);
+                }
+                
+                if (producto.getPrecioDeAdquisicion() != null) {
+                    precioDeAdquisicion += producto.getPrecioDeAdquisicion() * productoDTO.getCantidadProducto();
+                }
+                
                 PedidoProducto pedidoProducto = new PedidoProducto();
                 pedidoProducto.setPedido(pedido);
-                pedidoProducto.setProducto(productoOpt.get());
+                pedidoProducto.setProducto(producto);
                 pedidoProducto.setCantidadProducto(productoDTO.getCantidadProducto());
                 
                 // Guardar pedido producto
                 pedidoProducto = pedidoProductoRepository.save(pedidoProducto);
                 
-                // Crear adicionales si existen
+                // Crear adicionales si existen y calcular sus precios
                 if (productoDTO.getAdicionales() != null && !productoDTO.getAdicionales().isEmpty()) {
+                    System.out.println("Procesando " + productoDTO.getAdicionales().size() + " adicionales...");
+                    
                     for (var adicionalDTO : productoDTO.getAdicionales()) {
                         // Validar que el adicional existe
                         var adicionalOpt = adicionalRepository.findById(adicionalDTO.getAdicionalId());
@@ -135,11 +175,25 @@ public class PedidoServiceImpl implements PedidoService {
                             throw new RuntimeException("Adicional no encontrado con ID: " + adicionalDTO.getAdicionalId());
                         }
                         
-                        var adicional = adicionalOpt.get(); // Obtener el objeto adicional
+                        var adicional = adicionalOpt.get();
                         
                         // Validar cantidad
                         if (adicionalDTO.getCantidadAdicional() == null || adicionalDTO.getCantidadAdicional() <= 0) {
                             throw new RuntimeException("La cantidad del adicional debe ser mayor a cero");
+                        }
+                        
+                        // Calcular precio del adicional
+                        if (adicional.getPrecioDeVenta() != null) {
+                            float subtotal = adicional.getPrecioDeVenta() * adicionalDTO.getCantidadAdicional();
+                            precioDeVenta += subtotal;
+                            System.out.println("Adicional: " + adicional.getNombre() + 
+                                             " - Precio: " + adicional.getPrecioDeVenta() + 
+                                             " x " + adicionalDTO.getCantidadAdicional() + 
+                                             " = " + subtotal);
+                        }
+                        
+                        if (adicional.getPrecioDeAdquisicion() != null) {
+                            precioDeAdquisicion += adicional.getPrecioDeAdquisicion() * adicionalDTO.getCantidadAdicional();
                         }
                         
                         PedidoProductoAdicional pedidoProductoAdicional = new PedidoProductoAdicional();
@@ -151,7 +205,7 @@ public class PedidoServiceImpl implements PedidoService {
                         
                         pedidoProductoAdicional.setId(id);
                         pedidoProductoAdicional.setPedidoProducto(pedidoProducto);
-                        pedidoProductoAdicional.setAdicional(adicional); // Establecer la referencia al objeto Adicional
+                        pedidoProductoAdicional.setAdicional(adicional);
                         pedidoProductoAdicional.setCantidadAdicional(adicionalDTO.getCantidadAdicional());
                         
                         // Guardar el adicional del producto
@@ -161,6 +215,20 @@ public class PedidoServiceImpl implements PedidoService {
             }
         }
         
+        // Actualizar los precios calculados en el pedido
+        pedido.setPrecioDeVenta(precioDeVenta);
+        pedido.setPrecioDeAdquisicion(precioDeAdquisicion);
+        
+        // Guardar el pedido con los precios actualizados
+        pedido = pedidoRepository.save(pedido);
+        
+        System.out.println("Pedido creado exitosamente:");
+        System.out.println("ID: " + pedido.getId());
+        System.out.println("Precio Venta: $" + precioDeVenta);
+        System.out.println("Precio Adquisición: $" + precioDeAdquisicion);
+        System.out.println("Fecha Solicitud: " + pedido.getFechaSolicitud());
+        System.out.println("Fecha Entrega: " + pedido.getFechaEntrega());
+
         // Recargar el pedido completo para asegurar que todos los datos estén actualizados
         return pedidoRepository.findById(pedido.getId()).orElse(pedido);
     }
