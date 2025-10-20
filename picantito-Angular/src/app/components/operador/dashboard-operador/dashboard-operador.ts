@@ -1,15 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { GestionPedidosService } from '../../../services/gestion-pedidos.service';
 import { RepartidorService } from '../../../services/repartidor.service';
 import { PedidoCompleto } from '../../../models/pedido-completo';
+import { Repartidor } from '../../../models/repartidor';
 import { OperadorNavbarComponent } from '../../shared/operador-navbar/operador-navbar.component';
 import { OperadorSidebarComponent } from '../../shared/operador-sidebar/operador-sidebar.component';
 
 @Component({
   selector: 'app-dashboard-operador',
-  imports: [CommonModule, RouterLink, OperadorNavbarComponent, OperadorSidebarComponent],
+  imports: [CommonModule, OperadorNavbarComponent, OperadorSidebarComponent],
   templateUrl: './dashboard-operador.html',
   styleUrl: './dashboard-operador.css'
 })
@@ -18,6 +18,7 @@ export class DashboardOperador implements OnInit {
   private repartidorService = inject(RepartidorService);
 
   pedidos: PedidoCompleto[] = [];
+  repartidores: Repartidor[] = [];
   estadisticas = {
     recibidos: 0,
     cocinando: 0,
@@ -52,10 +53,13 @@ export class DashboardOperador implements OnInit {
       }
     });
 
-    // Cargar repartidores disponibles
-    this.repartidorService.getRepartidoresDisponibles().subscribe({
+    // Cargar todos los repartidores
+    this.repartidorService.getRepartidores().subscribe({
       next: (repartidores) => {
-        this.estadisticas.repartidoresDisponibles = repartidores.length;
+        this.repartidores = repartidores;
+        this.estadisticas.repartidoresDisponibles = repartidores.filter(
+          r => r.estado === 'DISPONIBLE'
+        ).length;
       },
       error: (err) => {
         console.error('Error al cargar repartidores:', err);
