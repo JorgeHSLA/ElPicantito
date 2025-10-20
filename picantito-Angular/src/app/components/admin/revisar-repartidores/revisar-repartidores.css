@@ -1,50 +1,89 @@
 .sidebar {
-  height: calc(100vh - 56px);
+    height: calc(100vh - 56px);
 }
 
-.card-header h5 { margin: 0; }
+.card-header h5 {
+    margin: 0;
+}
 
-.badge { text-transform: capitalize; }
+.badge {
+    text-transform: capitalize;
+}
+
 
 /* Solo letras blancas dentro de las tablas en negrita */
-table.table .text-white { font-weight: 700; }
-table.table .badge.bg-primary { font-weight: 700; }
-table.table .badge.bg-success { font-weight: 700; }
+
+table.table .text-white {
+    font-weight: 700;
+}
+
+table.table .badge.bg-primary {
+    font-weight: 700;
+}
+
+table.table .badge.bg-success {
+    font-weight: 700;
+}
+
 
 /* Cambiar a negro SOLO las letras blancas dentro de la tabla (badges y botones) */
-table.table .text-white { color: #000 !important; }
+
+table.table .text-white {
+    color: #000 !important;
+}
+
 table.table .badge.bg-primary,
-table.table .badge.bg-success { color: #000 !important; }
-table.table .btn.btn-primary { color: #000 !important; }
+table.table .badge.bg-success {
+    color: #000 !important;
+}
+
+table.table .btn.btn-primary {
+    color: #000 !important;
+}
+
 
 /* Mejora de contraste: cambiar fondo de los botones dentro de la tabla
    para que el texto negro sea legible y el color represente la acción */
+
 table.table .btn.btn-outline-success {
-  background-color: #d4edda; /* verde claro */
-  border-color: #28a745;
-  color: #000 !important;
+    background-color: #d4edda;
+    /* verde claro */
+    border-color: #28a745;
+    color: #000 !important;
 }
+
 table.table .btn.btn-outline-danger {
-  background-color: #f8d7da; /* rojo claro */
-  border-color: #dc3545;
-  color: #000 !important;
+    background-color: #f8d7da;
+    /* rojo claro */
+    border-color: #dc3545;
+    color: #000 !important;
 }
+
 table.table .btn.btn-outline-secondary {
-  background-color: #e2e3e5; /* gris claro */
-  border-color: #6c757d;
-  color: #000 !important;
+    background-color: #e2e3e5;
+    /* gris claro */
+    border-color: #6c757d;
+    color: #000 !important;
 }
+
 table.table .btn.btn-primary {
-  background-color: #cfe2ff; /* azul claro */
-  border-color: #0d6efd;
+    background-color: #cfe2ff;
+    /* azul claro */
+    border-color: #0d6efd;
 }
+
 
 /* SOLO los items de la columna ESTADO (col 4) en ambas tablas con texto blanco y +2px tamaño */
+
 table.table tbody tr td:nth-child(4) .badge {
-  color: #fff !important;
-  font-weight: 700;
-  font-size: calc(0.75rem + 2px);
+    color: #fff !important;
+    font-weight: 700;
+    font-size: calc(0.75rem + 2px);
 }
 
+
 /* Texto de solo lectura: "Repartidor ID: X" en negro puro */
-table.table .text-dark { color: #000 !important; }
+
+table.table .text-dark {
+    color: #000 !important;
+}

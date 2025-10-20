@@ -37,6 +37,17 @@ export class RevisarRepartidoresComponent implements OnInit {
     this.cargarDatos();
   }
 
+  // Utils repartidor
+  isRepartidorInactivo(rep?: Repartidor | null): boolean {
+    if (!rep) return false;
+    return (rep.estado || '').toUpperCase() === 'INACTIVO' || rep.activo === false;
+  }
+
+  getRepartidorById(id?: number): Repartidor | undefined {
+    if (!id) return undefined;
+    return this.repartidoresActivos().find(r => r.id === id);
+  }
+
   private cargarDatos(): void {
     this.loading.set(true);
     this.errorMessage.set('');
@@ -81,6 +92,35 @@ export class RevisarRepartidoresComponent implements OnInit {
     return idx !== -1 && idx < this.estadosOrdenados.length - 1;
   }
 
+  // Expuesto para template: ¿el siguiente estado es 'enviado'?
+  nextIsEnviado(estado: string | undefined): boolean {
+    const siguiente = this.getSiguienteEstado(estado || '');
+    return siguiente === 'enviado';
+  }
+
+  // Id de repartidor seleccionado o el ya asignado al pedido
+  getRepartidorIdParaPedido(pedido: PedidoCompleto): number | undefined {
+    return this.repartidorSeleccionado[pedido.id] !== undefined
+      ? this.repartidorSeleccionado[pedido.id]
+      : pedido.repartidorId;
+  }
+
+  // Bloquear avanzar si el siguiente es 'enviado' y el repartidor está INACTIVO
+  isBloqueadoAvanzar(pedido: PedidoCompleto): boolean {
+    if (!this.nextIsEnviado(pedido.estado)) return false;
+    const repId = this.getRepartidorIdParaPedido(pedido);
+    if (!repId) return false; // la falta de selección se maneja con mensaje al hacer clic
+    const rep = this.getRepartidorById(repId);
+    return this.isRepartidorInactivo(rep);
+  }
+
+  // Deshabilitar botón Asignar si el seleccionado está INACTIVO
+  isAsignarDisabled(pedidoId: number): boolean {
+    const repId = this.repartidorSeleccionado[pedidoId];
+    const rep = this.getRepartidorById(repId);
+    return this.isRepartidorInactivo(rep);
+  }
+
   // Acciones
   avanzarEstado(pedido: PedidoCompleto): void {
     const siguiente = this.getSiguienteEstado(pedido.estado);
@@ -91,6 +131,14 @@ export class RevisarRepartidoresComponent implements OnInit {
       const repId = this.repartidorSeleccionado[pedido.id] ?? pedido.repartidorId;
       if (!repId) {
         this.errorMessage.set('Debe seleccionar un repartidor antes de enviar el pedido');
+        setTimeout(() => this.errorMessage.set(''), 4000);
+        return;
+      }
+
+      // Validar que el repartidor no esté INACTIVO
+      const rep = this.getRepartidorById(repId);
+      if (this.isRepartidorInactivo(rep)) {
+        this.errorMessage.set('El repartidor seleccionado está INACTIVO y no puede ser asignado');
         setTimeout(() => this.errorMessage.set(''), 4000);
         return;
       }
@@ -106,6 +154,13 @@ export class RevisarRepartidoresComponent implements OnInit {
     const repId = this.repartidorSeleccionado[pedidoId];
     if (!repId) {
       this.errorMessage.set('Seleccione un repartidor para asignar');
+      setTimeout(() => this.errorMessage.set(''), 3000);
+      return;
+    }
+    // Validar estado del repartidor
+    const rep = this.getRepartidorById(repId);
+    if (this.isRepartidorInactivo(rep)) {
+      this.errorMessage.set('No se puede asignar un repartidor INACTIVO');
       setTimeout(() => this.errorMessage.set(''), 3000);
       return;
     }

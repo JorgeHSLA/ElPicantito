@@ -1,133 +1,132 @@
 <app-admin-navbar></app-admin-navbar>
 
 <div class="container-fluid">
-  <div class="row">
-    <!-- SIDEBAR -->
-    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-      <app-admin-sidebar></app-admin-sidebar>
-    </nav>
+    <div class="row">
+        <!-- SIDEBAR -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <app-admin-sidebar></app-admin-sidebar>
+        </nav>
 
-    <!-- MAIN -->
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-      <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-        <h1 class="h2">Revisar Repartidores</h1>
-      </div>
-
-      <!-- Mensajes -->
-  <div *ngIf="errorMessage()" class="alert alert-danger">{{ errorMessage() }}</div>
-  <div *ngIf="successMessage()" class="alert alert-success">{{ successMessage() }}</div>
-
-  <!-- Listas -->
-  <div class="row g-4">
-        <section class="col-12">
-          <div class="card shadow-sm">
-            <div class="card-header bg-dark text-white">
-              <h5 class="mb-0">Pedidos</h5>
+        <!-- MAIN -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                <h1 class="h2">Revisar Repartidores</h1>
             </div>
-            <div class="card-body p-0">
-              <div class="table-responsive">
-                <table class="table table-striped mb-0">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Cliente</th>
-                      <th>Dirección</th>
-                      <th>Estado</th>
-                      <th>Repartidor</th>
-                      <th style="width: 340px;">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (pedido of pedidosActivos(); track pedido.id) {
-                      <tr>
-                        <td>{{ pedido.id }}</td>
-                        <td>{{ pedido.clienteNombre }}</td>
-                        <td>{{ pedido.direccion }}</td>
-                        <td><span class="badge bg-primary text-uppercase">{{ pedido.estado }}</span></td>
-                        <td>{{ pedido.repartidorNombre || '—' }}</td>
-                        <td>
-                          @if (((pedido.estado || '').toLowerCase() === 'entregado') && pedido.repartidorId) {
-                            <span class="text-dark">Repartidor ID: <strong>{{ pedido.repartidorId }}</strong></span>
-                          } @else {
-                            <div class="d-flex gap-2 align-items-center">
-                              <select class="form-select form-select-sm" [(ngModel)]="repartidorSeleccionado[pedido.id]">
-                                <option [ngValue]="undefined">Seleccionar repartidor</option>
-                                @for (r of repartidoresActivos(); track r.id) {
-                                  <option [ngValue]="r.id">{{ r.nombreCompleto }} ({{ r.estado || '—' }})</option>
-                                }
-                              </select>
-                              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="asignarRepartidorDirecto(pedido.id)">
+
+            <!-- Mensajes -->
+            <div *ngIf="errorMessage()" class="alert alert-danger">{{ errorMessage() }}</div>
+            <div *ngIf="successMessage()" class="alert alert-success">{{ successMessage() }}</div>
+
+            <!-- Listas -->
+            <div class="row g-4">
+                <section class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Pedidos</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Cliente</th>
+                                            <th>Dirección</th>
+                                            <th>Estado</th>
+                                            <th>Repartidor</th>
+                                            <th style="width: 340px;">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (pedido of pedidosActivos(); track pedido.id) {
+                                        <tr>
+                                            <td>{{ pedido.id }}</td>
+                                            <td>{{ pedido.clienteNombre }}</td>
+                                            <td>{{ pedido.direccion }}</td>
+                                            <td><span class="badge bg-primary text-uppercase">{{ pedido.estado }}</span></td>
+                                            <td>{{ pedido.repartidorNombre || '—' }}</td>
+                                            <td>
+                                                @if (((pedido.estado || '').toLowerCase() === 'entregado') && pedido.repartidorId) {
+                                                <span class="text-dark">Repartidor ID: <strong>{{ pedido.repartidorId }}</strong></span> } @else {
+                                                <div class="d-flex gap-2 align-items-center">
+                                                                                                        <select class="form-select form-select-sm" [(ngModel)]="repartidorSeleccionado[pedido.id]">
+                                                                <option [ngValue]="undefined">Seleccionar repartidor</option>
+                                                                @for (r of repartidoresActivos(); track r.id) {
+                                                                    <option [ngValue]="r.id" [disabled]="isRepartidorInactivo(r)">
+                                                                        {{ r.nombreCompleto }} ({{ r.estado || '—' }})
+                                                                    </option>
+                                                                }
+                                                            </select>
+                                                                                                                         <button type="button" class="btn btn-sm btn-outline-secondary" (click)="asignarRepartidorDirecto(pedido.id)" [disabled]="isAsignarDisabled(pedido.id)">
                                 Asignar
                               </button>
-                              <button type="button" class="btn btn-sm btn-primary" [disabled]="!puedeAvanzar(pedido.estado)" (click)="avanzarEstado(pedido)">
+                                                                                                                         <button type="button" class="btn btn-sm btn-primary" [disabled]="!puedeAvanzar(pedido.estado) || isBloqueadoAvanzar(pedido)" (click)="avanzarEstado(pedido)">
                                 Avanzar estado
                               </button>
+                                                </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                        } @if (pedidosActivos().length === 0) {
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted py-3">No hay pedidos</td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
-                          }
-                        </td>
-                      </tr>
-                    }
-                    @if (pedidosActivos().length === 0) {
-                      <tr>
-                        <td colspan="6" class="text-center text-muted py-3">No hay pedidos</td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
+                        </div>
+                    </div>
+                </section>
 
-        <section class="col-12">
-          <div class="card shadow-sm">
-            <div class="card-header bg-dark text-white">
-              <h5 class="mb-0">Repartidores activos</h5>
-            </div>
-            <div class="card-body p-0">
-              <div class="table-responsive">
-                <table class="table table-striped mb-0">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nombre</th>
-                      <th>Teléfono</th>
-                      <th>Estado</th>
-                      <th style="width: 220px;">Opciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (r of repartidoresActivos(); track r.id) {
-                      <tr>
-                        <td>{{ r.id }}</td>
-                        <td>{{ r.nombreCompleto }}</td>
-                        <td>{{ r.telefono }}</td>
-                        <td><span class="badge bg-success">{{ r.estado || '—' }}</span></td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-sm btn-outline-success" (click)="activarRepartidor(r.id!)">
+                <section class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Repartidores activos</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                            <th>Teléfono</th>
+                                            <th>Estado</th>
+                                            <th style="width: 220px;">Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (r of repartidoresActivos(); track r.id) {
+                                        <tr>
+                                            <td>{{ r.id }}</td>
+                                            <td>{{ r.nombreCompleto }}</td>
+                                            <td>{{ r.telefono }}</td>
+                                            <td><span class="badge bg-success">{{ r.estado || '—' }}</span></td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <button type="button" class="btn btn-sm btn-outline-success" (click)="activarRepartidor(r.id!)">
                               Activar
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-danger" (click)="desactivarRepartidor(r.id!)">
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="desactivarRepartidor(r.id!)">
                               Desactivar
                             </button>
-                          </div>
-                        </td>
-                      </tr>
-                    }
-                    @if (repartidoresActivos().length === 0) {
-                      <tr>
-                        <td colspan="5" class="text-center text-muted py-3">No hay repartidores activos</td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        } @if (repartidoresActivos().length === 0) {
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted py-3">No hay repartidores activos</td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
-          </div>
-        </section>
-      </div>
-    </main>
-  </div>
-  
+        </main>
+    </div>
+
 </div>
