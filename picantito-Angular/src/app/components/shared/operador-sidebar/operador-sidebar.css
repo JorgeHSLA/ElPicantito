@@ -1,0 +1,124 @@
+.operador-sidebar {
+    position: fixed;
+    top: 85px; /* below navbar */
+    left: 0;
+    width: 250px;
+    height: calc(100vh - 85px);
+    background: #2D1529; /* purple base background */
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+    z-index: 1040;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+}
+
+.sidebar-nav {
+    padding: 1.5rem 0;
+}
+
+.sidebar-nav .nav {
+    gap: 0.5rem;
+}
+
+.sidebar-nav .nav-item {
+    padding: 0 1rem;
+}
+
+.sidebar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-nav .nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: white;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.sidebar-nav .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: translateX(4px);
+}
+
+.sidebar-nav .nav-link:hover::before {
+    transform: scaleY(1);
+}
+
+.sidebar-nav .nav-link.active {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-nav .nav-link.active::before {
+    transform: scaleY(1);
+}
+
+.sidebar-nav .nav-link i {
+    font-size: 1.1rem;
+    width: 24px;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-nav .nav-link:hover i {
+    transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .operador-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: 0;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .sidebar-nav {
+        padding: 1rem 0;
+    }
+
+    .sidebar-nav .nav {
+        flex-direction: row;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .sidebar-nav .nav-item {
+        padding: 0;
+    }
+
+    .sidebar-nav .nav-link {
+        padding: 0.75rem 1.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar-nav .nav-link span {
+        display: none;
+    }
+
+    .sidebar-nav .nav-link {
+        padding: 0.75rem;
+        justify-content: center;
+    }
+
+    .sidebar-nav .nav-link i {
+        margin-right: 0 !important;
+    }
+}

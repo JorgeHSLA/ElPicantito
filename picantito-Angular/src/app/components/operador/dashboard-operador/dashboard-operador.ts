@@ -4,10 +4,12 @@ import { RouterLink } from '@angular/router';
 import { GestionPedidosService } from '../../../services/gestion-pedidos.service';
 import { RepartidorService } from '../../../services/repartidor.service';
 import { PedidoCompleto } from '../../../models/pedido-completo';
+import { OperadorNavbarComponent } from '../../shared/operador-navbar/operador-navbar.component';
+import { OperadorSidebarComponent } from '../../shared/operador-sidebar/operador-sidebar.component';
 
 @Component({
   selector: 'app-dashboard-operador',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, OperadorNavbarComponent, OperadorSidebarComponent],
   templateUrl: './dashboard-operador.html',
   styleUrl: './dashboard-operador.css'
 })

@@ -59,6 +59,11 @@ export class AuthService {
     return user?.rol === 'ADMIN';
   }
 
+  isOperador(): boolean {
+    const user = this.loggedUserSignal();
+    return user?.rol === 'OPERADOR';
+  }
+
   isLoggedIn(): boolean {
     return this.loggedUserSignal() !== null;
   }

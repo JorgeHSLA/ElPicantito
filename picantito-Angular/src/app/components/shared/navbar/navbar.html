@@ -102,6 +102,14 @@
                                         <i class="bi bi-gear me-2"></i>Panel Administrativo
                                     </a>
                                 </li>
+                                <li *ngIf="isOperador()">
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li *ngIf="isOperador()">
+                                    <a class="dropdown-item user-dropdown-item admin-item" href="/operador/dashboard">
+                                        <i class="bi bi-gear me-2"></i>Panel de Operador
+                                    </a>
+                                </li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

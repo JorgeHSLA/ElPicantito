@@ -5,6 +5,8 @@ import { GestionPedidosService } from '../../../services/gestion-pedidos.service
 import { RepartidorService } from '../../../services/repartidor.service';
 import { PedidoCompleto } from '../../../models/pedido-completo';
 import { Repartidor } from '../../../models/repartidor';
+import { OperadorNavbarComponent } from '../../shared/operador-navbar/operador-navbar.component';
+import { OperadorSidebarComponent } from '../../shared/operador-sidebar/operador-sidebar.component';
 
 interface PedidosPorEstado {
   [key: string]: PedidoCompleto[];
@@ -16,7 +18,7 @@ interface PedidosPorEstado {
 
 @Component({
   selector: 'app-gestion-pedidos',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, OperadorNavbarComponent, OperadorSidebarComponent],
   templateUrl: './gestion-pedidos.html',
   styleUrl: './gestion-pedidos.css'
 })

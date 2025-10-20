@@ -16,6 +16,7 @@ import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
 export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn = signal(false);
   isAdmin = signal(false);
+  isOperador = signal(false);
   userName = signal('');
   userId = signal<number | null>(null);
   isScrolled = signal(false);
@@ -31,6 +32,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       const user = this.authService.loggedUser();
       this.isLoggedIn.set(!!user);
       this.isAdmin.set(this.authService.isAdmin());
+      this.isOperador.set(this.authService.isOperador());
       this.userName.set(user?.nombreUsuario?.toString() || '');
       this.userId.set(user?.id ?? null);
     });

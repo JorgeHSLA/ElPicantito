@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   showFooter = true;
 
   // Rutas donde NO queremos mostrar el navbar principal
-  private authRoutes = ['/login', '/registry', '/admin'];
+  private authRoutes = ['/login', '/registry', '/admin', '/operador'];
 
   constructor(private router: Router) {}
 
