@@ -46,6 +46,14 @@ export class RepartidorService {
   }
 
   /**
+   * Cambia el estado del repartidor usando el endpoint del backend
+   * PUT /api/usuarios/repartidor/{id}/estado/{estado}
+   */
+  cambiarEstadoRepartidor(id: number, estado: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/repartidor/${id}/estado/${encodeURIComponent(estado)}`, {});
+  }
+
+  /**
    * Obtiene los pedidos asignados a un repartidor
    */
   getPedidosRepartidor(repartidorId: number): Observable<any[]> {

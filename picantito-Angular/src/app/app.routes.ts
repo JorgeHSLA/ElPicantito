@@ -106,6 +106,10 @@ export const routes: Routes = [
       {
         path: 'usuarios/edit/:id',
         loadComponent: () => import('./components/admin/edit-usuario/edit-usuario').then(m => m.EditUsuarioComponent)
+      },
+      {
+        path: 'revisar-repartidores',
+        loadComponent: () => import('./components/admin/revisar-repartidores/revisar-repartidores').then(m => m.RevisarRepartidoresComponent)
       }
     ]
   },

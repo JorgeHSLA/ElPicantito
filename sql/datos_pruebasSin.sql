@@ -1,4 +1,4 @@
--- Insertar usuarios de prueba (PostgreSQL)
+ -- Insertar usuarios de prueba (PostgreSQL)
 INSERT INTO usuarios (nombrecompleto, nombreusuario, telefono, correo, contrasenia, rol, estado, activo) 
 VALUES 
 ('Administrador Principal', 'admin', '3001234567', 'admin@elpicantito.com', 'admin123', 'ADMIN', null, true),
@@ -22,7 +22,7 @@ VALUES
 ('Tacos de Chorizo', 'Tortilla de maíz con chorizo frito, papa y guacamole.', 18000, 9500, '/images/tacos_chorizo.jpg', true, 4, true),
 ('Tacos de Birria', 'Tacos con carne en su jugo, servidos con consomé para dip.', 24000, 15000, '/images/tacos_birria.jpg', true, 5, true),
 ('Tacos de Pollo BBQ', 'Pollo en salsa BBQ, lechuga fresca y queso rallado.', 16000, 8500, '/images/tacos_pollo_bbq.jpg', true, 4, true),
-('Tacos Veganos', 'Tortilla de maíz con lentejas guisadas, pico de gallo y aguacate.', 14000, 7000, '/images/tacos_veganos.jpg', true, 4, true),
+('Tacos Veganos', 'Tortil la de maíz con lentejas guisadas, pico de gallo y aguacate.', 14000, 7000, '/images/tacos_veganos.jpg', true, 4, true),
 ('Tacos de Arrachera', 'Carne arrachera a la parrilla, cebolla caramelizada y queso fresco.', 22000, 13000, '/images/tacos_arrachera.jpg', true, 5, true),
 -- BEBIDAS
 ('Agua de Horchata', 'Bebida fresca a base de arroz, canela y leche.', 8000, 4000, '/images/horchata.jpg', true, 5, true),
