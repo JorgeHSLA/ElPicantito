@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.picantito.picantito.dto.response.UserResponseDTO;
@@ -129,9 +130,29 @@ public class UserController {
     
     // === READ (Obtener todos los usuarios) ===
     // Obtener todos los usuarios: http://localhost:9998/api/usuarios
+    // Soporta parámetros de consulta opcionales: rol y estado
+    // Ejemplo: http://localhost:9998/api/usuarios?rol=REPARTIDOR
+    // Ejemplo: http://localhost:9998/api/usuarios?rol=REPARTIDOR&estado=DISPONIBLE
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsuarios() {
-        List<User> usuarios = autentificacionService.findAll();
+    public ResponseEntity<List<UserResponseDTO>> getAllUsuarios(
+            @RequestParam(required = false) String rol,
+            @RequestParam(required = false) String estado) {
+        
+        List<User> usuarios;
+        
+        // Si se especifica rol y estado
+        if (rol != null && estado != null) {
+            usuarios = autentificacionService.findByRolAndEstado(rol.toUpperCase(), estado.toUpperCase());
+        }
+        // Si solo se especifica rol
+        else if (rol != null) {
+            usuarios = autentificacionService.findByRol(rol.toUpperCase());
+        }
+        // Si no se especifica ningún filtro, devolver todos
+        else {
+            usuarios = autentificacionService.findAll();
+        }
+        
         List<UserResponseDTO> userDTOs = userMapper.toListDTO(usuarios);
         return ResponseEntity.ok(userDTOs);
     }
@@ -210,6 +231,11 @@ public class UserController {
             
             // Aseguramos que el ID sea el correcto
             usuario.setId(id);
+            
+            // Si la contraseña viene null o vacía, preservar la contraseña existente
+            if (usuario.getContrasenia() == null || usuario.getContrasenia().trim().isEmpty()) {
+                usuario.setContrasenia(usuarioExistente.getContrasenia());
+            }
             
             // Verificar si cambia el email o nombre de usuario para validar duplicados
             if (!usuarioExistente.getNombreUsuario().equals(usuario.getNombreUsuario())) {

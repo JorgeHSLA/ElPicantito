@@ -167,6 +167,7 @@ public class PedidoServiceImpl implements PedidoService {
 
 
     @Override
+    @Transactional
     public Pedido asignarRepartidor(AsignarRepartidorDTO asignacionDTO){
 
         // Validar que el pedido existe
@@ -180,20 +181,30 @@ public class PedidoServiceImpl implements PedidoService {
         if (!repartidorOpt.isPresent()) {
             throw new RuntimeException("Repartidor no encontrado con ID: " + asignacionDTO.getRepartidorId());
         }
-        if (!"REPARTIDOR".equals(repartidorOpt.get().getRol())) {
+        
+        var repartidor = repartidorOpt.get();
+        
+        // Verificar que tenga el rol de REPARTIDOR
+        if (!"REPARTIDOR".equals(repartidor.getRol())) {
             throw new RuntimeException("El usuario con ID " + asignacionDTO.getRepartidorId() + 
                                       " no tiene el rol de REPARTIDOR");
+        }
+        
+        // Verificar que el repartidor esté DISPONIBLE
+        if (!"DISPONIBLE".equals(repartidor.getEstado())) {
+            throw new RuntimeException("El repartidor no está disponible. Estado actual: " + repartidor.getEstado());
         }
 
         // Asignar repartidor al pedido
         Pedido pedido = pedidoOpt.get();
-        pedido.setRepartidor(repartidorOpt.get());
+        pedido.setRepartidor(repartidor);
 
         // Guardar cambios
         return pedidoRepository.save(pedido);
     }
 
     @Override
+    @Transactional
     public Pedido actualizarEstado(Integer id, String estado) {
         // Validar que el pedido existe
         var pedidoOpt = pedidoRepository.findById(id);
@@ -201,11 +212,36 @@ public class PedidoServiceImpl implements PedidoService {
             return null;
         }
 
-        // Actualizar estado
+        // Obtener el pedido y su estado anterior
         Pedido pedido = pedidoOpt.get();
-        pedido.setEstado(estado);
+        String estadoAnterior = pedido.getEstado();
+        String nuevoEstado = estado.toUpperCase();
 
-        // Guardar cambios
+        // Actualizar estado del pedido
+        pedido.setEstado(nuevoEstado);
+
+        // Gestión automática del estado del repartidor
+        if (pedido.getRepartidor() != null) {
+            var repartidor = pedido.getRepartidor();
+            
+            // Cuando el pedido cambia a ENVIADO, el repartidor pasa a OCUPADO
+            if ("ENVIADO".equals(nuevoEstado) && !"ENVIADO".equals(estadoAnterior)) {
+                repartidor.setEstado("OCUPADO");
+                usuarioRepository.save(repartidor);
+                System.out.println("Repartidor " + repartidor.getId() + " cambió a OCUPADO (pedido enviado)");
+            }
+            
+            // Cuando el pedido cambia a ENTREGADO, el repartidor vuelve a DISPONIBLE
+            if ("ENTREGADO".equals(nuevoEstado) && !"ENTREGADO".equals(estadoAnterior)) {
+                // También actualizar la fecha de entrega
+                pedido.setFechaEntrega(new Timestamp(System.currentTimeMillis()));
+                repartidor.setEstado("DISPONIBLE");
+                usuarioRepository.save(repartidor);
+                System.out.println("Repartidor " + repartidor.getId() + " cambió a DISPONIBLE (pedido entregado)");
+            }
+        }
+
+        // Guardar cambios del pedido
         return pedidoRepository.save(pedido);
     }
 

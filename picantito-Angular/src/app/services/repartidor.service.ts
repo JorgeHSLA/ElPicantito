@@ -25,6 +25,13 @@ export class RepartidorService {
   }
 
   /**
+   * Obtiene repartidores ocupados
+   */
+  getRepartidoresOcupados(): Observable<Repartidor[]> {
+    return this.http.get<Repartidor[]>(`${this.apiUrl}?rol=REPARTIDOR&estado=OCUPADO`);
+  }
+
+  /**
    * Obtiene un repartidor por ID
    */
   getRepartidorById(id: number): Observable<Repartidor> {

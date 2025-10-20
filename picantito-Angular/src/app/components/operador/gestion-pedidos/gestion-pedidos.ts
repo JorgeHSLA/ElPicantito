@@ -33,6 +33,7 @@ export class GestionPedidos implements OnInit {
   };
 
   repartidoresDisponibles: Repartidor[] = [];
+  todosRepartidores: Repartidor[] = [];
   repartidorSeleccionado: { [pedidoId: number]: number } = {};
   
   loading = false;
@@ -50,7 +51,7 @@ export class GestionPedidos implements OnInit {
 
   ngOnInit(): void {
     this.cargarPedidos();
-    this.cargarRepartidoresDisponibles();
+    this.cargarRepartidores();
   }
 
   cargarPedidos(): void {
@@ -67,6 +68,20 @@ export class GestionPedidos implements OnInit {
         this.error = 'Error al cargar los pedidos';
         console.error('Error:', err);
         this.loading = false;
+      }
+    });
+  }
+
+  cargarRepartidores(): void {
+    // Cargar todos los repartidores para mostrarlos con su estado
+    this.repartidorService.getRepartidores().subscribe({
+      next: (repartidores) => {
+        this.todosRepartidores = repartidores;
+        // También mantener la lista de solo disponibles para validaciones
+        this.repartidoresDisponibles = repartidores.filter(r => r.estado === 'DISPONIBLE');
+      },
+      error: (err) => {
+        console.error('Error al cargar repartidores:', err);
       }
     });
   }
@@ -128,9 +143,14 @@ export class GestionPedidos implements OnInit {
         this.actualizarEstadoPedido(pedidoId, nuevoEstado);
       },
       error: (err) => {
-        this.error = 'Error al asignar repartidor';
+        this.error = err.error || 'Error al asignar repartidor';
         console.error('Error:', err);
         this.loading = false;
+        
+        // Limpiar mensaje de error después de 5 segundos
+        setTimeout(() => {
+          this.error = null;
+        }, 5000);
       }
     });
   }
@@ -150,6 +170,10 @@ export class GestionPedidos implements OnInit {
         }
         
         this.organizarPedidosPorEstado();
+        
+        // Recargar lista de repartidores para actualizar disponibilidad
+        this.cargarRepartidores();
+        
         this.loading = false;
 
         // Limpiar mensaje después de 3 segundos
@@ -173,6 +197,21 @@ export class GestionPedidos implements OnInit {
   puedeAvanzar(estado: string): boolean {
     const indice = this.estadosOrdenados.indexOf(estado.toLowerCase());
     return indice !== -1 && indice < this.estadosOrdenados.length - 1;
+  }
+
+  getColorEstadoRepartidor(estado: string | undefined): string {
+    if (!estado) return 'bg-secondary';
+    
+    switch (estado.toUpperCase()) {
+      case 'DISPONIBLE':
+        return 'bg-success';
+      case 'OCUPADO':
+        return 'bg-warning';
+      case 'INACTIVO':
+        return 'bg-danger';
+      default:
+        return 'bg-secondary';
+    }
   }
 
   formatearMoneda(valor: number): string {

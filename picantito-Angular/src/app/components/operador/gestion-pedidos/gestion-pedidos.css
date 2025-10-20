@@ -1,0 +1,29 @@
+/* Estilos para el selector de repartidor */
+.form-select option {
+  padding: 8px;
+}
+
+/* Indicador visual de estado del repartidor */
+.estado-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.estado-disponible {
+  background-color: #28a745;
+  color: white;
+}
+
+.estado-ocupado {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.estado-inactivo {
+  background-color: #dc3545;
+  color: white;
+}
