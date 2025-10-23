@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductoService } from '../../../services/tienda/producto.service';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
-import { CartService } from '../../../services/cart.service';
 import { CarritoService } from '../../../services/carrito.service';
 import { AuthService } from '../../../services/auth.service';
 import { Producto } from '../../../models/producto';
@@ -44,7 +43,6 @@ export class ProductoDetalleComponent implements OnInit {
     private router: Router,
     private productoService: ProductoService,
     private adicionalService: AdicionalService,
-    private cartService: CartService,
     private carritoService: CarritoService, // Nuevo servicio
     private authService: AuthService
   ) {}

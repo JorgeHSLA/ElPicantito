@@ -52,6 +52,17 @@ export class CarritoService {
   constructor() {
     // Cargar carrito desde localStorage al inicializar
     this.loadCarritoFromStorage();
+    this.migrateLegacyCartIfPresent();
+
+    // Guardar siempre al cerrar/ocultar la pestaña
+    window.addEventListener('beforeunload', () => {
+      try { this.saveCarritoToStorage(); } catch {}
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        try { this.saveCarritoToStorage(); } catch {}
+      }
+    });
   }
 
   agregarItem(producto: Producto, cantidad: number = 1): void {
@@ -285,6 +296,51 @@ export class CarritoService {
         console.error('Error al cargar carrito desde localStorage:', error);
         this.limpiarCarritoCompleto();
       }
+    }
+  }
+
+  /**
+   * Migrar desde la clave legacy 'cart' (CartService antiguo) al formato nuevo.
+   */
+  private migrateLegacyCartIfPresent(): void {
+    const legacy = localStorage.getItem('cart');
+    if (!legacy) return;
+
+    try {
+      const legacyItems: Array<{ producto: Producto; cantidad: number }> = JSON.parse(legacy);
+      if (!Array.isArray(legacyItems) || legacyItems.length === 0) {
+        localStorage.removeItem('cart');
+        return;
+      }
+
+      const actuales = this.cartItemsSignal();
+      const combinados: CartItem[] = [...actuales];
+
+      for (const li of legacyItems) {
+        if (!li?.producto?.id || !li?.cantidad) continue;
+        const id = this.generateItemId(li.producto, []);
+        const existente = combinados.find(i => i.id === id);
+        if (existente) {
+          existente.cantidad += li.cantidad;
+          existente.subtotal = this.calcularSubtotalItem(existente);
+        } else {
+          const nuevo: CartItem = {
+            id,
+            producto: li.producto,
+            cantidad: li.cantidad,
+            adicionales: [],
+            subtotal: (li.producto.precioDeVenta || li.producto.precio || 0) * li.cantidad
+          };
+          combinados.push(nuevo);
+        }
+      }
+
+      this.cartItemsSignal.set(combinados);
+      this.saveCarritoToStorage();
+      localStorage.removeItem('cart');
+      console.log('✔ Migrado carrito legacy (cart) al nuevo (carrito)');
+    } catch (e) {
+      console.warn('No se pudo migrar el carrito legacy:', e);
     }
   }
 

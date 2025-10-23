@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CartService } from '../../../services/cart.service';
+import { CarritoService } from '../../../services/carrito.service';
 import { AuthService } from '../../../services/auth.service';
 
 interface PaymentMethod {
@@ -87,7 +87,7 @@ export class PaymentPortalComponent {
   ];
 
   constructor(
-    private cartService: CartService,
+    private carritoService: CarritoService,
     private authService: AuthService,
     private router: Router
   ) {
@@ -98,13 +98,13 @@ export class PaymentPortalComponent {
     }
 
     // Verificar que hay productos en el carrito
-    const cartItems = this.cartService.getCartItems()();
+    const cartItems = this.carritoService.cartItems();
     if (cartItems.length === 0) {
       this.router.navigate(['/tienda']);
       return;
     }
 
-    this.total.set(this.cartService.getTotal());
+    this.total.set(this.carritoService.getTotal());
   }
 
   selectPaymentMethod(methodId: string) {
@@ -128,8 +128,8 @@ export class PaymentPortalComponent {
       // Simular procesamiento de pago
       await this.simulatePaymentProcess();
 
-      // Limpiar carrito después del pago exitoso
-      this.cartService.clearCart();
+  // Limpiar carrito después del pago exitoso
+  this.carritoService.limpiarCarritoCompleto();
 
       // Mostrar mensaje de éxito y redirigir al rastreo
       alert('¡Pago procesado exitosamente! Tu pedido ha sido confirmado.');
