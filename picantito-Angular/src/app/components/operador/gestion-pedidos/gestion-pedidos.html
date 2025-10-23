@@ -91,9 +91,13 @@
                   <li *ngFor="let producto of pedido.productos" class="small">
                     <i class="bi bi-dot"></i>
                     {{ producto.cantidadProducto }}x {{ producto.nombreProducto }}
-                    <span *ngIf="producto.adicionales && producto.adicionales.length > 0" class="text-muted">
-                      ({{ producto.adicionales.length }} adicionales)
-                    </span>
+                    <div *ngIf="producto.adicionales && producto.adicionales.length > 0" class="text-muted ms-4">
+                      <small>Adicionales: 
+                        <span *ngFor="let adicional of producto.adicionales; let last = last">
+                          {{ adicional.cantidadAdicional }}x {{ adicional.nombreAdicional }}<span *ngIf="!last">, </span>
+                        </span>
+                      </small>
+                    </div>
                   </li>
                 </ul>
               </div>

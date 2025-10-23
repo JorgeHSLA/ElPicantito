@@ -48,17 +48,40 @@
                     Filtrar por estado
                 </h5>
                 <div class="d-flex flex-wrap gap-2">
-                    <button class="btn btn-outline-warning btn-sm">
-                        Todos ({{ pedidos().length }})
+                    <button 
+                        class="btn btn-sm"
+                        [class.btn-warning]="filtroActivo() === 'TODOS'"
+                        [class.btn-outline-warning]="filtroActivo() !== 'TODOS'"
+                        (click)="filtrarPorEstado('TODOS')">
+                        Todos ({{ contarPorEstado('TODOS') }})
                     </button>
-                    <button class="btn btn-outline-secondary btn-sm">
-                        Pendientes ({{ getPedidosPorEstado('PENDIENTE').length }})
+                    <button 
+                        class="btn btn-sm"
+                        [class.btn-info]="filtroActivo() === 'RECIBIDO'"
+                        [class.btn-outline-info]="filtroActivo() !== 'RECIBIDO'"
+                        (click)="filtrarPorEstado('RECIBIDO')">
+                        Recibido ({{ contarPorEstado('RECIBIDO') }})
                     </button>
-                    <button class="btn btn-outline-primary btn-sm">
-                        En Proceso ({{ getPedidosPorEstado('PREPARANDO').length }})
+                    <button 
+                        class="btn btn-sm"
+                        [class.btn-warning]="filtroActivo() === 'COCINANDO'"
+                        [class.btn-outline-warning]="filtroActivo() !== 'COCINANDO'"
+                        (click)="filtrarPorEstado('COCINANDO')">
+                        Cocinando ({{ contarPorEstado('COCINANDO') }})
                     </button>
-                    <button class="btn btn-outline-success btn-sm">
-                        Entregados ({{ getPedidosPorEstado('ENTREGADO').length }})
+                    <button 
+                        class="btn btn-sm"
+                        [class.btn-primary]="filtroActivo() === 'ENVIADO'"
+                        [class.btn-outline-primary]="filtroActivo() !== 'ENVIADO'"
+                        (click)="filtrarPorEstado('ENVIADO')">
+                        Enviado ({{ contarPorEstado('ENVIADO') }})
+                    </button>
+                    <button 
+                        class="btn btn-sm"
+                        [class.btn-success]="filtroActivo() === 'ENTREGADO'"
+                        [class.btn-outline-success]="filtroActivo() !== 'ENTREGADO'"
+                        (click)="filtrarPorEstado('ENTREGADO')">
+                        Entregado ({{ contarPorEstado('ENTREGADO') }})
                     </button>
                 </div>
             </div>
@@ -66,7 +89,7 @@
 
         <!-- Lista de Pedidos -->
         <div class="row g-4">
-            <div class="col-lg-6 col-xl-4" *ngFor="let pedido of pedidos(); index as i">
+            <div class="col-lg-6 col-xl-4" *ngFor="let pedido of pedidosFiltrados(); index as i">
                 <div class="card h-100 border-0 shadow-sm pedido-card">
                     <div class="card-body">
                         <!-- Header del pedido -->
@@ -146,26 +169,14 @@
                                 </span>
                             </div>
 
-                            <!-- Botones de acción -->
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-outline-primary btn-sm" (click)="verDetalles(pedido.id)">
-                                    <i class="bi bi-eye me-1"></i>
-                                    Ver Detalles
+                            <!-- Botón de eliminar solo para pedidos ENTREGADOS -->
+                            <div class="d-grid gap-2" *ngIf="puedeSerEliminado(pedido)">
+                                <button 
+                                    class="btn btn-danger btn-sm" 
+                                    (click)="eliminarPedido(pedido.id)">
+                                    <i class="bi bi-trash me-1"></i>
+                                    Eliminar Pedido
                                 </button>
-                                
-                                <div class="d-flex gap-2" *ngIf="pedido.estado !== 'CANCELADO' && pedido.estado !== 'ENTREGADO'">
-                                    <button 
-                                        class="btn btn-outline-danger btn-sm flex-fill" 
-                                        (click)="cancelarPedido(pedido.id)"
-                                        [disabled]="!puedeSerCancelado(pedido)">
-                                        <i class="bi bi-x-circle me-1"></i>
-                                        Cancelar
-                                    </button>
-                                    <button class="btn btn-outline-warning btn-sm flex-fill" (click)="reordenar(pedido)">
-                                        <i class="bi bi-arrow-repeat me-1"></i>
-                                        Reordenar
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>

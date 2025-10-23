@@ -39,4 +39,10 @@ public interface PedidoService {
      * @return El pedido modificado
      */
     public Pedido asignarRepartidorVerificado(AsignarRepartidorDTO asignacionDTO);
+
+    /**
+     * Elimina un pedido por su ID
+     * @param id ID del pedido a eliminar
+     */
+    public void eliminarPedido(Integer id);
 }

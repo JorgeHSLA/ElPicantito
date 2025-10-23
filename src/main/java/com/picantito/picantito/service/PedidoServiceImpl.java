@@ -354,4 +354,14 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoRepository.save(pedido);
     }
 
+    @Override
+    @Transactional
+    public void eliminarPedido(Integer id) {
+        // Simplemente eliminar el pedido, la cascada se encarga del resto
+        if (!pedidoRepository.existsById(id)) {
+            throw new RuntimeException("Pedido no encontrado con ID: " + id);
+        }
+        pedidoRepository.deleteById(id);
+    }
+
 }

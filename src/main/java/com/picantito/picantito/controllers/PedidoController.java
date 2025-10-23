@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -168,6 +169,16 @@ public class PedidoController {
         }
     }
 
-    
+    // Eliminar un pedido: http://localhost:9998/api/pedidos/{id}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarPedido(@PathVariable Integer id) {
+        try {
+            pedidoService.eliminarPedido(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            System.err.println("Error eliminando pedido: " + e.getMessage());
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
