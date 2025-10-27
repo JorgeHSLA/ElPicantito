@@ -1,7 +1,6 @@
 package com.picantito.picantito.service;
 
 import com.picantito.picantito.dto.AsignarRepartidorDTO;
-import com.picantito.picantito.dto.CrearPedidoDTO;
 import com.picantito.picantito.entities.Pedido;
 import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.entities.User;
@@ -20,7 +19,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Pruebas de INTEGRACIÓN del servicio de Pedidos
