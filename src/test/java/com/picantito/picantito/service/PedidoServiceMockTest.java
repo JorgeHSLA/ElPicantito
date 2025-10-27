@@ -23,12 +23,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Pruebas UNITARIAS con MOCKS del servicio de Pedidos
- * Estas pruebas usan mocks para simular dependencias
- * Total: 5 tests
+ * Pruebas Unitarias con Mocks del Servicio de Pedidos
+ * Usa mocks de Mockito para simular dependencias
+ * Total: 5 tests unitarios con mocks
  */
 @ExtendWith(MockitoExtension.class)
-@DisplayName("PedidoService - Unit Tests with Mocks")
+@DisplayName("Pruebas Unitarias con Mocks de PedidoService")
 class PedidoServiceMockTest {
 
     @Mock
@@ -77,7 +77,7 @@ class PedidoServiceMockTest {
     }
 
     @Test
-    @DisplayName("Mock 1: Obtener todos los pedidos")
+    @DisplayName("Debería obtener todos los pedidos usando mock")
     void testGetAllPedidos() {
         // Arrange
         Pedido pedido2 = new Pedido();
@@ -97,7 +97,7 @@ class PedidoServiceMockTest {
     }
 
     @Test
-    @DisplayName("Mock 2: Obtener pedido por ID existente")
+    @DisplayName("Debería encontrar un pedido por ID existente")
     void testGetPedidoByIdExistente() {
         // Arrange
         when(pedidoRepository.findById(1)).thenReturn(Optional.of(pedido));
@@ -113,7 +113,7 @@ class PedidoServiceMockTest {
     }
 
     @Test
-    @DisplayName("Mock 3: Obtener pedido por ID inexistente")
+    @DisplayName("Debería retornar null cuando el pedido no existe")
     void testGetPedidoByIdInexistente() {
         // Arrange
         when(pedidoRepository.findById(999)).thenReturn(Optional.empty());
@@ -127,7 +127,7 @@ class PedidoServiceMockTest {
     }
 
     @Test
-    @DisplayName("Mock 4: Actualizar estado de pedido exitosamente")
+    @DisplayName("Debería actualizar el estado de un pedido correctamente")
     void testActualizarEstadoExitoso() {
         // Arrange
         when(pedidoRepository.findById(1)).thenReturn(Optional.of(pedido));
@@ -144,7 +144,7 @@ class PedidoServiceMockTest {
     }
 
     @Test
-    @DisplayName("Mock 5: Asignar repartidor con validación exitosa")
+    @DisplayName("Debería asignar un repartidor a un pedido exitosamente")
     void testAsignarRepartidorExitoso() {
         // Arrange
         when(pedidoRepository.findById(1)).thenReturn(Optional.of(pedido));

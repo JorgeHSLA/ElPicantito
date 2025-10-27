@@ -15,13 +15,13 @@ import org.springframework.test.context.ActiveProfiles;
 import com.picantito.picantito.entities.User;
 
 /**
- * Test class for UsuarioRepository
- * Uses H2 in-memory database configured in application-test.properties
- * Tests CRUD operations and custom queries considering User relationships with Pedido
+ * Pruebas del repositorio de Usuarios
+ * Usa base de datos H2 en memoria configurada en application-test.properties
+ * Total: 10 tests (5 CRUD + 5 consultas personalizadas)
  */
 @DataJpaTest
 @ActiveProfiles("test")
-@DisplayName("Usuario Repository Tests")
+@DisplayName("Pruebas de UsuarioRepository")
 class UsuarioRepositoryTest {
 
     @Autowired
@@ -32,11 +32,11 @@ class UsuarioRepositoryTest {
     private User usuario3;
 
     @BeforeEach
-    void setUp() {
-        // Clean database before each test
+    void init() {
+        // Limpiar datos antes de cada test
         usuarioRepository.deleteAll();
 
-        // Create test users with different roles and states
+        // Crear usuarios de prueba con diferentes roles y estados
         usuario1 = new User();
         usuario1.setNombreCompleto("Juan Pérez");
         usuario1.setNombreUsuario("juanp");
@@ -71,7 +71,7 @@ class UsuarioRepositoryTest {
     // ==================== CRUD TESTS (5) ====================
 
     @Test
-    @DisplayName("Should save a new User successfully")
+    @DisplayName("CRUD 1: Guardar un nuevo Usuario exitosamente")
     void testSaveUsuario() {
         // When
         User savedUser = usuarioRepository.save(usuario1);
@@ -87,138 +87,138 @@ class UsuarioRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should find a User by ID")
+    @DisplayName("Debería encontrar un usuario por ID")
     void testFindById() {
-        // Given
+        // Arrange
         User savedUser = usuarioRepository.save(usuario1);
 
-        // When
+        // Act
         Optional<User> foundUser = usuarioRepository.findById(savedUser.getId());
 
-        // Then
+        // Assert
         assertThat(foundUser).isPresent();
         assertThat(foundUser.get().getNombreUsuario()).isEqualTo("juanp");
         assertThat(foundUser.get().getCorreo()).isEqualTo("juan@test.com");
     }
 
     @Test
-    @DisplayName("Should find all Users")
+    @DisplayName("Debería listar todos los usuarios")
     void testFindAll() {
-        // Given
+        // Arrange
         usuarioRepository.save(usuario1);
         usuarioRepository.save(usuario2);
         usuarioRepository.save(usuario3);
 
-        // When
+        // Act
         List<User> usuarios = usuarioRepository.findAll();
 
-        // Then
+        // Assert
         assertThat(usuarios).hasSize(3);
         assertThat(usuarios).extracting(User::getNombreUsuario)
             .containsExactlyInAnyOrder("juanp", "mariag", "admin");
     }
 
     @Test
-    @DisplayName("Should update an existing User")
+    @DisplayName("Debería actualizar un usuario existente")
     void testUpdateUsuario() {
-        // Given
+        // Arrange
         User savedUser = usuarioRepository.save(usuario1);
         Integer userId = savedUser.getId();
 
-        // When
+        // Act
         savedUser.setNombreCompleto("Juan Carlos Pérez");
         savedUser.setTelefono("3009999999");
         savedUser.setEstado("SUSPENDIDO");
         User updatedUser = usuarioRepository.save(savedUser);
 
-        // Then
+        // Assert
         assertThat(updatedUser.getId()).isEqualTo(userId);
         assertThat(updatedUser.getNombreCompleto()).isEqualTo("Juan Carlos Pérez");
         assertThat(updatedUser.getTelefono()).isEqualTo("3009999999");
         assertThat(updatedUser.getEstado()).isEqualTo("SUSPENDIDO");
-        assertThat(updatedUser.getNombreUsuario()).isEqualTo("juanp"); // Unchanged
+        assertThat(updatedUser.getNombreUsuario()).isEqualTo("juanp"); // Sin cambios
     }
 
     @Test
-    @DisplayName("Should delete a User by ID (considering cascade relationships)")
+    @DisplayName("Debería eliminar un usuario por ID")
     void testDeleteUsuario() {
-        // Given
+        // Arrange
         User savedUser = usuarioRepository.save(usuario1);
         Integer userId = savedUser.getId();
 
-        // When
+        // Act
         usuarioRepository.deleteById(userId);
 
-        // Then
+        // Assert
         Optional<User> deletedUser = usuarioRepository.findById(userId);
         assertThat(deletedUser).isNotPresent();
         
-        // Verify the user is completely removed
+        // Verificar que el usuario fue completamente eliminado
         List<User> allUsers = usuarioRepository.findAll();
         assertThat(allUsers).doesNotContain(savedUser);
     }
 
-    // ==================== CUSTOM QUERY TESTS (5) ====================
+    // ==================== CONSULTAS PERSONALIZADAS (5) ====================
 
     @Test
-    @DisplayName("Should find User by nombreUsuario")
+    @DisplayName("Debería encontrar un usuario por nombre de usuario")
     void testFindByNombreUsuario() {
-        // Given
+        // Arrange
         usuarioRepository.save(usuario1);
         usuarioRepository.save(usuario2);
 
-        // When
+        // Act
         Optional<User> foundUser = usuarioRepository.findByNombreUsuario("juanp");
 
-        // Then
+        // Assert
         assertThat(foundUser).isPresent();
         assertThat(foundUser.get().getNombreCompleto()).isEqualTo("Juan Pérez");
         assertThat(foundUser.get().getCorreo()).isEqualTo("juan@test.com");
     }
 
     @Test
-    @DisplayName("Should find User by correo")
+    @DisplayName("Debería encontrar un usuario por correo")
     void testFindByCorreo() {
-        // Given
+        // Arrange
         usuarioRepository.save(usuario1);
         usuarioRepository.save(usuario2);
 
-        // When
+        // Act
         Optional<User> foundUser = usuarioRepository.findByCorreo("maria@test.com");
 
-        // Then
+        // Assert
         assertThat(foundUser).isPresent();
         assertThat(foundUser.get().getNombreUsuario()).isEqualTo("mariag");
         assertThat(foundUser.get().getRol()).isEqualTo("REPARTIDOR");
     }
 
     @Test
-    @DisplayName("Should check if nombreUsuario exists")
+    @DisplayName("Debería verificar si existe un nombre de usuario")
     void testExistsByNombreUsuario() {
-        // Given
+        // Arrange
         usuarioRepository.save(usuario1);
 
-        // When
+        // Act
         boolean exists = usuarioRepository.existsByNombreUsuario("juanp");
         boolean notExists = usuarioRepository.existsByNombreUsuario("nonexistent");
 
-        // Then
+        // Assert
         assertThat(exists).isTrue();
         assertThat(notExists).isFalse();
     }
 
     @Test
-    @DisplayName("Should find all active Users (activo = true)")
+    @DisplayName("Debería encontrar todos los usuarios activos")
     void testFindByActivoTrue() {
-        // Given
+        // Arrange
         usuarioRepository.save(usuario1); // activo = true
         usuarioRepository.save(usuario2); // activo = false
         usuarioRepository.save(usuario3); // activo = true
 
-        // When
+        // Act
         List<User> activeUsers = usuarioRepository.findByActivoTrue();
 
-        // Then
+        // Assert
         assertThat(activeUsers).hasSize(2);
         assertThat(activeUsers).extracting(User::getNombreUsuario)
             .containsExactlyInAnyOrder("juanp", "admin");
@@ -226,14 +226,14 @@ class UsuarioRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should find Users by rol and estado")
+    @DisplayName("Debería encontrar usuarios por rol y estado")
     void testFindByRolAndEstado() {
-        // Given
+        // Arrange
         usuarioRepository.save(usuario1); // CLIENTE, ACTIVO
         usuarioRepository.save(usuario2); // REPARTIDOR, INACTIVO
         usuarioRepository.save(usuario3); // ADMINISTRADOR, ACTIVO
 
-        // Create another active cliente
+        // Crear otro cliente activo
         User usuario4 = new User();
         usuario4.setNombreCompleto("Pedro López");
         usuario4.setNombreUsuario("pedrol");
@@ -245,11 +245,11 @@ class UsuarioRepositoryTest {
         usuario4.setActivo(true);
         usuarioRepository.save(usuario4);
 
-        // When
+        // Act
         List<User> activeClientes = usuarioRepository.findByRolAndEstado("CLIENTE", "ACTIVO");
         List<User> inactiveRepartidores = usuarioRepository.findByRolAndEstado("REPARTIDOR", "INACTIVO");
 
-        // Then
+        // Assert
         assertThat(activeClientes).hasSize(2);
         assertThat(activeClientes).extracting(User::getNombreUsuario)
             .containsExactlyInAnyOrder("juanp", "pedrol");

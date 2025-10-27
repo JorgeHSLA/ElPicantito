@@ -18,13 +18,13 @@ import com.picantito.picantito.entities.ProductoAdicional;
 import com.picantito.picantito.entities.ProductoAdicionalId;
 
 /**
- * Test class for AdicionalRepository
- * Uses H2 in-memory database configured in application-test.properties
- * Tests CRUD operations and custom queries considering Adicional relationships with ProductoAdicional
+ * Pruebas del repositorio de Adicionales
+ * Usa base de datos H2 en memoria configurada en application-test.properties
+ * Total: 10 tests (5 CRUD + 5 consultas personalizadas)
  */
 @DataJpaTest
 @ActiveProfiles("test")
-@DisplayName("Adicional Repository Tests")
+@DisplayName("Pruebas de AdicionalRepository")
 class AdicionalRepositoryTest {
 
     @Autowired
@@ -43,12 +43,12 @@ class AdicionalRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        // Clean database before each test
+        // Limpiar base de datos antes de cada test
         productoAdicionalRepository.deleteAll();
         adicionalRepository.deleteAll();
         productRepository.deleteAll();
 
-        // Create test adicionales
+        // Crear adicionales de prueba
         adicional1 = new Adicional();
         adicional1.setNombre("Guacamole");
         adicional1.setDescripcion("Guacamole fresco casero");
@@ -76,7 +76,7 @@ class AdicionalRepositoryTest {
         adicional3.setDisponible(true);
         adicional3.setActivo(false); // Inactivo
 
-        // Create a test product for relationship testing
+        // Crear producto de prueba para testing de relaciones
         producto1 = new Producto();
         producto1.setNombre("Taco de Carne");
         producto1.setDescripcion("Taco con carne asada");
@@ -84,19 +84,21 @@ class AdicionalRepositoryTest {
         producto1.setPrecioDeAdquisicion(4000.0f);
         producto1.setImagen("taco_carne.jpg");
         producto1.setDisponible(true);
-        producto1.setCalificacion(5); // Integer calificacion
+        producto1.setCalificacion(5);
         producto1.setActivo(true);
     }
 
-    // ==================== CRUD TESTS (5) ====================
+    // ==================== PRUEBAS CRUD (5) ====================
 
     @Test
-    @DisplayName("Should save a new Adicional successfully")
+    @DisplayName("Debería guardar un nuevo adicional exitosamente")
     void testSaveAdicional() {
-        // When
+        // Arrange - Ya tenemos adicional1 del @BeforeEach
+
+        // Act
         Adicional savedAdicional = adicionalRepository.save(adicional1);
 
-        // Then
+        // Assert
         assertThat(savedAdicional).isNotNull();
         assertThat(savedAdicional.getId()).isNotNull();
         assertThat(savedAdicional.getNombre()).isEqualTo("Guacamole");
@@ -107,93 +109,93 @@ class AdicionalRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should find an Adicional by ID")
+    @DisplayName("Debería encontrar un adicional por ID")
     void testFindById() {
-        // Given
+        // Arrange
         Adicional savedAdicional = adicionalRepository.save(adicional1);
 
-        // When
+        // Act
         Optional<Adicional> foundAdicional = adicionalRepository.findById(savedAdicional.getId());
 
-        // Then
+        // Assert
         assertThat(foundAdicional).isPresent();
         assertThat(foundAdicional.get().getNombre()).isEqualTo("Guacamole");
         assertThat(foundAdicional.get().getPrecioDeVenta()).isEqualTo(3500.0f);
     }
 
     @Test
-    @DisplayName("Should find all Adicionales")
+    @DisplayName("Debería listar todos los adicionales")
     void testFindAll() {
-        // Given
+        // Arrange
         adicionalRepository.save(adicional1);
         adicionalRepository.save(adicional2);
         adicionalRepository.save(adicional3);
 
-        // When
+        // Act
         List<Adicional> adicionales = adicionalRepository.findAll();
 
-        // Then
+        // Assert
         assertThat(adicionales).hasSize(3);
         assertThat(adicionales).extracting(Adicional::getNombre)
             .containsExactlyInAnyOrder("Guacamole", "Queso Extra", "Jalapeños");
     }
 
     @Test
-    @DisplayName("Should update an existing Adicional")
+    @DisplayName("Debería actualizar un adicional existente")
     void testUpdateAdicional() {
-        // Given
+        // Arrange
         Adicional savedAdicional = adicionalRepository.save(adicional1);
         Integer adicionalId = savedAdicional.getId();
 
-        // When
+        // Act
         savedAdicional.setNombre("Guacamole Premium");
         savedAdicional.setPrecioDeVenta(4000.0f);
         savedAdicional.setCantidad(30);
         savedAdicional.setDisponible(false);
         Adicional updatedAdicional = adicionalRepository.save(savedAdicional);
 
-        // Then
+        // Assert
         assertThat(updatedAdicional.getId()).isEqualTo(adicionalId);
         assertThat(updatedAdicional.getNombre()).isEqualTo("Guacamole Premium");
         assertThat(updatedAdicional.getPrecioDeVenta()).isEqualTo(4000.0f);
         assertThat(updatedAdicional.getCantidad()).isEqualTo(30);
         assertThat(updatedAdicional.getDisponible()).isFalse();
-        assertThat(updatedAdicional.getDescripcion()).isEqualTo("Guacamole fresco casero"); // Unchanged
+        assertThat(updatedAdicional.getDescripcion()).isEqualTo("Guacamole fresco casero"); // Sin cambios
     }
 
     @Test
-    @DisplayName("Should delete an Adicional by ID (considering cascade relationships)")
+    @DisplayName("Debería eliminar un adicional por ID")
     void testDeleteAdicional() {
-        // Given
+        // Arrange
         Adicional savedAdicional = adicionalRepository.save(adicional1);
         Integer adicionalId = savedAdicional.getId();
 
-        // When
+        // Act
         adicionalRepository.deleteById(adicionalId);
 
-        // Then
+        // Assert
         Optional<Adicional> deletedAdicional = adicionalRepository.findById(adicionalId);
         assertThat(deletedAdicional).isNotPresent();
         
-        // Verify the adicional is completely removed
+        // Verificar que el adicional fue completamente eliminado
         List<Adicional> allAdicionales = adicionalRepository.findAll();
         assertThat(allAdicionales).doesNotContain(savedAdicional);
     }
 
-    // ==================== CUSTOM QUERY TESTS (5) ====================
+    // ==================== CONSULTAS PERSONALIZADAS (5) ====================
 
     @Test
-    @DisplayName("Should find all available Adicionales (disponible = true)")
+    @DisplayName("Debería encontrar todos los adicionales disponibles")
     void testFindByDisponibleTrue() {
-        // Given
+        // Arrange
         adicionalRepository.save(adicional1); // disponible = true
         adicionalRepository.save(adicional2); // disponible = false
         adicionalRepository.save(adicional3); // disponible = true
 
-        // When
+        // Act
         List<Adicional> disponibles = adicionalRepository.findByDisponibleTrue();
 
-        // Then
+        // Assert
         assertThat(disponibles).hasSize(2);
         assertThat(disponibles).extracting(Adicional::getNombre)
             .containsExactlyInAnyOrder("Guacamole", "Jalapeños");
@@ -201,14 +203,14 @@ class AdicionalRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should find Adicionales by Producto ID and disponible true")
+    @DisplayName("Debería encontrar adicionales por ID de producto y disponible")
     void testFindByProductoIdAndDisponibleTrue() {
-        // Given
+        // Arrange
         Producto savedProducto = productRepository.save(producto1);
         Adicional savedAdicional1 = adicionalRepository.save(adicional1); // disponible = true
         Adicional savedAdicional2 = adicionalRepository.save(adicional2); // disponible = false
         
-        // Create ProductoAdicional relationships with proper composite key initialization
+        // Crear relaciones ProductoAdicional con inicialización correcta de clave compuesta
         ProductoAdicionalId pa1Id = new ProductoAdicionalId();
         pa1Id.setProductoId(savedProducto.getId());
         pa1Id.setAdicionalId(savedAdicional1.getId());
@@ -229,24 +231,24 @@ class AdicionalRepositoryTest {
         pa2.setAdicional(savedAdicional2);
         productoAdicionalRepository.save(pa2);
 
-        // When
+        // Act
         List<Adicional> adicionalesDisponibles = adicionalRepository
             .findByProductoIdAndDisponibleTrue(savedProducto.getId());
 
-        // Then
+        // Assert
         assertThat(adicionalesDisponibles).hasSize(1);
         assertThat(adicionalesDisponibles.get(0).getNombre()).isEqualTo("Guacamole");
         assertThat(adicionalesDisponibles.get(0).getDisponible()).isTrue();
     }
 
     @Test
-    @DisplayName("Should find available Adicionales with no associated productos (empty relationships)")
+    @DisplayName("Debería encontrar adicionales disponibles sin productos asociados")
     void testFindByDisponibleTrueAndProductosIsEmpty() {
-        // Given
-        Adicional savedAdicional1 = adicionalRepository.save(adicional1); // Sin productos asociados, disponible
-        Adicional savedAdicional2 = adicionalRepository.save(adicional2); // Sin productos asociados, no disponible
+        // Arrange
+        adicionalRepository.save(adicional1); // Sin productos asociados, disponible
+        adicionalRepository.save(adicional2); // Sin productos asociados, no disponible
         
-        // Create a product and associate adicional3 with it
+        // Crear un producto y asociar adicional3 con él
         Producto savedProducto = productRepository.save(producto1);
         Adicional savedAdicional3 = adicionalRepository.save(adicional3);
         
@@ -260,26 +262,26 @@ class AdicionalRepositoryTest {
         pa.setAdicional(savedAdicional3);
         productoAdicionalRepository.save(pa);
 
-        // When
+        // Act
         List<Adicional> adicionalesSinProductos = adicionalRepository
             .findByDisponibleTrueAndProductosIsEmpty();
 
-        // Then
+        // Assert
         assertThat(adicionalesSinProductos).hasSize(1);
         assertThat(adicionalesSinProductos.get(0).getNombre()).isEqualTo("Guacamole");
         assertThat(adicionalesSinProductos.get(0).getDisponible()).isTrue();
     }
 
     @Test
-    @DisplayName("Should find available Adicionales for a specific Producto (not yet associated)")
+    @DisplayName("Debería encontrar adicionales disponibles no asociados a un producto")
     void testFindAvailableForProduct() {
-        // Given
+        // Arrange
         Producto savedProducto = productRepository.save(producto1);
-        Adicional savedAdicional1 = adicionalRepository.save(adicional1); // disponible, sin asociar
-        Adicional savedAdicional2 = adicionalRepository.save(adicional2); // no disponible, sin asociar
+        adicionalRepository.save(adicional1); // disponible, sin asociar
+        adicionalRepository.save(adicional2); // no disponible, sin asociar
         Adicional savedAdicional3 = adicionalRepository.save(adicional3); // disponible, pero lo asociaremos
         
-        // Associate adicional3 with producto1
+        // Asociar adicional3 con producto1
         ProductoAdicionalId paId = new ProductoAdicionalId();
         paId.setProductoId(savedProducto.getId());
         paId.setAdicionalId(savedAdicional3.getId());
@@ -290,23 +292,23 @@ class AdicionalRepositoryTest {
         pa.setAdicional(savedAdicional3);
         productoAdicionalRepository.save(pa);
 
-        // When
+        // Act
         List<Adicional> adicionalesDisponibles = adicionalRepository
             .findAvailableForProduct(savedProducto.getId());
 
-        // Then
-        // Should return adicional1 (disponible y no asociado)
-        // Should NOT return adicional2 (no disponible) 
-        // Should NOT return adicional3 (ya asociado)
+        // Assert
+        // Debería retornar adicional1 (disponible y no asociado)
+        // NO debería retornar adicional2 (no disponible) 
+        // NO debería retornar adicional3 (ya asociado)
         assertThat(adicionalesDisponibles).hasSize(1);
         assertThat(adicionalesDisponibles.get(0).getNombre()).isEqualTo("Guacamole");
         assertThat(adicionalesDisponibles.get(0).getDisponible()).isTrue();
     }
 
     @Test
-    @DisplayName("Should delete Adicional and verify ProductoAdicional relationship handling")
+    @DisplayName("Debería eliminar adicional y verificar manejo de relación con productos")
     void testCascadeDeleteWithProductoAdicional() {
-        // Given
+        // Arrange
         Producto savedProducto = productRepository.save(producto1);
         Adicional savedAdicional = adicionalRepository.save(adicional1);
         
@@ -320,27 +322,17 @@ class AdicionalRepositoryTest {
         pa.setAdicional(savedAdicional);
         ProductoAdicional savedPa = productoAdicionalRepository.save(pa);
 
-        // Verify relationship exists
+        // Verificar que la relación existe
         assertThat(productoAdicionalRepository.findById(savedPa.getId())).isPresent();
 
-        // When - Delete the adicional
-        // Note: Cascade deletion depends on the cascade configuration on the Adicional entity
-        // The @OneToMany mappedBy="adicional" with CascadeType.ALL should cascade to ProductoAdicional
+        // Act - Eliminar el adicional
         adicionalRepository.deleteById(savedAdicional.getId());
 
-        // Then - Verify adicional is deleted
+        // Assert - Verificar que el adicional fue eliminado
         assertThat(adicionalRepository.findById(savedAdicional.getId())).isNotPresent();
         
-        // Verify ProductoAdicional cascade behavior
-        // Since CascadeType.ALL is configured, ProductoAdicional should be deleted
-        // However, if it's not deleted, the relationship is orphaned which could indicate
-        // the need for orphanRemoval=true in the entity configuration
-        Optional<ProductoAdicional> paAfterDelete = productoAdicionalRepository.findById(savedPa.getId());
-        
-        // Test passes if either:
-        // 1. ProductoAdicional is deleted (cascade works)
-        // 2. ProductoAdicional remains but Adicional is deleted (orphaned relationship - acceptable for this test)
-        // We're just verifying that the Adicional itself can be deleted without constraint violations
+        // Verificar comportamiento de cascada de ProductoAdicional
+        // El test pasa si el Adicional puede ser eliminado sin violaciones de restricciones
         assertThat(adicionalRepository.findById(savedAdicional.getId())).isNotPresent();
     }
 }

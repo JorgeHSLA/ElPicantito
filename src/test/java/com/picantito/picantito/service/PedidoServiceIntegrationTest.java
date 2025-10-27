@@ -21,14 +21,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Pruebas de INTEGRACIÓN del servicio de Pedidos
- * Estas pruebas usan la base de datos H2 real y todos los componentes reales
- * Total: 5 tests
+ * Pruebas de Integración del Servicio de Pedidos
+ * Usa base de datos H2 en memoria con todos los componentes reales
+ * Total: 5 tests de integración
  */
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-@DisplayName("PedidoService - Integration Tests")
+@DisplayName("Pruebas de Integración de PedidoService")
 class PedidoServiceIntegrationTest {
 
     @Autowired
@@ -48,7 +48,7 @@ class PedidoServiceIntegrationTest {
     private Producto producto;
 
     @BeforeEach
-    void setUp() {
+    void init() {
         // Limpiar datos
         pedidoRepository.deleteAll();
         productRepository.deleteAll();
@@ -88,9 +88,9 @@ class PedidoServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Integration 1: Obtener todos los pedidos")
+    @DisplayName("Debería obtener todos los pedidos existentes")
     void testGetAllPedidos() {
-        // Arrange - crear pedidos manualmente
+        // Arrange
         Pedido pedido1 = new Pedido();
         pedido1.setCliente(cliente);
         pedido1.setDireccion("Calle 123");
@@ -117,7 +117,7 @@ class PedidoServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Integration 2: Obtener pedidos por cliente")
+    @DisplayName("Debería obtener todos los pedidos de un cliente específico")
     void testGetPedidosByCliente() {
         // Arrange
         Pedido pedido1 = new Pedido();
@@ -137,7 +137,7 @@ class PedidoServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Integration 3: Obtener pedido por ID")
+    @DisplayName("Debería obtener un pedido por su ID")
     void testGetPedidoById() {
         // Arrange
         Pedido pedido = new Pedido();
@@ -157,7 +157,7 @@ class PedidoServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Integration 4: Actualizar estado de pedido")
+    @DisplayName("Debería actualizar el estado de un pedido")
     void testActualizarEstado() {
         // Arrange
         Pedido pedido = new Pedido();
@@ -176,7 +176,7 @@ class PedidoServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Integration 5: Asignar repartidor a pedido")
+    @DisplayName("Debería asignar un repartidor a un pedido")
     void testAsignarRepartidor() {
         // Arrange
         Pedido pedido = new Pedido();

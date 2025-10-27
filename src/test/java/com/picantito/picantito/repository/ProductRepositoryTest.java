@@ -15,11 +15,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Pruebas del repositorio de Productos
+ * Usa base de datos H2 en memoria configurada en application-test.properties
  * Total: 10 tests (5 CRUD + 5 consultas personalizadas)
  */
 @DataJpaTest
 @ActiveProfiles("test")
-@DisplayName("ProductRepository - CRUD y Consultas Tests")
+@DisplayName("Pruebas de ProductRepository")
 class ProductRepositoryTest {
 
     @Autowired
@@ -75,13 +76,17 @@ class ProductRepositoryTest {
         burrito.setActivo(false);
     }
 
-    // ========== PRUEBAS CRUD (5 tests) ==========
+    // ==================== PRUEBAS CRUD (5) ====================
 
     @Test
-    @DisplayName("CRUD 1: Crear/Guardar un producto")
+    @DisplayName("Debería guardar un nuevo producto exitosamente")
     void testCreate() {
+        // Arrange - Ya tenemos tacoAlPastor del @BeforeEach
+
+        // Act
         Producto savedProducto = productRepository.save(tacoAlPastor);
 
+        // Assert
         assertThat(savedProducto).isNotNull();
         assertThat(savedProducto.getId()).isNotNull();
         assertThat(savedProducto.getNombre()).isEqualTo("Taco al Pastor");
@@ -89,67 +94,82 @@ class ProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("CRUD 2: Leer/Encontrar producto por ID")
+    @DisplayName("Debería encontrar un producto por ID")
     void testRead() {
+        // Arrange
         Producto savedProducto = productRepository.save(tacoAlPastor);
 
+        // Act
         Optional<Producto> foundProducto = productRepository.findById(savedProducto.getId());
 
+        // Assert
         assertThat(foundProducto).isPresent();
         assertThat(foundProducto.get().getNombre()).isEqualTo("Taco al Pastor");
     }
 
     @Test
-    @DisplayName("CRUD 3: Actualizar un producto")
+    @DisplayName("Debería actualizar un producto existente")
     void testUpdate() {
+        // Arrange
         Producto savedProducto = productRepository.save(tacoAlPastor);
         Integer productoId = savedProducto.getId();
 
+        // Act
         savedProducto.setPrecioDeVenta(28.0f);
         savedProducto.setDescripcion("Taco al pastor mejorado");
         Producto updatedProducto = productRepository.save(savedProducto);
 
+        // Assert
         assertThat(updatedProducto.getId()).isEqualTo(productoId);
         assertThat(updatedProducto.getPrecioDeVenta()).isEqualTo(28.0f);
         assertThat(updatedProducto.getDescripcion()).isEqualTo("Taco al pastor mejorado");
     }
 
     @Test
-    @DisplayName("CRUD 4: Eliminar un producto")
+    @DisplayName("Debería eliminar un producto por ID")
     void testDelete() {
+        // Arrange
         Producto savedProducto = productRepository.save(tacoAlPastor);
         Integer productoId = savedProducto.getId();
 
+        // Act
         productRepository.deleteById(productoId);
 
+        // Assert
         Optional<Producto> deletedProducto = productRepository.findById(productoId);
         assertThat(deletedProducto).isEmpty();
     }
 
     @Test
-    @DisplayName("CRUD 5: Listar todos los productos")
+    @DisplayName("Debería listar todos los productos")
     void testReadAll() {
+        // Arrange
         productRepository.save(tacoAlPastor);
         productRepository.save(tacoSuadero);
         productRepository.save(quesadilla);
 
+        // Act
         List<Producto> productos = productRepository.findAll();
 
+        // Assert
         assertThat(productos).isNotNull();
         assertThat(productos).hasSize(3);
     }
 
-    // ========== CONSULTAS PERSONALIZADAS (5 tests) ==========
+    // ==================== CONSULTAS PERSONALIZADAS (5) ====================
 
     @Test
-    @DisplayName("Consulta 1: Encontrar productos disponibles")
+    @DisplayName("Debería encontrar todos los productos disponibles")
     void testFindByDisponibleTrue() {
+        // Arrange
         productRepository.save(tacoAlPastor);   // disponible=true
         productRepository.save(tacoSuadero);    // disponible=true
         productRepository.save(quesadilla);     // disponible=false
 
+        // Act
         List<Producto> productosDisponibles = productRepository.findByDisponibleTrue();
 
+        // Assert
         assertThat(productosDisponibles).hasSize(2);
         assertThat(productosDisponibles)
                 .extracting(Producto::getDisponible)
@@ -157,14 +177,17 @@ class ProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("Consulta 2: Encontrar productos activos")
+    @DisplayName("Debería encontrar todos los productos activos")
     void testFindByActivoTrue() {
+        // Arrange
         productRepository.save(tacoAlPastor);   // activo=true
         productRepository.save(tacoSuadero);    // activo=true
         productRepository.save(burrito);        // activo=false
 
+        // Act
         List<Producto> productosActivos = productRepository.findByActivoTrue();
 
+        // Assert
         assertThat(productosActivos).hasSize(2);
         assertThat(productosActivos)
                 .extracting(Producto::getActivo)
@@ -172,14 +195,17 @@ class ProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("Consulta 3: Buscar productos por nombre (contiene texto)")
+    @DisplayName("Debería buscar productos por nombre que contenga un texto")
     void testFindByNombreContaining() {
+        // Arrange
         productRepository.save(tacoAlPastor);
         productRepository.save(tacoSuadero);
         productRepository.save(quesadilla);
 
+        // Act
         List<Producto> tacosFound = productRepository.findByNombreContainingIgnoreCase("taco");
 
+        // Assert
         assertThat(tacosFound).hasSize(2);
         assertThat(tacosFound)
                 .extracting(Producto::getNombre)
@@ -187,25 +213,31 @@ class ProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("Consulta 4: Encontrar producto por nombre exacto")
+    @DisplayName("Debería encontrar un producto por nombre exacto")
     void testFindByNombre() {
+        // Arrange
         productRepository.save(tacoAlPastor);
         productRepository.save(tacoSuadero);
 
+        // Act
         Optional<Producto> found = productRepository.findByNombre("Taco al Pastor");
 
+        // Assert
         assertThat(found).isPresent();
         assertThat(found.get().getNombre()).isEqualTo("Taco al Pastor");
         assertThat(found.get().getDescripcion()).isEqualTo("Delicioso taco con carne al pastor");
     }
 
     @Test
-    @DisplayName("Consulta 5: Verificar que no se encuentre producto con nombre inexistente")
+    @DisplayName("Debería retornar vacío cuando no encuentra producto por nombre")
     void testFindByNombreNotFound() {
+        // Arrange
         productRepository.save(tacoAlPastor);
 
+        // Act
         Optional<Producto> found = productRepository.findByNombre("Producto Inexistente");
 
+        // Assert
         assertThat(found).isEmpty();
     }
 }

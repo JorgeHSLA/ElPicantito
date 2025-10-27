@@ -28,12 +28,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Pruebas del CONTROLADOR de Pedidos con MOCKS
- * Incluye uno de cada tipo de petición HTTP (GET, POST, PUT, PATCH, DELETE)
- * Total: 5 tests
+ * Pruebas del Controlador de Pedidos con Mocks
+ * Incluye tests para diferentes tipos de peticiones HTTP
+ * Total: 5 tests de controlador
  */
 @WebMvcTest(PedidoController.class)
-@DisplayName("PedidoController - Tests with Mocks")
+@DisplayName("Pruebas del Controlador de Pedidos con Mocks")
 class PedidoControllerMockTest {
 
     @Autowired
@@ -88,7 +88,7 @@ class PedidoControllerMockTest {
     }
 
     @Test
-    @DisplayName("Controller 1: GET - Obtener todos los pedidos")
+    @DisplayName("Debería obtener todos los pedidos mediante GET")
     void testGetAllPedidos() throws Exception {
         // Arrange
         Pedido pedido2 = new Pedido();
@@ -121,7 +121,7 @@ class PedidoControllerMockTest {
     }
 
     @Test
-    @DisplayName("Controller 2: GET (con parámetro) - Obtener pedido por ID")
+    @DisplayName("Debería obtener un pedido por ID mediante GET")
     void testGetPedidoById() throws Exception {
         // Arrange
         when(pedidoService.getPedidoById(1)).thenReturn(pedido);
@@ -141,7 +141,7 @@ class PedidoControllerMockTest {
     }
 
     @Test
-    @DisplayName("Controller 3: POST - Asignar repartidor")
+    @DisplayName("Debería asignar un repartidor mediante POST")
     void testAsignarRepartidor() throws Exception {
         // Arrange
         AsignarRepartidorDTO dto = new AsignarRepartidorDTO();
@@ -167,7 +167,7 @@ class PedidoControllerMockTest {
     }
 
     @Test
-    @DisplayName("Controller 4: PATCH - Actualizar estado de pedido")
+    @DisplayName("Debería actualizar el estado de un pedido mediante PATCH")
     void testActualizarEstadoPatch() throws Exception {
         // Arrange
         Map<String, String> estadoBody = new HashMap<>();
@@ -192,7 +192,7 @@ class PedidoControllerMockTest {
     }
 
     @Test
-    @DisplayName("Controller 5: DELETE - Eliminar pedido")
+    @DisplayName("Debería eliminar un pedido mediante DELETE")
     void testEliminarPedido() throws Exception {
         // Arrange
         doNothing().when(pedidoService).eliminarPedido(1);
