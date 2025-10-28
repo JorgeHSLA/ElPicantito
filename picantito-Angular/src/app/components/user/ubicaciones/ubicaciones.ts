@@ -13,7 +13,7 @@ export class UbicacionesComponent implements OnInit, AfterViewInit {
   private map!: L.Map;
   
   // Coordenadas de Bogotá (puedes modificar estas coordenadas)
-  private bogotaCoords = { lat: 4.7110, lng: -74.0721 };
+  private bogotaCoords = { lat: 4.687062983237386, lng: -74.07370802922286 };
 
   ngOnInit(): void {
     // Fix para los iconos de Leaflet
@@ -38,12 +38,12 @@ export class UbicacionesComponent implements OnInit, AfterViewInit {
     const marker = L.marker([this.bogotaCoords.lat, this.bogotaCoords.lng]).addTo(this.map);
     
     // Puedes agregar un popup al marcador
-    marker.bindPopup('<b>El Picantito</b><br>Sucursal Principal').openPopup();
+    marker.bindPopup('<div style="color: black;"><b>El Picantito</b><br>Centro Comercial Cafam Floresta Local 67<br>Av. 68 #90 - 88, Bogotá</div>').openPopup();
 
     // Aquí puedes agregar más marcadores para otras sucursales
     // Ejemplo:
     // const sucursal2 = L.marker([4.6097, -74.0817]).addTo(this.map);
-    // sucursal2.bindPopup('<b>El Picantito</b><br>Sucursal 2');
+    // sucursal2.bindPopup('<div style="color: black;"><b>El Picantito</b><br>Sucursal 2</div>');
   }
 
   private fixLeafletIconPath(): void {

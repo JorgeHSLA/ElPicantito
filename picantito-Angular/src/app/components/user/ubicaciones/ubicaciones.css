@@ -1,7 +1,7 @@
 .ubicaciones-container {
   min-height: 100vh;
   padding: 2rem 1rem;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: #2d1529;
 }
 
 .ubicaciones-header {
@@ -13,14 +13,14 @@
 .title {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 0.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .subtitle {
   font-size: 1.2rem;
-  color: #666;
+  color: #e0e0e0;
   margin-bottom: 0;
 }
 
@@ -34,8 +34,9 @@
   height: 600px;
   width: 100%;
   border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
   overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .sucursales-info {
@@ -45,10 +46,10 @@
 }
 
 .info-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .info-card h3 {
