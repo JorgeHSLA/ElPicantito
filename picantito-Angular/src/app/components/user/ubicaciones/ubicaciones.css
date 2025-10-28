@@ -2,6 +2,8 @@
   min-height: 100vh;
   padding: 2rem 1rem;
   background: #2d1529;
+  position: relative;
+  z-index: 1;
 }
 
 .ubicaciones-header {
@@ -28,6 +30,8 @@
   max-width: 1200px;
   margin: 0 auto 2rem;
   padding: 0 1rem;
+  position: relative;
+  z-index: 1;
 }
 
 .map-container {
@@ -37,6 +41,8 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
   overflow: hidden;
   border: 2px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .sucursales-info {
@@ -112,6 +118,14 @@
 .leaflet-control-zoom-in:hover span,
 .leaflet-control-zoom-out:hover span {
   color: #000000 !important;
+}
+
+/* Asegurar que Leaflet no se sobreponga a la navbar */
+.leaflet-container,
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 1 !important;
 }
 
 /* Responsive */
