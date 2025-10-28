@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TeamMemberCardComponent } from '../../shared/team-member-card/team-member-card.component';
 import { ValueCardComponent } from '../../shared/value-card/value-card.component';
 import { StoryCardComponent } from '../../shared/story-card/story-card.component';
@@ -89,7 +89,7 @@ export class SobreNosotrosComponent implements OnInit, AfterViewInit {
   // Estado del usuario (simulado por ahora)
   loggedUser: any = null; // Aquí integrarás con tu servicio de autenticación
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     // Inicialización del componente
@@ -110,11 +110,11 @@ export class SobreNosotrosComponent implements OnInit, AfterViewInit {
   // Navegación
   navigateToStore(): void {
     // Implementar navegación a tienda
-    console.log('Navegando a tienda');
+    this.router.navigate(['/tienda']);
   }
 
   navigateToLocation(): void {
-    // Implementar navegación a ubicación
-    console.log('Navegando a ubicación');
+    // Navegar a la página de ubicaciones
+    this.router.navigate(['/ubicaciones']);
   }
 }

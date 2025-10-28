@@ -1,0 +1,156 @@
+.ubicaciones-container {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background: #2d1529;
+  position: relative;
+  z-index: 1;
+}
+
+.ubicaciones-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #e0e0e0;
+  margin-bottom: 0;
+}
+
+.map-wrapper {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.map-container {
+  height: 600px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.sucursales-info {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.info-card h3 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.info-card p {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.sucursal {
+  margin-top: 1rem;
+}
+
+.sucursal h4 {
+  font-size: 1.5rem;
+  color: #2d1529;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.sucursal p {
+  margin-bottom: 0.5rem;
+}
+
+.sucursal p strong {
+  color: #2d1529;
+}
+
+/* Estilos para botones de zoom de Leaflet */
+.leaflet-control-zoom a,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.leaflet-control-zoom a span,
+.leaflet-control-zoom-in span,
+.leaflet-control-zoom-out span {
+  color: #000000 !important;
+  font-weight: bold !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+}
+
+.leaflet-control-zoom a:hover,
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+  background-color: #f4f4f4 !important;
+  color: #000000 !important;
+}
+
+.leaflet-control-zoom a:hover span,
+.leaflet-control-zoom-in:hover span,
+.leaflet-control-zoom-out:hover span {
+  color: #000000 !important;
+}
+
+/* Asegurar que Leaflet no se sobreponga a la navbar */
+.leaflet-container,
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 1 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .map-container {
+    height: 400px;
+  }
+
+  .info-card {
+    padding: 1.5rem;
+  }
+
+  .info-card h3 {
+    font-size: 1.5rem;
+  }
+
+  .info-card p {
+    font-size: 1rem;
+  }
+}

@@ -75,6 +75,40 @@ export class CheckoutSummaryComponent {
       this.erroresValidacion.push('La dirección de entrega es obligatoria');
     }
 
+    // Validar teléfono
+    if (!this.customerInfo.telefono.trim()) {
+      this.erroresValidacion.push('El teléfono es obligatorio');
+    }
+
+    // Validar usuario autenticado
+    const usuario = this.authService.loggedUser();
+    console.log('👤 Usuario logueado:', usuario);
+    console.log('🔍 Detalles del ID:', {
+      id: usuario?.id,
+      tipo: typeof usuario?.id,
+      esNumero: typeof usuario?.id === 'number',
+      valor: usuario?.id
+    });
+    
+    if (!usuario || !usuario.id) {
+      this.erroresValidacion.push('No se pudo identificar el usuario. Por favor, inicia sesión nuevamente.');
+      return;
+    }
+
+    // Validar que el ID sea un número válido (convertir si es string)
+    const clienteId = Number(usuario.id);
+    console.log('🔢 Cliente ID procesado:', {
+      original: usuario.id,
+      convertido: clienteId,
+      esValido: !isNaN(clienteId) && clienteId > 0 && clienteId <= 2147483647
+    });
+    
+    if (isNaN(clienteId) || clienteId <= 0 || clienteId > 2147483647) {
+      console.error('❌ ID de usuario inválido:', usuario.id, 'Tipo:', typeof usuario.id);
+      this.erroresValidacion.push('ID de usuario inválido. Por favor, cierra sesión e inicia sesión nuevamente.');
+      return;
+    }
+
     // Validar pedido
     const summary = this.cartSummary();
     console.log('📋 Resumen del carrito:', summary);

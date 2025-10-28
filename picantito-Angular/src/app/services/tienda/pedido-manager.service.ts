@@ -25,8 +25,23 @@ export class PedidoManagerService {
     }
 
     const usuario = this.authService.loggedUser();
+    console.log('👤 Usuario obtenido del AuthService:', usuario);
+    
     if (!usuario || !usuario.id) {
       return throwError(() => new Error('Usuario no autenticado'));
+    }
+
+    // Validar que el ID sea un número válido dentro del rango de int
+    const clienteId = Number(usuario.id);
+    console.log('🔢 Cliente ID convertido a número:', clienteId, 'Tipo:', typeof clienteId);
+    
+    if (isNaN(clienteId) || clienteId <= 0 || clienteId > 2147483647) {
+      console.error('❌ ID de cliente inválido:', {
+        original: usuario.id,
+        convertido: clienteId,
+        tipo: typeof usuario.id
+      });
+      return throwError(() => new Error('ID de usuario inválido. Por favor, inicia sesión nuevamente.'));
     }
 
     // Convertir items del carrito a formato de pedido
@@ -44,7 +59,7 @@ export class PedidoManagerService {
 
     const pedidoRequest: CrearPedidoRequest = {
       direccion,
-      clienteId: usuario.id,
+      clienteId: clienteId,
       fechaEntrega: fechaEntregaFinal,
       productos
     };
