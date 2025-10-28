@@ -1,4 +1,4 @@
-import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem, DragDropModule } from '@angular/cdk/drag-drop';
 import { Component, signal } from '@angular/core';
 import { Item } from '../../../models/crearTaco/item';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
@@ -8,9 +8,10 @@ import { CommonModule } from '@angular/common';
 import { Adicional } from '../../../models/adicional';
 @Component({
   selector: 'app-drag-and-drop',
-  imports: [CommonModule, CdkDropList, CdkDrag],
+  standalone: true,
+  imports: [CommonModule, DragDropModule],
   templateUrl: './drag-and-drop.html',
-  styleUrl: './drag-and-drop.css'
+  styleUrls: ['./drag-and-drop.css']
 })
 export class DragAndDrop {
 
