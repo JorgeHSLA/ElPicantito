@@ -6,6 +6,14 @@
 /* Estilos específicos para mi-perfil */
 :host {
   min-height: 100vh;
+  display: block;
+  background-color: #2d1529;
+}
+
+.profile-container {
+  background-color: #2d1529;
+  min-height: 100vh;
+  padding: 2rem 0;
 }
 
 .profile-avatar {
