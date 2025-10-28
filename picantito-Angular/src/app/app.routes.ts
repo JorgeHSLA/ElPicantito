@@ -47,6 +47,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/user/sobre-nosotros/sobre-nosotros').then(m => m.SobreNosotrosComponent)
   },
   {
+    path: 'ubicaciones',
+    loadComponent: () => import('./components/user/ubicaciones/ubicaciones').then(m => m.UbicacionesComponent)
+  },
+  {
     path: 'cliente/:clienteId/pedidos',
     loadComponent: () => import('./components/user/pedidos-cliente/pedidos-cliente.component').then(m => m.PedidosClienteComponent),
     canActivate: [AuthGuard]
