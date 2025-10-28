@@ -1,59 +1,69 @@
 <!-- CREAR TU TACO -->
 <section class="build-your-taco-section py-5">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6 mb-4 mb-lg-0">
-        <div class="taco-content">
-          <span class="badge text-dark mb-3 px-3 py-2" style="background-color: #ED7E47;">Personalización</span>
-          <h2 class="display-5 fw-bold mb-4 text-white">
-            Arma Tu Propio <span style="color: #ED7E47;">Taco</span>
-          </h2>
-          <p class="lead mb-4 text-white">
-            Elige tus ingredientes favoritos y crea el taco perfecto para ti. 
-            Más de 20 ingredientes frescos para combinar.
-          </p>
-          
-          <div class="steps mb-4">
-            <div class="d-flex align-items-start mb-3">
-              <span class="badge text-dark rounded-circle me-3 mt-1" style="background-color: #ED7E47;">1</span>
-              <div>
-                <h6 class="fw-semibold mb-1 text-white">Elige tu tortilla</h6>
-                <small class="text-white-50">Maíz artesanal o harina suave</small>
-              </div>
-            </div>
-            <div class="d-flex align-items-start mb-3">
-              <span class="badge text-dark rounded-circle me-3 mt-1" style="background-color: #ED7E47;">2</span>
-              <div>
-                <h6 class="fw-semibold mb-1 text-white">Selecciona tu proteína</h6>
-                <small class="text-white-50">Carne, pollo, pescado o vegetariano</small>
-              </div>
-            </div>
-            <div class="d-flex align-items-start mb-3">
-              <span class="badge text-dark rounded-circle me-3 mt-1" style="background-color: #ED7E47;">3</span>
-              <div>
-                <h6 class="fw-semibold mb-1 text-white">Agrega tus extras</h6>
-                <small class="text-white-50">Salsas, guarniciones y especias</small>
-              </div>
-            </div>
-            <div class="d-flex align-items-start">
-              <span class="badge text-dark rounded-circle me-3 mt-1" style="background-color: #ED7E47;">4</span>
-              <div>
-                <h6 class="fw-semibold mb-1 text-white">¡Disfruta!</h6>
-                <small class="text-white-50">Tu taco hecho a medida</small>
-              </div>
-            </div>
-          </div>
-          
-          <button (click)="navigateToBuilder()" class="btn btn-lg px-4 py-2 rounded-pill" style="background-color: #ED7E47; border-color: #ED7E47; color: white;">
+    <!-- Banderines inclinados individuales -->
+    <div class="bunting-strip">
+        <img src="/images/banderines.png" class="bunting-item" alt="">
+        <img src="/images/banderines.png" class="bunting-item" alt="">
+        <img src="/images/banderines.png" class="bunting-item" alt="">
+        <img src="/images/banderines.png" class="bunting-item" alt="">
+        <img src="/images/banderines.png" class="bunting-item" alt="">
+        <img src="/images/banderines.png" class="bunting-item" alt="">
+        <img src="/images/banderines.png" class="bunting-item" alt="">
+    </div>
+
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="taco-content">
+                    <span class="badge text-dark mb-3 px-3 py-2" style="background-color: #ED7E47;">Personalización</span>
+                    <h2 class="display-5 fw-bold mb-4 text-white">
+                        Arma Tu Propio <span style="color: #ED7E47;">Taco</span>
+                    </h2>
+                    <p class="lead mb-4 text-white">
+                        Elige tus ingredientes favoritos y crea el taco perfecto para ti. Más de 20 ingredientes frescos para combinar.
+                    </p>
+
+                    <div class="steps mb-4">
+                        <div class="d-flex align-items-start mb-3">
+                            <span class="badge text-dark rounded-circle me-3 mt-1" style="background-color: #ED7E47;">1</span>
+                            <div>
+                                <h6 class="fw-semibold mb-1 text-white">Elige tu tortilla</h6>
+                                <small class="text-white-50">Maíz artesanal o harina suave</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start mb-3">
+                            <span class="badge text-dark rounded-circle me-3 mt-1" style="background-color: #ED7E47;">2</span>
+                            <div>
+                                <h6 class="fw-semibold mb-1 text-white">Selecciona tu proteína</h6>
+                                <small class="text-white-50">Carne, pollo, pescado o vegetariano</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start mb-3">
+                            <span class="badge text-dark rounded-circle me-3 mt-1" style="background-color: #ED7E47;">3</span>
+                            <div>
+                                <h6 class="fw-semibold mb-1 text-white">Agrega tus extras</h6>
+                                <small class="text-white-50">Salsas, guarniciones y especias</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start">
+                            <span class="badge text-dark rounded-circle me-3 mt-1" style="background-color: #ED7E47;">4</span>
+                            <div>
+                                <h6 class="fw-semibold mb-1 text-white">¡Disfruta!</h6>
+                                <small class="text-white-50">Tu taco hecho a medida</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button (click)="navigateToBuilder()" class="btn btn-lg px-4 py-2 rounded-pill" style="background-color: #ED7E47; border-color: #ED7E47; color: white;">
             <i class="bi bi-plus-circle me-2"></i>Comenzar Ahora
           </button>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="taco-image text-center">
+                    <img src="/images/CreateTaco.jpg" class="img-fluid rounded-4 shadow-lg" alt="Crear tu taco">
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="taco-image text-center">
-          <img src="/images/CreateTaco.jpg" class="img-fluid rounded-4 shadow-lg" alt="Crear tu taco">
-        </div>
-      </div>
     </div>
-  </div>
 </section>
