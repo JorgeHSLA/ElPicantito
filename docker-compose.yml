@@ -14,10 +14,9 @@ services:
       container_name: ElPicantitoDB
       restart: always
       volumes:
-      # el volumen es para persistencia de datos aunque el container se caiga 
-      # podemos ver que hay docker-entrypoint-initdb.d, en este fragmento se indica el init, lo cual hace que cada vez que se inicie el contenedor se van a leer esos archivos
-      # docker compose up para que inicie el contenedor
-        - ./sql:/docker-entrypoint-initdb.d
+      # Volumen para persistencia de datos (no montamos todo ./sql para evitar ejecutar scripts no deseados)
+      # Montamos solo el archivo create_schema.sql en el init folder para que SOLO ese script se ejecute en la inicialización.
+        - ./sql/create_schema.sql:/docker-entrypoint-initdb.d/create_schema.sql:ro
         - postgres_data:/var/lib/postgresql/data  # Volumen nombrado para datos persistentes
       environment:
       ## informacion de bases de datos
