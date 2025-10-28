@@ -64,6 +64,56 @@
   line-height: 1.6;
 }
 
+.sucursal {
+  margin-top: 1rem;
+}
+
+.sucursal h4 {
+  font-size: 1.5rem;
+  color: #2d1529;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.sucursal p {
+  margin-bottom: 0.5rem;
+}
+
+.sucursal p strong {
+  color: #2d1529;
+}
+
+/* Estilos para botones de zoom de Leaflet */
+.leaflet-control-zoom a,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.leaflet-control-zoom a span,
+.leaflet-control-zoom-in span,
+.leaflet-control-zoom-out span {
+  color: #000000 !important;
+  font-weight: bold !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+}
+
+.leaflet-control-zoom a:hover,
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+  background-color: #f4f4f4 !important;
+  color: #000000 !important;
+}
+
+.leaflet-control-zoom a:hover span,
+.leaflet-control-zoom-in:hover span,
+.leaflet-control-zoom-out:hover span {
+  color: #000000 !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .title {
