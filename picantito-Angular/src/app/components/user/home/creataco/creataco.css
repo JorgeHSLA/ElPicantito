@@ -18,6 +18,46 @@
 .build-your-taco-section {
     background-color: #442142; /* Fondo morado uniforme */
     color: white; /* Texto blanco */
+    position: relative; /* Para posicionar adornos */
+    overflow: visible; /* Permite que los banderines se vean fuera si es necesario */
+    isolation: isolate; /* Aísla las mezclas para no afectar otras secciones */
+    padding-top: 5rem; /* Espacio normal, no extra */
+}
+
+/* Contenedor de la tira de banderines */
+.bunting-strip {
+    position: absolute;
+    top: -120px;
+    left: 0;
+    width: 100%;
+    height: 180px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    pointer-events: none;
+    z-index: 2;
+    overflow: visible; /* Cambiado para que se vea completo */
+}
+
+/* Cada banderín individual */
+.bunting-item {
+    width: 20%; /* Dividir el ancho entre los banderines */
+    min-width: 280px;
+    height: auto;
+    transform: rotate(-1.5deg); /* Inclinación muy sutil */
+    mix-blend-mode: multiply;
+    filter: brightness(1.05) contrast(1.08);
+    margin-right: -20px; /* Ligero solapamiento para continuidad */
+    flex-shrink: 0; /* Evita que se reduzcan */
+}
+
+/* Elevar el contenido sobre los adornos */
+.taco-content, .taco-image { position: relative; z-index: 1; }
+
+/* Pseudo-elementos anteriores ya no se usan */
+.build-your-taco-section::before,
+.build-your-taco-section::after {
+    display: none;
 }
 
 .steps .badge {
@@ -29,10 +69,20 @@
     font-size: 0.875rem;
 }
 
+.taco-image {
+    /* Variables para controlar tamaño del banderín - proporción más natural */
+    --bunting-h: 120px;
+    --bunting-w: 200px; /* ancho de una imagen de banderín - proporción más cuadrada */
+    position: relative; /* necesario para posicionar el banderín */
+}
+
 .taco-image img {
     max-height: 500px;
     object-fit: cover;
 }
+
+/* Elevar el contenido sobre los adornos */
+.taco-content, .taco-image { position: relative; z-index: 1; }
 
 /* Build taco section - spans destacados */
 .build-your-taco-section .text-warning {
@@ -90,4 +140,68 @@
 
 .btn-warning:hover {
     animation: pulse 1.5s infinite;
+}
+
+/* ===================== */
+/* Adornos: banderines   */
+/* ===================== */
+.bunting {
+    position: absolute;
+    pointer-events: none; /* Decorativo; no interactúa */
+    opacity: 0.9;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+}
+
+/* Truco CSS para “transparentar” fondos blancos sobre fondo oscuro */
+.bunting.remove-white {
+    mix-blend-mode: multiply; /* El blanco se funde con el fondo morado */
+    /* Ajustes leves para mantener color en los triángulos */
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25)) brightness(1.05) contrast(1.08);
+}
+
+.bunting-top-left {
+    top: 0;
+    left: 0;
+    width: 45%;
+    height: auto;
+    transform: translateY(-6px) rotate(-2deg);
+}
+
+.bunting-bottom-right {
+    right: 0;
+    bottom: -6px;
+    width: 42%;
+    height: auto;
+    transform: rotate(180deg);
+}
+
+.bunting-top-right {
+    top: 0;
+    right: 0;
+    width: 45%;
+    height: auto;
+    transform: translateY(-6px) scaleX(-1) rotate(-2deg);
+}
+
+/* Responsivo: reducir adornos en pantallas pequeñas */
+@media (max-width: 768px) {
+    .bunting-top-left { width: 70%; }
+    .bunting-top-right { width: 70%; }
+    .bunting-bottom-right { width: 65%; }
+}
+
+/* Banderines grandes que cubren todo el ancho de la pantalla debajo del GIF */
+.build-your-taco-section::after {
+    display: none; /* ya no se usa, ahora está en .taco-image::after */
+}
+
+@media (max-width: 768px) {
+    .build-your-taco-section {
+        padding-top: 3rem;
+    }
+    .build-your-taco-section::before {
+        top: -100px;
+        height: 120px; /* Altura aumentada para móviles también */
+        background-size: 200px auto;
+    }
 }
