@@ -32,8 +32,28 @@ export class AuthService {
     
     return this.http.post<any>(`${this.API_URL}/login`, credentials).pipe(
       map((response) => {
+        console.log('🔐 Respuesta del login:', response);
+        
         if (response && response.usuario) {
           const usuario = response.usuario;
+          
+          // Validar que el ID sea un número válido
+          if (usuario.id && typeof usuario.id !== 'number') {
+            console.warn('⚠️ ID de usuario no es número, convirtiendo:', usuario.id);
+            usuario.id = Number(usuario.id);
+          }
+          
+          if (!usuario.id || isNaN(usuario.id) || usuario.id <= 0) {
+            console.error('❌ ID de usuario inválido después del login:', usuario.id);
+            return false;
+          }
+          
+          console.log('✅ Usuario validado:', {
+            id: usuario.id,
+            tipo: typeof usuario.id,
+            nombre: usuario.nombreCompleto
+          });
+          
           this.loggedUserSignal.set(usuario);
           localStorage.setItem('loggedUser', JSON.stringify(usuario));
           return true;
@@ -97,7 +117,33 @@ export class AuthService {
   private loadUserFromStorage(): void {
     const storedUser = localStorage.getItem('loggedUser');
     if (storedUser) {
-      this.loggedUserSignal.set(JSON.parse(storedUser));
+      try {
+        const usuario = JSON.parse(storedUser);
+        console.log('📦 Usuario cargado desde localStorage:', usuario);
+        
+        // Validar y convertir el ID si es necesario
+        if (usuario.id && typeof usuario.id !== 'number') {
+          console.warn('⚠️ ID de usuario en localStorage no es número, convirtiendo:', usuario.id);
+          usuario.id = Number(usuario.id);
+        }
+        
+        if (!usuario.id || isNaN(usuario.id) || usuario.id <= 0) {
+          console.error('❌ ID de usuario inválido en localStorage, limpiando sesión');
+          localStorage.removeItem('loggedUser');
+          return;
+        }
+        
+        console.log('✅ Usuario validado desde storage:', {
+          id: usuario.id,
+          tipo: typeof usuario.id,
+          nombre: usuario.nombreCompleto
+        });
+        
+        this.loggedUserSignal.set(usuario);
+      } catch (error) {
+        console.error('❌ Error al parsear usuario desde localStorage:', error);
+        localStorage.removeItem('loggedUser');
+      }
     }
   }
 }

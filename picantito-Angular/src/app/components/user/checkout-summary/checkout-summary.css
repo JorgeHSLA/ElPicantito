@@ -363,12 +363,18 @@
     margin-bottom: 1rem;
 }
 
+
+.alert h6 {
+    color: #000000;
+}
+
 .alert ul {
     padding-left: 1.25rem;
 }
 
 .alert li {
     margin-bottom: 0.25rem;
+    color: #000000;
 }
 
 /* Botón de procesando */
