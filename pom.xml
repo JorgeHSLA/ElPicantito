@@ -60,29 +60,19 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- Selenium Java -->
+        <!-- Selenium Java (solo esta dependencia es necesaria, incluye todas las demás) -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.20.0</version>
+            <version>4.26.0</version>
+            <scope>test</scope>
         </dependency>
-        <!-- Selenium API -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-api</artifactId>
-            <version>4.20.0</version>
-        </dependency>
-        <!-- Selenium ChromeDriver -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-chrome-driver</artifactId>
-            <version>4.20.0</version>
-        </dependency>
-        <!-- WebDriverManager by bonigarcia -->
+        <!-- WebDriverManager by bonigarcia (versión compatible con Selenium 4.26.0) -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>5.8.0</version>
+            <version>5.9.2</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- DevTools (solo en desarrollo) -->
