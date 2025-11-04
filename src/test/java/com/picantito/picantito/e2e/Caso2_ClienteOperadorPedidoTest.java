@@ -59,18 +59,13 @@ public class Caso2_ClienteOperadorPedidoTest {
     
     @BeforeAll
     static void setupClass() {
-        // Configurar WebDriverManager para ChromeDriver
         WebDriverManager.chromedriver().setup();
         
-        // Configurar opciones de Chrome
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
         options.addArguments("--disable-notifications");
         options.addArguments("--disable-popup-blocking");
-        // Descomentar para modo headless
-        // options.addArguments("--headless");
-        
-        // Crear dos instancias de WebDriver (una para cliente, otra para operador)
+
         driverCliente = new ChromeDriver(options);
         driverOperador = new ChromeDriver(options);
         
@@ -257,9 +252,7 @@ public class Caso2_ClienteOperadorPedidoTest {
             String precioTexto = precioElement.getText();
             double precioProducto1 = extraerPrecio(precioTexto);
             totalEsperado += precioProducto1;
-        } catch (Exception e) {
-            // Precio no extraído
-        }
+        } catch (Exception e) { /* Precio no extraído */ }
         
         List<WebElement> todosLosAdicionales = waitCliente.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
             By.cssSelector(".adicional-item")));
@@ -297,9 +290,7 @@ public class Caso2_ClienteOperadorPedidoTest {
                         Thread.sleep(500);
                         break;
                     }
-                } catch (Exception e) {
-                    // Continuar con el siguiente adicional
-                }
+                } catch (Exception e) { /* Continuar con el siguiente adicional */ }
             }
         }
         
@@ -1230,9 +1221,7 @@ public class Caso2_ClienteOperadorPedidoTest {
     void test11_ClienteRevisaHistorial() {
         System.out.println("\n=== TEST 11: REVISAR HISTORIAL DE PEDIDOS ===");
         
-        // Navegar a "Mis Pedidos" desde el dropdown del header
-        // Similar a cómo se hace login/logout
-        
+        // Navegar a "Mis Pedidos" desde el dropdown del header        
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -1356,7 +1345,7 @@ public class Caso2_ClienteOperadorPedidoTest {
         assertTrue(productosEncontrados >= 1, 
             "Debería aparecer al menos 1 producto en el pedido. Encontrados: " + productosEncontrados);
         
-        // Verificar adicionales (al menos verificar que haya elementos relacionados)
+        // Verificar adicionales
         try {
             List<WebElement> adicionalesElements = driverCliente.findElements(
                 By.cssSelector(".adicional-item, [class*='adicional'], input[type='checkbox']"));
@@ -1427,7 +1416,6 @@ public class Caso2_ClienteOperadorPedidoTest {
     
     /**
      * Método auxiliar para extraer precio de un texto
-     * Ejemplos: "$25.50", "25.50", "Precio: $25.50" -> 25.50
      */
     private static double extraerPrecio(String texto) {
         // Eliminar símbolos y texto adicional, mantener solo números y punto decimal
