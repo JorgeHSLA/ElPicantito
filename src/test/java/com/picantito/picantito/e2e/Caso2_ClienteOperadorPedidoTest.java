@@ -92,16 +92,13 @@ public class Caso2_ClienteOperadorPedidoTest {
     @Order(1)
     @DisplayName("1. Cliente inicia sesión en el sistema")
     void test01_ClienteLogin() {
-        // Navegar a la página de login
         driverCliente.get(BASE_URL + "/login");
         
-        // Esperar a que carguen los campos del formulario (usar ID específico como en Caso 1)
         WebElement usernameInput = waitCliente.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector("input#nombreUsuario")));
         WebElement passwordInput = waitCliente.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector("input#password")));
         
-        // Hacer clic en el campo para enfocarlo
         usernameInput.click();
         try {
             Thread.sleep(200);
@@ -109,12 +106,10 @@ public class Caso2_ClienteOperadorPedidoTest {
             Thread.currentThread().interrupt();
         }
         
-        // Limpiar completamente el campo
         usernameInput.clear();
         usernameInput.sendKeys(Keys.CONTROL + "a");
         usernameInput.sendKeys(Keys.DELETE);
         
-        // Ingresar username caracter por caracter
         for (char c : CLIENTE_USERNAME.toCharArray()) {
             usernameInput.sendKeys(String.valueOf(c));
             try {
@@ -130,7 +125,6 @@ public class Caso2_ClienteOperadorPedidoTest {
             Thread.currentThread().interrupt();
         }
         
-        // Hacer clic en el campo de password
         passwordInput.click();
         try {
             Thread.sleep(200);
@@ -138,12 +132,10 @@ public class Caso2_ClienteOperadorPedidoTest {
             Thread.currentThread().interrupt();
         }
         
-        // Limpiar el campo de password
         passwordInput.clear();
         passwordInput.sendKeys(Keys.CONTROL + "a");
         passwordInput.sendKeys(Keys.DELETE);
         
-        // Ingresar password caracter por caracter
         for (char c : CLIENTE_PASSWORD.toCharArray()) {
             passwordInput.sendKeys(String.valueOf(c));
             try {
@@ -159,19 +151,16 @@ public class Caso2_ClienteOperadorPedidoTest {
             Thread.currentThread().interrupt();
         }
         
-        // Hacer clic en el botón de login
         WebElement loginButton = waitCliente.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector("button[type='submit']")));
         loginButton.click();
         
-        // Dar tiempo para que se procese el login
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Esperar redirección exitosa
         waitCliente.until(ExpectedConditions.or(
             ExpectedConditions.urlContains("/home"),
             ExpectedConditions.urlContains("/tienda"),
@@ -182,50 +171,41 @@ public class Caso2_ClienteOperadorPedidoTest {
         assertFalse(currentUrl.contains("/login"), 
             "El cliente debería haber iniciado sesión correctamente. URL actual: " + currentUrl);
         
-        System.out.println("✓ Cliente inició sesión exitosamente");
+        System.out.println("✓ Test 1: Cliente inició sesión exitosamente");
     }
     
     @Test
     @Order(2)
     @DisplayName("2. Cliente navega al menú y agrega Taco al Pastor con 2 adicionales")
     void test02_AgregarPrimerProducto() {
-        // Navegar a la tienda/menú
         driverCliente.get(BASE_URL + "/tienda");
         
         try {
-            Thread.sleep(2000); // Dar tiempo para que cargue la página
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Esperar a que carguen los productos
         waitCliente.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
             By.cssSelector("app-product-card, .taco-card")));
         
         try {
-            Thread.sleep(1500); // Dar tiempo adicional
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Buscar específicamente el "Taco al Pastor" por su nombre
         WebElement tacoAlPastor = null;
         try {
-            // Intentar encontrar el producto por texto que contenga "Pastor"
             tacoAlPastor = driverCliente.findElement(
                 By.xpath("//h5[contains(text(), 'Pastor') or contains(text(), 'pastor')]//ancestor::app-product-card | " +
                         "//h5[contains(text(), 'Pastor') or contains(text(), 'pastor')]//ancestor::div[contains(@class, 'card')]"));
-            
-            System.out.println("  ✓ Encontrado: Taco al Pastor");
         } catch (Exception e) {
-            // Si no se encuentra por nombre, usar el último producto de la lista (está al final)
             List<WebElement> productos = driverCliente.findElements(By.cssSelector("app-product-card, .taco-card"));
             assertTrue(productos.size() > 0, "Deberían haber productos disponibles");
-            tacoAlPastor = productos.get(productos.size() - 1); // Último producto
-            System.out.println("  ℹ Seleccionando último producto de la lista");
+            tacoAlPastor = productos.get(productos.size() - 1);
         }
         
-        // Scroll al producto
         ((JavascriptExecutor) driverCliente).executeScript(
             "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", tacoAlPastor);
         
@@ -235,15 +215,10 @@ public class Caso2_ClienteOperadorPedidoTest {
             Thread.currentThread().interrupt();
         }
         
-        // Obtener el nombre del producto antes de hacer clic
         String nombreProducto1 = tacoAlPastor.findElement(
             By.cssSelector("h5.card-title, .card-title")).getText();
-        
         productosSeleccionados.add(nombreProducto1);
         
-        System.out.println("  Producto seleccionado: " + nombreProducto1);
-        
-        // Intentar hacer clic en el botón "Ver Detalles" primero
         try {
             WebElement verDetallesBtn = tacoAlPastor.findElement(
                 By.xpath(".//button[contains(text(), 'Ver Detalles') or contains(@class, 'btn-sm')]"));
@@ -256,47 +231,36 @@ public class Caso2_ClienteOperadorPedidoTest {
             
             try {
                 verDetallesBtn.click();
-                System.out.println("  ✓ Clic en botón 'Ver Detalles'");
             } catch (Exception e) {
                 ((JavascriptExecutor) driverCliente).executeScript("arguments[0].click();", verDetallesBtn);
-                System.out.println("  ✓ Clic forzado en botón 'Ver Detalles'");
             }
         } catch (Exception e) {
-            // Si no encuentra el botón, hacer clic en la tarjeta completa
-            System.out.println("  ℹ No se encontró botón 'Ver Detalles', haciendo clic en la tarjeta");
             waitCliente.until(ExpectedConditions.elementToBeClickable(tacoAlPastor));
             try {
                 tacoAlPastor.click();
-                System.out.println("  ✓ Clic en tarjeta del producto");
             } catch (Exception ex) {
                 ((JavascriptExecutor) driverCliente).executeScript("arguments[0].click();", tacoAlPastor);
-                System.out.println("  ✓ Clic forzado en tarjeta del producto");
             }
         }
         
-        // Esperar a que cargue la página de detalles del producto
         waitCliente.until(ExpectedConditions.urlContains("/producto/"));
         
         try {
-            Thread.sleep(2000); // Dar tiempo para que carguen los adicionales
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Obtener el precio del producto desde la página de detalles
         try {
             WebElement precioElement = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
                 By.cssSelector(".precio-container h2, .text-warning.fw-bold")));
             String precioTexto = precioElement.getText();
             double precioProducto1 = extraerPrecio(precioTexto);
             totalEsperado += precioProducto1;
-            System.out.println("  Precio del producto: $" + precioProducto1);
         } catch (Exception e) {
-            System.out.println("  ⚠ No se pudo extraer el precio del producto");
+            // Precio no extraído
         }
         
-        // Seleccionar específicamente: Aguacate y Jalapeños
-        // Buscar solo botones toggle (no los de cantidad)
         List<WebElement> todosLosAdicionales = waitCliente.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
             By.cssSelector(".adicional-item")));
         
@@ -304,34 +268,24 @@ public class Caso2_ClienteOperadorPedidoTest {
         int adicionalesSeleccionadosCount = 0;
         
         for (String adicionalRequerido : adicionalesRequeridos) {
-            boolean encontrado = false;
-            
-            // Buscar el adicional específico por nombre
             for (WebElement adicionalCard : todosLosAdicionales) {
                 try {
                     String nombreAdicional = adicionalCard.findElement(By.cssSelector("h6.card-title")).getText();
                     
                     if (nombreAdicional.toLowerCase().contains(adicionalRequerido.toLowerCase())) {
-                        // Scroll al adicional
                         ((JavascriptExecutor) driverCliente).executeScript(
                             "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", adicionalCard);
                         
                         Thread.sleep(300);
                         
-                        // Obtener precio del adicional
                         String precioAdicionalTexto = adicionalCard.findElement(By.cssSelector(".text-warning.fw-bold")).getText();
                         double precioAdicional = extraerPrecio(precioAdicionalTexto);
                         totalEsperado += precioAdicional;
                         adicionalesSeleccionados.add(nombreAdicional);
                         
-                        System.out.println("    + Adicional: " + nombreAdicional + " - $" + precioAdicional);
-                        
-                        // Buscar el botón toggle dentro de este adicional específico
-                        // El primer botón es siempre el toggle, no los de cantidad
                         WebElement botonToggle = adicionalCard.findElement(
                             By.cssSelector("button.btn-warning, button.btn-outline-warning"));
                         
-                        // Hacer clic en el botón toggle del adicional
                         waitCliente.until(ExpectedConditions.elementToBeClickable(botonToggle));
                         try {
                             botonToggle.click();
@@ -340,7 +294,6 @@ public class Caso2_ClienteOperadorPedidoTest {
                         }
                         
                         adicionalesSeleccionadosCount++;
-                        encontrado = true;
                         Thread.sleep(500);
                         break;
                     }
@@ -348,31 +301,20 @@ public class Caso2_ClienteOperadorPedidoTest {
                     // Continuar con el siguiente adicional
                 }
             }
-            
-            if (!encontrado) {
-                System.out.println("    ⚠ No se encontró el adicional: " + adicionalRequerido);
-            }
         }
         
         assertTrue(adicionalesSeleccionadosCount >= 2, 
             "Deberían seleccionarse Aguacate y Jalapeños. Seleccionados: " + adicionalesSeleccionadosCount);
         
-        System.out.println("  ✓ Adicionales seleccionados correctamente");
-        
-        // Esperar un momento para que la UI se actualice
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Hacer clic en el botón "Agregar al carrito" - buscar por clase btn-lg y icono cart-plus
         WebElement addToCartButton = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
             By.cssSelector("button.btn-lg.btn-warning, button.btn-lg[class*='warning']")));
         
-        System.out.println("  ✓ Botón 'Agregar al carrito' encontrado");
-        
-        // Scroll al botón
         ((JavascriptExecutor) driverCliente).executeScript(
             "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", addToCartButton);
         
@@ -389,22 +331,15 @@ public class Caso2_ClienteOperadorPedidoTest {
             ((JavascriptExecutor) driverCliente).executeScript("arguments[0].click();", addToCartButton);
         }
         
-        System.out.println("  ✓ Producto agregado al carrito");
-        
-        // Esperar a que se abra el carrito sidebar
         try {
-            Thread.sleep(1500); // Dar tiempo para que se abra el sidebar
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Esperar a que el carrito sidebar esté visible
-        WebElement cartSidebar = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
+        waitCliente.until(ExpectedConditions.presenceOfElementLocated(
             By.cssSelector(".cart-sidebar.show")));
         
-        System.out.println("  ✓ Carrito sidebar abierto");
-        
-        // Hacer clic en el botón X para cerrar el carrito
         WebElement closeCartButton = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
             By.cssSelector(".btn-close-cart, button[aria-label='Cerrar carrito']")));
         
@@ -417,24 +352,19 @@ public class Caso2_ClienteOperadorPedidoTest {
         waitCliente.until(ExpectedConditions.elementToBeClickable(closeCartButton));
         try {
             closeCartButton.click();
-            System.out.println("  ✓ Carrito cerrado con X");
         } catch (Exception e) {
             ((JavascriptExecutor) driverCliente).executeScript("arguments[0].click();", closeCartButton);
-            System.out.println("  ✓ Carrito cerrado con X (JavaScript)");
         }
         
-        // Esperar a que el carrito se cierre
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Hacer clic en "Seguir comprando" para volver a la tienda
         WebElement seguirComprandoButton = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
             By.xpath("//button[contains(text(), 'Seguir comprando') or contains(text(), 'seguir comprando')]")));
         
-        // Scroll al botón
         ((JavascriptExecutor) driverCliente).executeScript(
             "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", seguirComprandoButton);
         
@@ -451,22 +381,19 @@ public class Caso2_ClienteOperadorPedidoTest {
             ((JavascriptExecutor) driverCliente).executeScript("arguments[0].click();", seguirComprandoButton);
         }
         
-        // Esperar a volver a la tienda
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        System.out.println("✓ Taco al Pastor agregado con 2 adicionales");
-        System.out.println("  Total acumulado: $" + totalEsperado);
+        System.out.println("✓ Test 2: Taco al Pastor agregado con adicionales - Total: $" + totalEsperado);
     }
     
     @Test
     @Order(3)
     @DisplayName("3. Cliente agrega Taco de Pescado con 2 adicionales")
     void test03_AgregarSegundoProducto() {
-        // Ya deberíamos estar en la tienda, pero por si acaso navegamos de nuevo
         if (!driverCliente.getCurrentUrl().contains("/tienda")) {
             driverCliente.get(BASE_URL + "/tienda");
             try {
@@ -477,33 +404,25 @@ public class Caso2_ClienteOperadorPedidoTest {
         }
         
         try {
-            Thread.sleep(1500); // Dar tiempo para que cargue la página
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Esperar a que carguen los productos
         waitCliente.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
             By.cssSelector("app-product-card, .taco-card")));
         
-        // Buscar específicamente el "Taco de Pescado" por su nombre
         WebElement tacoDePescado = null;
         try {
-            // Intentar encontrar el producto por texto que contenga "Pescado"
             tacoDePescado = driverCliente.findElement(
                 By.xpath("//h5[contains(text(), 'Pescado') or contains(text(), 'pescado')]//ancestor::app-product-card | " +
                         "//h5[contains(text(), 'Pescado') or contains(text(), 'pescado')]//ancestor::div[contains(@class, 'card')]"));
-            
-            System.out.println("  ✓ Encontrado: Taco de Pescado");
         } catch (Exception e) {
-            // Si no se encuentra por nombre, usar el segundo producto de la lista
             List<WebElement> productos = driverCliente.findElements(By.cssSelector("app-product-card, .taco-card"));
             assertTrue(productos.size() >= 2, "Deberían haber al menos 2 productos disponibles");
-            tacoDePescado = productos.get(1); // Segundo producto
-            System.out.println("  ℹ Seleccionando segundo producto de la lista");
+            tacoDePescado = productos.get(1);
         }
         
-        // Scroll al producto
         ((JavascriptExecutor) driverCliente).executeScript(
             "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", tacoDePescado);
         
@@ -513,15 +432,10 @@ public class Caso2_ClienteOperadorPedidoTest {
             Thread.currentThread().interrupt();
         }
         
-        // Obtener el nombre del producto
         String nombreProducto2 = tacoDePescado.findElement(
             By.cssSelector("h5.card-title, .card-title")).getText();
-        
         productosSeleccionados.add(nombreProducto2);
         
-        System.out.println("  Producto seleccionado: " + nombreProducto2);
-        
-        // Intentar hacer clic en el botón "Ver Detalles" primero
         try {
             WebElement verDetallesBtn = tacoDePescado.findElement(
                 By.xpath(".//button[contains(text(), 'Ver Detalles') or contains(@class, 'btn-sm')]"));
@@ -534,47 +448,36 @@ public class Caso2_ClienteOperadorPedidoTest {
             
             try {
                 verDetallesBtn.click();
-                System.out.println("  ✓ Clic en botón 'Ver Detalles'");
             } catch (Exception e) {
                 ((JavascriptExecutor) driverCliente).executeScript("arguments[0].click();", verDetallesBtn);
-                System.out.println("  ✓ Clic forzado en botón 'Ver Detalles'");
             }
         } catch (Exception e) {
-            // Si no encuentra el botón, hacer clic en la tarjeta completa
-            System.out.println("  ℹ No se encontró botón 'Ver Detalles', haciendo clic en la tarjeta");
             waitCliente.until(ExpectedConditions.elementToBeClickable(tacoDePescado));
             try {
                 tacoDePescado.click();
-                System.out.println("  ✓ Clic en tarjeta del producto");
             } catch (Exception ex) {
                 ((JavascriptExecutor) driverCliente).executeScript("arguments[0].click();", tacoDePescado);
-                System.out.println("  ✓ Clic forzado en tarjeta del producto");
             }
         }
         
-        // Esperar a que cargue la página de detalles
         waitCliente.until(ExpectedConditions.urlContains("/producto/"));
         
         try {
-            Thread.sleep(2000); // Dar tiempo para que carguen los adicionales
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Obtener el precio del producto desde la página de detalles
         try {
             WebElement precioElement = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
                 By.cssSelector(".precio-container h2, .text-warning.fw-bold")));
             String precioTexto = precioElement.getText();
             double precioProducto2 = extraerPrecio(precioTexto);
             totalEsperado += precioProducto2;
-            System.out.println("  Precio del producto: $" + precioProducto2);
         } catch (Exception e) {
-            System.out.println("  ⚠ No se pudo extraer el precio del producto");
+            // Precio no extraído
         }
         
-        // Seleccionar específicamente: Aguacate y Queso extra
-        // Buscar solo los cards de adicionales (no los botones individuales)
         List<WebElement> todosLosAdicionales = waitCliente.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
             By.cssSelector(".adicional-item")));
         
@@ -582,34 +485,24 @@ public class Caso2_ClienteOperadorPedidoTest {
         int adicionalesSeleccionadosCount = 0;
         
         for (String adicionalRequerido : adicionalesRequeridos) {
-            boolean encontrado = false;
-            
-            // Buscar el adicional específico por nombre
             for (WebElement adicionalCard : todosLosAdicionales) {
                 try {
                     String nombreAdicional = adicionalCard.findElement(By.cssSelector("h6.card-title")).getText();
                     
                     if (nombreAdicional.toLowerCase().contains(adicionalRequerido.toLowerCase())) {
-                        // Scroll al adicional
                         ((JavascriptExecutor) driverCliente).executeScript(
                             "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", adicionalCard);
                         
                         Thread.sleep(300);
                         
-                        // Obtener precio del adicional
                         String precioAdicionalTexto = adicionalCard.findElement(By.cssSelector(".text-warning.fw-bold")).getText();
                         double precioAdicional = extraerPrecio(precioAdicionalTexto);
                         totalEsperado += precioAdicional;
                         adicionalesSeleccionados.add(nombreAdicional);
                         
-                        System.out.println("    + Adicional: " + nombreAdicional + " - $" + precioAdicional);
-                        
-                        // Buscar el botón toggle dentro de este adicional específico
-                        // El primer botón es siempre el toggle, no los de cantidad
                         WebElement botonToggle = adicionalCard.findElement(
                             By.cssSelector("button.btn-warning, button.btn-outline-warning"));
                         
-                        // Hacer clic en el botón toggle del adicional
                         waitCliente.until(ExpectedConditions.elementToBeClickable(botonToggle));
                         try {
                             botonToggle.click();
@@ -618,39 +511,27 @@ public class Caso2_ClienteOperadorPedidoTest {
                         }
                         
                         adicionalesSeleccionadosCount++;
-                        encontrado = true;
                         Thread.sleep(500);
                         break;
                     }
                 } catch (Exception e) {
-                    // Continuar con el siguiente adicional
+                    // Continuar
                 }
-            }
-            
-            if (!encontrado) {
-                System.out.println("    ⚠ No se encontró el adicional: " + adicionalRequerido);
             }
         }
         
         assertTrue(adicionalesSeleccionadosCount >= 2, 
             "Deberían seleccionarse Aguacate y Queso. Seleccionados: " + adicionalesSeleccionadosCount);
         
-        System.out.println("  ✓ Adicionales seleccionados correctamente");
-        
-        // Esperar un momento para que la UI se actualice
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Hacer clic en el botón "Agregar al carrito" - buscar por clase btn-lg y no btn-sm
         WebElement addToCartButton = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
             By.cssSelector("button.btn-lg.btn-warning, button.btn-lg[class*='warning']")));
         
-        System.out.println("  ✓ Botón 'Agregar al carrito' encontrado");
-        
-        // Scroll al botón
         ((JavascriptExecutor) driverCliente).executeScript(
             "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", addToCartButton);
         
@@ -667,92 +548,45 @@ public class Caso2_ClienteOperadorPedidoTest {
             ((JavascriptExecutor) driverCliente).executeScript("arguments[0].click();", addToCartButton);
         }
         
-        System.out.println("  ✓ Producto agregado al carrito");
-        
-        // Esperar a que se abra el carrito sidebar
         try {
-            Thread.sleep(1500); // Dar tiempo para que se abra el sidebar
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Verificar que el carrito sidebar esté visible
         WebElement cartSidebar = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
             By.cssSelector(".cart-sidebar.show")));
         
-        System.out.println("  ✓ Carrito sidebar abierto");
-        
-        // Verificar que ambos productos estén en el carrito
         List<WebElement> cartItems = waitCliente.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
             By.cssSelector(".cart-item")));
         
-        System.out.println("  Items en carrito: " + cartItems.size());
         assertTrue(cartItems.size() >= 2, 
             "El carrito debería tener al menos 2 productos. Encontrados: " + cartItems.size());
         
-        // Verificar que los nombres de los productos estén presentes
         String cartText = cartSidebar.getText();
         int productosEncontradosEnCarrito = 0;
         
         for (String nombreProducto : productosSeleccionados) {
             if (cartText.contains(nombreProducto)) {
                 productosEncontradosEnCarrito++;
-                System.out.println("  ✓ Producto en carrito: " + nombreProducto);
             }
         }
         
         assertTrue(productosEncontradosEnCarrito >= 2,
             "Ambos productos deberían estar visibles en el carrito. Encontrados: " + productosEncontradosEnCarrito);
         
-        // Verificar el total en el carrito
-        WebElement totalEnCarrito = null;
-        try {
-            totalEnCarrito = cartSidebar.findElement(
-                By.cssSelector(".summary-row.total .fw-bold, .cart-footer .total .fw-bold"));
-            String totalTexto = totalEnCarrito.getText();
-            double totalMostrado = extraerPrecio(totalTexto);
-            System.out.println("  Total en carrito sidebar: $" + totalMostrado);
-            System.out.println("  Total esperado: $" + totalEsperado);
-            
-            // Permitir margen de error más amplio ya que podemos estar sumando mal
-            if (totalMostrado > 0) {
-                System.out.println("  ✓ El carrito tiene un total válido");
-            } else {
-                System.out.println("  ⚠ El carrito muestra total $0");
-            }
-        } catch (Exception e) {
-            System.out.println("  ⚠ No se pudo extraer el total del carrito sidebar: " + e.getMessage());
-        }
-        
-        System.out.println("✓ Taco de Pescado agregado con 2 adicionales");
-        System.out.println("✓ Ambos productos verificados en el carrito");
-        System.out.println("  Total acumulado esperado: $" + totalEsperado);
-        
-        // Ahora simplemente dejamos el carrito abierto con ambos productos
-        // Test 4 se encargará de ir al checkout
-        System.out.println("✓ Test 3 completado - Carrito tiene 2 productos listos");
+        System.out.println("✓ Test 3: Taco de Pescado agregado - Carrito tiene 2 productos - Total: $" + totalEsperado);
     }
     
     @Test
     @Order(4)
     @DisplayName("4. Verificar que el carrito de compras esté correcto")
     void test04_VerificarCarrito() {
-        System.out.println("\n=== TEST 4: VERIFICAR CARRITO ===");
-        System.out.println("  Tests 2 y 3 completados exitosamente");
-        System.out.println("  Productos esperados en carrito: " + productosSeleccionados.size());
-        System.out.println("  Total esperado: $" + totalEsperado);
-        
-        // En lugar de navegar directamente, usar el carrito sidebar y proceder al checkout
-        // Esto asegura que localStorage se cargue correctamente
-        
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        
-        // Abrir el carrito sidebar haciendo clic en el ícono del carrito
-        System.out.println("  Abriendo carrito sidebar...");
         
         try {
             WebElement carritoIcon = waitCliente.until(ExpectedConditions.elementToBeClickable(
@@ -765,27 +599,21 @@ public class Caso2_ClienteOperadorPedidoTest {
             }
             
             Thread.sleep(1000);
-            System.out.println("  ✓ Carrito sidebar abierto");
         } catch (Exception e) {
-            System.out.println("  ⚠ Error abriendo carrito: " + e.getMessage());
+            // Error abriendo carrito
         }
         
-        // Verificar que el sidebar tiene productos
         try {
             WebElement cartSidebar = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
                 By.cssSelector(".cart-sidebar.show, .cart-sidebar.active, app-cart-sidebar")));
             
             List<WebElement> itemsEnCarrito = cartSidebar.findElements(By.cssSelector(".cart-item"));
-            System.out.println("  Items en carrito sidebar: " + itemsEnCarrito.size());
             
             assertTrue(itemsEnCarrito.size() >= 2,
                 "El carrito debería tener al menos 2 productos. Encontrados: " + itemsEnCarrito.size());
         } catch (Exception e) {
-            System.out.println("  ⚠ Error verificando items en sidebar: " + e.getMessage());
+            // Error verificando items
         }
-        
-        // Hacer clic en "Proceder a Comprar" para ir al checkout
-        System.out.println("  Buscando botón 'Proceder a Comprar'...");
         
         WebElement checkoutButton = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
             By.cssSelector(".btn-checkout, button.btn-primary, button[class*='proceder']")));
@@ -800,7 +628,6 @@ public class Caso2_ClienteOperadorPedidoTest {
         }
         
         waitCliente.until(ExpectedConditions.elementToBeClickable(checkoutButton));
-        System.out.println("  Haciendo clic en 'Proceder a Comprar'...");
         
         try {
             checkoutButton.click();
@@ -808,66 +635,51 @@ public class Caso2_ClienteOperadorPedidoTest {
             ((JavascriptExecutor) driverCliente).executeScript("arguments[0].click();", checkoutButton);
         }
         
-        // Esperar a que navegue a la página de checkout
         waitCliente.until(ExpectedConditions.urlContains("/checkout"));
-        System.out.println("  ✓ Navegado a página de checkout");
         
         try {
-            Thread.sleep(2000); // Dar tiempo para que cargue el carrito
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        // Verificar que haya productos en el carrito usando el selector correcto
         List<WebElement> itemsCarrito = waitCliente.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
             By.cssSelector(".product-item")));
-        
-        System.out.println("  Items encontrados en carrito: " + itemsCarrito.size());
         
         assertTrue(itemsCarrito.size() >= 2, 
             "El carrito debería tener al menos 2 productos. Encontrados: " + itemsCarrito.size());
         
-        // Verificar que los productos seleccionados estén en el carrito
         String textoCarrito = driverCliente.findElement(By.tagName("body")).getText();
         int productosEncontrados = 0;
         for (String producto : productosSeleccionados) {
             if (textoCarrito.contains(producto)) {
                 productosEncontrados++;
-                System.out.println("  ✓ Producto en carrito: " + producto);
             }
         }
         
         assertTrue(productosEncontrados >= 1,
             "Al menos 1 producto debería estar visible en el carrito");
         
-        // Buscar el total del carrito - según HTML línea 191: strong.text-success dentro de summary-row.total
         WebElement totalElement = null;
         try {
-            // Selector específico del HTML del checkout-summary
             totalElement = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
                 By.cssSelector(".summary-row.total strong.text-success")));
-            System.out.println("  ✓ Total encontrado con selector específico");
         } catch (Exception e) {
             try {
-                // Fallback 1: Cualquier strong con text-success
                 totalElement = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
                     By.cssSelector("strong.text-success")));
-                System.out.println("  ✓ Total encontrado con selector alternativo");
             } catch (Exception e2) {
                 try {
-                    // Fallback 2: Buscar en order-summary
                     totalElement = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
                         By.cssSelector(".order-summary strong")));
-                    System.out.println("  ✓ Total encontrado en order-summary");
                 } catch (Exception e3) {
-                    System.out.println("  ⚠ Error buscando total: " + e3.getMessage());
+                    // Error buscando total
                 }
             }
         }
         
         assertNotNull(totalElement, "Debería encontrarse el elemento del total en el carrito");
         
-        // Scroll al total
         ((JavascriptExecutor) driverCliente).executeScript(
             "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", totalElement);
         
@@ -878,20 +690,14 @@ public class Caso2_ClienteOperadorPedidoTest {
         }
         
         String totalTexto = totalElement.getText();
-        System.out.println("  Texto del total encontrado: " + totalTexto);
-        
         double totalMostrado = extraerPrecio(totalTexto);
         
-        // GUARDAR el total real del carrito para compararlo después
         totalEsperado = totalMostrado;
-        
-        // Verificar que el total no sea 0
-        System.out.println("  Total del carrito: $" + totalMostrado);
         
         assertTrue(totalMostrado > 0,
             "El total del carrito debería ser mayor a 0. Total: $" + totalMostrado);
         
-        System.out.println("✓ Carrito verificado correctamente con total: $" + totalMostrado);
+        System.out.println("✓ Test 4: Carrito verificado - Total: $" + totalMostrado);
     }
     
     @Test
@@ -1571,41 +1377,31 @@ public class Caso2_ClienteOperadorPedidoTest {
     @Order(13)
     @DisplayName("13. Verificar que el total del pedido sea correcto")
     void test13_VerificarTotalPagado() {
-        System.out.println("\n=== TEST 13: VERIFICAR TOTAL DEL PEDIDO ===");
-        
-        // Buscar el elemento que muestra el total del pedido
-        // Según el HTML: <span class="h5 text-success fw-bold mb-0">{{ formatearMoneda(pedido.precioDeVenta) }}</span>
         WebElement totalPedidoElement = null;
         
         try {
-            // Intentar con el selector específico del HTML
             totalPedidoElement = waitCliente.until(ExpectedConditions.presenceOfElementLocated(
                 By.cssSelector(".pedido-footer .text-success.fw-bold, span.h5.text-success.fw-bold")));
-            System.out.println("  ✓ Total del pedido encontrado con selector específico");
         } catch (Exception e) {
             try {
-                // Fallback: buscar cualquier elemento con texto que parezca un precio en la sección del total
                 List<WebElement> elementsWithMoney = driverCliente.findElements(
                     By.xpath("//*[contains(text(), '$') and contains(@class, 'success')]"));
                 
                 for (WebElement el : elementsWithMoney) {
                     String text = el.getText();
-                    // Verificar que tenga formato de precio y sea un monto razonable
                     if (text.matches(".*\\$\\s*[0-9,]+.*") && extraerPrecio(text) > 100) {
                         totalPedidoElement = el;
-                        System.out.println("  ✓ Total del pedido encontrado con búsqueda alternativa");
                         break;
                     }
                 }
             } catch (Exception e2) {
-                System.out.println("  ⚠ Error buscando total: " + e2.getMessage());
+                // Error buscando total
             }
         }
         
         assertNotNull(totalPedidoElement, 
             "Debería encontrarse el elemento del total del pedido");
         
-        // Scroll al total
         ((JavascriptExecutor) driverCliente).executeScript(
             "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", totalPedidoElement);
         
@@ -1616,23 +1412,16 @@ public class Caso2_ClienteOperadorPedidoTest {
         }
         
         String totalTexto = totalPedidoElement.getText();
-        System.out.println("  Texto del total: " + totalTexto);
-        
         double totalPedido = extraerPrecio(totalTexto);
         
-        // Verificar que el total del pedido coincida con el total que se guardó en el Test 4
-        System.out.println("  Total del carrito (Test 4): $" + totalEsperado);
-        System.out.println("  Total del pedido (mostrado): $" + totalPedido);
-        
-        // Usar un margen de error pequeño por posibles redondeos
         assertEquals(totalEsperado, totalPedido, 1.5, 
             "El total del pedido ($" + totalPedido + ") debería coincidir con el total del carrito ($" + totalEsperado + ")");
         
-        System.out.println("✓ Total del pedido verificado correctamente: $" + totalPedido);
-        System.out.println("\n✓✓✓ Caso 2 completado exitosamente ✓✓✓");
-        System.out.println("  - Cliente realizó pedido con 2 productos y adicionales");
-        System.out.println("  - Operador gestionó el pedido a través de múltiples estados");
-        System.out.println("  - Cliente verificó el pedido completado con todos los detalles");
+        System.out.println("✓✓✓ CASO 2 COMPLETADO EXITOSAMENTE ✓✓✓");
+        System.out.println("  - 2 productos con adicionales agregados al carrito");
+        System.out.println("  - Pedido confirmado y enviado");
+        System.out.println("  - Operador gestionó estados: RECIBIDO → COCINANDO → ENVIADO → ENTREGADO");
+        System.out.println("  - Cliente verificó pedido completado");
         System.out.println("  - Total verificado: $" + totalPedido);
     }
     
