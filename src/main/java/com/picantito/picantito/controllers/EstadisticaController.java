@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.picantito.picantito.models.EstadisticaDTO;
 import com.picantito.picantito.service.EstadisticaService;
 
 @RestController
@@ -137,6 +138,28 @@ public class EstadisticaController {
         try {
             Integer total = estadisticaService.totalPedidos();
             return ResponseEntity.ok(total);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // Obtener todas las estadísticas: http://localhost:9998/api/estadisticas/todas-las-estadisticas
+    @GetMapping("/todas")
+    public ResponseEntity<EstadisticaDTO> getTodasLasEstadisticas() {
+        try {
+            EstadisticaDTO dto = new EstadisticaDTO();
+            dto.setVentasPorDia(estadisticaService.ventasPorDia());
+            dto.setMejoresClientes(estadisticaService.mejoresClientes());
+            dto.setProductosMenosVendidos(estadisticaService.productosMenosVendidos());
+            dto.setProductosMasVendidos(estadisticaService.productosMasVendidos());
+            dto.setAdicionalesMasConsumidos(estadisticaService.AdicionalesMasConsumidos());
+            dto.setAdicionalesMenosConsumidos(estadisticaService.AdicionalesMenosConsumidos());
+            dto.setProductosNoRecomendados(estadisticaService.productosNoRecomendados());
+            dto.setProductosRecomendados(estadisticaService.productosRecomendados());
+            dto.setIngresosTotales(estadisticaService.ingresosTotales());
+            dto.setIngresosNetos(estadisticaService.ingresosNetos());
+            dto.setTotalPedidos(estadisticaService.totalPedidos());
+            return ResponseEntity.ok(dto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
