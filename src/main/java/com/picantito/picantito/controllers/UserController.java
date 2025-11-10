@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.picantito.picantito.dto.UserDto;
 import com.picantito.picantito.dto.response.UserResponseDTO;
 import com.picantito.picantito.entities.User;
 import com.picantito.picantito.mapper.UserMapper;
+import com.picantito.picantito.mapper.UserDtoMapper;
 import com.picantito.picantito.service.AutentificacionService;
 
 
@@ -35,6 +37,9 @@ public class UserController {
     
     @Autowired
     private UserMapper userMapper;
+    
+    @Autowired
+    private UserDtoMapper userDtoMapper;
     
     // === LOGIN ===
     // Login de usuario: http://localhost:9998/api/usuarios/login
@@ -78,7 +83,7 @@ public class UserController {
             }
             
             // Login exitoso, devolver información del usuario usando DTO
-            UserResponseDTO userDTO = userMapper.toDTO(user);
+            UserDto userDTO = userDtoMapper.toDto(user);
             
             return ResponseEntity.ok()
                     .body(Map.of(
@@ -120,7 +125,7 @@ public class UserController {
             
             // Guardar el nuevo usuario
             User nuevoUsuario = autentificacionService.save(usuario);
-            UserResponseDTO userDTO = userMapper.toDTO(nuevoUsuario);
+            UserDto userDTO = userDtoMapper.toDto(nuevoUsuario);
             return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -319,4 +324,24 @@ public class UserController {
                     .body("Error al actualizar estado: " + e.getMessage());
         }
     }
+    
+    // === ENDPOINT SIMPLE CON DTOs ===
+    /**
+     * Endpoint que devuelve usuarios usando UserDto (sin contraseñas)
+     * GET /api/usuarios/dto
+     */
+    @GetMapping("/dto")
+    public ResponseEntity<List<UserDto>> getAllUsuariosDto() {
+        try {
+            List<User> usuarios = autentificacionService.findAll();
+            List<UserDto> usuariosDto = userDtoMapper.toListDto(usuarios);
+            return ResponseEntity.ok(usuariosDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+
+    
+
 }
