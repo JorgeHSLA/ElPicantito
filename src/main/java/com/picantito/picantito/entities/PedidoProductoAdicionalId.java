@@ -4,12 +4,14 @@ import java.io.Serializable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class PedidoProductoAdicionalId implements Serializable {
     @Column(name = "pedido_producto_id")
     private Integer pedidoProductoId;

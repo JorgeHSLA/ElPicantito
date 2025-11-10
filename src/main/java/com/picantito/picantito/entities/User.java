@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "usuarios")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,17 +60,8 @@ public class User {
     @OneToMany(mappedBy = "repartidor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pedido> pedidosRepartidor = new ArrayList<>();
 
-    public User(String nombreCompleto, String nombreUsuario, String telefono, String correo, String contrasenia, String estado, String rol) {
-        this.nombreCompleto = nombreCompleto;
-        this.nombreUsuario = nombreUsuario;
-        this.telefono = telefono;
-        this.correo = correo;
-        this.contrasenia = contrasenia;
-        this.estado = estado;
-        this.rol = rol;
-    }
     public boolean isAdmin() {
-    return "ADMIN".equalsIgnoreCase(this.rol);
+        return "ADMIN".equalsIgnoreCase(this.rol);
     }
 
 }
