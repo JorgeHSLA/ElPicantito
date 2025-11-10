@@ -11,9 +11,28 @@ CREATE TABLE Usuarios (
     correo VARCHAR(150) UNIQUE NOT NULL,
     contrasenia VARCHAR(255) NOT NULL,
     Estado VARCHAR(50),  
-    Rol VARCHAR(50),
     activo BOOLEAN DEFAULT TRUE
 );
+-- ==========================
+-- Tabla: Roles
+-- ==========================
+CREATE TABLE Roles (
+    ID SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) UNIQUE NOT NULL
+);
+
+-- ==========================
+-- Tabla: User_Roles
+-- (relación N:M entre Usuarios y Roles)
+-- ==========================
+CREATE TABLE User_Roles (
+    user_id INT NOT NULL,
+    role_id INT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES Usuarios(ID) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES Roles(ID) ON DELETE CASCADE
+);
+
 -- ==========================
 -- Tabla: Productos
 -- ==========================

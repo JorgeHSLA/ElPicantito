@@ -1,12 +1,15 @@
 package com.picantito.picantito.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.picantito.picantito.entities.Role;
 import com.picantito.picantito.entities.User;
+import com.picantito.picantito.repository.RoleRepository;
 import com.picantito.picantito.repository.UsuarioRepository;
 
 
@@ -15,6 +18,9 @@ public class AutenticacionServiceImpl implements AutentificacionService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public List<User> findAll() {
@@ -83,8 +89,16 @@ public class AutenticacionServiceImpl implements AutentificacionService {
             return "El nombre de usuario o correo ya está registrado";
         }
         
-        // Establecer rol por defecto
-        user.setRol("USER");
+        // Establecer rol por defecto USER
+        Role userRole = roleRepository.findByNombre("USER")
+            .orElseGet(() -> {
+                Role newRole = new Role();
+                newRole.setNombre("USER");
+                return roleRepository.save(newRole);
+            });
+        
+        user.setRoles(new HashSet<>());
+        user.getRoles().add(userRole);
         
         try {
             this.save(user);
@@ -158,7 +172,8 @@ public class AutenticacionServiceImpl implements AutentificacionService {
             }
         }
         
-        usuario.setRol(loggedUser.getRol());
+        // Mantener los roles del usuario logueado (no permitir cambio de rol en edición de perfil)
+        usuario.setRoles(loggedUser.getRoles());
         
         try {
             this.save(usuario);

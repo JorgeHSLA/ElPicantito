@@ -44,7 +44,7 @@ class UsuarioRepositoryTest {
         usuario1.setCorreo("juan@test.com");
         usuario1.setContrasenia("password123");
         usuario1.setEstado("ACTIVO");
-        usuario1.setRol("CLIENTE");
+        usuario1.addRoleByName("CLIENTE");
         usuario1.setActivo(true);
 
         usuario2 = new User();
@@ -54,7 +54,7 @@ class UsuarioRepositoryTest {
         usuario2.setCorreo("maria@test.com");
         usuario2.setContrasenia("password456");
         usuario2.setEstado("INACTIVO");
-        usuario2.setRol("REPARTIDOR");
+        usuario2.addRoleByName("REPARTIDOR");
         usuario2.setActivo(false);
 
         usuario3 = new User();
@@ -64,7 +64,7 @@ class UsuarioRepositoryTest {
         usuario3.setCorreo("admin@test.com");
         usuario3.setContrasenia("adminpass");
         usuario3.setEstado("ACTIVO");
-        usuario3.setRol("ADMINISTRADOR");
+        usuario3.addRoleByName("ADMINISTRADOR");
         usuario3.setActivo(true);
     }
 
@@ -241,7 +241,7 @@ class UsuarioRepositoryTest {
         usuario4.setCorreo("pedro@test.com");
         usuario4.setContrasenia("pass789");
         usuario4.setEstado("ACTIVO");
-        usuario4.setRol("CLIENTE");
+        usuario4.addRoleByName("CLIENTE");
         usuario4.setActivo(true);
         usuarioRepository.save(usuario4);
 

@@ -1,7 +1,9 @@
 package com.picantito.picantito.entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -12,6 +14,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -47,9 +52,6 @@ public class User {
     private String estado;
     
     @Column(nullable = false)
-    private String rol = "USER"; // USER, REPARTIDOR, ADMIN
-
-    @Column(nullable = false)
     private Boolean activo = true;
 
     @JsonIgnore
@@ -60,8 +62,31 @@ public class User {
     @OneToMany(mappedBy = "repartidor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pedido> pedidosRepartidor = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
     public boolean isAdmin() {
-        return "ADMIN".equalsIgnoreCase(this.rol);
+        return roles.stream().anyMatch(role -> "ADMIN".equalsIgnoreCase(role.getNombre()));
+    }
+
+    // Método para compatibilidad con DTOs existentes, devuelve el nombre del primer rol o null
+    public String getRol() {
+        return roles.isEmpty() ? null : roles.iterator().next().getNombre();
+    }
+    
+    // Método helper para agregar un rol por nombre (útil en tests y migrations)
+    public void addRoleByName(String roleName) {
+        Role role = new Role();
+        role.setNombre(roleName);
+        if (this.roles == null) {
+            this.roles = new HashSet<>();
+        }
+        this.roles.add(role);
     }
 
 }

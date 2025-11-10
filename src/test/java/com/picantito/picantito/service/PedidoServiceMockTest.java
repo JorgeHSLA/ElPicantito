@@ -1,26 +1,28 @@
 package com.picantito.picantito.service;
 
-import com.picantito.picantito.dto.AsignarRepartidorDTO;
-import com.picantito.picantito.entities.Pedido;
-import com.picantito.picantito.entities.User;
-import com.picantito.picantito.repository.PedidoRepository;
-import com.picantito.picantito.repository.UsuarioRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.picantito.picantito.dto.AsignarRepartidorDTO;
+import com.picantito.picantito.entities.Pedido;
+import com.picantito.picantito.entities.User;
+import com.picantito.picantito.repository.PedidoRepository;
+import com.picantito.picantito.repository.UsuarioRepository;
 
 /**
  * Pruebas Unitarias con Mocks del Servicio de Pedidos
@@ -53,7 +55,7 @@ class PedidoServiceMockTest {
         cliente.setNombreUsuario("juan");
         cliente.setCorreo("juan@test.com");
         cliente.setTelefono("1234567890");
-        cliente.setRol("CLIENTE");
+        cliente.addRoleByName("CLIENTE");
         cliente.setEstado("ACTIVO");
 
         // Crear repartidor mock
@@ -63,7 +65,7 @@ class PedidoServiceMockTest {
         repartidor.setNombreUsuario("carlos");
         repartidor.setCorreo("carlos@test.com");
         repartidor.setTelefono("0987654321");
-        repartidor.setRol("REPARTIDOR");
+        repartidor.addRoleByName("REPARTIDOR");
         repartidor.setEstado("DISPONIBLE");
 
         // Crear pedido mock

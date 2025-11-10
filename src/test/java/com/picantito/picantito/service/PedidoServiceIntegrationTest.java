@@ -1,12 +1,9 @@
 package com.picantito.picantito.service;
 
-import com.picantito.picantito.dto.AsignarRepartidorDTO;
-import com.picantito.picantito.entities.Pedido;
-import com.picantito.picantito.entities.Producto;
-import com.picantito.picantito.entities.User;
-import com.picantito.picantito.repository.PedidoRepository;
-import com.picantito.picantito.repository.ProductRepository;
-import com.picantito.picantito.repository.UsuarioRepository;
+import java.sql.Timestamp;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,10 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.picantito.picantito.dto.AsignarRepartidorDTO;
+import com.picantito.picantito.entities.Pedido;
+import com.picantito.picantito.entities.Producto;
+import com.picantito.picantito.entities.User;
+import com.picantito.picantito.repository.PedidoRepository;
+import com.picantito.picantito.repository.ProductRepository;
+import com.picantito.picantito.repository.UsuarioRepository;
 
 /**
  * Pruebas de Integración del Servicio de Pedidos
@@ -61,7 +61,7 @@ class PedidoServiceIntegrationTest {
         cliente.setCorreo("juan@test.com");
         cliente.setTelefono("1234567890");
         cliente.setContrasenia("password123");
-        cliente.setRol("CLIENTE");
+        cliente.addRoleByName("CLIENTE");
         cliente.setEstado("ACTIVO");
         cliente = usuarioRepository.save(cliente);
 
@@ -72,7 +72,7 @@ class PedidoServiceIntegrationTest {
         repartidor.setCorreo("carlos@test.com");
         repartidor.setTelefono("0987654321");
         repartidor.setContrasenia("password123");
-        repartidor.setRol("REPARTIDOR");
+        repartidor.addRoleByName("REPARTIDOR");
         repartidor.setEstado("DISPONIBLE");
         repartidor = usuarioRepository.save(repartidor);
 

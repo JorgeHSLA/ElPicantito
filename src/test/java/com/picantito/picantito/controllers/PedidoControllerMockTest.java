@@ -60,14 +60,14 @@ class PedidoControllerMockTest {
         cliente.setId(1);
         cliente.setNombreCompleto("Juan Pérez");
         cliente.setNombreUsuario("juan");
-        cliente.setRol("CLIENTE");
+        cliente.addRoleByName("CLIENTE");
 
         // Crear repartidor
         repartidor = new User();
         repartidor.setId(2);
         repartidor.setNombreCompleto("Carlos Repartidor");
         repartidor.setNombreUsuario("carlos");
-        repartidor.setRol("REPARTIDOR");
+        repartidor.addRoleByName("REPARTIDOR");
         repartidor.setEstado("DISPONIBLE");
 
         // Crear pedido
