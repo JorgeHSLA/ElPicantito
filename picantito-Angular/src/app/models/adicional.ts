@@ -7,7 +7,9 @@ export interface Adicional {
   cantidad?: number;
   disponible?: boolean;
   activo?: boolean;
-  
+  imagen?: string;
+  categoria?: 'PROTEINA' | 'VEGETAL' | 'SALSA' | 'QUESO' | 'EXTRA';
+
   // COMPATIBILIDAD HACIA ATRÁS - TEMPORAL
   precio?: number; // Mapea a precioDeVenta
 }

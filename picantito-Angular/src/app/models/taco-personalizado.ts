@@ -1,11 +1,10 @@
-import { Producto } from './producto';
 import { Adicional } from './adicional';
 
 export interface TacoPersonalizado {
   id?: number;
   nombre: string;
   tortilla: TipoTortilla | null;
-  proteina: Producto | null;
+  proteina: Adicional | null;
   vegetales: AdicionalSeleccionado[];
   salsas: AdicionalSeleccionado[];
   quesos: AdicionalSeleccionado[];

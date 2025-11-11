@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.picantito.picantito.entities.AdicionalCategoria;
+import com.picantito.picantito.dto.CategorizedAdicionalesResponse;
 
 import com.picantito.picantito.dto.ProductoAdicionalIdDTO;
 import com.picantito.picantito.entities.Adicional;
@@ -195,6 +197,23 @@ public class AdicionalController {
     public ResponseEntity<List<Adicional>> getAdicionalesDisponiblesParaProducto(@PathVariable Integer productoId) {
         List<Adicional> adicionales = adicionalService.getAdicionalesDisponiblesParaProducto(productoId);
         return ResponseEntity.ok(adicionales);
+    }
+
+    // Obtener adicionales por categoría: http://localhost:9998/api/adicional/categoria/PROTEINA
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<List<Adicional>> getAdicionalesPorCategoria(@PathVariable String categoria) {
+        try {
+            AdicionalCategoria cat = AdicionalCategoria.valueOf(categoria.toUpperCase());
+            return ResponseEntity.ok(adicionalService.getByCategoria(cat));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // Obtener todos los adicionales categorizados
+    @GetMapping("/categorizados")
+    public ResponseEntity<CategorizedAdicionalesResponse> getCategorizados() {
+        return ResponseEntity.ok(adicionalService.getAdicionalesCategorizados());
     }
 
 

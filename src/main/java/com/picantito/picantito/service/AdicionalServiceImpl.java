@@ -12,9 +12,11 @@ import com.picantito.picantito.entities.Adicional;
 import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.entities.ProductoAdicional;
 import com.picantito.picantito.entities.ProductoAdicionalId;
+import com.picantito.picantito.entities.AdicionalCategoria;
 import com.picantito.picantito.repository.AdicionalRepository;
 import com.picantito.picantito.repository.ProductRepository;
 import com.picantito.picantito.repository.ProductoAdicionalRepository;
+import com.picantito.picantito.dto.CategorizedAdicionalesResponse;
 
 
 
@@ -165,5 +167,87 @@ public class AdicionalServiceImpl implements AdicionalService {
         } catch (Exception e) {
             return "No se puede eliminar la relación. Error: " + e.getMessage();
         }
+    }
+
+    @Override
+    public List<Adicional> getByCategoria(AdicionalCategoria categoria) {
+        return adicionalRepository.findAll().stream()
+            .filter(a -> {
+                if (a.getCategoria() != null) return a.getCategoria() == categoria;
+                // Fallback heurístico por nombre cuando no hay categoría en datos antiguos
+                if (categoria == AdicionalCategoria.PROTEINA) {
+                    return isProteinHeuristic(a);
+                }
+                return false;
+            })
+            .toList();
+    }
+
+    @Override
+    public CategorizedAdicionalesResponse getAdicionalesCategorizados() {
+        List<Adicional> all = adicionalRepository.findAll();
+        List<Adicional> proteinas = all.stream().filter(a -> {
+            if (a.getCategoria() != null) return a.getCategoria() == AdicionalCategoria.PROTEINA;
+            return isProteinHeuristic(a);
+        }).toList();
+        List<Adicional> vegetales = all.stream().filter(a -> {
+            if (a.getCategoria() != null) return a.getCategoria() == AdicionalCategoria.VEGETAL;
+            return isVegetalHeuristic(a);
+        }).toList();
+        List<Adicional> salsas = all.stream().filter(a -> {
+            if (a.getCategoria() != null) return a.getCategoria() == AdicionalCategoria.SALSA;
+            return isSalsaHeuristic(a);
+        }).toList();
+        List<Adicional> quesos = all.stream().filter(a -> {
+            if (a.getCategoria() != null) return a.getCategoria() == AdicionalCategoria.QUESO;
+            return isQuesoHeuristic(a);
+        }).toList();
+        // Extras: marcados como EXTRA o los no clasificados por ninguna heurística
+        List<Adicional> extras = all.stream().filter(a -> {
+            if (a.getCategoria() != null) return a.getCategoria() == AdicionalCategoria.EXTRA;
+            return !(isProteinHeuristic(a) || isVegetalHeuristic(a) || isSalsaHeuristic(a) || isQuesoHeuristic(a));
+        }).toList();
+
+        return new CategorizedAdicionalesResponse(proteinas, vegetales, salsas, quesos, extras);
+    }
+
+    private boolean isProteinHeuristic(Adicional a) {
+        if (a.getNombre() == null) return false;
+        String n = a.getNombre().toLowerCase();
+        String[] keys = {"carne", "res", "cerdo", "pastor", "suadero", "pollo", "pescado", "camar" , "chorizo", "tocino", "barbacoa"};
+        for (String k : keys) {
+            if (n.contains(k)) return true;
+        }
+        return false;
+    }
+
+    private boolean isVegetalHeuristic(Adicional a) {
+        if (a.getNombre() == null) return false;
+        String n = a.getNombre().toLowerCase();
+        String[] keys = {"lechuga", "tomate", "cebolla", "cilantro", "aguacate", "pepino", "zanahoria", "col", "champiñ", "pimiento"};
+        for (String k : keys) {
+            if (n.contains(k)) return true;
+        }
+        return false;
+    }
+
+    private boolean isSalsaHeuristic(Adicional a) {
+        if (a.getNombre() == null) return false;
+        String n = a.getNombre().toLowerCase();
+        String[] keys = {"salsa", "habanero", "chipotle", "pico de gallo", "guacamole", "crema"};
+        for (String k : keys) {
+            if (n.contains(k)) return true;
+        }
+        return false;
+    }
+
+    private boolean isQuesoHeuristic(Adicional a) {
+        if (a.getNombre() == null) return false;
+        String n = a.getNombre().toLowerCase();
+        String[] keys = {"queso", "oaxaca", "fresco", "cheddar", "manchego", "panela"};
+        for (String k : keys) {
+            if (n.contains(k)) return true;
+        }
+        return false;
     }
 }

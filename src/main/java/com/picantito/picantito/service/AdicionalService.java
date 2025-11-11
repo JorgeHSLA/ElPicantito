@@ -6,6 +6,8 @@ import java.util.Optional;
 import com.picantito.picantito.dto.ProductoAdicionalIdDTO;
 import com.picantito.picantito.entities.Adicional;
 import com.picantito.picantito.entities.ProductoAdicional;
+import com.picantito.picantito.entities.AdicionalCategoria;
+import com.picantito.picantito.dto.CategorizedAdicionalesResponse;
 
 public interface AdicionalService {
     List<Adicional> getAllAdicionales();
@@ -25,4 +27,8 @@ public interface AdicionalService {
     
     ProductoAdicional crearProductoAdicional(Integer productoId, Integer adicionalId);
     String eliminarProductoAdicional(Integer productoId, Integer adicionalId);
+
+    // Nueva funcionalidad: categorizados
+    List<Adicional> getByCategoria(AdicionalCategoria categoria);
+    CategorizedAdicionalesResponse getAdicionalesCategorizados();
 }

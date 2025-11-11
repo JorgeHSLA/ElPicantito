@@ -59,6 +59,15 @@ export class AdicionalService {
     return this.http.get<Adicional[]>(`${this.API_URL}/disponibles-para-producto/${productoId}`);
   }
 
+  // ============== NUEVO: API categorizada ==============
+  getAdicionalesPorCategoria(categoria: 'PROTEINA'|'VEGETAL'|'SALSA'|'QUESO'|'EXTRA'): Observable<Adicional[]> {
+    return this.http.get<Adicional[]>(`${this.API_URL}/categoria/${categoria}`);
+  }
+
+  getAdicionalesCategorizados(): Observable<{ proteinas: Adicional[]; vegetales: Adicional[]; salsas: Adicional[]; quesos: Adicional[]; extras: Adicional[]; }> {
+    return this.http.get<{ proteinas: Adicional[]; vegetales: Adicional[]; salsas: Adicional[]; quesos: Adicional[]; extras: Adicional[]; }>(`${this.API_URL}/categorizados`);
+  }
+
   // Obtener todas las relaciones producto-adicional
   getProductoAdicionales(): Observable<ProductoAdicional[]> {
     return this.http.get<ProductoAdicional[]>(`${this.API_URL}/productoAdicionales`);
