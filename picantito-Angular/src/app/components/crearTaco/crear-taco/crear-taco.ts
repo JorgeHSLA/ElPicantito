@@ -2,10 +2,9 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Producto } from '../../../models/producto';
 import { Adicional } from '../../../models/adicional';
+import { Producto } from '../../../models/producto';
 import { TacoPersonalizado, AdicionalSeleccionado, TipoTortilla, CategoriaAdicional } from '../../../models/taco-personalizado';
-import { ProductoService } from '../../../services/tienda/producto.service';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
 import { CarritoService } from '../../../services/carrito.service';
 
@@ -18,7 +17,8 @@ import { CarritoService } from '../../../services/carrito.service';
 export class CrearTaco implements OnInit {
   // Datos para el formulario
   tortillas = signal<TipoTortilla[]>([]);
-  proteinas = signal<Producto[]>([]);
+  // Ahora las proteínas se tratarán como un subconjunto de adicionales (categoría PROTEÍNAS)
+  proteinas = signal<Adicional[]>([]);
   categoriasAdicionales = signal<CategoriaAdicional[]>([]);
 
   // Estado del taco personalizado
@@ -41,7 +41,6 @@ export class CrearTaco implements OnInit {
   seccionActiva = signal<string>('tortilla');
 
   constructor(
-    private productoService: ProductoService,
     private adicionalService: AdicionalService,
     private carritoService: CarritoService,
     private router: Router
@@ -56,27 +55,27 @@ export class CrearTaco implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    // Cargar proteínas (productos activos)
-    this.productoService.getProductosActivos().subscribe({
-      next: (productos) => {
-        this.proteinas.set(productos);
-      },
-      error: (error) => {
-        console.error('Error al cargar proteínas:', error);
-        this.error.set('Error al cargar las opciones de proteínas');
-      }
-    });
-
-    // Cargar adicionales y organizarlos por categorías
-    this.adicionalService.getAllAdicionales().subscribe({
-      next: (adicionales) => {
-        const adicionalesDisponibles = adicionales.filter(a => a.disponible && a.activo);
-        this.organizarAdicionalesPorCategoria(adicionalesDisponibles);
+    this.adicionalService.getAdicionalesCategorizados().subscribe({
+      next: (resp) => {
+        // Asignar directamente desde respuesta categorizada
+        this.proteinas.set(resp.proteinas.filter(a => a.disponible && a.activo));
+        const vegetales = resp.vegetales.filter(a => a.disponible && a.activo);
+        const salsas = resp.salsas.filter(a => a.disponible && a.activo);
+        const quesos = resp.quesos.filter(a => a.disponible && a.activo);
+        const extras = resp.extras.filter(a => a.disponible && a.activo);
+        // Convertir a estructura de categorias existente
+        const categorias: CategoriaAdicional[] = [
+          { nombre: 'Vegetales', descripcion: 'Vegetales frescos y crujientes', icono: 'fas fa-carrot', multipleSeleccion: true, items: vegetales },
+          { nombre: 'Salsas', descripcion: 'Salsas artesanales y tradicionales', icono: 'fas fa-fire', multipleSeleccion: true, items: salsas },
+          { nombre: 'Quesos', descripcion: 'Quesos frescos y derretidos', icono: 'fas fa-cheese', multipleSeleccion: true, items: quesos },
+          { nombre: 'Extras', descripcion: 'Ingredientes especiales y únicos', icono: 'fas fa-plus-circle', multipleSeleccion: true, items: extras }
+        ];
+        this.categoriasAdicionales.set(categorias);
         this.loading.set(false);
       },
       error: (error) => {
-        console.error('Error al cargar adicionales:', error);
-        this.error.set('Error al cargar los adicionales');
+        console.error('Error al cargar adicionales categorizados:', error);
+        this.error.set('Error al cargar los adicionales categorizados');
         this.loading.set(false);
       }
     });
@@ -116,45 +115,7 @@ export class CrearTaco implements OnInit {
     this.tortillas.set(tortillasDisponibles);
   }
 
-  private organizarAdicionalesPorCategoria(adicionales: Adicional[]): void {
-    const categorias: CategoriaAdicional[] = [
-      {
-        nombre: 'Vegetales',
-        descripcion: 'Vegetales frescos y crujientes',
-        icono: 'fas fa-carrot',
-        multipleSeleccion: true,
-        items: this.filtrarPorNombre(adicionales, ['lechuga', 'tomate', 'cebolla', 'cilantro', 'aguacate', 'pepino', 'zanahoria', 'col'])
-      },
-      {
-        nombre: 'Salsas',
-        descripcion: 'Salsas artesanales y tradicionales',
-        icono: 'fas fa-fire',
-        multipleSeleccion: true,
-        items: this.filtrarPorNombre(adicionales, ['salsa verde', 'salsa roja', 'salsa habanero', 'pico de gallo', 'guacamole', 'crema', 'salsa chipotle'])
-      },
-      {
-        nombre: 'Quesos',
-        descripcion: 'Quesos frescos y derretidos',
-        icono: 'fas fa-cheese',
-        multipleSeleccion: true,
-        items: this.filtrarPorNombre(adicionales, ['queso oaxaca', 'queso fresco', 'queso cheddar', 'queso manchego', 'queso panela'])
-      },
-      {
-        nombre: 'Extras',
-        descripcion: 'Ingredientes especiales y únicos',
-        icono: 'fas fa-plus-circle',
-        multipleSeleccion: true,
-        items: this.filtrarPorNombre(adicionales, ['frijoles', 'arroz', 'elote', 'piña', 'chile toreado', 'cebolla caramelizada', 'champiñones'])
-      }
-    ];
-
-    // Si no hay suficientes adicionales específicos, agregar los restantes a extras
-    const usados = categorias.flatMap(cat => cat.items.map(item => item.id));
-    const restantes = adicionales.filter(add => !usados.includes(add.id));
-    categorias[3].items.push(...restantes);
-
-    this.categoriasAdicionales.set(categorias);
-  }
+  // Ya no se requiere organizar por nombres clave: la API entrega categorías listas
 
   private filtrarPorNombre(adicionales: Adicional[], nombres: string[]): Adicional[] {
     return adicionales.filter(adicional =>
@@ -175,7 +136,7 @@ export class CrearTaco implements OnInit {
   }
 
   // Seleccionar proteína
-  seleccionarProteina(proteina: Producto): void {
+  seleccionarProteina(proteina: Adicional): void {
     const tacoActual = this.tacoPersonalizado();
     this.tacoPersonalizado.set({
       ...tacoActual,
