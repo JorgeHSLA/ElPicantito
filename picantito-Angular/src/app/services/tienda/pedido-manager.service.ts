@@ -19,14 +19,14 @@ export class PedidoManagerService {
    */
   procesarPedidoDesdeCarrito(direccion: string): Observable<PedidoCompleto> {
     const summary = this.carritoService.getCartSummary();
-    
+
     if (summary.items.length === 0) {
       return throwError(() => new Error('El carrito está vacío'));
     }
 
     const usuario = this.authService.loggedUser();
     console.log('👤 Usuario obtenido del AuthService:', usuario);
-    
+
     if (!usuario || !usuario.id) {
       return throwError(() => new Error('Usuario no autenticado'));
     }
@@ -34,7 +34,7 @@ export class PedidoManagerService {
     // Validar que el ID sea un número válido dentro del rango de int
     const clienteId = Number(usuario.id);
     console.log('🔢 Cliente ID convertido a número:', clienteId, 'Tipo:', typeof clienteId);
-    
+
     if (isNaN(clienteId) || clienteId <= 0 || clienteId > 2147483647) {
       console.error('❌ ID de cliente inválido:', {
         original: usuario.id,
@@ -75,7 +75,20 @@ export class PedidoManagerService {
       }),
       catchError(error => {
         console.error('❌ Error al procesar pedido:', error);
-        return throwError(() => new Error('Error al procesar el pedido. Intente nuevamente.'));
+        // Propagar el mensaje real del backend si está disponible
+        let mensaje = 'Error al procesar el pedido. Intente nuevamente.';
+        try {
+          if (error?.error) {
+            if (typeof error.error === 'string') {
+              mensaje = error.error;
+            } else if (error.error?.message) {
+              mensaje = error.error.message;
+            }
+          } else if (error?.message) {
+            mensaje = error.message;
+          }
+        } catch {}
+        return throwError(() => new Error(mensaje));
       })
     );
   }
@@ -145,7 +158,7 @@ export class PedidoManagerService {
       if (!item.producto.id) {
         errores.push(`Producto sin ID: ${item.producto.nombre}`);
       }
-      
+
       if (item.cantidad <= 0) {
         errores.push(`Cantidad inválida para: ${item.producto.nombre}`);
       }
@@ -155,7 +168,7 @@ export class PedidoManagerService {
         if (!adicional.adicional.id) {
           errores.push(`Adicional sin ID: ${adicional.adicional.nombre}`);
         }
-        
+
         if (adicional.cantidad <= 0) {
           errores.push(`Cantidad inválida para adicional: ${adicional.adicional.nombre}`);
         }
@@ -187,14 +200,14 @@ export class PedidoManagerService {
    */
   private convertirATimestampSQL(fechaISO: string): string {
     const fecha = new Date(fechaISO);
-    
+
     const year = fecha.getFullYear();
     const month = String(fecha.getMonth() + 1).padStart(2, '0');
     const day = String(fecha.getDate()).padStart(2, '0');
     const hours = String(fecha.getHours()).padStart(2, '0');
     const minutes = String(fecha.getMinutes()).padStart(2, '0');
     const seconds = String(fecha.getSeconds()).padStart(2, '0');
-    
+
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 

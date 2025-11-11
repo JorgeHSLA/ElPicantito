@@ -38,7 +38,7 @@ export class AdicionalService {
   }
 
   // ============== MÉTODOS ESPECÍFICOS PARA PRODUCTOS Y ADICIONALES ==============
-  
+
   // Obtener adicionales disponibles
   getAdicionalesDisponibles(): Observable<Adicional[]> {
     return this.http.get<Adicional[]>(`${this.API_URL}/disponibles`);
@@ -84,7 +84,7 @@ export class AdicionalService {
   }
 
   // ============== MÉTODOS CRUD PARA RELACIONES PRODUCTO-ADICIONAL ==============
-  
+
   // Crear nueva relación producto-adicional
   crearProductoAdicional(productoId: number, adicionalId: number): Observable<ProductoAdicional> {
     return this.http.post<ProductoAdicional>(`${this.API_URL}/productoAdicionales`, {
@@ -100,7 +100,7 @@ export class AdicionalService {
 
   // ============== MÉTODOS DE COMPATIBILIDAD HACIA ATRÁS ==============
   // Estos métodos son para mantener funcionando los componentes existentes
-  
+
   // Método síncrono que devuelve array vacío (temporal)
   getAdicionales(): Adicional[] {
     console.warn('getAdicionales() es un método deprecated. Use getAllAdicionales() Observable');

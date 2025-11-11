@@ -26,6 +26,11 @@ export class ProductoService {
     return this.http.get<Producto>(`${this.API_URL}/${id}`);
   }
 
+  // Obtener producto por nombre
+  getProductoByName(name: string): Observable<Producto> {
+    return this.http.get<Producto>(`${this.API_URL}/name/${encodeURIComponent(name)}`);
+  }
+
   // Crear nuevo producto
   crearProducto(producto: Producto): Observable<Producto> {
     return this.http.post<Producto>(this.API_URL, producto);
@@ -44,7 +49,7 @@ export class ProductoService {
   // ============== MÉTODOS DE COMPATIBILIDAD HACIA ATRÁS ==============
   // Estos métodos son para mantener funcionando los componentes existentes
   // mientras se migran a usar la API REST
-  
+
   // Método síncrono que devuelve array vacío (temporal)
   getProductos(): Producto[] {
     console.warn('getProductos() es un método deprecated. Use getAllProductos() Observable');

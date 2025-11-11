@@ -3,11 +3,11 @@ package com.picantito.picantito.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.picantito.picantito.dto.CategorizedAdicionalesResponse;
 import com.picantito.picantito.dto.ProductoAdicionalIdDTO;
 import com.picantito.picantito.entities.Adicional;
-import com.picantito.picantito.entities.ProductoAdicional;
 import com.picantito.picantito.entities.AdicionalCategoria;
-import com.picantito.picantito.dto.CategorizedAdicionalesResponse;
+import com.picantito.picantito.entities.ProductoAdicional;
 
 public interface AdicionalService {
     List<Adicional> getAllAdicionales();

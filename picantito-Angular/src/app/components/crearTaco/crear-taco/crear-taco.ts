@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
 import { Adicional } from '../../../models/adicional';
 import { Producto } from '../../../models/producto';
 import { TacoPersonalizado, AdicionalSeleccionado, TipoTortilla, CategoriaAdicional } from '../../../models/taco-personalizado';
+import { AdicionalSeleccionado as CartAdicionalSeleccionado } from '../../../models/cart-item';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
+import { ProductoService } from '../../../services/tienda/producto.service';
 import { CarritoService } from '../../../services/carrito.service';
 
 @Component({
@@ -42,6 +44,7 @@ export class CrearTaco implements OnInit {
 
   constructor(
     private adicionalService: AdicionalService,
+    private productoService: ProductoService,
     private carritoService: CarritoService,
     private router: Router
   ) {}
@@ -275,29 +278,70 @@ export class CrearTaco implements OnInit {
     }
 
     const taco = this.tacoPersonalizado();
-
-    // Crear un producto "virtual" que represente el taco personalizado
-    const tacoProducto: Producto = {
-      id: Date.now(), // ID temporal único
-      nombre: taco.nombre,
-      descripcion: this.generarDescripcionTaco(taco),
-      precioDeVenta: taco.precioTotal,
-      imagen: '/images/taco1.webp', // Imagen por defecto
-      disponible: true,
-      activo: true
-    };
-
-    // Agregar al carrito
-    this.carritoService.agregarItem(tacoProducto, 1);
-
-    // Mostrar mensaje de éxito
-    this.successMessage.set('¡Taco personalizado agregado al carrito exitosamente!');
+    this.loading.set(true);
     this.error.set(null);
 
-    // Redirigir después de 2 segundos
-    setTimeout(() => {
-      this.router.navigate(['/home']);
-    }, 2000);
+    // Resolver el producto base por nombre para no depender de un ID fijo
+    this.productoService.getProductoByName('Taco Personalizado').subscribe({
+      next: (productoBaseEncontrado: Producto) => {
+        const productoBase: Producto = {
+          ...productoBaseEncontrado,
+          descripcion: this.generarDescripcionTaco(taco),
+          precioDeVenta: 0,
+          activo: true,
+          disponible: true
+        };
+
+        const adicionalesSeleccionados: CartAdicionalSeleccionado[] = this.construirAdicionalesSeleccionados(taco);
+        this.carritoService.agregarItemConAdicionales(productoBase, 1, adicionalesSeleccionados);
+
+        this.successMessage.set('¡Taco personalizado agregado al carrito exitosamente!');
+        this.loading.set(false);
+
+        setTimeout(() => {
+          this.router.navigate(['/home']);
+        }, 2000);
+      },
+      error: (err) => {
+        console.error('No se pudo resolver el producto base Taco Personalizado:', err);
+        this.loading.set(false);
+        this.error.set('No se encontró el producto base para tacos. Por favor, contacta al administrador.');
+      }
+    });
+  }
+
+  private construirAdicionalesSeleccionados(taco: TacoPersonalizado): CartAdicionalSeleccionado[] {
+    const adicionalesSeleccionados: CartAdicionalSeleccionado[] = [];
+
+    // Proteína (1x) si existe
+    if (taco.proteina) {
+      const precio = taco.proteina.precioDeVenta || taco.proteina.precio || 0;
+      adicionalesSeleccionados.push({
+        adicional: taco.proteina,
+        cantidad: 1,
+        subtotal: precio * 1
+      });
+    }
+
+    // Otras categorías: vegetales, salsas, quesos, extras
+    const categorias: AdicionalSeleccionado[][] = [
+      taco.vegetales,
+      taco.salsas,
+      taco.quesos,
+      taco.extras
+    ];
+
+    for (const lista of categorias) {
+      for (const item of lista) {
+        const precio = item.adicional.precioDeVenta || item.adicional.precio || 0;
+        adicionalesSeleccionados.push({
+          adicional: item.adicional,
+          cantidad: item.cantidad,
+          subtotal: precio * item.cantidad
+        });
+      }
+    }
+    return adicionalesSeleccionados;
   }
 
   // Generar descripción del taco
