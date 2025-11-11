@@ -149,10 +149,10 @@
           <div class="mb-3">
             <label for="rol" class="form-label">Rol:</label>
             <select class="form-select" id="rol"
-                    [value]="nuevoUsuario().rol || 'USER'"
+                    [value]="nuevoUsuario().rol || 'CLIENTE'"
                     (change)="updateUsuarioField('rol', $any($event.target).value)"
                     required>
-              <option value="USER">Usuario</option>
+              <option value="CLIENTE">Cliente</option>
               <option value="ADMIN">Administrador</option>
               <option value="OPERADOR">Operador</option>
               <option value="REPARTIDOR">Repartidor</option>

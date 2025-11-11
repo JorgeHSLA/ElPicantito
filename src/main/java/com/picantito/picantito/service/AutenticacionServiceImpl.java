@@ -57,6 +57,9 @@ public class AutenticacionServiceImpl implements AutentificacionService {
 
     @Override
     public User actualizarUsuarioConRol(User user) {
+        System.out.println("🔍 actualizarUsuarioConRol - Usuario: " + user.getNombreUsuario());
+        System.out.println("🔍 actualizarUsuarioConRol - Rol del campo: " + user.getRol());
+        
         // Encriptar la contraseña si no está ya encriptada
         if (user.getContrasenia() != null && !user.getContrasenia().startsWith("$2a$")) {
             user.setContrasenia(passwordEncoder.encode(user.getContrasenia()));
@@ -65,12 +68,15 @@ public class AutenticacionServiceImpl implements AutentificacionService {
         // Actualizar roles basado en el campo rol
         if (user.getRol() != null && !user.getRol().trim().isEmpty()) {
             String rolNombre = user.getRol().toUpperCase().trim();
+            System.out.println("🔍 Buscando rol: " + rolNombre);
             Optional<Role> roleOptional = roleRepository.findByNombre(rolNombre);
             
             if (roleOptional.isPresent()) {
+                System.out.println("✅ Rol encontrado: " + roleOptional.get().getNombre());
                 user.setRoles(new HashSet<>());
                 user.getRoles().add(roleOptional.get());
             } else {
+                System.out.println("❌ Rol no encontrado, asignando CLIENTE por defecto");
                 // Si el rol no existe, asignar CLIENTE por defecto
                 Optional<Role> roleCliente = roleRepository.findByNombre("CLIENTE");
                 if (roleCliente.isPresent()) {
@@ -79,6 +85,7 @@ public class AutenticacionServiceImpl implements AutentificacionService {
                 }
             }
         } else {
+            System.out.println("⚠️ No viene rol, asignando CLIENTE por defecto");
             // Si no viene rol, asignar CLIENTE por defecto
             Optional<Role> roleCliente = roleRepository.findByNombre("CLIENTE");
             if (roleCliente.isPresent()) {

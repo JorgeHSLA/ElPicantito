@@ -156,6 +156,9 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> crearUsuario(@RequestBody User usuario) {
         try {
+            System.out.println("🔍 Usuario recibido: " + usuario.getNombreUsuario());
+            System.out.println("🔍 Rol recibido: " + usuario.getRol());
+            
             // Validación básica
             if (usuario.getNombreUsuario() == null || usuario.getNombreUsuario().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body("El nombre de usuario es obligatorio");
@@ -173,13 +176,18 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("El correo electrónico ya está registrado");
             }
             
-            // Verificar que el estado solo exista para repartidores
-            if (!"REPARTIDOR".equals(usuario.getRol()) && usuario.getEstado() != null) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("El estado solo puede ser asignado a repartidores");
+            // Si es un repartidor, asignar estado DISPONIBLE automáticamente
+            if ("REPARTIDOR".equals(usuario.getRol())) {
+                usuario.setEstado("DISPONIBLE");
             }
             
-            // Guardar el nuevo usuario
-            User nuevoUsuario = autentificacionService.save(usuario);
+            // Verificar que el estado solo exista para repartidores
+            if (!"REPARTIDOR".equals(usuario.getRol()) && usuario.getEstado() != null) {
+                usuario.setEstado(null); // Limpiar el estado para usuarios no repartidores
+            }
+            
+            // Guardar el nuevo usuario con el rol especificado
+            User nuevoUsuario = autentificacionService.actualizarUsuarioConRol(usuario);
             UserDto userDTO = userDtoMapper.toDto(nuevoUsuario);
             return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
         } catch (Exception e) {

@@ -59,7 +59,21 @@ export class UsuariosComponent implements OnInit {
       usuario.rol = 'CLIENTE';
     }
     
-    this.authService.crearUsuario(usuario).subscribe({
+    // Crear un objeto plano para enviar al backend (sin signals)
+    const usuarioData: Usuario = {
+      nombreCompleto: usuario.nombreCompleto,
+      nombreUsuario: usuario.nombreUsuario,
+      telefono: usuario.telefono,
+      correo: usuario.correo,
+      contrasenia: usuario.contrasenia,
+      rol: usuario.rol,
+      activo: usuario.activo
+    };
+    
+    console.log('🔍 Usuario a crear:', usuarioData);
+    console.log('🔍 Rol seleccionado:', usuarioData.rol);
+    
+    this.authService.crearUsuario(usuarioData).subscribe({
       next: () => {
         this.successMessage.set('Usuario guardado exitosamente');
         this.loadUsuarios();

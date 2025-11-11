@@ -76,13 +76,25 @@ public class User {
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
+    // Campo transitorio para recibir el rol desde el frontend
+    @jakarta.persistence.Transient
+    private String rol;
+
     public boolean isAdmin() {
         return roles.stream().anyMatch(role -> "ADMIN".equalsIgnoreCase(role.getNombre()));
     }
 
     // Método para compatibilidad con DTOs existentes, devuelve el nombre del primer rol o null
     public String getRol() {
+        if (rol != null) {
+            return rol; // Si viene del JSON, devolver ese valor
+        }
         return roles.isEmpty() ? null : roles.iterator().next().getNombre();
+    }
+    
+    // Setter para que Jackson pueda deserializar el campo rol desde JSON
+    public void setRol(String rol) {
+        this.rol = rol;
     }
     
     // Método helper para agregar un rol por nombre (útil en tests y migrations)
