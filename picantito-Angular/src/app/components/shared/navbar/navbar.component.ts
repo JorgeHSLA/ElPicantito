@@ -78,9 +78,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout();
-    this.carritoService.limpiarCarritoCompleto();
-    this.router.navigate(['/home']);
+    this.authService.logout().subscribe({
+      next: () => {
+        console.log('✅ Sesión cerrada correctamente');
+        this.carritoService.limpiarCarritoCompleto();
+        this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        console.error('❌ Error al cerrar sesión:', error);
+        // Redirigir de todas formas
+        this.carritoService.limpiarCarritoCompleto();
+        this.router.navigate(['/home']);
+      }
+    });
   }
 
   toggleCart() {

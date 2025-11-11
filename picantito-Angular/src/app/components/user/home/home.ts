@@ -6,6 +6,7 @@ import { HerocarruselComponent } from './herocarrusel/herocarrusel';
 import { MinisobreComponent } from './minisobre/minisobre';
 import { RecomendadosComponent } from './recomendados/recomendados';
 import { CreatacoComponent } from './creataco/creataco';
+import { AuthService } from '../../../services/auth.service';
 
 declare var bootstrap: any;
 
@@ -35,13 +36,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   ];
 
-  // Estado del usuario (simulado por ahora)
-  loggedUser: any = null; // Aquí integrarás con tu servicio de autenticación
-
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    // Inicialización del componente
+    // Si el usuario ya está autenticado con JWT, redirigir según su rol
+    if (this.authService.isLoggedIn()) {
+      this.authService.redirectByRole();
+    }
   }
 
   ngAfterViewInit(): void {

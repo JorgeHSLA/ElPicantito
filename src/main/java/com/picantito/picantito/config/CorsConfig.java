@@ -21,8 +21,13 @@ public class CorsConfig {
         // configuration.addAllowedOrigin("http://localhost:3000");
         
         configuration.addAllowedMethod("*"); // GET, POST, PUT, DELETE, etc.
-        configuration.addAllowedHeader("*"); // Todos los headers
-        configuration.setAllowCredentials(false); // Desactivar credentials para poder usar "*"
+        configuration.addAllowedHeader("*"); // Todos los headers (incluyendo Authorization)
+        
+        // Exponer el header Authorization para que el frontend pueda leerlo
+        configuration.addExposedHeader("Authorization");
+        
+        // Permitir credentials (necesario para JWT con cookies o headers personalizados)
+        configuration.setAllowCredentials(false); // false para permitir "*" en origins
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

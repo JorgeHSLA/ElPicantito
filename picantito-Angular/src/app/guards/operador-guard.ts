@@ -13,9 +13,8 @@ export class OperadorGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this.authService.isLoggedIn()) {
-      const user = this.authService.loggedUser();
       // Permitir acceso a OPERADOR y ADMIN
-      if (user && (user.rol === 'OPERADOR' || user.rol === 'ADMIN')) {
+      if (this.authService.isOperador() || this.authService.isAdmin()) {
         return true;
       }
     }

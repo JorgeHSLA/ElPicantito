@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.picantito.picantito.entities.Role;
@@ -22,6 +23,9 @@ public class AutenticacionServiceImpl implements AutentificacionService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public List<User> findAll() {
         return usuarioRepository.findAll();
@@ -34,6 +38,20 @@ public class AutenticacionServiceImpl implements AutentificacionService {
 
     @Override
     public User save(User user) {
+        // Encriptar la contraseña si no está ya encriptada
+        if (user.getContrasenia() != null && !user.getContrasenia().startsWith("$2a$")) {
+            user.setContrasenia(passwordEncoder.encode(user.getContrasenia()));
+        }
+        
+        // Si el usuario es nuevo y no tiene roles asignados, asignar el rol USER por defecto
+        if (user.getId() == null && (user.getRoles() == null || user.getRoles().isEmpty())) {
+            Optional<Role> roleUser = roleRepository.findByNombre("USER");
+            if (roleUser.isPresent()) {
+                user.setRoles(new HashSet<>());
+                user.getRoles().add(roleUser.get());
+            }
+        }
+        
         return usuarioRepository.save(user);
     }
 

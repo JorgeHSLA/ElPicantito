@@ -3,10 +3,16 @@ package com.picantito.picantito.controllers;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +24,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.picantito.picantito.dto.LoginRequest;
+import com.picantito.picantito.dto.LoginResponse;
 import com.picantito.picantito.dto.UserDto;
 import com.picantito.picantito.dto.response.UserResponseDTO;
 import com.picantito.picantito.entities.User;
 import com.picantito.picantito.mapper.UserMapper;
 import com.picantito.picantito.mapper.UserDtoMapper;
+import com.picantito.picantito.security.JwtService;
 import com.picantito.picantito.service.AutentificacionService;
+import com.picantito.picantito.service.TokenRevocationService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 
@@ -40,60 +52,103 @@ public class UserController {
     
     @Autowired
     private UserDtoMapper userDtoMapper;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private TokenRevocationService tokenRevocationService;
     
     // === LOGIN ===
     // Login de usuario: http://localhost:9998/api/usuarios/login
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            String nombreUsuario = credentials.get("nombreUsuario");
-            String contrasenia = credentials.get("contrasenia");
-            
             // Validación básica
-            if (nombreUsuario == null || contrasenia == null) {
-                return ResponseEntity.badRequest().body("Nombre de usuario y contraseña son obligatorios");
+            if (loginRequest.getNombreUsuario() == null || loginRequest.getContrasenia() == null) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Nombre de usuario y contraseña son obligatorios"));
             }
             
             // Buscar el usuario
-            Optional<User> optionalUser = autentificacionService.findByNombreUsuario(nombreUsuario);
+            Optional<User> optionalUser = autentificacionService.findByNombreUsuario(loginRequest.getNombreUsuario());
             
             if (!optionalUser.isPresent()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("Nombre de usuario no encontrado");
+                        .body(Map.of("error", "Nombre de usuario no encontrado"));
             }
             
             User user = optionalUser.get();
             
-            // Verificar si el usuario ha sido eliminado lógicamente
-            if ("ELIMINADO".equals(user.getRol())) {
+            // Verificar si el usuario está activo
+            if (!user.getActivo()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("La cuenta ya no existe y no se puede volver a crear con ese correo");
+                        .body(Map.of("error", "La cuenta no está activa"));
             }
             
-            // Verificar si es un repartidor (nueva validación)
-            if ("REPARTIDOR".equals(user.getRol())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Los repartidores no pueden iniciar sesión a través de esta interfaz");
+            // Autenticar usando Spring Security
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    loginRequest.getNombreUsuario(),
+                    loginRequest.getContrasenia()
+                )
+            );
+
+            // Generar token JWT
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String jwt = jwtService.generateToken(userDetails);
+
+            // Extraer roles sin el prefijo "ROLE_"
+            var roles = userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .map(role -> role.replace("ROLE_", ""))
+                    .collect(Collectors.toSet());
+
+            // Construir respuesta
+            LoginResponse response = LoginResponse.builder()
+                    .token(jwt)
+                    .type("Bearer")
+                    .id(user.getId())
+                    .nombreUsuario(user.getNombreUsuario())
+                    .nombreCompleto(user.getNombreCompleto())
+                    .correo(user.getCorreo())
+                    .roles(roles)
+                    .build();
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Credenciales inválidas"));
+        }
+    }
+
+    // === LOGOUT ===
+    // Logout de usuario (revoca el token JWT): http://localhost:9998/api/usuarios/logout
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        try {
+            String jwt = getJwtFromRequest(request);
+            
+            if (jwt != null) {
+                tokenRevocationService.revokeToken(jwt);
+                return ResponseEntity.ok(Map.of("mensaje", "Sesión cerrada exitosamente"));
             }
             
-            // Verificar contraseña
-            if (!user.getContrasenia().equals(contrasenia)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("Contraseña incorrecta");
-            }
-            
-            // Login exitoso, devolver información del usuario usando DTO
-            UserDto userDTO = userDtoMapper.toDto(user);
-            
-            return ResponseEntity.ok()
-                    .body(Map.of(
-                        "mensaje", "Login exitoso",
-                        "usuario", userDTO
-                    ));
+            return ResponseEntity.badRequest().body(Map.of("error", "No se encontró token para cerrar sesión"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error durante el login: " + e.getMessage());
+                    .body(Map.of("error", "Error al cerrar sesión: " + e.getMessage()));
         }
+    }
+
+    private String getJwtFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
     // === CREATE (Crear usuario) ===

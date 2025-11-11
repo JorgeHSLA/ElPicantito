@@ -36,19 +36,8 @@ export class LoginComponent {
     this.authService.login(this.nombreUsuario(), this.password()).subscribe({
       next: (success) => {
         if (success) {
-          // Redirigir según el rol del usuario
-          const user = this.authService.loggedUser();
-          if (user) {
-            if (user.rol === 'ADMIN') {
-              this.router.navigate(['/admin/dashboard']);
-            } else if (user.rol === 'OPERADOR') {
-              this.router.navigate(['/operador/dashboard']);
-            } else {
-              this.router.navigate(['/home']);
-            }
-          } else {
-            this.router.navigate(['/home']);
-          }
+          // Redirigir según el rol del usuario usando el método del servicio
+          this.authService.redirectByRole();
         } else {
           this.errorMessage.set('Credenciales incorrectas');
         }

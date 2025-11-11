@@ -1,7 +1,18 @@
 import { Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, of } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 import { Usuario } from '../models/usuario';
+import { Router } from '@angular/router';
+
+interface LoginResponse {
+  token: string;
+  type: string;
+  id: number;
+  nombreUsuario: string;
+  nombreCompleto: string;
+  correo: string;
+  roles: string[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +28,7 @@ export class AuthService {
     return this.loggedUserSignal.asReadonly();
   }
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     // Verificar si hay usuario en localStorage al inicializar
     this.loadUserFromStorage();
   }
@@ -30,62 +41,126 @@ export class AuthService {
   login(nombreUsuario: string, contrasenia: string): Observable<boolean> {
     const credentials = { nombreUsuario, contrasenia };
     
-    return this.http.post<any>(`${this.API_URL}/login`, credentials).pipe(
+    return this.http.post<LoginResponse>(`${this.API_URL}/login`, credentials).pipe(
       map((response) => {
         console.log('🔐 Respuesta del login:', response);
         
-        if (response && response.usuario) {
-          const usuario = response.usuario;
+        if (response && response.token) {
+          // Guardar token
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('tokenType', response.type);
           
-          // Validar que el ID sea un número válido
-          if (usuario.id && typeof usuario.id !== 'number') {
-            console.warn('⚠️ ID de usuario no es número, convirtiendo:', usuario.id);
-            usuario.id = Number(usuario.id);
-          }
+          // Crear objeto Usuario compatible con el modelo existente
+          const usuario: Usuario = {
+            id: response.id,
+            nombreCompleto: response.nombreCompleto,
+            nombreUsuario: response.nombreUsuario,
+            correo: response.correo,
+            telefono: '', // No viene en LoginResponse
+            contrasenia: '', // No se debe guardar
+            rol: response.roles[0], // Primer rol
+            activo: true,
+            estado: undefined
+          };
           
-          if (!usuario.id || isNaN(usuario.id) || usuario.id <= 0) {
-            console.error('❌ ID de usuario inválido después del login:', usuario.id);
-            return false;
-          }
-          
-          console.log('✅ Usuario validado:', {
-            id: usuario.id,
-            tipo: typeof usuario.id,
-            nombre: usuario.nombreCompleto
-          });
+          console.log('✅ Usuario creado desde JWT:', usuario);
           
           this.loggedUserSignal.set(usuario);
           localStorage.setItem('loggedUser', JSON.stringify(usuario));
+          localStorage.setItem('roles', JSON.stringify(response.roles));
+          
           return true;
         }
         return false;
       }),
       catchError((error) => {
-        console.error('Error en login:', error);
+        console.error('❌ Error en login:', error);
         return of(false);
       })
     );
   }
 
-  logout(): void {
+  logout(): Observable<void> {
+    const token = this.getToken();
+    
+    if (token) {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+      
+      return this.http.post<any>(`${this.API_URL}/logout`, {}, { headers }).pipe(
+        tap(() => {
+          this.clearSession();
+        }),
+        catchError((error) => {
+          console.error('❌ Error en logout:', error);
+          // Limpiar sesión de todas formas
+          this.clearSession();
+          return of(void 0);
+        })
+      );
+    }
+    
+    this.clearSession();
+    return of(void 0);
+  }
+
+  private clearSession(): void {
     this.loggedUserSignal.set(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('tokenType');
     localStorage.removeItem('loggedUser');
-    // Limpiar también el carrito al cerrar sesión
+    localStorage.removeItem('roles');
     localStorage.removeItem('cart');
   }
 
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  getRoles(): string[] {
+    const rolesStr = localStorage.getItem('roles');
+    return rolesStr ? JSON.parse(rolesStr) : [];
+  }
+
+  hasRole(role: string): boolean {
+    const roles = this.getRoles();
+    return roles.includes(role);
+  }
+
   isAdmin(): boolean {
-    const user = this.loggedUserSignal();
-    return user?.rol === 'ADMIN';
+    return this.hasRole('ADMIN');
   }
 
   isOperador(): boolean {
-    const user = this.loggedUserSignal();
-    return user?.rol === 'OPERADOR';
+    return this.hasRole('OPERADOR');
+  }
+
+  isCliente(): boolean {
+    return this.hasRole('CLIENTE');
+  }
+
+  isRepartidor(): boolean {
+    return this.hasRole('REPARTIDOR');
   }
 
   isLoggedIn(): boolean {
-    return this.loggedUserSignal() !== null;
+    return this.getToken() !== null && this.loggedUserSignal() !== null;
+  }
+
+  // Redirigir según rol
+  redirectByRole(): void {
+    if (this.isAdmin()) {
+      this.router.navigate(['/admin']);
+    } else if (this.isOperador()) {
+      this.router.navigate(['/operador']);
+    } else if (this.isCliente()) {
+      this.router.navigate(['/cliente']);
+    } else if (this.isRepartidor()) {
+      this.router.navigate(['/repartidor']);
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   // Métodos adicionales para el CRUD de usuarios
