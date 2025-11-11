@@ -42,9 +42,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    // Si el usuario ya está autenticado con JWT, redirigir según su rol
+    // Si el usuario es ADMIN u OPERADOR, redirigir a su dashboard
+    // Los CLIENTES pueden quedarse en el home
     if (this.authService.isLoggedIn()) {
-      this.authService.redirectByRole();
+      if (this.authService.isAdmin()) {
+        this.router.navigate(['/admin']);
+      } else if (this.authService.isOperador()) {
+        this.router.navigate(['/operador']);
+      }
+      // Los clientes y repartidores se quedan en home
     }
   }
 

@@ -155,9 +155,9 @@ export class AuthService {
     } else if (this.isOperador()) {
       this.router.navigate(['/operador']);
     } else if (this.isCliente()) {
-      this.router.navigate(['/cliente']);
+      this.router.navigate(['/home']);
     } else if (this.isRepartidor()) {
-      this.router.navigate(['/repartidor']);
+      this.router.navigate(['/home']);
     } else {
       this.router.navigate(['/']);
     }

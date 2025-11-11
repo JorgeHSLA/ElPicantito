@@ -100,9 +100,9 @@ public class PedidoServiceImpl implements PedidoService {
             throw new RuntimeException("Cliente no encontrado con ID: " + pedidoDTO.getClienteId());
         }
         var cliente = clienteOpt.get();
-        if (!"CLIENTE".equals(cliente.getRol()) && !"ADMIN".equals(cliente.getRol()) && !"USER".equals(cliente.getRol())) {
+        if (!"CLIENTE".equals(cliente.getRol()) && !"ADMIN".equals(cliente.getRol())) {
             throw new RuntimeException("El usuario con ID " + pedidoDTO.getClienteId() + 
-                                      " no tiene un rol válido para crear pedidos (CLIENTE, ADMIN o USER)");
+                                      " no tiene un rol válido para crear pedidos (CLIENTE o ADMIN)");
         }
         pedido.setCliente(cliente);
         

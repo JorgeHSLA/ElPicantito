@@ -11,6 +11,7 @@ public interface AutentificacionService {
     List<User> findAll();
     Optional<User> findById(Integer id);
     User save(User user);
+    User actualizarUsuarioConRol(User user);
     
     // Autenticacion
     Optional<User> findByNombreUsuario(String nombreUsuario);

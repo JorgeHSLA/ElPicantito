@@ -43,12 +43,47 @@ public class AutenticacionServiceImpl implements AutentificacionService {
             user.setContrasenia(passwordEncoder.encode(user.getContrasenia()));
         }
         
-        // Si el usuario es nuevo y no tiene roles asignados, asignar el rol USER por defecto
+        // Si el usuario es nuevo y no tiene roles asignados, asignar el rol CLIENTE por defecto
         if (user.getId() == null && (user.getRoles() == null || user.getRoles().isEmpty())) {
-            Optional<Role> roleUser = roleRepository.findByNombre("USER");
-            if (roleUser.isPresent()) {
+            Optional<Role> roleCliente = roleRepository.findByNombre("CLIENTE");
+            if (roleCliente.isPresent()) {
                 user.setRoles(new HashSet<>());
-                user.getRoles().add(roleUser.get());
+                user.getRoles().add(roleCliente.get());
+            }
+        }
+        
+        return usuarioRepository.save(user);
+    }
+
+    @Override
+    public User actualizarUsuarioConRol(User user) {
+        // Encriptar la contraseña si no está ya encriptada
+        if (user.getContrasenia() != null && !user.getContrasenia().startsWith("$2a$")) {
+            user.setContrasenia(passwordEncoder.encode(user.getContrasenia()));
+        }
+        
+        // Actualizar roles basado en el campo rol
+        if (user.getRol() != null && !user.getRol().trim().isEmpty()) {
+            String rolNombre = user.getRol().toUpperCase().trim();
+            Optional<Role> roleOptional = roleRepository.findByNombre(rolNombre);
+            
+            if (roleOptional.isPresent()) {
+                user.setRoles(new HashSet<>());
+                user.getRoles().add(roleOptional.get());
+            } else {
+                // Si el rol no existe, asignar CLIENTE por defecto
+                Optional<Role> roleCliente = roleRepository.findByNombre("CLIENTE");
+                if (roleCliente.isPresent()) {
+                    user.setRoles(new HashSet<>());
+                    user.getRoles().add(roleCliente.get());
+                }
+            }
+        } else {
+            // Si no viene rol, asignar CLIENTE por defecto
+            Optional<Role> roleCliente = roleRepository.findByNombre("CLIENTE");
+            if (roleCliente.isPresent()) {
+                user.setRoles(new HashSet<>());
+                user.getRoles().add(roleCliente.get());
             }
         }
         

@@ -22,7 +22,7 @@ export class UsuariosComponent implements OnInit {
     telefono: '',
     correo: '',
     contrasenia: '',
-    rol: 'USER',
+    rol: 'CLIENTE',
     activo: true
   });
   successMessage = signal('');
@@ -56,7 +56,7 @@ export class UsuariosComponent implements OnInit {
     
     // Asegurar que tenga un rol válido
     if (!usuario.rol) {
-      usuario.rol = 'USER';
+      usuario.rol = 'CLIENTE';
     }
     
     this.authService.crearUsuario(usuario).subscribe({
@@ -96,7 +96,7 @@ export class UsuariosComponent implements OnInit {
       telefono: '', 
       correo: '', 
       contrasenia: '',
-      rol: 'USER',
+      rol: 'CLIENTE',
       activo: true
     });
   }

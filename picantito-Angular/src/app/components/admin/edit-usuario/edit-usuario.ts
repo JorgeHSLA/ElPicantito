@@ -22,7 +22,7 @@ export class EditUsuarioComponent implements OnInit {
     telefono: '',
     correo: '',
     contrasenia: '',
-    rol: 'USER',
+    rol: 'CLIENTE',
     activo: true
   });
   

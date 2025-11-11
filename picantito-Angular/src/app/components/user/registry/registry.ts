@@ -72,7 +72,7 @@ export class RegistryComponent implements OnInit, AfterViewInit {
       correo: this.registryForm.correo,
       contrasenia: this.registryForm.password,
       estado: null, // El backend solo acepta estado para repartidores
-      rol: 'USER',
+      rol: 'CLIENTE',
       activo: true
     };
 

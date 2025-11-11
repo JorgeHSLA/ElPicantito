@@ -144,7 +144,6 @@ CREATE TABLE Pedido_Producto_Adicional (
 -- ==========================
 INSERT INTO Roles (nombre) VALUES 
     ('ADMIN'),
-    ('USER'),
     ('CLIENTE'),
     ('OPERADOR'),
     ('REPARTIDOR');

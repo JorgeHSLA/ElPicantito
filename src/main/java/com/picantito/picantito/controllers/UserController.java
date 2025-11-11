@@ -312,8 +312,8 @@ public class UserController {
                 }
             }
             
-            // Actualizar usuario
-            User usuarioActualizado = autentificacionService.save(usuario);
+            // Actualizar usuario (el servicio maneja los roles automáticamente)
+            User usuarioActualizado = autentificacionService.actualizarUsuarioConRol(usuario);
             UserResponseDTO userDTO = userMapper.toDTO(usuarioActualizado);
             return ResponseEntity.ok(userDTO);
         } catch (Exception e) {
