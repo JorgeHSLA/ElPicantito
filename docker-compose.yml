@@ -17,7 +17,7 @@ services:
       # Volumen para persistencia de datos.
       # Montamos explícitamente los scripts de inicialización en orden numérico para que
       # se ejecute primero el esquema y luego los datos de prueba en una inicialización nueva.
-        - ./sql/create_schema.sql:/docker-entrypoint-initdb.d/1_create_schema.sql:ro
+        - ./sql/schema_completo.sql:/docker-entrypoint-initdb.d/1_create_schema.sql:ro
         - ./sql/datos_picantito.sql:/docker-entrypoint-initdb.d/2_datos_picantito.sql:ro
         - postgres_data:/var/lib/postgresql/data  # Volumen nombrado para datos persistentes
       environment:

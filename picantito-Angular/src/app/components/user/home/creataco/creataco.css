@@ -60,8 +60,8 @@
     /* Dividir el ancho entre los banderines */
     min-width: 280px;
     height: auto;
-    transform: rotate(-1.5deg);
-    /* Inclinación muy sutil */
+    transform: rotate(0deg);
+    /* Sin inclinación, completamente horizontal */
     mix-blend-mode: multiply;
     filter: brightness(1.05) contrast(1.08);
     margin-right: 0;
