@@ -143,7 +143,7 @@ public class EstadisticaController {
         }
     }
 
-    // Obtener todas las estadísticas: http://localhost:9998/api/estadisticas/todas-las-estadisticas
+    // Obtener todas las estadísticas: http://localhost:9998/api/estadisticas/todas
     @GetMapping("/todas")
     public ResponseEntity<EstadisticaDTO> getTodasLasEstadisticas() {
         try {

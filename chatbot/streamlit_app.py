@@ -1,6 +1,129 @@
 import os
 import streamlit as st
 from openai import OpenAI
+import requests
+import json
+
+# === CONFIGURACIÓN DE LA API DE SPRING BOOT ===
+SPRINGBOOT_API_BASE = os.environ.get("SPRINGBOOT_API_BASE", "http://localhost:9998")
+
+# === FUNCIONES PARA OBTENER DATOS DE SPRING BOOT ===
+@st.cache_data(ttl=300)  # Cache por 5 minutos
+def obtener_estadisticas():
+    """Obtiene todas las estadísticas del sistema"""
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/estadisticas/todas", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        return None
+
+@st.cache_data(ttl=300)
+def obtener_usuarios():
+    """Obtiene información de usuarios (sin contraseñas)"""
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/usuarios/dto", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        return None
+
+@st.cache_data(ttl=300)
+def obtener_adicionales():
+    """Obtiene todos los adicionales disponibles"""
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        return None
+
+@st.cache_data(ttl=300)
+def obtener_productos():
+    """Obtiene todos los productos"""
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/productos", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        return None
+
+@st.cache_data(ttl=300)
+def obtener_relaciones_producto_adicional():
+    """Obtiene las relaciones entre productos y adicionales"""
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional/productoAdicionales", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        return None
+
+def construir_contexto_sistema():
+    """Construye un contexto enriquecido con datos del sistema"""
+    contexto_base = """Eres un asistente útil para la página web 'El Picantito', un restaurante mexicano. 
+Responde amablemente a las preguntas sobre las funcionalidades del sitio. 
+Usa un tono cálido y amigable, con toques de humor mexicano cuando sea apropiado."""
+    
+    # Intentar obtener datos del sistema
+    estadisticas = obtener_estadisticas()
+    usuarios = obtener_usuarios()
+    adicionales = obtener_adicionales()
+    productos = obtener_productos()
+    relaciones = obtener_relaciones_producto_adicional()
+    
+    # Agregar información al contexto si está disponible
+    contexto_adicional = []
+    
+    if estadisticas:
+        contexto_adicional.append(f"\n\n=== ESTADÍSTICAS DEL SISTEMA ===")
+        contexto_adicional.append(f"- Total de pedidos: {estadisticas.get('totalPedidos', 'N/A')}")
+        contexto_adicional.append(f"- Ingresos totales: ${estadisticas.get('ingresosTotales', 'N/A')}")
+        contexto_adicional.append(f"- Ingresos netos: ${estadisticas.get('ingresosNetos', 'N/A')}")
+        if estadisticas.get('productosMasVendidos'):
+            contexto_adicional.append(f"- Productos más vendidos (IDs): {estadisticas['productosMasVendidos']}")
+    
+    if usuarios:
+        contexto_adicional.append(f"\n\n=== INFORMACIÓN DE USUARIOS ===")
+        contexto_adicional.append(f"- Total de usuarios registrados: {len(usuarios)}")
+        roles = {}
+        for u in usuarios:
+            rol = u.get('rol', 'DESCONOCIDO')
+            roles[rol] = roles.get(rol, 0) + 1
+        contexto_adicional.append(f"- Distribución por roles: {json.dumps(roles)}")
+    
+    if productos:
+        contexto_adicional.append(f"\n\n=== CATÁLOGO DE PRODUCTOS ===")
+        contexto_adicional.append(f"- Total de productos: {len(productos)}")
+        productos_disponibles = [p for p in productos if p.get('disponible', False)]
+        contexto_adicional.append(f"- Productos disponibles: {len(productos_disponibles)}")
+        # Listar algunos productos
+        if productos_disponibles:
+            nombres = [p.get('nombre', 'Sin nombre') for p in productos_disponibles[:5]]
+            contexto_adicional.append(f"- Ejemplos: {', '.join(nombres)}")
+    
+    if adicionales:
+        contexto_adicional.append(f"\n\n=== ADICIONALES DISPONIBLES ===")
+        contexto_adicional.append(f"- Total de adicionales: {len(adicionales)}")
+        adicionales_disponibles = [a for a in adicionales if a.get('disponible', False)]
+        contexto_adicional.append(f"- Adicionales disponibles: {len(adicionales_disponibles)}")
+        if adicionales_disponibles:
+            nombres = [a.get('nombre', 'Sin nombre') for a in adicionales_disponibles[:5]]
+            contexto_adicional.append(f"- Ejemplos: {', '.join(nombres)}")
+    
+    if relaciones:
+        contexto_adicional.append(f"\n\n=== PERSONALIZACIÓN ===")
+        contexto_adicional.append(f"- Total de combinaciones producto-adicional: {len(relaciones)}")
+    
+    if contexto_adicional:
+        contexto_base += "\n" + "\n".join(contexto_adicional)
+        contexto_base += "\n\nUsa esta información para dar respuestas más precisas sobre el estado actual del sistema."
+    
+    return contexto_base
 
 # === ESTILOS MEXICANOS CON FONDO OSCURO ===
 st.markdown(
@@ -175,6 +298,16 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# Mostrar indicador de conexión con Spring Boot
+try:
+    response = requests.get(f"{SPRINGBOOT_API_BASE}/actuator/health", timeout=2)
+    if response.status_code == 200:
+        st.success(f"✅ Conectado a Spring Boot ({SPRINGBOOT_API_BASE})")
+    else:
+        st.warning(f"⚠️ Spring Boot responde pero con estado: {response.status_code}")
+except:
+    st.error(f"❌ No se puede conectar a Spring Boot en {SPRINGBOOT_API_BASE}. Funcionando en modo básico.")
+
 # Configuración de DeepSeek / OpenAI: primero st.secrets, fallback a variables de entorno
 deepseek_api_key = None
 try:
@@ -193,10 +326,136 @@ if not deepseek_api_key or deepseek_api_key.strip() == "":
 
 deepseek_base_url = "https://openrouter.ai/api/v1"  # ajustar si usa otro endpoint
 
+# === CONFIGURACIÓN DE LA API DE SPRING BOOT ===
+SPRINGBOOT_API_BASE = os.environ.get("SPRINGBOOT_API_BASE", "http://localhost:9998")
+
+# === FUNCIONES PARA OBTENER DATOS DE SPRING BOOT ===
+@st.cache_data(ttl=300)  # Cache por 5 minutos
+def obtener_estadisticas():
+    """Obtiene todas las estadísticas del sistema"""
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/estadisticas/todas", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        st.warning(f"No se pudieron obtener estadísticas: {e}")
+        return None
+
+@st.cache_data(ttl=300)
+def obtener_usuarios():
+    """Obtiene información de usuarios (sin contraseñas)"""
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/usuarios/dto", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        st.warning(f"No se pudieron obtener usuarios: {e}")
+        return None
+
+@st.cache_data(ttl=300)
+def obtener_adicionales():
+    """Obtiene todos los adicionales disponibles"""
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        st.warning(f"No se pudieron obtener adicionales: {e}")
+        return None
+
+@st.cache_data(ttl=300)
+def obtener_productos():
+    """Obtiene todos los productos"""
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/productos", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        st.warning(f"No se pudieron obtener productos: {e}")
+        return None
+
+@st.cache_data(ttl=300)
+def obtener_relaciones_producto_adicional():
+    """Obtiene las relaciones entre productos y adicionales"""
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional/productoAdicionales", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        st.warning(f"No se pudieron obtener relaciones: {e}")
+        return None
+
+def construir_contexto_sistema():
+    """Construye un contexto enriquecido con datos del sistema"""
+    contexto_base = """Eres un asistente útil para la página web 'El Picantito', un restaurante mexicano. 
+Responde amablemente a las preguntas sobre las funcionalidades del sitio. 
+Usa un tono cálido y amigable, con toques de humor mexicano cuando sea apropiado."""
+    
+    # Intentar obtener datos del sistema
+    estadisticas = obtener_estadisticas()
+    usuarios = obtener_usuarios()
+    adicionales = obtener_adicionales()
+    productos = obtener_productos()
+    relaciones = obtener_relaciones_producto_adicional()
+    
+    # Agregar información al contexto si está disponible
+    contexto_adicional = []
+    
+    if estadisticas:
+        contexto_adicional.append(f"\n\n=== ESTADÍSTICAS DEL SISTEMA ===")
+        contexto_adicional.append(f"- Total de pedidos: {estadisticas.get('totalPedidos', 'N/A')}")
+        contexto_adicional.append(f"- Ingresos totales: ${estadisticas.get('ingresosTotales', 'N/A')}")
+        contexto_adicional.append(f"- Ingresos netos: ${estadisticas.get('ingresosNetos', 'N/A')}")
+        if estadisticas.get('productosMasVendidos'):
+            contexto_adicional.append(f"- Productos más vendidos (IDs): {estadisticas['productosMasVendidos']}")
+    
+    if usuarios:
+        contexto_adicional.append(f"\n\n=== INFORMACIÓN DE USUARIOS ===")
+        contexto_adicional.append(f"- Total de usuarios registrados: {len(usuarios)}")
+        roles = {}
+        for u in usuarios:
+            rol = u.get('rol', 'DESCONOCIDO')
+            roles[rol] = roles.get(rol, 0) + 1
+        contexto_adicional.append(f"- Distribución por roles: {json.dumps(roles)}")
+    
+    if productos:
+        contexto_adicional.append(f"\n\n=== CATÁLOGO DE PRODUCTOS ===")
+        contexto_adicional.append(f"- Total de productos: {len(productos)}")
+        productos_disponibles = [p for p in productos if p.get('disponible', False)]
+        contexto_adicional.append(f"- Productos disponibles: {len(productos_disponibles)}")
+        # Listar algunos productos
+        if productos_disponibles:
+            nombres = [p.get('nombre', 'Sin nombre') for p in productos_disponibles[:5]]
+            contexto_adicional.append(f"- Ejemplos: {', '.join(nombres)}")
+    
+    if adicionales:
+        contexto_adicional.append(f"\n\n=== ADICIONALES DISPONIBLES ===")
+        contexto_adicional.append(f"- Total de adicionales: {len(adicionales)}")
+        adicionales_disponibles = [a for a in adicionales if a.get('disponible', False)]
+        contexto_adicional.append(f"- Adicionales disponibles: {len(adicionales_disponibles)}")
+        if adicionales_disponibles:
+            nombres = [a.get('nombre', 'Sin nombre') for a in adicionales_disponibles[:5]]
+            contexto_adicional.append(f"- Ejemplos: {', '.join(nombres)}")
+    
+    if relaciones:
+        contexto_adicional.append(f"\n\n=== PERSONALIZACIÓN ===")
+        contexto_adicional.append(f"- Total de combinaciones producto-adicional: {len(relaciones)}")
+    
+    if contexto_adicional:
+        contexto_base += "\n" + "\n".join(contexto_adicional)
+        contexto_base += "\n\nUsa esta información para dar respuestas más precisas sobre el estado actual del sistema."
+    
+    return contexto_base
+
 # Inicializar historial solo una vez
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "system", "content": "Eres un asistente útil para la página web 'El Picantito'. Responde amablemente a las preguntas sobre las funcionalidades del sitio. Usa un tono cálido y amigable, con toques de humor mexicano cuando sea apropiado."}
+        {"role": "system", "content": construir_contexto_sistema()}
     ]
 
 # Crear cliente de DeepSeek/OpenAI (capturar fallo de autenticación temprano)

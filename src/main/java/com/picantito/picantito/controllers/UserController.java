@@ -391,7 +391,7 @@ public class UserController {
     // === ENDPOINT SIMPLE CON DTOs ===
     /**
      * Endpoint que devuelve usuarios usando UserDto (sin contraseñas)
-     * GET /api/usuarios/dto
+     * GET http://localhost:9998/api/usuarios/dto
      */
     @GetMapping("/dto")
     public ResponseEntity<List<UserDto>> getAllUsuariosDto() {
