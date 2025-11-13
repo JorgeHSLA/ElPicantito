@@ -16,7 +16,7 @@ import com.picantito.picantito.service.EstadisticaService;
 
 @RestController
 @RequestMapping("/api/estadisticas")
-@CrossOrigin(origins = "*")
+@CrossOrigin(originPatterns = "*", allowCredentials = "false") 
 public class EstadisticaController {
 
     @Autowired

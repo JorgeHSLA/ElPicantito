@@ -3,7 +3,6 @@ import { Component, signal } from '@angular/core';
 import { Item } from '../../../models/crearTaco/item';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
 import { ProductoService } from '../../../services/tienda/producto.service';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Adicional } from '../../../models/adicional';
 @Component({
@@ -33,7 +32,7 @@ export class DragAndDrop {
   ];
 
   private proteinas: Item[] = [
-    { idAdcional: 4, nombre: 'CarneAsada', image: '/images/crearTaco/proteinas/carne-asada.jpg', precio: 25, cantidad: 1 },
+    { idAdcional: 4, nombre: 'CarneAsada', image: '/images/crearTaco/proteinas/carne-asada.png', precio: 25, cantidad: 1 },
     { idAdcional: 5, nombre: 'Pollo', image: '/images/crearTaco/proteinas/pollo.jpg', precio: 20, cantidad: 1 },
     { idAdcional: 6, nombre: 'Pastor', image: '/images/crearTaco/proteinas/pastor.jpg', precio: 22, cantidad: 1 },
     { idAdcional: 7, nombre: 'Carnitas', image: '/images/crearTaco/proteinas/carnitas.jpg', precio: 23, cantidad: 1 },
