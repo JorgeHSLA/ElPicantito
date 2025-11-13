@@ -21,93 +21,193 @@ export class DragAndDrop {
   totalPrice = signal<number>(0);
   canGoToNextStep = signal<boolean>(false);
 
-  adcionales =signal<Adicional[]>([]);
+  adcionales = signal<Adicional[]>([]);
   
-
-  // Categorías de ingredientes
-  private tortillas: Item[] = [
-    { idAdcional: 1, nombre: 'Tortilla de Maíz', image: '/images/crearTaco/tortillas/tortilla.png', precio: 5, cantidad: 1 },
-    { idAdcional: 2, nombre: 'Tortilla de Harina', image: '/images/crearTaco/tortillas/tortilla.png', precio: 6, cantidad: 1 },
-    { idAdcional: 3, nombre: 'Tortilla Integral', image: '/images/crearTaco/tortillas/tortilla.png', precio: 7, cantidad: 1 }
-  ];
-
-  private proteinas: Item[] = [
-    { idAdcional: 4, nombre: 'CarneAsada', image: '/images/crearTaco/proteinas/carne-asada.png', precio: 25, cantidad: 1 },
-    { idAdcional: 5, nombre: 'Pollo', image: '/images/crearTaco/proteinas/pollo.jpg', precio: 20, cantidad: 1 },
-    { idAdcional: 6, nombre: 'Pastor', image: '/images/crearTaco/proteinas/pastor.jpg', precio: 22, cantidad: 1 },
-    { idAdcional: 7, nombre: 'Carnitas', image: '/images/crearTaco/proteinas/carnitas.jpg', precio: 23, cantidad: 1 },
-    { idAdcional: 8, nombre: 'Chorizo', image: '/images/crearTaco/proteinas/chorizo.jpg', precio: 21, cantidad: 1 }
-  ];
-
-  private salsas: Item[] = [
-    { idAdcional: 9,  nombre: 'Salsa Verde', image: '/images/crearTaco/salsas/verde.jpg', precio: 3, cantidad: 1 },
-    { idAdcional: 10, nombre: 'Salsa Roja', image: '/images/crearTaco/salsas/roja.jpg', precio: 3, cantidad: 1 },
-    { idAdcional: 11, nombre: 'Salsa Habanera', image: '/images/crearTaco/salsas/habanera.jpg', precio: 4, cantidad: 1 },
-    { idAdcional: 12, nombre: 'Salsa Chipotle', image: '/images/crearTaco/salsas/chipotle.jpg', precio: 4, cantidad: 1 },
-    { idAdcional: 13, nombre: 'Pico de Gallo', image: '/images/crearTaco/salsas/pico-gallo.jpg', precio: 5, cantidad: 1 }
-  ];
-
-  private extras: Item[] = [
-    { idAdcional: 14, nombre: 'Queso Oaxaca', image: '/images/crearTaco/quesos/oaxaca.jpg', precio: 8, cantidad: 1 },
-    { idAdcional: 15, nombre: 'Queso Cotija', image: '/images/crearTaco/quesos/cotija.jpg', precio: 7, cantidad: 1 },
-    { idAdcional: 16, nombre: 'Lechuga', image: '/images/crearTaco/vegetales/lechuga.jpg', precio: 2, cantidad: 1 }
-  ];
+  // Categorías de ingredientes cargadas desde el servicio
+  private tortillas = signal<Item[]>([]);
+  private proteinas = signal<Item[]>([]);
+  private salsas = signal<Item[]>([]);
+  private extras = signal<Item[]>([]);
 
   constructor(
     private productoService: ProductoService,
     private adicionalService: AdicionalService,
-
   ) {}
 
 
   ngOnInit() {
-    // Inicializar con tortillas
-    this.loadCategoryItems('tortilla');
-    this.done.set([]);
+    // Cargar todos los adicionales desde el backend
+    this.loadAdicionalesFromService();
+  }
+
+  private loadAdicionalesFromService() {
+    this.adicionalService.getAllAdicionales().subscribe({
+      next: (adicionales) => {
+        this.adcionales.set(adicionales);
+        
+        // Mapear adicionales a Items por nombre (sin usar categoria)
+        this.tortillas.set(
+          adicionales
+            .filter(a => a.nombre && 
+                        (a.nombre.toLowerCase().includes('tortilla')))
+            .map(a => this.mapAdicionalToItem(a))
+        );
+
+        this.proteinas.set(
+          adicionales
+            .filter(a => a.nombre && 
+                        (a.nombre.toLowerCase().includes('carne') ||
+                         a.nombre.toLowerCase().includes('pollo') ||
+                         a.nombre.toLowerCase().includes('pastor') ||
+                         a.nombre.toLowerCase().includes('carnitas') ||
+                         a.nombre.toLowerCase().includes('chorizo')))
+            .map(a => this.mapAdicionalToItem(a))
+        );
+
+        this.salsas.set(
+          adicionales
+            .filter(a => a.nombre && 
+                        (a.nombre.toLowerCase().includes('salsa') ||
+                         a.nombre.toLowerCase().includes('pico')))
+            .map(a => this.mapAdicionalToItem(a))
+        );
+
+        this.extras.set(
+          adicionales
+            .filter(a => a.nombre && 
+                        (a.nombre.toLowerCase().includes('queso') ||
+                         a.nombre.toLowerCase().includes('lechuga')))
+            .map(a => this.mapAdicionalToItem(a))
+        );
+
+        // Inicializar con tortillas
+        this.loadCategoryItems('tortilla');
+        this.done.set([]);
+      },
+      error: (error) => {
+        console.error('Error cargando adicionales:', error);
+        // Inicializar vacío en caso de error
+        this.loadCategoryItems('tortilla');
+        this.done.set([]);
+      }
+    });
+  }
+
+  private mapAdicionalToItem(adicional: Adicional): Item {
+    return {
+      idAdcional: adicional.id,
+      nombre: adicional.nombre || 'Sin nombre',
+      image: this.getImageForAdicional(adicional.nombre || ''),
+      precio: adicional.precioDeVenta || 0,
+      cantidad: 1
+    };
+  }
+
+  private getImageForAdicional(nombre: string): string {
+    const nombreLower = nombre.toLowerCase();
+    
+    // Tortillas
+    if (nombreLower.includes('tortilla')) {
+      return '/images/crearTaco/tortillas/tortilla.png';
+    }
+    
+    // Proteínas
+    if (nombreLower.includes('carne') || nombreLower.includes('asada')) {
+      return '/images/crearTaco/proteinas/carne-asada.png';
+    }
+    if (nombreLower.includes('pollo')) {
+      return '/images/crearTaco/proteinas/pollo.jpg';
+    }
+    if (nombreLower.includes('pastor')) {
+      return '/images/crearTaco/proteinas/pastor.jpg';
+    }
+    if (nombreLower.includes('carnitas')) {
+      return '/images/crearTaco/proteinas/carnitas.jpg';
+    }
+    if (nombreLower.includes('chorizo')) {
+      return '/images/crearTaco/proteinas/chorizo.jpg';
+    }
+    
+    // Salsas
+    if (nombreLower.includes('verde')) {
+      return '/images/crearTaco/salsas/verde.jpg';
+    }
+    if (nombreLower.includes('roja')) {
+      return '/images/crearTaco/salsas/roja.jpg';
+    }
+    if (nombreLower.includes('habanera')) {
+      return '/images/crearTaco/salsas/habanera.jpg';
+    }
+    if (nombreLower.includes('chipotle')) {
+      return '/images/crearTaco/salsas/chipotle.jpg';
+    }
+    if (nombreLower.includes('pico')) {
+      return '/images/crearTaco/salsas/pico-gallo.jpg';
+    }
+    
+    // Quesos
+    if (nombreLower.includes('oaxaca')) {
+      return '/images/crearTaco/quesos/oaxaca.jpg';
+    }
+    if (nombreLower.includes('cotija')) {
+      return '/images/crearTaco/quesos/cotija.jpg';
+    }
+    
+    // Vegetales
+    if (nombreLower.includes('lechuga')) {
+      return '/images/crearTaco/vegetales/lechuga.jpg';
+    }
+    
+    // Imagen por defecto
+    return '/images/default-ingredient.png';
   }
 
   private loadCategoryItems(category: string) {
     const doneItems = this.done();
     let availableItems: Item[] = [];
+    const tortillaIds = this.tortillas().map(t => t.idAdcional);
+    const proteinaIds = this.proteinas().map(p => p.idAdcional);
+    const salsaIds = this.salsas().map(s => s.idAdcional);
+    const extraIds = this.extras().map(e => e.idAdcional);
 
     switch(category) {
       case 'tortilla':
         // Para tortillas, mostrar todas MENOS la que está actualmente en done
         const currentTortillaInDone = doneItems.find(
-          item => item.idAdcional! >= 1 && item.idAdcional! <= 3
+          item => tortillaIds.includes(item.idAdcional)
         );
         
-        availableItems = this.tortillas.filter(
+        availableItems = this.tortillas().filter(
           tortilla => tortilla.idAdcional !== currentTortillaInDone?.idAdcional
         );
         break;
       case 'proteína':
         // Para proteínas, mostrar todas MENOS las que ya están en done
         const doneProteinIds = doneItems
-          .filter(item => item.idAdcional! >= 4 && item.idAdcional! <= 8)
+          .filter(item => proteinaIds.includes(item.idAdcional))
           .map(item => item.idAdcional);
         
-        availableItems = this.proteinas.filter(
+        availableItems = this.proteinas().filter(
           proteina => !doneProteinIds.includes(proteina.idAdcional)
         );
         break;
       case 'salsa':
         // Para salsas, mostrar todas MENOS las que ya están en done
         const doneSalsaIds = doneItems
-          .filter(item => item.idAdcional! >= 9 && item.idAdcional! <= 13)
+          .filter(item => salsaIds.includes(item.idAdcional))
           .map(item => item.idAdcional);
         
-        availableItems = this.salsas.filter(
+        availableItems = this.salsas().filter(
           salsa => !doneSalsaIds.includes(salsa.idAdcional)
         );
         break;
       case 'extras':
         // Para extras, mostrar todas MENOS las que ya están en done
         const doneExtraIds = doneItems
-          .filter(item => item.idAdcional! >= 14 && item.idAdcional! <= 16)
+          .filter(item => extraIds.includes(item.idAdcional))
           .map(item => item.idAdcional);
         
-        availableItems = this.extras.filter(
+        availableItems = this.extras().filter(
           extra => !doneExtraIds.includes(extra.idAdcional)
         );
         break;
@@ -120,16 +220,18 @@ export class DragAndDrop {
   private updateCanGoToNextStep() {
     const doneItems = this.done();
     const currentStepValue = this.currentStep();
+    const tortillaIds = this.tortillas().map(t => t.idAdcional);
+    const proteinaIds = this.proteinas().map(p => p.idAdcional);
     
     if (currentStepValue === 'tortilla') {
       // Debe tener al menos una tortilla
       this.canGoToNextStep.set(
-        doneItems.some(item => item.idAdcional! >= 1 && item.idAdcional! <= 3)
+        doneItems.some(item => tortillaIds.includes(item.idAdcional))
       );
     } else if (currentStepValue === 'proteína') {
       // Debe tener al menos una proteína
       this.canGoToNextStep.set(
-        doneItems.some(item => item.idAdcional! >= 4 && item.idAdcional! <= 8)
+        doneItems.some(item => proteinaIds.includes(item.idAdcional))
       );
     } else {
       // Salsas y extras son opcionales
@@ -172,6 +274,8 @@ export class DragAndDrop {
   }
 
   drop(event: CdkDragDrop<Item[]>) {
+    const tortillaIds = this.tortillas().map(t => t.idAdcional);
+    
     if(event.previousContainer === event.container) {
       // Reordenar dentro de la misma lista
       let items = [...event.container.data];
@@ -194,11 +298,11 @@ export class DragAndDrop {
           const doneItems = this.done();
           // Buscar si ya hay una tortilla en done
           const previousTortilla = doneItems.find(
-            doneItem => doneItem.idAdcional! >= 1 && doneItem.idAdcional! <= 3
+            doneItem => tortillaIds.includes(doneItem.idAdcional)
           );
           // Remover cualquier tortilla existente de done
           const filteredDone = doneItems.filter(
-            doneItem => !(doneItem.idAdcional! >= 1 && doneItem.idAdcional! <= 3)
+            doneItem => !tortillaIds.includes(doneItem.idAdcional)
           );
           // Agregar la nueva tortilla a done y ordenar
           const newDone = this.sortDoneWithTortillaFirst([item, ...filteredDone]);
@@ -247,11 +351,12 @@ export class DragAndDrop {
   }
 
   /**
-   * Ordena la lista done para que la tortilla (idAdcional 1-3) quede siempre de primera
+   * Ordena la lista done para que la tortilla quede siempre de primera
    */
   private sortDoneWithTortillaFirst(items: Item[]): Item[] {
-    const tortillas = items.filter(i => i.idAdcional! >= 1 && i.idAdcional! <= 3);
-    const others = items.filter(i => !(i.idAdcional! >= 1 && i.idAdcional! <= 3));
+    const tortillaIds = this.tortillas().map(t => t.idAdcional);
+    const tortillas = items.filter(i => tortillaIds.includes(i.idAdcional));
+    const others = items.filter(i => !tortillaIds.includes(i.idAdcional));
     return [...tortillas, ...others];
   }
 
