@@ -80,29 +80,51 @@
             </div>
             <div
                 cdkDropList
+                cdkDropListSortingDisabled
                 id="doneList"
                 #doneList="cdkDropList"
                 [cdkDropListConnectedTo]="[todoList]"
                 [cdkDropListData]="done()"
                 class="taco-list"
                 (cdkDropListDropped)="drop($event)">
-                @for(item of done(); track item.idAdcional) {
-                    <div class="taco-ingredient" cdkDrag>
-                        <div class="ingredient-content">
-                            <div class="ingredient-icon">✓</div>
-                            <div class="ingredient-info">
-                                <h3>{{item.nombre}}</h3>
-                                <span class="price">${{item.precio}}</span>
-                            </div>
-                        </div>
-                        <div class="drag-indicator">⋮⋮</div>
-                    </div>
-                }
                 @if(done().length === 0) {
                     <div class="empty-taco">
                         <div class="taco-icon">🌮</div>
                         <p>Arrastra ingredientes aquí para comenzar</p>
                         <p class="hint">Empieza con una tortilla</p>
+                    </div>
+                } @else {
+                    <div class="taco-visual-container">
+                        <!-- Ingredientes apilados (todo excepto salsas) -->
+                        <div class="taco-stacked-ingredients">
+                            @for(item of done(); track item.idAdcional) {
+                                @if(item.nombre && !item.nombre.toLowerCase().includes('salsa') && !item.nombre.toLowerCase().includes('pico')) {
+                                    <div class="stacked-item" cdkDrag>
+                                        <img [src]="item.image" [alt]="item.nombre" class="ingredient-image">
+                                        <div class="item-label">
+                                            <span class="item-name">{{item.nombre}}</span>
+                                            <span class="item-price">${{item.precio}}</span>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        
+                        <!-- Salsas en fila separada -->
+                        @if(getSalsas().length > 0) {
+                            <div class="taco-salsas-row">
+                                <h3 class="salsas-title">Salsas:</h3>
+                                <div class="salsas-container">
+                                    @for(salsa of getSalsas(); track salsa.idAdcional) {
+                                        <div class="salsa-item" cdkDrag>
+                                            <img [src]="salsa.image" [alt]="salsa.nombre" class="salsa-image">
+                                            <span class="salsa-name">{{salsa.nombre}}</span>
+                                            <span class="salsa-price">${{salsa.precio}}</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
                     </div>
                 }
             </div>

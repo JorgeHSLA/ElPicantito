@@ -125,12 +125,199 @@
 }
 
 /* Listas */
-.ingredients-list,
-.taco-list {
+.ingredients-list {
     padding: 1.5rem;
     min-height: 400px;
     max-height: 500px;
     overflow-y: auto;
+}
+
+.taco-list {
+    padding: 2rem;
+    min-height: 750px;
+    max-height: 850px;
+    overflow-y: auto;
+}
+
+/* Contenedor visual del taco */
+.taco-visual-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    padding: 3rem 2rem;
+    min-height: 700px;
+}
+
+/* Ingredientes apilados */
+.taco-stacked-ingredients {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    min-height: 650px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.stacked-item {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+    cursor: move;
+    z-index: 1;
+}
+
+/* La tortilla (primer elemento) debe ser más grande */
+.stacked-item:first-child {
+    width: 115%;
+    z-index: 0;
+}
+
+.stacked-item:first-child .ingredient-image {
+    height: 650px;
+}
+
+.stacked-item:nth-child(2) {
+    z-index: 1;
+}
+
+.stacked-item:nth-child(3) {
+    z-index: 2;
+}
+
+.stacked-item:nth-child(4) {
+    z-index: 3;
+}
+
+.stacked-item:nth-child(5) {
+    z-index: 4;
+}
+
+.stacked-item:nth-child(6) {
+    z-index: 5;
+}
+
+.stacked-item:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+    z-index: 20 !important;
+}
+
+.ingredient-image {
+    width: 100%;
+    height: 560px;
+    object-fit: contain;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.2));
+    display: block;
+}
+
+.item-label {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 107, 53, 0.95);
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 25;
+    pointer-events: none;
+}
+
+.stacked-item:hover .item-label {
+    opacity: 1;
+}
+
+.item-name {
+    font-weight: 700;
+    color: white;
+    font-size: 0.95rem;
+}
+
+.item-price {
+    color: white;
+    font-weight: bold;
+    font-size: 0.95rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+}
+
+/* Salsas en fila */
+.taco-salsas-row {
+    width: 100%;
+    background: linear-gradient(135deg, #fff5f0 0%, #ffe5d9 100%);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.salsas-title {
+    margin: 0 0 1rem 0;
+    color: #d84315;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.salsas-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.salsa-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: move;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.salsa-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.salsa-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #ff6b35;
+    background: white;
+}
+
+.salsa-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.salsa-price {
+    color: #ff6b35;
+    font-weight: bold;
+    font-size: 0.9rem;
 }
 
 /* Tarjetas de ingredientes */
@@ -213,6 +400,18 @@
 .cdk-drop-list-dragging .ingredient-card:not(.cdk-drag-placeholder),
 .cdk-drop-list-dragging .taco-ingredient:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Placeholder invisible para elementos apilados */
+.taco-stacked-ingredients .cdk-drag-placeholder,
+.salsas-container .cdk-drag-placeholder {
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    position: absolute !important;
+    visibility: hidden !important;
 }
 
 .cdk-drag-placeholder {

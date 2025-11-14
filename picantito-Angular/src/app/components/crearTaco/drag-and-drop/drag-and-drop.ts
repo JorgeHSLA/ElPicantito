@@ -36,56 +36,74 @@ export class DragAndDrop {
 
 
   ngOnInit() {
-    // Cargar todos los adicionales desde el backend
+    // Cargar adicionales del producto "Taco Personalizado" desde el backend
     this.loadAdicionalesFromService();
   }
 
   private loadAdicionalesFromService() {
-    this.adicionalService.getAllAdicionales().subscribe({
-      next: (adicionales) => {
-        this.adcionales.set(adicionales);
-        
-        // Mapear adicionales a Items por nombre (sin usar categoria)
-        this.tortillas.set(
-          adicionales
-            .filter(a => a.nombre && 
-                        (a.nombre.toLowerCase().includes('tortilla')))
-            .map(a => this.mapAdicionalToItem(a))
-        );
+    // 1. Obtener el producto "Taco Personalizado" por nombre
+    this.productoService.getProductoByName('Taco Personalizado').subscribe({
+      next: (producto) => {
+        if (producto && producto.id) {
+          // 2. Usar el ID del producto para obtener los adicionales asociados
+          this.adicionalService.getAdicionalesPorProducto(producto.id).subscribe({
+            next: (adicionales) => {
+              this.adcionales.set(adicionales);
+              
+              // 3. Filtrar por nombres para categorizar (mismo filtro que antes)
+              this.tortillas.set(
+                adicionales
+                  .filter(a => a.nombre && 
+                              (a.nombre.toLowerCase().includes('tortilla')))
+                  .map(a => this.mapAdicionalToItem(a))
+              );
 
-        this.proteinas.set(
-          adicionales
-            .filter(a => a.nombre && 
-                        (a.nombre.toLowerCase().includes('carne') ||
-                         a.nombre.toLowerCase().includes('pollo') ||
-                         a.nombre.toLowerCase().includes('pastor') ||
-                         a.nombre.toLowerCase().includes('carnitas') ||
-                         a.nombre.toLowerCase().includes('chorizo')))
-            .map(a => this.mapAdicionalToItem(a))
-        );
+              this.proteinas.set(
+                adicionales
+                  .filter(a => a.nombre && 
+                              (a.nombre.toLowerCase().includes('carne') ||
+                               a.nombre.toLowerCase().includes('pollo') ||
+                               a.nombre.toLowerCase().includes('pastor') ||
+                               a.nombre.toLowerCase().includes('carnitas') ||
+                               a.nombre.toLowerCase().includes('chorizo')))
+                  .map(a => this.mapAdicionalToItem(a))
+              );
 
-        this.salsas.set(
-          adicionales
-            .filter(a => a.nombre && 
-                        (a.nombre.toLowerCase().includes('salsa') ||
-                         a.nombre.toLowerCase().includes('pico')))
-            .map(a => this.mapAdicionalToItem(a))
-        );
+              this.salsas.set(
+                adicionales
+                  .filter(a => a.nombre && 
+                              (a.nombre.toLowerCase().includes('salsa') ||
+                               a.nombre.toLowerCase().includes('pico')))
+                  .map(a => this.mapAdicionalToItem(a))
+              );
 
-        this.extras.set(
-          adicionales
-            .filter(a => a.nombre && 
-                        (a.nombre.toLowerCase().includes('queso') ||
-                         a.nombre.toLowerCase().includes('lechuga')))
-            .map(a => this.mapAdicionalToItem(a))
-        );
+              this.extras.set(
+                adicionales
+                  .filter(a => a.nombre && 
+                              (a.nombre.toLowerCase().includes('queso') ||
+                               a.nombre.toLowerCase().includes('lechuga')))
+                  .map(a => this.mapAdicionalToItem(a))
+              );
 
-        // Inicializar con tortillas
-        this.loadCategoryItems('tortilla');
-        this.done.set([]);
+              // Inicializar con tortillas
+              this.loadCategoryItems('tortilla');
+              this.done.set([]);
+            },
+            error: (error) => {
+              console.error('Error cargando adicionales del producto:', error);
+              // Inicializar vacío en caso de error
+              this.loadCategoryItems('tortilla');
+              this.done.set([]);
+            }
+          });
+        } else {
+          console.error('Producto "Taco Personalizado" no encontrado');
+          this.loadCategoryItems('tortilla');
+          this.done.set([]);
+        }
       },
       error: (error) => {
-        console.error('Error cargando adicionales:', error);
+        console.error('Error obteniendo producto "Taco Personalizado":', error);
         // Inicializar vacío en caso de error
         this.loadCategoryItems('tortilla');
         this.done.set([]);
@@ -116,7 +134,7 @@ export class DragAndDrop {
       return '/images/crearTaco/proteinas/carne-asada.png';
     }
     if (nombreLower.includes('pollo')) {
-      return '/images/crearTaco/proteinas/pollo.jpg';
+      return '/images/crearTaco/proteinas/pollo.png';
     }
     if (nombreLower.includes('pastor')) {
       return '/images/crearTaco/proteinas/pastor.jpg';
@@ -130,10 +148,10 @@ export class DragAndDrop {
     
     // Salsas
     if (nombreLower.includes('verde')) {
-      return '/images/crearTaco/salsas/verde.jpg';
+      return '/images/crearTaco/salsas/SalsaVerde.png';
     }
     if (nombreLower.includes('roja')) {
-      return '/images/crearTaco/salsas/roja.jpg';
+      return '/images/crearTaco/salsas/SalsaRoja.png';
     }
     if (nombreLower.includes('habanera')) {
       return '/images/crearTaco/salsas/habanera.jpg';
@@ -343,6 +361,11 @@ export class DragAndDrop {
         sourceItems = this.sortDoneWithTortillaFirst(sourceItems);
         this.done.set(sourceItems);
         this.todo.set(targetItems);
+        
+        // Si done quedó vacío, volver al paso de tortilla
+        if (sourceItems.length === 0) {
+          this.loadCategoryItems('tortilla');
+        }
       }
       // Actualizar precio y validar paso
       this.calculateTotalPrice();
@@ -365,5 +388,15 @@ export class DragAndDrop {
     this.loadCategoryItems('tortilla');
     this.calculateTotalPrice();
     this.updateCanGoToNextStep();
+  }
+
+  /**
+   * Obtiene solo las salsas de la lista done
+   */
+  getSalsas(): Item[] {
+    return this.done().filter(item => 
+      item.nombre?.toLowerCase().includes('salsa') || 
+      item.nombre?.toLowerCase().includes('pico')
+    );
   }
 }
