@@ -7,16 +7,16 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.picantito.picantito.dto.CategorizedAdicionalesResponse;
 import com.picantito.picantito.dto.ProductoAdicionalIdDTO;
 import com.picantito.picantito.entities.Adicional;
+import com.picantito.picantito.entities.AdicionalCategoria;
 import com.picantito.picantito.entities.Producto;
 import com.picantito.picantito.entities.ProductoAdicional;
 import com.picantito.picantito.entities.ProductoAdicionalId;
-import com.picantito.picantito.entities.AdicionalCategoria;
 import com.picantito.picantito.repository.AdicionalRepository;
 import com.picantito.picantito.repository.ProductRepository;
 import com.picantito.picantito.repository.ProductoAdicionalRepository;
-import com.picantito.picantito.dto.CategorizedAdicionalesResponse;
 
 
 
@@ -173,8 +173,7 @@ public class AdicionalServiceImpl implements AdicionalService {
     public List<Adicional> getByCategoria(AdicionalCategoria categoria) {
         return adicionalRepository.findAll().stream()
             .filter(a -> {
-                if (a.getCategoria() != null) return a.getCategoria() == categoria;
-                // Fallback heurístico por nombre cuando no hay categoría en datos antiguos
+                // Identificación por nombre usando heurística
                 if (categoria == AdicionalCategoria.PROTEINA) {
                     return isProteinHeuristic(a);
                 }
@@ -186,27 +185,22 @@ public class AdicionalServiceImpl implements AdicionalService {
     @Override
     public CategorizedAdicionalesResponse getAdicionalesCategorizados() {
         List<Adicional> all = adicionalRepository.findAll();
-        List<Adicional> proteinas = all.stream().filter(a -> {
-            if (a.getCategoria() != null) return a.getCategoria() == AdicionalCategoria.PROTEINA;
-            return isProteinHeuristic(a);
-        }).toList();
-        List<Adicional> vegetales = all.stream().filter(a -> {
-            if (a.getCategoria() != null) return a.getCategoria() == AdicionalCategoria.VEGETAL;
-            return isVegetalHeuristic(a);
-        }).toList();
-        List<Adicional> salsas = all.stream().filter(a -> {
-            if (a.getCategoria() != null) return a.getCategoria() == AdicionalCategoria.SALSA;
-            return isSalsaHeuristic(a);
-        }).toList();
-        List<Adicional> quesos = all.stream().filter(a -> {
-            if (a.getCategoria() != null) return a.getCategoria() == AdicionalCategoria.QUESO;
-            return isQuesoHeuristic(a);
-        }).toList();
-        // Extras: marcados como EXTRA o los no clasificados por ninguna heurística
-        List<Adicional> extras = all.stream().filter(a -> {
-            if (a.getCategoria() != null) return a.getCategoria() == AdicionalCategoria.EXTRA;
-            return !(isProteinHeuristic(a) || isVegetalHeuristic(a) || isSalsaHeuristic(a) || isQuesoHeuristic(a));
-        }).toList();
+        List<Adicional> proteinas = all.stream()
+            .filter(this::isProteinHeuristic)
+            .toList();
+        List<Adicional> vegetales = all.stream()
+            .filter(this::isVegetalHeuristic)
+            .toList();
+        List<Adicional> salsas = all.stream()
+            .filter(this::isSalsaHeuristic)
+            .toList();
+        List<Adicional> quesos = all.stream()
+            .filter(this::isQuesoHeuristic)
+            .toList();
+        // Extras: los no clasificados por ninguna heurística
+        List<Adicional> extras = all.stream()
+            .filter(a -> !(isProteinHeuristic(a) || isVegetalHeuristic(a) || isSalsaHeuristic(a) || isQuesoHeuristic(a)))
+            .toList();
 
         return new CategorizedAdicionalesResponse(proteinas, vegetales, salsas, quesos, extras);
     }
