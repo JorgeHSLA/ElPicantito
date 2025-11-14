@@ -31,16 +31,16 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "precio_de_adquisicion")
+    @Column(name = "preciodeadquisicion")
     private Float precioDeAdquisicion;
 
-    @Column(name = "precio_de_venta")
+    @Column(name = "preciodeventa")
     private Float precioDeVenta;
 
-    @Column(name = "fecha_entrega")
+    @Column(name = "fechaentrega")
     private Timestamp fechaEntrega;
     
-    @Column(name = "fecha_solicitud")
+    @Column(name = "fechasolicitud")
     private Timestamp fechaSolicitud;
     
     @Column(name = "estado")

@@ -146,21 +146,48 @@ public class EstadisticaController {
     // Obtener todas las estadísticas: http://localhost:9998/api/estadisticas/todas
     @GetMapping("/todas")
     public ResponseEntity<EstadisticaDTO> getTodasLasEstadisticas() {
+        System.out.println("========== CONTROLLER: /todas endpoint CALLED ==========");
         try {
             EstadisticaDTO dto = new EstadisticaDTO();
+            
+            System.out.println(">>> Calling ventasPorDia()");
             dto.setVentasPorDia(estadisticaService.ventasPorDia());
+            
+            System.out.println(">>> Calling mejoresClientes()");
             dto.setMejoresClientes(estadisticaService.mejoresClientes());
+            
+            System.out.println(">>> Calling productosMenosVendidos()");
             dto.setProductosMenosVendidos(estadisticaService.productosMenosVendidos());
+            
+            System.out.println(">>> Calling productosMasVendidos()");
             dto.setProductosMasVendidos(estadisticaService.productosMasVendidos());
+            
+            System.out.println(">>> Calling AdicionalesMasConsumidos()");
             dto.setAdicionalesMasConsumidos(estadisticaService.AdicionalesMasConsumidos());
+            
+            System.out.println(">>> Calling AdicionalesMenosConsumidos()");
             dto.setAdicionalesMenosConsumidos(estadisticaService.AdicionalesMenosConsumidos());
+            
+            System.out.println(">>> Calling productosNoRecomendados()");
             dto.setProductosNoRecomendados(estadisticaService.productosNoRecomendados());
+            
+            System.out.println(">>> Calling productosRecomendados()");
             dto.setProductosRecomendados(estadisticaService.productosRecomendados());
+            
+            System.out.println(">>> Calling ingresosTotales()");
             dto.setIngresosTotales(estadisticaService.ingresosTotales());
+            
+            System.out.println(">>> Calling ingresosNetos()");
             dto.setIngresosNetos(estadisticaService.ingresosNetos());
+            
+            System.out.println(">>> Calling totalPedidos()");
             dto.setTotalPedidos(estadisticaService.totalPedidos());
+            
+            System.out.println("========== CONTROLLER: Returning DTO ==========");
             return ResponseEntity.ok(dto);
         } catch (Exception e) {
+            System.err.println("========== ERROR IN CONTROLLER ==========");
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

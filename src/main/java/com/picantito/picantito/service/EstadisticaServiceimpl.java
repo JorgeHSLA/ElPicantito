@@ -35,12 +35,23 @@ public class EstadisticaServiceimpl implements EstadisticaService {
         Map<String, Float> ventasPorDia = new LinkedHashMap<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+        System.out.println("=== DEBUG ventasPorDia ===");
+        System.out.println("Total pedidos: " + pedidos.size());
+        
         for (Pedido pedido : pedidos) {
+            System.out.println("Pedido ID: " + pedido.getId() + 
+                             ", fechaSolicitud: " + pedido.getFechaSolicitud() + 
+                             ", precioDeVenta: " + pedido.getPrecioDeVenta());
+            
             if (pedido.getFechaSolicitud() != null && pedido.getPrecioDeVenta() != null) {
                 String fecha = dateFormat.format(pedido.getFechaSolicitud());
                 ventasPorDia.merge(fecha, pedido.getPrecioDeVenta(), Float::sum);
+            } else {
+                System.out.println("  -> SKIPPED (null fecha o precio)");
             }
         }
+        
+        System.out.println("Total días con ventas: " + ventasPorDia.size());
 
         return ventasPorDia.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
@@ -56,12 +67,23 @@ public class EstadisticaServiceimpl implements EstadisticaService {
         List<Pedido> pedidos = pedidoRepository.findAll();
         Map<Integer, Float> gastosPorCliente = new HashMap<>();
 
+        System.out.println("=== DEBUG mejoresClientes ===");
+        System.out.println("Total pedidos: " + pedidos.size());
+        
         for (Pedido pedido : pedidos) {
+            System.out.println("Pedido ID: " + pedido.getId() + 
+                             ", cliente: " + (pedido.getCliente() != null ? pedido.getCliente().getId() : "NULL") + 
+                             ", precioDeVenta: " + pedido.getPrecioDeVenta());
+            
             if (pedido.getCliente() != null && pedido.getPrecioDeVenta() != null) {
                 Integer clienteId = pedido.getCliente().getId();
                 gastosPorCliente.merge(clienteId, pedido.getPrecioDeVenta(), Float::sum);
+            } else {
+                System.out.println("  -> SKIPPED (null cliente o precio)");
             }
         }
+        
+        System.out.println("Total clientes con gastos: " + gastosPorCliente.size());
 
         return gastosPorCliente.entrySet().stream()
                 .sorted(Map.Entry.<Integer, Float>comparingByValue().reversed())
@@ -155,6 +177,9 @@ public class EstadisticaServiceimpl implements EstadisticaService {
         List<PedidoProducto> pedidoProductos = pedidoProductoRepository.findAll();
         Map<Integer, Float> gananciasPorProducto = new HashMap<>();
 
+        System.out.println("=== DEBUG productosNoRecomendados ===");
+        System.out.println("Total pedidoProductos: " + pedidoProductos.size());
+        
         for (PedidoProducto pp : pedidoProductos) {
             if (pp.getProducto() != null && pp.getPedido() != null) {
                 Integer productoId = pp.getProducto().getId();
@@ -162,12 +187,23 @@ public class EstadisticaServiceimpl implements EstadisticaService {
                 Float precioAdquisicion = pp.getPedido().getPrecioDeAdquisicion();
                 Integer cantidad = pp.getCantidadProducto() != null ? pp.getCantidadProducto() : 0;
 
+                System.out.println("Producto ID: " + productoId + 
+                                 ", precioVenta: " + precioVenta + 
+                                 ", precioAdquisicion: " + precioAdquisicion +
+                                 ", cantidad: " + cantidad);
+
                 if (precioVenta != null && precioAdquisicion != null) {
                     Float ganancia = (precioVenta - precioAdquisicion) * cantidad;
                     gananciasPorProducto.merge(productoId, ganancia, Float::sum);
+                } else {
+                    System.out.println("  -> SKIPPED (null precios)");
                 }
+            } else {
+                System.out.println("  -> SKIPPED (null producto o pedido)");
             }
         }
+        
+        System.out.println("Total productos con ganancias: " + gananciasPorProducto.size());
 
         return gananciasPorProducto.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
@@ -181,6 +217,8 @@ public class EstadisticaServiceimpl implements EstadisticaService {
         List<PedidoProducto> pedidoProductos = pedidoProductoRepository.findAll();
         Map<Integer, Float> gananciasPorProducto = new HashMap<>();
 
+        System.out.println("=== DEBUG productosRecomendados ===");
+        
         for (PedidoProducto pp : pedidoProductos) {
             if (pp.getProducto() != null && pp.getPedido() != null) {
                 Integer productoId = pp.getProducto().getId();
@@ -191,9 +229,13 @@ public class EstadisticaServiceimpl implements EstadisticaService {
                 if (precioVenta != null && precioAdquisicion != null) {
                     Float ganancia = (precioVenta - precioAdquisicion) * cantidad;
                     gananciasPorProducto.merge(productoId, ganancia, Float::sum);
+                } else {
+                    System.out.println("Producto ID: " + productoId + " -> SKIPPED (null precios)");
                 }
             }
         }
+        
+        System.out.println("Total productos recomendados: " + gananciasPorProducto.size());
 
         return gananciasPorProducto.entrySet().stream()
                 .sorted(Map.Entry.<Integer, Float>comparingByValue().reversed())
