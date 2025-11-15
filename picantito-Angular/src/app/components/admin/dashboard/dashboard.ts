@@ -138,9 +138,25 @@ export class DashboardComponent implements OnInit {
     return max > 0 ? (monto / max) * 100 : 0;
   }
 
+  obtenerEtiquetasEjeY(): string[] {
+    const max = this.maxVenta();
+    if (max === 0) return ['$0'];
+    
+    const etiquetas: string[] = [];
+    const numEtiquetas = 5;
+    
+    for (let i = numEtiquetas; i >= 0; i--) {
+      const valor = (max / numEtiquetas) * i;
+      etiquetas.push(this.formatearMoneda(valor));
+    }
+    
+    return etiquetas;
+  }
+
   formatearFecha(fecha: string): string {
-    const date = new Date(fecha);
-    return `${date.getDate()}/${date.getMonth() + 1}`;
+    // Extraer día y mes directamente del string para evitar problemas de zona horaria
+    const [year, month, day] = fecha.split('-');
+    return `${parseInt(day)}/${parseInt(month)}`;
   }
 
   formatearMoneda(monto: number): string {
