@@ -97,6 +97,7 @@ public class EstadisticaServiceimpl implements EstadisticaService {
         List<PedidoProducto> pedidoProductos = pedidoProductoRepository.findAll();
         Map<Integer, Integer> ventasPorProducto = new HashMap<>();
 
+        System.out.println("=== DEBUG productosMenosVendidos ===");
         for (PedidoProducto pp : pedidoProductos) {
             if (pp.getProducto() != null) {
                 Integer productoId = pp.getProducto().getId();
@@ -104,6 +105,12 @@ public class EstadisticaServiceimpl implements EstadisticaService {
                 ventasPorProducto.merge(productoId, cantidad, Integer::sum);
             }
         }
+
+        System.out.println("Productos MENOS vendidos (ordenados ASC):");
+        ventasPorProducto.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .limit(10)
+                .forEach(e -> System.out.println("  Producto ID: " + e.getKey() + ", Cantidad: " + e.getValue()));
 
         return ventasPorProducto.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
@@ -117,6 +124,7 @@ public class EstadisticaServiceimpl implements EstadisticaService {
         List<PedidoProducto> pedidoProductos = pedidoProductoRepository.findAll();
         Map<Integer, Integer> ventasPorProducto = new HashMap<>();
 
+        System.out.println("=== DEBUG productosMasVendidos ===");
         for (PedidoProducto pp : pedidoProductos) {
             if (pp.getProducto() != null) {
                 Integer productoId = pp.getProducto().getId();
@@ -124,6 +132,12 @@ public class EstadisticaServiceimpl implements EstadisticaService {
                 ventasPorProducto.merge(productoId, cantidad, Integer::sum);
             }
         }
+
+        System.out.println("Productos MAS vendidos (ordenados DESC):");
+        ventasPorProducto.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
+                .limit(10)
+                .forEach(e -> System.out.println("  Producto ID: " + e.getKey() + ", Cantidad: " + e.getValue()));
 
         return ventasPorProducto.entrySet().stream()
                 .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
@@ -137,6 +151,7 @@ public class EstadisticaServiceimpl implements EstadisticaService {
         List<PedidoProductoAdicional> pedidoAdicionales = pedidoProductoAdicionalRepository.findAll();
         Map<Integer, Integer> consumoPorAdicional = new HashMap<>();
 
+        System.out.println("=== DEBUG AdicionalesMasConsumidos ===");
         for (PedidoProductoAdicional ppa : pedidoAdicionales) {
             if (ppa.getAdicional() != null) {
                 Integer adicionalId = ppa.getAdicional().getId();
@@ -144,6 +159,12 @@ public class EstadisticaServiceimpl implements EstadisticaService {
                 consumoPorAdicional.merge(adicionalId, cantidad, Integer::sum);
             }
         }
+
+        System.out.println("Adicionales MAS consumidos (ordenados DESC):");
+        consumoPorAdicional.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
+                .limit(10)
+                .forEach(e -> System.out.println("  Adicional ID: " + e.getKey() + ", Cantidad: " + e.getValue()));
 
         return consumoPorAdicional.entrySet().stream()
                 .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
@@ -157,6 +178,7 @@ public class EstadisticaServiceimpl implements EstadisticaService {
         List<PedidoProductoAdicional> pedidoAdicionales = pedidoProductoAdicionalRepository.findAll();
         Map<Integer, Integer> consumoPorAdicional = new HashMap<>();
 
+        System.out.println("=== DEBUG AdicionalesMenosConsumidos ===");
         for (PedidoProductoAdicional ppa : pedidoAdicionales) {
             if (ppa.getAdicional() != null) {
                 Integer adicionalId = ppa.getAdicional().getId();
@@ -164,6 +186,12 @@ public class EstadisticaServiceimpl implements EstadisticaService {
                 consumoPorAdicional.merge(adicionalId, cantidad, Integer::sum);
             }
         }
+
+        System.out.println("Adicionales MENOS consumidos (ordenados ASC):");
+        consumoPorAdicional.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .limit(10)
+                .forEach(e -> System.out.println("  Adicional ID: " + e.getKey() + ", Cantidad: " + e.getValue()));
 
         return consumoPorAdicional.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
@@ -204,6 +232,11 @@ public class EstadisticaServiceimpl implements EstadisticaService {
         }
         
         System.out.println("Total productos con ganancias: " + gananciasPorProducto.size());
+        System.out.println("Productos NO recomendados (ordenados ASC por ganancia):");
+        gananciasPorProducto.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .limit(10)
+                .forEach(e -> System.out.println("  Producto ID: " + e.getKey() + ", Ganancia: " + e.getValue()));
 
         return gananciasPorProducto.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
@@ -236,6 +269,11 @@ public class EstadisticaServiceimpl implements EstadisticaService {
         }
         
         System.out.println("Total productos recomendados: " + gananciasPorProducto.size());
+        System.out.println("Productos recomendados (ordenados DESC por ganancia):");
+        gananciasPorProducto.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Float>comparingByValue().reversed())
+                .limit(10)
+                .forEach(e -> System.out.println("  Producto ID: " + e.getKey() + ", Ganancia: " + e.getValue()));
 
         return gananciasPorProducto.entrySet().stream()
                 .sorted(Map.Entry.<Integer, Float>comparingByValue().reversed())

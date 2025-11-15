@@ -1,5 +1,6 @@
 package com.picantito.picantito.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -19,6 +20,7 @@ public class PedidoProductoAdicional {
     @EmbeddedId
     private PedidoProductoAdicionalId id;
 
+    @Column(name = "cantidadadicional")
     private Integer cantidadAdicional;
 
     @ManyToOne
