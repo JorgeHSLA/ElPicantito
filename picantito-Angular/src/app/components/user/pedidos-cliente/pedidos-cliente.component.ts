@@ -25,6 +25,9 @@ export class PedidosClienteComponent implements OnInit {
   filtroActivo = signal<string>('TODOS');
   loading = signal<boolean>(true);
   error = signal<string>('');
+  
+  // Pedido seleccionado para vista detallada
+  pedidoSeleccionado = signal<PedidoCompleto | null>(null);
 
   ngOnInit(): void {
     // Verificar autenticación
@@ -49,6 +52,11 @@ export class PedidosClienteComponent implements OnInit {
         this.pedidos.set(pedidosOrdenados);
         this.pedidosFiltrados.set(pedidosOrdenados);
         this.loading.set(false);
+        
+        // Seleccionar el primer pedido automáticamente
+        if (pedidosOrdenados.length > 0) {
+          this.pedidoSeleccionado.set(pedidosOrdenados[0]);
+        }
       },
       error: (err) => {
         console.error('Error cargando pedidos:', err);
@@ -71,6 +79,22 @@ export class PedidosClienteComponent implements OnInit {
       );
       this.pedidosFiltrados.set(filtrados);
     }
+    
+    // Si hay pedidos filtrados y ninguno seleccionado, seleccionar el primero
+    if (this.pedidosFiltrados().length > 0 && !this.pedidoSeleccionado()) {
+      this.seleccionarPedido(this.pedidosFiltrados()[0]);
+    }
+  }
+
+  seleccionarPedido(pedido: PedidoCompleto): void {
+    this.pedidoSeleccionado.set(pedido);
+  }
+
+  formatearAdicionales(adicionales: any[]): string {
+    if (!adicionales || adicionales.length === 0) {
+      return '';
+    }
+    return adicionales.map(a => a.nombreAdicional).join(', ');
   }
 
   contarPorEstado(estado: string): number {

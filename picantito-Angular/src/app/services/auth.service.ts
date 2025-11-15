@@ -11,6 +11,7 @@ interface LoginResponse {
   nombreUsuario: string;
   nombreCompleto: string;
   correo: string;
+  telefono?: string;
   roles: string[];
 }
 
@@ -56,7 +57,7 @@ export class AuthService {
             nombreCompleto: response.nombreCompleto,
             nombreUsuario: response.nombreUsuario,
             correo: response.correo,
-            telefono: '', // No viene en LoginResponse
+            telefono: response.telefono || '', // Obtener del LoginResponse si está disponible
             contrasenia: '', // No se debe guardar
             rol: response.roles[0], // Primer rol
             activo: true,

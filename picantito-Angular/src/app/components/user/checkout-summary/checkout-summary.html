@@ -129,35 +129,138 @@
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-light">
                         <h6 class="mb-0">
-                            <i class="bi bi-geo-alt me-2"></i> Informacion de Entrega <!-- Sin acento pq la font NO usa acentos -->
+                            <i class="bi bi-truck me-2"></i> Informacion de Entrega <!-- Sin acento pq la font NO usa acentos -->
                         </h6>
                     </div>
                     <div class="card-body">
+                        <!-- Dirección de entrega -->
                         <div class="mb-3">
-                            <label for="direccion" class="form-label">Dirección</label>
-                            <textarea class="form-control" 
-                                      id="direccion" 
-                                      [(ngModel)]="customerInfo.direccion" 
-                                      placeholder="Ingresa tu dirección completa (calle, número, apartamento, referencias)" 
-                                      rows="3" 
-                                      required></textarea>
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-geo-alt-fill text-primary me-1"></i>
+                                Direccion de Entrega
+                            </label>
+                            <div class="delivery-address-display">
+                                <div class="address-text" *ngIf="customerInfo.direccion; else noAddress">
+                                    {{ customerInfo.direccion }}
+                                </div>
+                                <ng-template #noAddress>
+                                    <div class="address-text text-muted-custom">
+                                        <i class="bi bi-map me-1"></i>
+                                        No has seleccionado una direccion
+                                    </div>
+                                </ng-template>
+                                <button type="button" 
+                                        class="btn btn-sm btn-outline-primary btn-edit-address" 
+                                        (click)="openMapModal()">
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    {{ customerInfo.direccion ? 'Cambiar' : 'Seleccionar' }}
+                                </button>
+                            </div>
+                            <small class="text-muted d-block mt-2">
+                                <i class="bi bi-info-circle-fill me-1"></i>
+                                Usa el mapa para ubicar tu direccion de entrega
+                            </small>
                         </div>
-                        <div class="mb-3">
-                            <label for="telefono" class="form-label">Teléfono</label>
-                            <input type="tel" 
-                                   class="form-control" 
-                                   id="telefono" 
-                                   [(ngModel)]="customerInfo.telefono" 
-                                   placeholder="Ej: +57 300 123 4567" 
-                                   required>
+
+                        <hr class="my-3">
+
+                        <!-- Datos de contacto -->
+                        <div class="contact-info-section">
+                            <label class="form-label fw-semibold mb-3">
+                                <i class="bi bi-person-badge text-success me-1"></i>
+                                Datos de Contacto
+                            </label>
+                            
+                            <!-- Teléfono -->
+                            <div class="mb-3">
+                                <label for="telefono" class="form-label small text-secondary">
+                                    <i class="bi bi-telephone-fill me-1"></i>
+                                    Telefono
+                                </label>
+                                <div class="input-with-button">
+                                    <input type="tel" 
+                                           class="form-control form-control-sm" 
+                                           id="telefono" 
+                                           [(ngModel)]="customerInfo.telefono" 
+                                           placeholder="+57 300 123 4567" 
+                                           [readonly]="!isEditingTelefono()"
+                                           required>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-primary btn-edit-field"
+                                            *ngIf="!isEditingTelefono()"
+                                            (click)="toggleEditTelefono()">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-success btn-edit-field"
+                                            *ngIf="isEditingTelefono()"
+                                            (click)="saveEditTelefono()">
+                                        <i class="bi bi-check2"></i>
+                                    </button>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-secondary btn-edit-field"
+                                            *ngIf="isEditingTelefono()"
+                                            (click)="toggleEditTelefono()">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                                <small class="text-muted d-block mt-1">
+                                    Telefono asociado a tu cuenta
+                                </small>
+                            </div>
+                            
+                            <!-- Correo electrónico -->
+                            <div class="mb-3">
+                                <label for="correo" class="form-label small text-secondary">
+                                    <i class="bi bi-envelope-fill me-1"></i>
+                                    Correo Electronico
+                                </label>
+                                <div class="input-with-button">
+                                    <input type="email" 
+                                           class="form-control form-control-sm" 
+                                           id="correo" 
+                                           [(ngModel)]="customerInfo.correo" 
+                                           placeholder="correo@ejemplo.com" 
+                                           [readonly]="!isEditingCorreo()"
+                                           required>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-primary btn-edit-field"
+                                            *ngIf="!isEditingCorreo()"
+                                            (click)="toggleEditCorreo()">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-success btn-edit-field"
+                                            *ngIf="isEditingCorreo()"
+                                            (click)="saveEditCorreo()">
+                                        <i class="bi bi-check2"></i>
+                                    </button>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-secondary btn-edit-field"
+                                            *ngIf="isEditingCorreo()"
+                                            (click)="toggleEditCorreo()">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                                <small class="text-muted d-block mt-1">
+                                    Recibiras notificaciones sobre tu pedido
+                                </small>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="observaciones" class="form-label">Observaciones</label>
+
+                        <hr class="my-3">
+
+                        <!-- Observaciones -->
+                        <div class="mb-0">
+                            <label for="observaciones" class="form-label fw-semibold">
+                                <i class="bi bi-chat-left-text text-warning me-1"></i>
+                                Observaciones Adicionales
+                            </label>
                             <textarea class="form-control" 
                                       id="observaciones" 
                                       [(ngModel)]="customerInfo.observaciones" 
-                                      placeholder="Comentarios adicionales (opcional)" 
-                                      rows="2"></textarea>
+                                      placeholder="Ej: Tocar el timbre, dejar con el portero, etc. (opcional)" 
+                                      rows="3"></textarea>
                         </div>
                     </div>
                 </div>
@@ -209,6 +312,119 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal del Mapa -->
+<div class="map-modal-overlay" *ngIf="showMapModal()" (click)="closeMapModal()">
+    <div class="map-modal-content" (click)="$event.stopPropagation()">
+        <div class="map-modal-header">
+            <h5 class="modal-title">
+                <i class="bi bi-pin-map-fill me-2"></i>
+                Ubicar Dirección de Entrega
+            </h5>
+            <button type="button" class="btn-close-modal" (click)="closeMapModal()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        
+        <div class="map-modal-body">
+            <div class="map-instructions">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                Escribe tu direccion o haz clic en el mapa para ubicar el marcador
+            </div>
+
+            <!-- Campo de dirección editable dentro del modal -->
+            <div class="mb-3">
+                <label for="direccionModal" class="form-label fw-semibold">
+                    <i class="bi bi-search me-1"></i>
+                    Buscar Direccion
+                </label>
+                <textarea class="form-control" 
+                          id="direccionModal" 
+                          [(ngModel)]="customerInfo.direccionTemporal" 
+                          (input)="onAddressChangeInModal()"
+                          placeholder="Ej: Calle 45 #12-34, Chapinero, Bogotá" 
+                          rows="2"></textarea>
+                <small class="text-muted d-block mt-1">
+                    <i class="bi bi-lightbulb-fill me-1"></i>
+                    El marcador se actualizara automaticamente
+                </small>
+            </div>
+            
+            <div class="map-loading" *ngIf="isLoadingLocation()">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando ubicación...</span>
+                </div>
+            </div>
+            
+            <div id="map-container" class="map-container"></div>
+
+            <!-- Mensaje de error de ubicación -->
+            <div class="map-error-message" *ngIf="locationErrorMessage()">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span>{{ locationErrorMessage() }}</span>
+            </div>
+        </div>
+        
+        <div class="map-modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeMapModal()">
+                <i class="bi bi-x-circle me-1"></i>
+                Cancelar
+            </button>
+            <button type="button" 
+                    class="btn btn-success" 
+                    (click)="confirmMapLocation()"
+                    [disabled]="!!locationErrorMessage() || !customerInfo.direccionTemporal.trim()">
+                <i class="bi bi-check-circle me-1"></i>
+                Confirmar Ubicación
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación de Pedido -->
+<div class="order-confirmation-overlay" *ngIf="showOrderConfirmationModal()">
+    <div class="order-confirmation-modal">
+        <!-- Ícono de éxito -->
+        <div class="order-confirmation-icon">
+            <i class="bi bi-check-circle-fill"></i>
+        </div>
+
+        <!-- Título -->
+        <h2 class="order-confirmation-title">¡Pedido Confirmado!</h2>
+        <p class="order-confirmation-subtitle">Tu orden ha sido procesada exitosamente</p>
+
+        <!-- Detalles del pedido -->
+        <div class="order-confirmation-details" *ngIf="orderConfirmationData()">
+            <div class="order-detail-row">
+                <span class="order-detail-label">
+                    <i class="bi bi-receipt"></i>
+                    Número de Pedido
+                </span>
+                <span class="order-detail-value">#{{ orderConfirmationData()!.pedidoId }}</span>
+            </div>
+            <div class="order-detail-row">
+                <span class="order-detail-label">
+                    <i class="bi bi-cash-stack"></i>
+                    Total
+                </span>
+                <span class="order-detail-value highlight">
+                    {{ formatearMoneda(orderConfirmationData()!.total) }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Mensaje informativo -->
+        <div class="order-confirmation-message">
+            <i class="bi bi-hourglass-split"></i>
+            <span>Redirigiendo al rastreo de pedido</span>
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
     </div>

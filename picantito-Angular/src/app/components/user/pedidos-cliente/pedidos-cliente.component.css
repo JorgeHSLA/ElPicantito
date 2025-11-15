@@ -1,86 +1,659 @@
-/* Reutiliza estilos globales; solo ajustes sutiles de layout */
-
+/* ==================== HERO SECTION ==================== */
 .menu-hero {
-    background: transparent !important;
+    background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+    color: white;
+    border-bottom: 4px solid #ffc107;
 }
 
-
-/* Delineado y elevación para las cards de Mis Pedidos */
-
-.taco-card {
-    border: 2px solid rgba(255, 255, 255, 0.22) !important;
-    border-radius: 15px;
-    background: linear-gradient(180deg, rgba(45, 21, 41, 0.82), rgba(45, 21, 41, 0.92)) !important;
-    color: var(--neutral-text);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(237, 126, 71, 0.06);
-    transition: border-color 0.25s ease, box-shadow 0.3s ease, transform 0.25s ease;
+/* ==================== FILTER BUTTONS ==================== */
+.pedidos-header {
+    padding: 0 1rem;
 }
 
-.taco-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255, 255, 255, 0.35) !important;
-    box-shadow: 0 16px 44px rgba(0, 0, 0, 0.45), 0 6px 16px rgba(237, 126, 71, 0.12);
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
-.taco-card .card-title {
-    color: var(--accent-color);
+.filter-btn {
+    padding: 0.65rem 1.25rem;
+    border: 2px solid #dee2e6;
+    background: white;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
 }
 
-/* Estilos específicos para pedidos */
-.pedido-card {
+.filter-btn:hover {
+    border-color: #ffc107;
+    background: #fff9e6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.2);
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+    border-color: #ffc107;
+    color: #1a1a1a;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+    font-weight: 700;
+}
+
+/* ==================== TWO PANEL LAYOUT ==================== */
+.pedidos-content {
+    display: flex;
+    gap: 1.5rem;
+    height: calc(100vh - 380px);
+    min-height: 550px;
+    padding: 0 1rem;
+}
+
+/* ==================== LEFT PANEL: ORDER LIST ==================== */
+.order-list-panel {
+    flex: 0 0 320px;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+}
+
+.order-list-scroll {
+    height: 100%;
+    overflow-y: auto;
+    padding: 1rem;
+    background: #f8f9fa;
+}
+
+/* Custom scrollbar */
+.order-list-scroll::-webkit-scrollbar {
+    width: 10px;
+}
+
+.order-list-scroll::-webkit-scrollbar-track {
+    background: #e9ecef;
+    border-radius: 5px;
+    margin: 8px 0;
+}
+
+.order-list-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ffc107 0%, #ffb300 100%);
+    border-radius: 5px;
+    border: 2px solid #e9ecef;
+}
+
+.order-list-scroll::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ffb300 0%, #ffa000 100%);
+}
+
+/* Order List Item */
+.order-list-item {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.order-list-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: transparent;
     transition: all 0.3s ease;
 }
 
-.pedido-card:hover {
+.order-list-item:hover {
+    border-color: #ffc107;
+    box-shadow: 0 6px 16px rgba(255, 193, 7, 0.15);
+    transform: translateX(4px);
+}
+
+.order-list-item:hover::before {
+    background: linear-gradient(180deg, #ffc107 0%, #ffb300 100%);
+}
+
+.order-list-item.selected {
+    border-color: #ffc107;
+    background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
+    box-shadow: 0 8px 20px rgba(255, 193, 7, 0.25);
+}
+
+.order-list-item.selected::before {
+    background: linear-gradient(180deg, #ffc107 0%, #ffb300 100%);
+    width: 5px;
+}
+
+.order-id {
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: #212529;
+}
+
+.order-date {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.order-date i {
+    color: #ffc107;
+}
+
+.order-total {
+    font-size: 1.1rem;
+    color: #28a745;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+/* ==================== RIGHT PANEL: ORDER DETAILS ==================== */
+.order-detail-panel {
+    flex: 1;
+    background: white;
+    border-radius: 16px;
+    overflow-y: auto;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+}
+
+/* Custom scrollbar for detail panel */
+.order-detail-panel::-webkit-scrollbar {
+    width: 10px;
+}
+
+.order-detail-panel::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.order-detail-panel::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ffc107 0%, #ffb300 100%);
+    border-radius: 5px;
+    border: 2px solid #f8f9fa;
+}
+
+.order-detail-panel::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ffb300 0%, #ffa000 100%);
+}
+
+/* No Selection State */
+.no-selection-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: #6c757d;
+}
+
+.no-selection-state i {
+    color: #ffc107;
+}
+
+/* Order Detail Content */
+.order-detail-content {
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Detail Header with Cancel Button */
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 1.5rem;
+    border-bottom: 3px solid #f8f9fa;
+    margin-bottom: 2rem;
+}
+
+.header-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.detail-header h3 {
+    font-weight: 800;
+    color: #212529;
+    font-size: 1.75rem;
+}
+
+.btn-cancel {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.btn-cancel:hover {
     transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
 }
 
-.pedido-info {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+/* Info Card - Fechas y Dirección juntas */
+.info-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border: 2px solid #e9ecef;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.productos-pedido {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.producto-item {
+.info-card-section {
     padding: 0.5rem 0;
 }
 
-.adicionales-mini {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-    padding: 0.25rem 0.5rem;
-    margin-top: 0.25rem;
+.info-card-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #e9ecef 50%, transparent 100%);
+    margin: 1.5rem 0;
 }
 
-.pedido-footer {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 8px;
-    padding: 1rem;
+.section-title {
+    font-weight: 700;
+    color: #343a40;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
 }
 
-/* Estados de pedidos */
-.badge {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 8px;
+.section-title i {
+    color: #ffc107;
+    font-size: 1.2rem;
 }
 
-/* Botones específicos */
-.btn-sm {
-    border-radius: 8px;
+/* Info Row and Columns */
+.info-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info-col label {
+    font-weight: 600;
+    color: #6c757d;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-col span {
+    color: #212529;
+    font-size: 1.05rem;
     font-weight: 500;
 }
 
-.btn-outline-primary:hover {
-    background: rgba(13, 110, 253, 0.1);
+/* Address Text */
+.address-text {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 10px;
+    border-left: 5px solid #ffc107;
+    font-size: 1.05rem;
+    color: #212529;
+    line-height: 1.6;
+    margin-top: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.btn-outline-danger:hover {
-    background: rgba(220, 53, 69, 0.1);
+/* Detail Sections */
+.detail-section {
+    margin-bottom: 2rem;
 }
 
-.btn-outline-warning:hover {
-    background: rgba(255, 193, 7, 0.1);
+/* Products List */
+.products-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.product-item {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: linear-gradient(180deg, #ffc107 0%, #ffb300 100%);
+}
+
+.product-item:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.product-number {
+    flex: 0 0 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+    color: #1a1a1a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.product-content {
+    flex: 1;
+}
+
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.product-name {
+    font-weight: 700;
+    color: #212529;
+    font-size: 1.15rem;
+}
+
+.product-price {
+    font-weight: 800;
+    color: #28a745;
+    font-size: 1.2rem;
+}
+
+.product-quantity {
+    color: #6c757d;
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+}
+
+.product-quantity i {
+    color: #ffc107;
+}
+
+/* Adicionales - Más visibles */
+.product-adicionales {
+    background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+    border: 2px dashed #ffc107;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 0.75rem;
+}
+
+.adicionales-header {
+    display: flex;
+    align-items: center;
+    color: #856404;
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+}
+
+.adicionales-header i {
+    color: #ffc107;
+    font-size: 1.1rem;
+}
+
+.adicionales-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.adicional-badge {
+    background: white;
+    color: #856404;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 2px solid #ffc107;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(255, 193, 7, 0.2);
+}
+
+/* Total Section - Rediseñada */
+.total-section {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border-radius: 16px;
+    padding: 0;
+    margin-bottom: 2rem;
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+    overflow: hidden;
+}
+
+.total-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.75rem 2rem;
+}
+
+.total-icon {
+    flex: 0 0 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+}
+
+.total-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.total-label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.total-amount {
+    font-weight: 900;
+    font-size: 2rem;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Map Placeholder */
+.map-placeholder {
+    background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
+    border: 3px dashed #ced4da;
+    border-radius: 16px;
+    padding: 4rem 2rem;
+    text-align: center;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+}
+
+.map-placeholder i {
+    color: #ffc107;
+    opacity: 0.5;
+}
+
+.map-placeholder strong {
+    color: #495057;
+}
+
+/* ==================== ESTADO BADGES ==================== */
+.badge {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+    color: white;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%) !important;
+    color: #1a1a1a;
+}
+
+.badge.bg-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+    color: white;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%) !important;
+    color: white;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%) !important;
+    color: white;
+}
+
+.badge.bg-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%) !important;
+    color: white;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 1200px) {
+    .pedidos-content {
+        gap: 1rem;
+    }
+    
+    .order-list-panel {
+        flex: 0 0 280px;
+    }
+}
+
+@media (max-width: 992px) {
+    .pedidos-content {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .order-list-panel {
+        flex: 0 0 auto;
+        max-height: 350px;
+    }
+
+    .order-detail-panel {
+        min-height: 500px;
+    }
+
+    .detail-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .btn-cancel {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-buttons {
+        flex-direction: column;
+    }
+
+    .filter-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .order-list-panel {
+        max-height: 280px;
+    }
+
+    .info-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .total-content {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    .product-item {
+        flex-direction: column;
+    }
+
+    .product-number {
+        align-self: flex-start;
+    }
+
+    .adicionales-list {
+        flex-direction: column;
+    }
+
+    .adicional-badge {
+        width: 100%;
+        justify-content: center;
+    }
 }

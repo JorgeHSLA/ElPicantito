@@ -11,7 +11,7 @@
     <hr class="mt-4 mb-0" style="opacity:.1">
 </section>
 
-<main class="container py-4">
+<main class="container-fluid py-4">
     <!-- Loading State -->
     <div *ngIf="loading()" class="text-center py-5">
         <div class="spinner-border text-warning" role="status">
@@ -37,151 +37,206 @@
         </a>
     </div>
 
-    <!-- Pedidos List -->
-    <div *ngIf="!loading() && !error() && pedidos().length > 0">
+    <!-- Pedidos Layout: Header + Two Panels -->
+    <div *ngIf="!loading() && !error() && pedidos().length > 0" class="pedidos-layout">
         
-        <!-- Filtros por estado -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <h5 class="fw-bold mb-3">
-                    <i class="bi bi-funnel me-2"></i>
-                    Filtrar por estado
-                </h5>
-                <div class="d-flex flex-wrap gap-2">
-                    <button 
-                        class="btn btn-sm"
-                        [class.btn-warning]="filtroActivo() === 'TODOS'"
-                        [class.btn-outline-warning]="filtroActivo() !== 'TODOS'"
-                        (click)="filtrarPorEstado('TODOS')">
-                        Todos ({{ contarPorEstado('TODOS') }})
-                    </button>
-                    <button 
-                        class="btn btn-sm"
-                        [class.btn-info]="filtroActivo() === 'RECIBIDO'"
-                        [class.btn-outline-info]="filtroActivo() !== 'RECIBIDO'"
-                        (click)="filtrarPorEstado('RECIBIDO')">
-                        Recibido ({{ contarPorEstado('RECIBIDO') }})
-                    </button>
-                    <button 
-                        class="btn btn-sm"
-                        [class.btn-warning]="filtroActivo() === 'COCINANDO'"
-                        [class.btn-outline-warning]="filtroActivo() !== 'COCINANDO'"
-                        (click)="filtrarPorEstado('COCINANDO')">
-                        Cocinando ({{ contarPorEstado('COCINANDO') }})
-                    </button>
-                    <button 
-                        class="btn btn-sm"
-                        [class.btn-primary]="filtroActivo() === 'ENVIADO'"
-                        [class.btn-outline-primary]="filtroActivo() !== 'ENVIADO'"
-                        (click)="filtrarPorEstado('ENVIADO')">
-                        Enviado ({{ contarPorEstado('ENVIADO') }})
-                    </button>
-                    <button 
-                        class="btn btn-sm"
-                        [class.btn-success]="filtroActivo() === 'ENTREGADO'"
-                        [class.btn-outline-success]="filtroActivo() !== 'ENTREGADO'"
-                        (click)="filtrarPorEstado('ENTREGADO')">
-                        Entregado ({{ contarPorEstado('ENTREGADO') }})
-                    </button>
-                </div>
+        <!-- Header con filtros -->
+        <div class="pedidos-header mb-3">
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-funnel me-2"></i>
+                Filtrar por estado
+            </h5>
+            <div class="filter-buttons">
+                <button 
+                    class="filter-btn" 
+                    [class.active]="filtroActivo() === 'TODOS'"
+                    (click)="filtrarPorEstado('TODOS')">
+                    Todos ({{ contarPorEstado('TODOS') }})
+                </button>
+                <button 
+                    class="filter-btn" 
+                    [class.active]="filtroActivo() === 'RECIBIDO'"
+                    (click)="filtrarPorEstado('RECIBIDO')">
+                    Recibidos ({{ contarPorEstado('RECIBIDO') }})
+                </button>
+                <button 
+                    class="filter-btn" 
+                    [class.active]="filtroActivo() === 'COCINANDO'"
+                    (click)="filtrarPorEstado('COCINANDO')">
+                    En Preparación ({{ contarPorEstado('COCINANDO') }})
+                </button>
+                <button 
+                    class="filter-btn" 
+                    [class.active]="filtroActivo() === 'ENVIADO'"
+                    (click)="filtrarPorEstado('ENVIADO')">
+                    En Camino ({{ contarPorEstado('ENVIADO') }})
+                </button>
+                <button 
+                    class="filter-btn" 
+                    [class.active]="filtroActivo() === 'ENTREGADO'"
+                    (click)="filtrarPorEstado('ENTREGADO')">
+                    Entregados ({{ contarPorEstado('ENTREGADO') }})
+                </button>
             </div>
         </div>
 
-        <!-- Lista de Pedidos -->
-        <div class="row g-4">
-            <div class="col-lg-6 col-xl-4" *ngFor="let pedido of pedidosFiltrados(); index as i">
-                <div class="card h-100 border-0 shadow-sm pedido-card">
-                    <div class="card-body">
-                        <!-- Header del pedido -->
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="card-title fw-bold mb-0">
-                                <i class="bi bi-receipt me-2"></i>
-                                Pedido #{{ pedido.id }}
-                            </h5>
-                            <span [class]="getEstadoClass(pedido.estado)">
+        <!-- Two Panel Layout -->
+        <div class="pedidos-content">
+            
+            <!-- LEFT PANEL: Order List (Scrollable) -->
+            <div class="order-list-panel">
+                <div class="order-list-scroll">
+                    <div *ngFor="let pedido of pedidosFiltrados()" 
+                         class="order-list-item"
+                         [class.selected]="pedidoSeleccionado()?.id === pedido.id"
+                         (click)="seleccionarPedido(pedido)">
+                        
+                        <!-- Order ID and Badge -->
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="order-id">#{{ pedido.id }}</span>
+                            <span class="badge" [ngClass]="getEstadoClass(pedido.estado)">
                                 {{ pedido.estado }}
                             </span>
                         </div>
-
-                        <!-- Información básica -->
-                        <div class="pedido-info mb-3">
-                            <p class="card-text mb-2">
-                                <i class="bi bi-calendar-event me-2 text-muted"></i>
-                                <strong>Solicitado:</strong> 
-                                <br><small class="text-muted ms-4">{{ formatearFecha(pedido.fechaSolicitud) }}</small>
-                            </p>
-                            <p class="card-text mb-2">
-                                <i class="bi bi-truck me-2 text-muted"></i>
-                                <strong>Entrega:</strong> 
-                                <br><small class="text-muted ms-4">{{ formatearFecha(pedido.fechaEntrega) }}</small>
-                            </p>
-                            <p class="card-text mb-2">
-                                <i class="bi bi-geo-alt me-2 text-muted"></i>
-                                <strong>Dirección:</strong> 
-                                <br><small class="text-muted ms-4">{{ pedido.direccion }}</small>
-                            </p>
+                        
+                        <!-- Date -->
+                        <div class="order-date">
+                            <i class="bi bi-calendar3 me-1"></i>
+                            {{ pedido.fechaSolicitud | date:'dd/MM/yyyy HH:mm' }}
                         </div>
-
-                        <!-- Productos del pedido -->
-                        <div class="productos-pedido mb-3">
-                            <h6 class="fw-bold text-primary mb-2">
-                                <i class="bi bi-bag me-1"></i>
-                                Productos ({{ pedido.productos.length || 0 }})
-                            </h6>
-                            <div *ngIf="pedido.productos && pedido.productos.length > 0" class="productos-list">
-                                <div *ngFor="let prod of pedido.productos; let last = last" class="producto-item">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div class="flex-grow-1">
-                                            <span class="fw-semibold">{{ prod.nombreProducto }}</span>
-                                            <small class="text-muted d-block">Cantidad: {{ prod.cantidadProducto }}</small>
-                                            <small class="text-success fw-bold d-block" *ngIf="prod.precioProducto">
-                                                Precio: {{ formatearMoneda(prod.precioProducto) }} c/u
-                                            </small>
-                                            
-                                            <!-- Adicionales -->
-                                            <div *ngIf="prod.adicionales && prod.adicionales.length > 0" class="adicionales-mini mt-1">
-                                                <small class="text-primary fw-bold">Adicionales:</small>
-                                                <div *ngFor="let adic of prod.adicionales" class="ms-2">
-                                                    <small class="text-secondary">
-                                                        • {{ adic.nombreAdicional }} ({{ adic.cantidadAdicional }}x)
-                                                        <span *ngIf="adic.precioAdicional" class="text-success"> - {{ formatearMoneda(adic.precioAdicional) }} c/u</span>
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="text-end">
-                                            <div class="fw-bold text-success" *ngIf="prod.precioProducto">
-                                                {{ formatearMoneda(calcularSubtotalProducto(prod)) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr *ngIf="!last" class="my-2">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Total y acciones -->
-                        <div class="pedido-footer">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="fw-bold">Total:</span>
-                                <span class="h5 text-success fw-bold mb-0">
-                                    {{ formatearMoneda(pedido.precioDeVenta) }}
-                                </span>
-                            </div>
-
-                            <!-- Botón de eliminar solo para pedidos ENTREGADOS -->
-                            <div class="d-grid gap-2" *ngIf="puedeSerEliminado(pedido)">
-                                <button 
-                                    class="btn btn-danger btn-sm" 
-                                    (click)="eliminarPedido(pedido.id)">
-                                    <i class="bi bi-trash me-1"></i>
-                                    Eliminar Pedido
-                                </button>
-                            </div>
+                        
+                        <!-- Total -->
+                        <div class="order-total">
+                            <strong>{{ pedido.precioDeVenta | currency:'COP':'symbol-narrow':'1.0-0' }}</strong>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- RIGHT PANEL: Order Details -->
+            <div class="order-detail-panel">
+                
+                <!-- No Selection State -->
+                <div *ngIf="!pedidoSeleccionado()" class="no-selection-state">
+                    <i class="bi bi-arrow-left display-1 text-muted mb-3"></i>
+                    <h4>Selecciona un pedido</h4>
+                    <p class="text-muted">Haz clic en cualquier pedido de la lista para ver sus detalles</p>
+                </div>
+
+                <!-- Order Selected -->
+                <div *ngIf="pedidoSeleccionado()" class="order-detail-content">
+                    
+                    <!-- Header con botón de cancelar -->
+                    <div class="detail-header">
+                        <div class="header-info">
+                            <h3 class="mb-1">Pedido #{{ pedidoSeleccionado()!.id }}</h3>
+                            <span class="badge" [ngClass]="getEstadoClass(pedidoSeleccionado()!.estado)">
+                                {{ pedidoSeleccionado()!.estado }}
+                            </span>
+                        </div>
+                        <button *ngIf="pedidoSeleccionado()!.estado === 'RECIBIDO'" 
+                                class="btn btn-danger btn-cancel" 
+                                (click)="eliminarPedido(pedidoSeleccionado()!.id)">
+                            <i class="bi bi-x-circle me-2"></i>
+                            Cancelar Pedido
+                        </button>
+                    </div>
+
+                    <!-- Info Card: Fechas y Dirección -->
+                    <div class="info-card">
+                        <div class="info-card-section">
+                            <h5 class="section-title">
+                                <i class="bi bi-calendar-event me-2"></i>
+                                Información del Pedido
+                            </h5>
+                            <div class="info-row">
+                                <div class="info-col">
+                                    <label>Fecha de Solicitud</label>
+                                    <span>{{ pedidoSeleccionado()!.fechaSolicitud | date:'dd/MM/yyyy HH:mm' }}</span>
+                                </div>
+                                <div class="info-col">
+                                    <label>Fecha de Entrega</label>
+                                    <span>{{ pedidoSeleccionado()!.fechaEntrega | date:'dd/MM/yyyy HH:mm' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card-divider"></div>
+                        
+                        <div class="info-card-section">
+                            <h5 class="section-title">
+                                <i class="bi bi-geo-alt-fill me-2"></i>
+                                Dirección de Entrega
+                            </h5>
+                            <div class="address-text">
+                                {{ pedidoSeleccionado()!.direccion }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Section -->
+                    <div class="detail-section">
+                        <h5 class="section-title">
+                            <i class="bi bi-bag-fill me-2"></i>
+                            Productos del Pedido
+                        </h5>
+                        <div class="products-list">
+                            <div *ngFor="let producto of pedidoSeleccionado()!.productos; let i = index" class="product-item">
+                                <div class="product-number">{{ i + 1 }}</div>
+                                <div class="product-content">
+                                    <div class="product-header">
+                                        <span class="product-name">{{ producto.nombreProducto }}</span>
+                                        <span class="product-price">{{ producto.precioProducto | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                                    </div>
+                                    <div class="product-quantity">
+                                        <i class="bi bi-box me-1"></i>
+                                        Cantidad: {{ producto.cantidadProducto }}
+                                    </div>
+                                    <div *ngIf="producto.adicionales && producto.adicionales.length > 0" class="product-adicionales">
+                                        <div class="adicionales-header">
+                                            <i class="bi bi-plus-circle-fill me-1"></i>
+                                            <strong>Adicionales:</strong>
+                                        </div>
+                                        <div class="adicionales-list">
+                                            <span *ngFor="let adicional of producto.adicionales" class="adicional-badge">
+                                                {{ adicional.nombreAdicional }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Section -->
+                    <div class="total-section">
+                        <div class="total-content">
+                            <div class="total-icon">
+                                <i class="bi bi-receipt-cutoff"></i>
+                            </div>
+                            <div class="total-info">
+                                <span class="total-label">Total del Pedido</span>
+                                <span class="total-amount">{{ pedidoSeleccionado()!.precioDeVenta | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Placeholder - Al final -->
+                    <div class="detail-section">
+                        <h5 class="section-title">
+                            <i class="bi bi-map me-2"></i>
+                            Seguimiento de Entrega
+                        </h5>
+                        <div class="map-placeholder">
+                            <i class="bi bi-geo-fill display-4 mb-2"></i>
+                            <p class="mb-1"><strong>Mapa de seguimiento en tiempo real</strong></p>
+                            <small>(Próximamente disponible)</small>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
 </main>
