@@ -97,9 +97,9 @@
                     <div class="taco-visual-container">
                         <!-- Ingredientes apilados (todo excepto salsas) -->
                         <div class="taco-stacked-ingredients">
-                            @for(item of done(); track item.idAdcional) {
+                            @for(item of done(); track item.idAdcional; let idx = $index) {
                                 @if(item.nombre && !item.nombre.toLowerCase().includes('salsa') && !item.nombre.toLowerCase().includes('pico')) {
-                                    <div class="stacked-item" cdkDrag>
+                                    <div class="stacked-item" [class.tortilla-item]="idx === 0" cdkDrag>
                                         <img [src]="item.image" [alt]="item.nombre" class="ingredient-image">
                                         <div class="item-label">
                                             <span class="item-name">{{item.nombre}}</span>

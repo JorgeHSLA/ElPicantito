@@ -154,13 +154,13 @@ export class DragAndDrop {
       return '/images/crearTaco/salsas/SalsaRoja.png';
     }
     if (nombreLower.includes('habanera')) {
-      return '/images/crearTaco/salsas/habanera.jpg';
+      return '/images/crearTaco/salsas/habanera.png';
     }
     if (nombreLower.includes('chipotle')) {
-      return '/images/crearTaco/salsas/chipotle.jpg';
+      return '/images/crearTaco/salsas/chipotle.png';
     }
     if (nombreLower.includes('pico')) {
-      return '/images/crearTaco/salsas/pico-gallo.jpg';
+      return '/images/crearTaco/salsas/pico-gallo.png';
     }
     
     // Quesos
