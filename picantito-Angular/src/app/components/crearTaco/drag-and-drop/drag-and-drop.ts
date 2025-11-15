@@ -137,13 +137,13 @@ export class DragAndDrop {
       return '/images/crearTaco/proteinas/pollo.png';
     }
     if (nombreLower.includes('pastor')) {
-      return '/images/crearTaco/proteinas/pastor.jpg';
+      return '/images/crearTaco/proteinas/pastor.png';
     }
     if (nombreLower.includes('carnitas')) {
-      return '/images/crearTaco/proteinas/carnitas.jpg';
+      return '/images/crearTaco/proteinas/carnitas.png';
     }
     if (nombreLower.includes('chorizo')) {
-      return '/images/crearTaco/proteinas/chorizo.jpg';
+      return '/images/crearTaco/proteinas/chorizo.png';
     }
     
     // Salsas
