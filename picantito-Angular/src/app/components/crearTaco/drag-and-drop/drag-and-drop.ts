@@ -18,6 +18,9 @@ import { AdicionalSeleccionado } from '../../../models/cart-item';
 })
 export class DragAndDrop {
 
+  // Exponer Math para el template
+  Math = Math;
+
   // Usando signals para estado reactivo
   todo = signal<Item[]>([]);
   done = signal<Item[]>([]);
@@ -589,7 +592,7 @@ export class DragAndDrop {
               !item.nombre.toLowerCase().includes('pico')
     );
     const baseHeight = 500;
-    const heightPerItem = 40;
+    const heightPerItem = 20;
     return baseHeight + (Math.max(0, nonSalsaItems.length - 1) * heightPerItem);
   }
 
@@ -603,7 +606,7 @@ export class DragAndDrop {
               !item.nombre.toLowerCase().includes('pico')
     );
     const baseHeight = 450;
-    const heightPerItem = 40;
+    const heightPerItem = 20;
     return baseHeight + (Math.max(0, nonSalsaItems.length - 1) * heightPerItem);
   }
 

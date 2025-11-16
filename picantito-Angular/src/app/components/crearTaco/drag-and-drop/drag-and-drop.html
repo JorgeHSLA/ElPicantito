@@ -132,7 +132,6 @@
                                 @if(item.nombre && !item.nombre.toLowerCase().includes('salsa') && !item.nombre.toLowerCase().includes('pico')) {
                                     <div class="stacked-item" 
                                          [class.tortilla-item]="idx === 0" 
-                                         [style.z-index]="idx"
                                          [style.transform]="'translate(-50%, -50%) translateY(' + (idx * -40) + 'px)'"
                                          cdkDrag>
                                         <img [src]="item.image" [alt]="item.nombre" class="ingredient-image">
