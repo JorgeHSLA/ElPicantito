@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { CarritoService } from '../../../services/carrito.service';
+import { NotificationService } from '../../../services/notification.service';
 import { SearchbarComponent } from '../searchbar/searchbar';
 import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
 
@@ -25,7 +26,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private carritoService: CarritoService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     // Effect para reaccionar a cambios en el usuario logueado
     effect(() => {
@@ -82,13 +84,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
       next: () => {
         console.log('✅ Sesión cerrada correctamente');
         this.carritoService.limpiarCarritoCompleto();
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home']).then(() => {
+          this.notificationService.showWarning('Sesión cerrada con éxito.');
+        });
       },
       error: (error) => {
         console.error('❌ Error al cerrar sesión:', error);
         // Redirigir de todas formas
         this.carritoService.limpiarCarritoCompleto();
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home']).then(() => {
+          this.notificationService.showWarning('Sesión cerrada con éxito.');
+        });
       }
     });
   }

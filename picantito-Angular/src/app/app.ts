@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { FooterComponent } from './components/shared/footer/footer.component';
+import { NotificationComponent } from './components/shared/notification/notification.component';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent, FooterComponent],
+  imports: [CommonModule, RouterOutlet, NavbarComponent, FooterComponent, NotificationComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
