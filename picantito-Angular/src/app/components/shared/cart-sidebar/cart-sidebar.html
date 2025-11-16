@@ -47,9 +47,9 @@
 
                     <!-- Adicionales si existen -->
                     <div *ngIf="item.adicionales && item.adicionales.length > 0" class="adicionales-info">
-                        <small class="text-muted d-block mb-1">Adicionales:</small>
+                        <small class="d-block mb-1">Adicionales:</small>
                         <div *ngFor="let adicional of item.adicionales" class="adicional-item">
-                            <small class="text-secondary">
+                            <small>
                                 • {{ adicional.adicional.nombre }} ({{ adicional.cantidad }}x) 
                                 +${{ (adicional.adicional.precioDeVenta || adicional.adicional.precio || 0) | number:'1.0-0' }}
                             </small>

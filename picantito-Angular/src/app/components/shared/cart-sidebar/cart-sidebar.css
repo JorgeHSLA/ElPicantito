@@ -157,6 +157,25 @@
     font-weight: 500;
 }
 
+/* Adicionales */
+.adicionales-info {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.adicionales-info small {
+    color: #495057 !important;
+    font-size: 0.8rem;
+}
+
+.adicional-item small {
+    color: #333 !important;
+    display: block;
+    line-height: 1.4;
+}
 
 /* Quantity controls */
 
