@@ -538,6 +538,76 @@ export class DragAndDrop {
   }
 
   /**
+   * Eliminar un item de la lista done
+   */
+  removeItemFromDone(item: Item): void {
+    const doneItems = this.done();
+    const todoItems = this.todo();
+    const tortillaIds = this.tortillas().map(t => t.idAdcional);
+    
+    // Verificar si es la tortilla
+    const isTortilla = tortillaIds.includes(item.idAdcional);
+    
+    // Si es tortilla y hay otros ingredientes encima, no permitir borrar
+    if (isTortilla && doneItems.length > 1) {
+      this.error.set('No puedes eliminar la tortilla mientras haya ingredientes encima. Usa el botón "Limpiar" para borrar todo.');
+      setTimeout(() => this.error.set(null), 8000);
+      return;
+    }
+    
+    // Remover el item de done
+    const updatedDone = doneItems.filter(i => i.idAdcional !== item.idAdcional);
+    this.done.set(updatedDone);
+    
+    // Devolver el item a todo solo si corresponde al step actual o si es tortilla
+    const currentStepValue = this.currentStep();
+    const shouldReturnToTodo = 
+      (isTortilla && currentStepValue === 'tortilla') ||
+      (this.proteinas().some(p => p.idAdcional === item.idAdcional) && currentStepValue === 'proteína') ||
+      (this.salsas().some(s => s.idAdcional === item.idAdcional) && currentStepValue === 'salsa') ||
+      (this.extras().some(e => e.idAdcional === item.idAdcional) && currentStepValue === 'extras');
+    
+    if (shouldReturnToTodo) {
+      todoItems.push(item);
+      this.todo.set(todoItems);
+    }
+    
+    // Recalcular precio
+    this.calculateTotalPrice();
+    
+    // Actualizar validación del step
+    this.updateCanGoToNextStep();
+  }
+
+  /**
+   * Calcular altura dinámica del contenedor según número de ingredientes
+   */
+  getContainerHeight(): number {
+    const nonSalsaItems = this.done().filter(
+      item => item.nombre && 
+              !item.nombre.toLowerCase().includes('salsa') && 
+              !item.nombre.toLowerCase().includes('pico')
+    );
+    const baseHeight = 500;
+    const heightPerItem = 40;
+    return baseHeight + (Math.max(0, nonSalsaItems.length - 1) * heightPerItem);
+  }
+
+  /**
+   * Calcular altura del stack de ingredientes
+   */
+  getStackHeight(): number {
+    const nonSalsaItems = this.done().filter(
+      item => item.nombre && 
+              !item.nombre.toLowerCase().includes('salsa') && 
+              !item.nombre.toLowerCase().includes('pico')
+    );
+    const baseHeight = 450;
+    const heightPerItem = 40;
+    return baseHeight + (Math.max(0, nonSalsaItems.length - 1) * heightPerItem);
+  }
+
+  /**
    * Cancelar y volver a la tienda
    */
   cancelar(): void {

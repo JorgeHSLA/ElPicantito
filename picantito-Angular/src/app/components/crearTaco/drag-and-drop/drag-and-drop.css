@@ -183,6 +183,7 @@
     align-items: center;
     justify-content: center;
     min-height: 500px;
+    transition: min-height 0.3s ease;
 }
 
 /* Contenedor visual del taco */
@@ -193,6 +194,7 @@
     justify-content: center;
     width: 100%;
     min-height: 500px;
+    transition: min-height 0.3s ease;
 }
 
 /* Ingredientes apilados */
@@ -206,6 +208,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: height 0.3s ease;
 }
 
 .stacked-item {
@@ -266,7 +269,7 @@
 /* Sección de salsas en Tu Taco */
 .salsas-section {
     width: 100%;
-    margin-top: 2rem;
+    margin-top: 0.5rem;
     padding: 1rem;
     background: linear-gradient(135deg, #fff5f0 0%, #ffe5d9 100%);
     border-radius: 12px;
@@ -507,11 +510,43 @@
     flex: 1;
 }
 
+.summary-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
 .summary-item-price {
     font-size: 0.95rem;
     color: #28a745;
     font-weight: 600;
-    margin-left: 1rem;
+}
+
+.btn-remove {
+    background: #ff4444;
+    border: none;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+    padding: 0;
+    line-height: 1;
+}
+
+.btn-remove:hover {
+    background: #cc0000;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(255, 68, 68, 0.4);
+}
+
+.btn-remove:active {
+    transform: scale(0.95);
 }
 
 .empty-summary {
