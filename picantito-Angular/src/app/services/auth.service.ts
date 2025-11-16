@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 import { Usuario } from '../models/usuario';
 import { Router } from '@angular/router';
+import { NotificationService } from './notification.service';
 
 interface LoginResponse {
   token: string;
@@ -29,7 +30,11 @@ export class AuthService {
     return this.loggedUserSignal.asReadonly();
   }
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private notificationService: NotificationService
+  ) {
     // Verificar si hay usuario en localStorage al inicializar
     this.loadUserFromStorage();
   }
@@ -156,7 +161,9 @@ export class AuthService {
     } else if (this.isOperador()) {
       this.router.navigate(['/operador']);
     } else if (this.isCliente()) {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/home']).then(() => {
+        this.notificationService.showWarning('Sesión iniciada con éxito.');
+      });
     } else if (this.isRepartidor()) {
       this.router.navigate(['/home']);
     } else {

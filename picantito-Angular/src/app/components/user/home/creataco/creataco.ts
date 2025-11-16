@@ -14,9 +14,8 @@ export class CreatacoComponent {
   constructor(private router: Router) {}
 
   navigateToBuilder(): void {
-    // Aquí navegaríamos al constructor de tacos cuando esté implementado
-    // Por ahora, redirigir a la tienda
-    this.router.navigate(['/tienda']).then(() => {
+    // Navegar al constructor de tacos con drag-and-drop
+    this.router.navigate(['/crear-taco']).then(() => {
       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     });
   }
