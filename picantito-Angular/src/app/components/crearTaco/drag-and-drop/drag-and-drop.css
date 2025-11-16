@@ -2,7 +2,7 @@
     max-width: 1400px;
     margin: 0 auto;
     padding: 2rem;
-    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    background: #2d1529;
     min-height: 100vh;
 }
 
@@ -20,13 +20,13 @@
 
 .subtitle {
     font-size: 1.1rem;
-    color: #5d4037;
+    color: #ffffff;
     font-weight: 500;
 }
 
 .builder-wrapper {
     display: grid;
-    grid-template-columns: 1fr 1.5fr;
+    grid-template-columns: 0.9fr 1.6fr;
     gap: 2rem;
     align-items: start;
 }
