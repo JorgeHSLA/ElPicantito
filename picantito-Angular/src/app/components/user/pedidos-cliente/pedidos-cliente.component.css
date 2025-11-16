@@ -514,28 +514,41 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Map Placeholder */
-.map-placeholder {
-    background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
-    border: 3px dashed #ced4da;
-    border-radius: 16px;
-    padding: 4rem 2rem;
-    text-align: center;
-    min-height: 280px;
+/* Map Container with Leaflet */
+.map-container {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tracking-map {
+    height: 450px;
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+    z-index: 1;
+}
+
+.map-legend {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    color: #6c757d;
+    gap: 2rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-top: 2px solid #e9ecef;
 }
 
-.map-placeholder i {
-    color: #ffc107;
-    opacity: 0.5;
-}
-
-.map-placeholder strong {
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
     color: #495057;
+}
+
+.legend-item i {
+    font-size: 1.2rem;
 }
 
 /* ==================== ESTADO BADGES ==================== */

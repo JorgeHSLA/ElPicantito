@@ -221,16 +221,35 @@
                         </div>
                     </div>
 
-                    <!-- Map Placeholder - Al final -->
+                    <!-- Mapa de Seguimiento con OpenStreetMap -->
                     <div class="detail-section">
                         <h5 class="section-title">
                             <i class="bi bi-map me-2"></i>
                             Seguimiento de Entrega
+                            <span *ngIf="pedidoSeleccionado()" class="ms-2">
+                                <span [ngClass]="getEstadoClass(pedidoSeleccionado()!.estado)">
+                                    {{ pedidoSeleccionado()!.estado }}
+                                </span>
+                            </span>
                         </h5>
-                        <div class="map-placeholder">
-                            <i class="bi bi-geo-fill display-4 mb-2"></i>
-                            <p class="mb-1"><strong>Mapa de seguimiento en tiempo real</strong></p>
-                            <small>(Próximamente disponible)</small>
+                        <div class="map-container">
+                            <div id="trackingMap" class="tracking-map"></div>
+                            
+                            <!-- Leyenda del mapa -->
+                            <div class="map-legend">
+                                <div class="legend-item">
+                                    <i class="bi bi-house-fill text-primary"></i>
+                                    <span>El Picantito</span>
+                                </div>
+                                <div class="legend-item">
+                                    <i class="bi bi-geo-alt-fill text-danger"></i>
+                                    <span>Tu ubicación</span>
+                                </div>
+                                <div *ngIf="pedidoSeleccionado() && pedidoSeleccionado()!.estado.toUpperCase() === 'ENVIADO'" class="legend-item">
+                                    <i class="bi bi-dash-lg text-success" style="font-weight: bold;"></i>
+                                    <span>Ruta de entrega</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

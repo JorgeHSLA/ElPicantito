@@ -38,6 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 // Verificar si el token está en la blacklist
                 if (tokenRevocationService.isTokenRevoked(jwt)) {
+                    logger.warn("Token revocado detectado");
                     filterChain.doFilter(request, response);
                     return;
                 }
@@ -45,22 +46,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String username = jwtService.extractUsername(jwt);
 
                 if (username != null) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    try {
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                    if (jwtService.validateToken(jwt, userDetails)) {
-                        UsernamePasswordAuthenticationToken authentication = 
-                            new UsernamePasswordAuthenticationToken(
-                                userDetails, 
-                                null, 
-                                userDetails.getAuthorities()
-                            );
-                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                        if (jwtService.validateToken(jwt, userDetails)) {
+                            UsernamePasswordAuthenticationToken authentication = 
+                                new UsernamePasswordAuthenticationToken(
+                                    userDetails, 
+                                    null, 
+                                    userDetails.getAuthorities()
+                                );
+                            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                            SecurityContextHolder.getContext().setAuthentication(authentication);
+                        }
+                    } catch (org.springframework.security.core.userdetails.UsernameNotFoundException ex) {
+                        logger.warn("Usuario no encontrado para el token: " + username);
+                        // No establecer autenticación si el usuario no existe
+                        // El filtro continuará y la petición será procesada sin autenticación
                     }
                 }
             }
         } catch (Exception ex) {
-            logger.error("No se pudo establecer la autenticación del usuario en el contexto de seguridad", ex);
+            logger.error("Error inesperado al procesar autenticación JWT", ex);
         }
 
         filterChain.doFilter(request, response);

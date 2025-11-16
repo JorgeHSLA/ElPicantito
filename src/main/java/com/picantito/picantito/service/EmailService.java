@@ -493,4 +493,129 @@ public class EmailService {
             </html>
             """;
     }
+
+    /**
+     * Envía un correo de notificación de cambio de estado de pedido
+     */
+    @Async
+    public void enviarNotificacionCambioEstado(String destinatario, String nombreCliente, 
+                                                 Long pedidoId, String nuevoEstado) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            helper.setFrom("noreply@elpicantito.com");
+            helper.setTo(destinatario);
+            helper.setSubject("🌮 El Picantito - Actualización de tu Pedido #" + pedidoId);
+            
+            String contenido = construirHtmlCambioEstado(nombreCliente, pedidoId, nuevoEstado);
+            helper.setText(contenido, true);
+            
+            mailSender.send(message);
+            log.info("Email de notificación enviado exitosamente a: {}", destinatario);
+            
+        } catch (Exception e) {
+            log.error("Error al enviar email de notificación a {}: {}", destinatario, e.getMessage());
+        }
+    }
+
+    /**
+     * Construye el HTML del mensaje de notificación según el estado
+     */
+    private String construirHtmlCambioEstado(String nombreCliente, Long pedidoId, String estado) {
+        String estadoTitulo;
+        String estadoIcono;
+        String estadoColor;
+        String estadoDescripcion;
+        
+        switch (estado.toUpperCase()) {
+            case "RECIBIDO":
+                estadoTitulo = "PEDIDO RECIBIDO";
+                estadoIcono = "✅";
+                estadoColor = "#17a2b8";
+                estadoDescripcion = "Hemos recibido tu pedido y lo estamos procesando. Pronto comenzaremos a prepararlo con los mejores ingredientes.";
+                break;
+                
+            case "COCINANDO":
+                estadoTitulo = "EN PREPARACIÓN";
+                estadoIcono = "👨‍🍳";
+                estadoColor = "#ffc107";
+                estadoDescripcion = "¡Tu pedido está siendo preparado con mucho cuidado! Nuestros chefs están trabajando en tu orden.";
+                break;
+                
+            case "ENVIADO":
+                estadoTitulo = "EN CAMINO";
+                estadoIcono = "🚚";
+                estadoColor = "#007bff";
+                estadoDescripcion = "¡Tu pedido está en camino! Nuestro repartidor lo está llevando a tu ubicación. Puedes seguir su ruta en tiempo real desde tu perfil.";
+                break;
+                
+            case "ENTREGADO":
+                estadoTitulo = "ENTREGADO";
+                estadoIcono = "🎉";
+                estadoColor = "#28a745";
+                estadoDescripcion = "¡Tu pedido ha sido entregado exitosamente! Esperamos que disfrutes de tu comida. ¡Gracias por confiar en El Picantito! 🌮";
+                break;
+                
+            case "CANCELADO":
+                estadoTitulo = "CANCELADO";
+                estadoIcono = "❌";
+                estadoColor = "#dc3545";
+                estadoDescripcion = "Tu pedido ha sido cancelado. Si tienes alguna duda, contáctanos.";
+                break;
+                
+            default:
+                estadoTitulo = "ACTUALIZACIÓN DE ESTADO";
+                estadoIcono = "📦";
+                estadoColor = "#6c757d";
+                estadoDescripcion = "Tu pedido ha sido actualizado a: " + estado;
+                break;
+        }
+        
+        return """
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+                <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 15px; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+                    <div style="background: linear-gradient(135deg, #212529 0%%, #343a40 100%%); color: white; padding: 30px; text-align: center;">
+                        <h1 style="margin: 0; font-size: 28px;">🌮 El Picantito</h1>
+                        <p style="margin: 10px 0 0 0; opacity: 0.9;">Actualización de tu Pedido</p>
+                    </div>
+                    <div style="padding: 40px 30px;">
+                        <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
+                            Hola <strong>%s</strong>,
+                        </p>
+                        <div style="background-color: %s; color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 30px 0;">
+                            <div style="font-size: 48px; margin-bottom: 10px;">%s</div>
+                            <h2 style="margin: 0; font-size: 24px;">%s</h2>
+                            <p style="margin: 10px 0 0 0; font-size: 14px;">Pedido #%d</p>
+                        </div>
+                        <p style="font-size: 16px; color: #555; line-height: 1.6; text-align: center;">
+                            %s
+                        </p>
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="http://localhost:4200/cliente/tu-id/pedidos" 
+                               style="display: inline-block; background-color: #ffc107; color: #1a1a1a; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                                Ver Seguimiento en Tiempo Real
+                            </a>
+                        </div>
+                        <p style="font-size: 14px; color: #888; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                            <strong>Nota:</strong> Puedes seguir el estado de tu pedido en tiempo real desde tu perfil en nuestra aplicación.
+                        </p>
+                    </div>
+                    <div style="background-color: #f8f9fa; padding: 20px; text-align: center; color: #6c757d; font-size: 12px;">
+                        <p style="margin: 0;">
+                            Este es un correo automático, por favor no respondas.<br>
+                            © 2025 El Picantito - Todos los derechos reservados
+                        </p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """.formatted(nombreCliente, estadoColor, estadoIcono, estadoTitulo, pedidoId, estadoDescripcion);
+    }
 }

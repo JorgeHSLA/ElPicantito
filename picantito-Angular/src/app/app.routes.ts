@@ -73,11 +73,6 @@ export const routes: Routes = [
     loadComponent: () => import('./components/user/payment-portal/payment-portal.component').then(m => m.PaymentPortalComponent),
     canActivate: [AuthGuard]
   },
-  {
-    path: 'rastreo-pedido',
-    loadComponent: () => import('./components/user/rastreo-pedido/rastreo-pedido.component').then(m => m.RastreoPedidoComponent),
-    canActivate: [AuthGuard]
-  },
   // Rutas de administración
   {
     path: 'admin',

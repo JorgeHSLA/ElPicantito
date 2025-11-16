@@ -23,6 +23,7 @@ import com.picantito.picantito.dto.response.PedidoResponseDTO;
 import com.picantito.picantito.entities.Pedido;
 import com.picantito.picantito.mapper.PedidoMapper;
 import com.picantito.picantito.service.PedidoService;
+import com.picantito.picantito.service.EmailService;
 @RestController
 @RequestMapping("/api/pedidos")
 @CrossOrigin(originPatterns = "*", allowCredentials = "false") // Para desarrollo - permite todos los orígenes
@@ -34,6 +35,9 @@ public class PedidoController {
     
     @Autowired
     private PedidoMapper pedidoMapper;
+    
+    @Autowired
+    private EmailService emailService;
 
     // Obtener todos los pedidos de un cliente: http://localhost:9998/api/pedidos/cliente/{clienteId}
     @GetMapping("/cliente/{clienteId}")
@@ -120,6 +124,18 @@ public class PedidoController {
             if (pedido == null) {
                 return new ResponseEntity<>("Pedido no encontrado con ID: " + id, HttpStatus.NOT_FOUND);
             }
+            
+            // Enviar notificación por email
+            if (pedido.getCliente() != null && pedido.getCliente().getCorreo() != null) {
+                String nombreCliente = pedido.getCliente().getNombreCompleto();
+                emailService.enviarNotificacionCambioEstado(
+                    pedido.getCliente().getCorreo(),
+                    nombreCliente,
+                    pedido.getId().longValue(),
+                    pedido.getEstado()
+                );
+            }
+            
             PedidoResponseDTO responseDTO = pedidoMapper.toDTO(pedido);
             return ResponseEntity.ok(responseDTO);
         } catch (Exception e) {
@@ -141,6 +157,18 @@ public class PedidoController {
             if (pedido == null) {
                 return new ResponseEntity<>("Pedido no encontrado con ID: " + id, HttpStatus.NOT_FOUND);
             }
+            
+            // Enviar notificación por email
+            if (pedido.getCliente() != null && pedido.getCliente().getCorreo() != null) {
+                String nombreCliente = pedido.getCliente().getNombreCompleto();
+                emailService.enviarNotificacionCambioEstado(
+                    pedido.getCliente().getCorreo(),
+                    nombreCliente,
+                    pedido.getId().longValue(),
+                    pedido.getEstado()
+                );
+            }
+            
             PedidoResponseDTO responseDTO = pedidoMapper.toDTO(pedido);
             return ResponseEntity.ok(responseDTO);
         } catch (Exception e) {
