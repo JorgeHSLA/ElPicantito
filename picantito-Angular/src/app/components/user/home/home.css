@@ -1,194 +1,230 @@
   /* Importar estilos base desde la carpeta styles */
-@import 'carrusel.css';
-@import '../../../assets/styles/css/dark-hc.css';
-@import '../../../assets/styles/creaTaco.css';
 
-/* Estilos específicos para el carrusel infinito */
+  @import 'carrusel.css';
+  @import '../../../assets/styles/css/dark-hc.css';
+  @import '../../../assets/styles/creaTaco.css';
+  /* Fondo decorativo global para la página de home */
 
-.recommended-carousel {
-    position: relative;
-    overflow: hidden;
-}
+  :host {
+      display: block;
+      position: relative;
+      min-height: 100vh;
+  }
 
-.recommended-carousel-container {
-    display: flex;
-    gap: 24px;
-    transition: transform 0.5s ease;
-}
+  :host::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('/images/Fondo.png');
+      background-size: 90%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      opacity: 0.2;
+      z-index: -1;
+      pointer-events: none;
+  }
+  /* Estilos específicos para el carrusel infinito */
 
-.recommended-carousel-container.no-transition {
-    transition: none;
-}
+  .recommended-carousel {
+      position: relative;
+      overflow: hidden;
+  }
 
-.recommended-card-carousel {
-    flex: 0 0 auto;
-    width: calc(33.333% - 16px);
-    text-decoration: none;
-    color: inherit;
-}
+  .recommended-carousel-container {
+      display: flex;
+      gap: 24px;
+      transition: transform 0.5s ease;
+  }
 
-@media (max-width: 992px) {
-    .recommended-card-carousel {
-        width: calc(50% - 12px);
-    }
-}
+  .recommended-carousel-container.no-transition {
+      transition: none;
+  }
 
-@media (max-width: 768px) {
-    .recommended-card-carousel {
-        width: 100%;
-    }
-}
+  .recommended-card-carousel {
+      flex: 0 0 auto;
+      width: calc(33.333% - 16px);
+      text-decoration: none;
+      color: inherit;
+  }
 
+  @media (max-width: 992px) {
+      .recommended-card-carousel {
+          width: calc(50% - 12px);
+      }
+  }
 
-/* Flechas carrusel recomendados (estilo unificado con navbar) */
+  @media (max-width: 768px) {
+      .recommended-card-carousel {
+          width: 100%;
+      }
+  }
+  /* Flechas carrusel recomendados (estilo unificado con navbar) */
 
-.carousel-control-recommended {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 56px;
-    height: 56px;
-    background: var(--primary-color);
-    border: 5px solid var(--primary-color);
-    border-radius: 5px;
-    /* esquinas 5px */
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-    transition: all 0.35s ease;
-}
+  .carousel-control-recommended {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 56px;
+      height: 56px;
+      background: var(--primary-color);
+      border: 5px solid var(--primary-color);
+      border-radius: 5px;
+      /* esquinas 5px */
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+      transition: all 0.35s ease;
+  }
+  /* Más adentro del carrusel */
 
+  .carousel-control-recommended.prev {
+      left: 15px;
+  }
 
-/* Más adentro del carrusel */
+  .carousel-control-recommended.next {
+      right: 15px;
+  }
 
-.carousel-control-recommended.prev {
-    left: 15px;
-}
+  .carousel-control-recommended:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+      transform: translateY(-50%) scale(1.06);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.30);
+  }
 
-.carousel-control-recommended.next {
-    right: 15px;
-}
+  .carousel-control-recommended:active {
+      transform: translateY(-50%) scale(0.95);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
 
-.carousel-control-recommended:hover {
-    background: var(--primary-hover);
-    border-color: var(--primary-hover);
-    transform: translateY(-50%) scale(1.06);
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.30);
-}
+  .carousel-control-recommended:focus-visible {
+      outline: 3px solid var(--accent-color);
+      outline-offset: 2px;
+  }
 
-.carousel-control-recommended:active {
-    transform: translateY(-50%) scale(0.95);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-}
+  .carousel-control-recommended i {
+      font-size: 1.2rem;
+  }
 
-.carousel-control-recommended:focus-visible {
-    outline: 3px solid var(--accent-color);
-    outline-offset: 2px;
-}
+  .card-img-container {
+      height: 200px;
+      overflow: hidden;
+      border-radius: 8px 8px 0 0;
+  }
 
-.carousel-control-recommended i {
-    font-size: 1.2rem;
-}
+  .card-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+  }
 
-.card-img-container {
-    height: 200px;
-    overflow: hidden;
-    border-radius: 8px 8px 0 0;
-}
+  .recommended-card-carousel:hover .card-img-container img {
+      transform: scale(1.05);
+  }
 
-.card-img-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
+  .card-body {
+      padding: 1rem;
+      background: white;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
 
-.recommended-card-carousel:hover .card-img-container img {
-    transform: scale(1.05);
-}
+  .rating i {
+      color: #ffc107;
+      font-size: 0.875rem;
+  }
 
-.card-body {
-    padding: 1rem;
-    background: white;
-    border-radius: 0 0 8px 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+  .price {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #28a745;
+      margin-top: 0.5rem;
+  }
+  /* Estilos para el carrusel principal - movido a herocarrusel.css */
+  /* Responsive adjustments */
 
-.rating i {
-    color: #ffc107;
-    font-size: 0.875rem;
-}
+  @media (max-width: 768px) {
+      .carousel-content {
+          min-height: 50vh;
+      }
+      .promo-text {
+          text-align: center;
+          padding: 1rem 0;
+      }
+      .display-4 {
+          font-size: 2rem;
+      }
+  }
+  /* Feature cards */
 
-.price {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #28a745;
-    margin-top: 0.5rem;
-}
+  .features-section {
+      position: relative;
+      z-index: 1;
+  }
 
+  .features-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('/images/Fondo.png');
+      background-size: 90%;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.2;
+      z-index: -1;
+      pointer-events: none;
+  }
 
-/* Estilos para el carrusel principal - movido a herocarrusel.css */
+  .features-section .container {
+      position: relative;
+      z-index: 1;
+  }
 
+  .feature-card {
+      padding: 2rem 1rem;
+      text-align: center;
+      transition: transform 0.3s ease;
+  }
 
-/* Responsive adjustments */
+  .feature-card:hover {
+      transform: translateY(-5px);
+  }
 
-@media (max-width: 768px) {
-    .carousel-content {
-        min-height: 50vh;
-    }
-    .promo-text {
-        text-align: center;
-        padding: 1rem 0;
-    }
-    .display-4 {
-        font-size: 2rem;
-    }
-}
+  .feature-icon {
+      transition: transform 0.3s ease;
+  }
 
+  .feature-card:hover .feature-icon {
+      transform: scale(1.1);
+  }
+  /* Build taco section - movido a creataco.css */
+  /* About section - movido a minisobre.css */
 
-/* Feature cards */
-
-.feature-card {
-    padding: 2rem 1rem;
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-
-.feature-card:hover {
-    transform: translateY(-5px);
-}
-
-.feature-icon {
-    transition: transform 0.3s ease;
-}
-
-.feature-card:hover .feature-icon {
-    transform: scale(1.1);
-}
-
-
-/* Build taco section - movido a creataco.css */
-
-/* About section - movido a minisobre.css */
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-        text-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-/* Efectos adicionales para mejorar interactividad - SIN movimiento de columnas
+  @keyframes pulse {
+      0% {
+          transform: scale(1);
+      }
+      50% {
+          transform: scale(1.05);
+          text-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
+      }
+      100% {
+          transform: scale(1);
+      }
+  }
+  /* Efectos adicionales para mejorar interactividad - SIN movimiento de columnas
 .about-section .col-lg-6:first-child {
     transition: all 0.3s ease;
 }
@@ -205,82 +241,77 @@
     transform: translateX(-5px);
 }
 */
+  /* Aplicar animación pulse a otros elementos destacados de la página */
+  /* Features section - iconos y títulos */
 
-/* Aplicar animación pulse a otros elementos destacados de la página */
+  .feature-card .feature-icon i {
+      transition: all 0.3s ease;
+      display: inline-block;
+  }
 
-/* Features section - iconos y títulos */
-.feature-card .feature-icon i {
-    transition: all 0.3s ease;
-    display: inline-block;
-}
+  .feature-card:hover .feature-icon i {
+      animation: pulse 1.5s infinite;
+  }
 
-.feature-card:hover .feature-icon i {
-    animation: pulse 1.5s infinite;
-}
+  .feature-card h5 {
+      transition: all 0.3s ease;
+  }
 
-.feature-card h5 {
-    transition: all 0.3s ease;
-}
+  .feature-card:hover h5 {
+      animation: pulse 1.5s infinite;
+  }
+  /* Build taco section - spans destacados - movido a creataco.css */
+  /* Recommended section - spans destacados (SIN animación pulse para no interferir con el carrusel) */
 
-.feature-card:hover h5 {
-    animation: pulse 1.5s infinite;
-}
-
-/* Build taco section - spans destacados - movido a creataco.css */
-
-/* Recommended section - spans destacados (SIN animación pulse para no interferir con el carrusel) */
-.recommended-carousel-section .text-warning {
-    transition: all 0.3s ease;
-    display: inline-block;
-}
-
-/* Comentado para no interferir con el funcionamiento del carrusel
+  .recommended-carousel-section .text-warning {
+      transition: all 0.3s ease;
+      display: inline-block;
+  }
+  /* Comentado para no interferir con el funcionamiento del carrusel
 .recommended-carousel-section:hover .text-warning {
     animation: pulse 1.5s infinite;
 }
 */
+  /* Botones principales con efecto pulse en hover */
 
-/* Botones principales con efecto pulse en hover */
-.btn-warning {
-    transition: all 0.3s ease;
-}
+  .btn-warning {
+      transition: all 0.3s ease;
+  }
 
-.btn-warning:hover {
-    animation: pulse 1.5s infinite;
-}
+  .btn-warning:hover {
+      animation: pulse 1.5s infinite;
+  }
 
-.btn-outline-warning {
-    transition: all 0.3s ease;
-}
+  .btn-outline-warning {
+      transition: all 0.3s ease;
+  }
 
-.btn-outline-warning:hover {
-    animation: pulse 1.5s infinite;
-}
+  .btn-outline-warning:hover {
+      animation: pulse 1.5s infinite;
+  }
+  /* Headers principales */
 
-/* Headers principales */
-.features-section h5 {
-    transition: all 0.3s ease;
-}
+  .features-section h5 {
+      transition: all 0.3s ease;
+  }
+  /* Build taco section headers - movido a creataco.css */
 
-/* Build taco section headers - movido a creataco.css */
+  .recommended-carousel-section h2 {
+      transition: all 0.3s ease;
+  }
 
-.recommended-carousel-section h2 {
-    transition: all 0.3s ease;
-}
+  .recommended-carousel-section h2:hover {
+      transform: translateY(-2px);
+      text-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+  }
+  /* Efecto de pulse en el span resaltado de Recomendados */
 
-.recommended-carousel-section h2:hover {
-    transform: translateY(-2px);
-    text-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
-}
+  .recommended-carousel-section h2 .text-warning {
+      transition: all 0.3s ease;
+      display: inline-block;
+  }
 
-/* Efecto de pulse en el span resaltado de Recomendados */
-.recommended-carousel-section h2 .text-warning {
-    transition: all 0.3s ease;
-    display: inline-block;
-}
-
-.recommended-carousel-section h2:hover .text-warning {
-    animation: pulse 1.5s infinite;
-}
-
-/* Steps badges en build taco section - movido a creataco.css */
+  .recommended-carousel-section h2:hover .text-warning {
+      animation: pulse 1.5s infinite;
+  }
+  /* Steps badges en build taco section - movido a creataco.css */

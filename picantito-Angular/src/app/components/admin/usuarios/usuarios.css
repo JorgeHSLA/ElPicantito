@@ -1,3 +1,13 @@
+/* Importar estilos profesionales compartidos */
+@import '../shared-admin-styles.css';
+
+/* Título principal en blanco */
+h1.h2,
+main h1,
+.h2 {
+  color: #ffffff !important;
+}
+
 .table th {
   background-color: var(--neutral-surface);
   font-weight: 600;

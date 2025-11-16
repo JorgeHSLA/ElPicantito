@@ -192,10 +192,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     width: 100%;
     min-height: 500px;
     transition: min-height 0.3s ease;
+    padding-bottom: 0.25rem;
 }
 
 /* Ingredientes apilados */
@@ -204,19 +205,19 @@
     width: 100%;
     max-width: 500px;
     min-height: 450px;
-    height: 450px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     transition: height 0.3s ease;
     isolation: isolate;
+    overflow: hidden;
 }
 
 .stacked-item {
     position: absolute;
-    width: 100%;
-    top: 50%;
+    width: 90%;
+    bottom: 0;
     left: 50%;
     cursor: move;
     transition: transform 0.3s ease, z-index 0s;
@@ -228,7 +229,7 @@
 .stacked-item:first-child,
 .stacked-item.tortilla-item {
     width: 120%;
-    transform: translate(-50%, -50%) translateY(0px) !important;
+    transform: translate(-50%, 0) translateY(0px) !important;
     z-index: 0 !important;
 }
 
@@ -273,16 +274,17 @@
 /* Sección de salsas en Tu Taco */
 .salsas-section {
     width: 100%;
-    margin-top: 0.5rem;
-    padding: 1rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+    padding: 0.5rem 0.75rem;
     background: linear-gradient(135deg, #fff5f0 0%, #ffe5d9 100%);
     border-radius: 12px;
 }
 
 .salsas-section-title {
-    margin: 0 0 1rem 0;
+    margin: 0 0 0.5rem 0;
     color: #d84315;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     text-align: center;
 }

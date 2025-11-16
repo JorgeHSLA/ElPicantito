@@ -1,82 +1,268 @@
 /* Importar estilos base desde la carpeta styles */
+
 @import '../../../assets/styles/styles.css';
 @import '../../../assets/styles/css/dark-hc.css';
 
+/* Fondo decorativo global para la página sobre nosotros */
+
+:host {
+    display: block;
+    position: relative;
+    min-height: 100vh;
+}
+
+:host::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
+}
+
+
 /* Estilos específicos para sobre nosotros */
+
 .about-hero {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    position: relative;
+    z-index: 1;
 }
 
-.story-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
 }
 
-.story-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+.about-hero .container {
+    position: relative;
+    z-index: 1;
 }
 
-.value-card {
-  transition: transform 0.3s ease;
+.our-story {
+    position: relative;
+    z-index: 1;
 }
 
-.value-card:hover {
-  transform: translateY(-5px);
+.our-story::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
 }
 
-.value-icon {
-  transition: transform 0.3s ease;
+.our-story .container {
+    position: relative;
+    z-index: 1;
 }
 
-.value-card:hover .value-icon {
-  transform: scale(1.1);
+.our-values {
+    position: relative;
+    z-index: 1;
 }
 
-.team-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.our-values::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
 }
 
-.team-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+.our-values .container {
+    position: relative;
+    z-index: 1;
 }
 
-.team-avatar {
-  width: 120px !important;
-  height: 120px !important;
-  object-fit: cover;
-  border: 3px solid var(--accent-color);
-  transition: all 0.3s ease;
+.team {
+    position: relative;
+    z-index: 1;
 }
 
-.team-avatar:hover {
-  transform: scale(1.05);
+.team::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.team .container {
+    position: relative;
+    z-index: 1;
 }
 
 .commitment {
-  background: linear-gradient(45deg, #fff 0%, #f8f9fa 100%);
+    background: linear-gradient(45deg, #fff 0%, #f8f9fa 100%);
+    position: relative;
+    z-index: 1;
+}
+
+.commitment::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.commitment .container {
+    position: relative;
+    z-index: 1;
 }
 
 .cta-section {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    position: relative;
+    z-index: 2;
 }
 
+
+/* Remover el fondo del CTA para que no se vea afectado */
+
+
+/* .cta-section::before eliminado para mantener footer limpio */
+
+.cta-section .container {
+    position: relative;
+    z-index: 1;
+}
+
+.story-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    z-index: 1;
+    background: white;
+}
+
+.story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.value-card {
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 1;
+    background: white;
+}
+
+.value-card:hover {
+    transform: translateY(-5px);
+}
+
+.value-icon {
+    transition: transform 0.3s ease;
+}
+
+.value-card:hover .value-icon {
+    transform: scale(1.1);
+}
+
+.team-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    z-index: 1;
+    background: white;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.team-avatar {
+    width: 120px !important;
+    height: 120px !important;
+    object-fit: cover;
+    border: 3px solid var(--accent-color);
+    transition: all 0.3s ease;
+}
+
+.team-avatar:hover {
+    transform: scale(1.05);
+}
+
+.commitment {
+    background: linear-gradient(45deg, #fff 0%, #f8f9fa 100%);
+}
+
+.cta-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+
 /* Responsive adjustments */
+
 @media (max-width: 768px) {
-  .display-4 {
-    font-size: 2rem;
-  }
-  
-  .display-5 {
-    font-size: 1.75rem;
-  }
-  
-  .display-6 {
-    font-size: 1.5rem;
-  }
-  
-  .team-avatar {
-    width: 100px !important;
-    height: 100px !important;
-  }
+    .display-4 {
+        font-size: 2rem;
+    }
+    .display-5 {
+        font-size: 1.75rem;
+    }
+    .display-6 {
+        font-size: 1.5rem;
+    }
+    .team-avatar {
+        width: 100px !important;
+        height: 100px !important;
+    }
 }

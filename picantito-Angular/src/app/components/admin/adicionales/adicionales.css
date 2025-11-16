@@ -1,3 +1,6 @@
+/* Importar estilos profesionales compartidos */
+@import '../shared-admin-styles.css';
+
 .table th {
   background-color: var(--neutral-surface);
   font-weight: 600;
@@ -85,4 +88,19 @@ td span {
 
 .productos-list::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* Título principal en blanco - DEBE IR AL FINAL */
+:host h1.h2.text-white,
+:host h1.text-white,
+:host h1.h2,
+:host h1,
+:host ::ng-deep h1.h2,
+:host ::ng-deep h1.text-white {
+  color: #ffffff !important;
+}
+
+/* Asegurar que el título principal sea blanco sin importar el contexto */
+:host ::ng-deep main h1 {
+  color: #ffffff !important;
 }

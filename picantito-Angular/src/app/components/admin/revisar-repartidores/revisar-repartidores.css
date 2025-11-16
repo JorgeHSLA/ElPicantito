@@ -1,3 +1,6 @@
+/* Importar estilos profesionales compartidos */
+@import '../shared-admin-styles.css';
+
 .sidebar {
     height: calc(100vh - 56px);
 }
@@ -86,4 +89,11 @@ table.table tbody tr td:nth-child(4) .badge {
 
 table.table .text-dark {
     color: #000 !important;
+}
+
+/* Título principal en blanco - DEBE IR AL FINAL */
+h1.h2,
+main h1,
+.h2 {
+  color: #ffffff !important;
 }
