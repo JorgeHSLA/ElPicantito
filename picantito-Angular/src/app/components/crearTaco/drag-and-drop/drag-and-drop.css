@@ -213,36 +213,16 @@
     width: 100%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
     cursor: move;
-    z-index: 1;
+    transition: transform 0.3s ease, z-index 0s;
 }
 
-/* La tortilla (primer elemento) debe ser más grande */
+/* La tortilla (primer elemento) debe ser más grande y estar en la base */
 .stacked-item:first-child,
 .stacked-item.tortilla-item {
     width: 120%;
-    z-index: 0;
-}
-
-.stacked-item:nth-child(2) {
-    z-index: 1;
-}
-
-.stacked-item:nth-child(3) {
-    z-index: 2;
-}
-
-.stacked-item:nth-child(4) {
-    z-index: 3;
-}
-
-.stacked-item:nth-child(5) {
-    z-index: 4;
-}
-
-.stacked-item:nth-child(6) {
-    z-index: 5;
+    transform: translate(-50%, -50%) translateY(0px) !important;
+    z-index: 0 !important;
 }
 
 .ingredient-image {
