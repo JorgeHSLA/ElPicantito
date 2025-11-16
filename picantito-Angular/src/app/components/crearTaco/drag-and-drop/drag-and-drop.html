@@ -90,7 +90,12 @@
                             @for(item of done(); track item.idAdcional) {
                                 <div class="summary-item">
                                     <span class="summary-item-name">• {{item.nombre}}</span>
-                                    <span class="summary-item-price">${{(item.precio || 0) * (item.cantidad || 1)}}</span>
+                                    <div class="summary-item-actions">
+                                        <span class="summary-item-price">${{(item.precio || 0) * (item.cantidad || 1)}}</span>
+                                        <button class="btn-remove" (click)="removeItemFromDone(item)" title="Eliminar">
+                                            ✕
+                                        </button>
+                                    </div>
                                 </div>
                             }
                         </div>
@@ -120,15 +125,24 @@
                         <p class="hint">Empieza con una tortilla</p>
                     </div>
                 } @else {
-                    <div class="taco-visual-container">
+                    <div class="taco-visual-container" [style.min-height.px]="getContainerHeight()">
                         <!-- Ingredientes apilados (sin salsas) -->
-                        <div class="taco-stacked-ingredients">
+                        <div class="taco-stacked-ingredients" [style.height.px]="getStackHeight()">
                             @for(item of done(); track item.idAdcional; let idx = $index) {
                                 @if(item.nombre && !item.nombre.toLowerCase().includes('salsa') && !item.nombre.toLowerCase().includes('pico')) {
-                                    <div class="stacked-item" [class.tortilla-item]="idx === 0" cdkDrag>
+                                    <div class="stacked-item" 
+                                         [class.tortilla-item]="idx === 0" 
+                                         [style.transform]="'translate(-50%, -50%) translateY(' + (idx * -40) + 'px)'"
+                                         cdkDrag>
                                         <img [src]="item.image" [alt]="item.nombre" class="ingredient-image">
                                         <div class="item-label">
                                             <span class="item-name">{{item.nombre}}</span>
+                                        </div>
+                                        
+                                        <!-- Preview personalizado para el drag -->
+                                        <div *cdkDragPreview class="drag-preview-custom">
+                                            <img [src]="item.image" [alt]="item.nombre" class="preview-image">
+                                            <span class="preview-name">{{item.nombre}}</span>
                                         </div>
                                     </div>
                                 }
