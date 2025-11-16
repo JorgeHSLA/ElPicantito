@@ -3,10 +3,124 @@
 @import '../../../assets/styles/styles.css';
 @import '../../../assets/styles/css/dark-hc.css';
 
+/* Fondo decorativo global para la página de tienda/menú */
+
+:host {
+    display: block;
+    position: relative;
+    min-height: 100vh;
+}
+
+:host::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
+}
+
+
 /* Estilos específicos para tienda */
 
 .menu-hero {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    position: relative;
+    z-index: 1;
+}
+
+.menu-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.menu-hero .container {
+    position: relative;
+    z-index: 1;
+}
+
+.filters-section {
+    border-bottom: 1px solid #dee2e6;
+    position: relative;
+    z-index: 1;
+}
+
+.filters-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.filters-section .container {
+    position: relative;
+    z-index: 1;
+}
+
+main.container {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* Remover el fondo del main para que no afecte el footer CTA */
+
+
+/* main.container::before eliminado para evitar transparencia en CTA */
+
+
+/* Aplicar fondo solo a la sección de productos */
+
+main.container .row.g-4 {
+    position: relative;
+    z-index: 1;
+}
+
+main.container .row.g-4::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .menu-stats {
@@ -34,6 +148,9 @@
     border-radius: 15px;
     overflow: hidden;
     cursor: pointer;
+    position: relative;
+    z-index: 1;
+    background: white;
 }
 
 .taco-card:hover {
@@ -73,6 +190,9 @@
 .cta-section {
     border: 2px dashed var(--accent-color);
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 193, 7, 0.1) !important;
 }
 
 .cta-section:hover {

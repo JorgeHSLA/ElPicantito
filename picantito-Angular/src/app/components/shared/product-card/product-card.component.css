@@ -9,7 +9,7 @@
     overflow: hidden;
     cursor: pointer;
     /* Fondo solicitado */
-    background-color: #c13d76be !important;
+    background-color: rgb(141, 47, 95) !important;
     /* antes: #f14d94 */
     /* Borde visible aun con .border-0 de Bootstrap */
     border: 2px solid rgba(255, 255, 255, 0.22) !important;
@@ -19,7 +19,7 @@
 
 .taco-card:hover {
     transform: translateY(-5px);
-    background-color: #a83467 !important;
+    background-color: rgb(121, 37, 80) !important;
     /* aún más oscuro en hover */
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
     border-color: rgba(255, 255, 255, 0.35) !important;
