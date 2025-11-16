@@ -2,8 +2,10 @@
     max-width: 1400px;
     margin: 0 auto;
     padding: 2rem;
+    padding-bottom: 3rem;
     background: #2d1529;
     min-height: 100vh;
+    margin-bottom: 3rem;
 }
 
 .header {
@@ -29,15 +31,48 @@
     grid-template-columns: 0.9fr 1.6fr;
     gap: 2rem;
     align-items: start;
+    min-height: 600px;
+}
+
+/* Columna izquierda */
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 600px;
 }
 
 /* Panel de ingredientes */
-.ingredients-panel,
+.ingredients-panel {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Panel de resumen */
+.summary-panel {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Panel del taco */
 .taco-panel {
     background: white;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     overflow: hidden;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
 }
 
 .panel-header {
@@ -127,16 +162,27 @@
 /* Listas */
 .ingredients-list {
     padding: 1.5rem;
-    min-height: 400px;
-    max-height: 500px;
+    flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.summary-content {
+    padding: 1.5rem;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .taco-list {
     padding: 2rem;
-    min-height: 750px;
-    max-height: 850px;
+    flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
 }
 
 /* Contenedor visual del taco */
@@ -144,17 +190,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3rem;
-    padding: 3rem 2rem;
-    min-height: 700px;
+    justify-content: center;
+    width: 100%;
+    min-height: 500px;
 }
 
 /* Ingredientes apilados */
 .taco-stacked-ingredients {
     position: relative;
     width: 100%;
-    max-width: 700px;
-    min-height: 650px;
+    max-width: 500px;
+    min-height: 450px;
+    height: 450px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -174,7 +221,7 @@
 /* La tortilla (primer elemento) debe ser más grande */
 .stacked-item:first-child,
 .stacked-item.tortilla-item {
-    width: 140%;
+    width: 120%;
     z-index: 0;
 }
 
@@ -200,7 +247,7 @@
 
 .ingredient-image {
     width: 100%;
-    height: 420px;
+    height: 350px;
     object-fit: contain;
     border-radius: 0;
     box-shadow: none;
@@ -213,7 +260,7 @@
 /* La tortilla siempre debe ser más grande - debe estar DESPUÉS de .ingredient-image */
 .stacked-item:first-child .ingredient-image,
 .stacked-item.tortilla-item .ingredient-image {
-    height: 750px !important;
+    height: 400px !important;
     width: 100% !important;
 }
 
@@ -236,7 +283,55 @@
     border-radius: 10px;
 }
 
-/* Salsas en fila */
+/* Sección de salsas en Tu Taco */
+.salsas-section {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #fff5f0 0%, #ffe5d9 100%);
+    border-radius: 12px;
+}
+
+.salsas-section-title {
+    margin: 0 0 1rem 0;
+    color: #d84315;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.salsas-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.salsa-display-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.salsa-display-image {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ff6b35;
+}
+
+.salsa-display-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Salsas en fila - DESHABILITADO: Las salsas ahora solo aparecen en el resumen
 .taco-salsas-row {
     width: 100%;
     background: linear-gradient(135deg, #fff5f0 0%, #ffe5d9 100%);
@@ -293,6 +388,7 @@
     font-weight: bold;
     font-size: 0.9rem;
 }
+*/
 
 /* Tarjetas de ingredientes */
 .ingredient-card,
@@ -395,10 +491,55 @@
 
 /* Mensajes vacíos */
 .empty-message,
-.empty-taco {
+.empty-taco,
+.empty-summary {
     text-align: center;
     padding: 3rem 2rem;
-    color: #999;
+    color: #ff6b35;
+}
+
+/* Panel de resumen */
+.summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.summary-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.summary-item-name {
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 500;
+    flex: 1;
+}
+
+.summary-item-price {
+    font-size: 0.95rem;
+    color: #28a745;
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.empty-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    font-style: italic;
 }
 
 .info-message {
@@ -434,6 +575,7 @@
 .empty-taco p {
     margin: 0.5rem 0;
     font-size: 1.1rem;
+    color: #ff6b35;
 }
 
 .hint {

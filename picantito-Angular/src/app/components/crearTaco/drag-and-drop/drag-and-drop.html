@@ -5,70 +5,97 @@
     </div>
 
     <div class="builder-wrapper">
-        <!-- Panel de ingredientes disponibles -->
-        <div class="ingredients-panel">
-            <div class="panel-header">
-                <h2>Ingredientes Disponibles</h2>
-                <span class="step-indicator">{{currentStep()}}</span>
-            </div>
+        <!-- Columna izquierda: Ingredientes + Resumen -->
+        <div class="left-column">
+            <!-- Panel de ingredientes disponibles -->
+            <div class="ingredients-panel">
+                <div class="panel-header">
+                    <h2>Ingredientes Disponibles</h2>
+                    <span class="step-indicator">{{currentStep()}}</span>
+                </div>
 
-            <!-- Botones de navegación entre categorías -->
-            <div class="step-navigation">
-                <button 
-                    class="nav-btn btn-prev" 
-                    (click)="goToPreviousStep()"
-                    [disabled]="currentStep() === 'tortilla'">
-                    ← Anterior
-                </button>
-                <div class="step-info">
-                    @if(currentStep() === 'tortilla') {
-                        <span>Elige 1 tortilla</span>
-                    } @else if(currentStep() === 'proteína') {
-                        <span>Elige proteína(s)</span>
-                    } @else if(currentStep() === 'salsa') {
-                        <span>Elige salsa(s)</span>
-                    } @else {
-                        <span>Agrega extras (opcional)</span>
+                <!-- Botones de navegación entre categorías -->
+                <div class="step-navigation">
+                    <button 
+                        class="nav-btn btn-prev" 
+                        (click)="goToPreviousStep()"
+                        [disabled]="currentStep() === 'tortilla'">
+                        ← Anterior
+                    </button>
+                    <div class="step-info">
+                        @if(currentStep() === 'tortilla') {
+                            <span>Elige 1 tortilla</span>
+                        } @else if(currentStep() === 'proteína') {
+                            <span>Elige proteína(s)</span>
+                        } @else if(currentStep() === 'salsa') {
+                            <span>Elige salsa(s)</span>
+                        } @else {
+                            <span>Agrega extras (opcional)</span>
+                        }
+                    </div>
+                    <button 
+                        class="nav-btn btn-next" 
+                        (click)="goToNextStep()"
+                        [disabled]="!canGoToNextStep() || currentStep() === 'extras'">
+                        Siguiente →
+                    </button>
+                </div>
+
+                <div
+                    cdkDropList
+                    id="todoList"
+                    #todoList="cdkDropList"
+                    [cdkDropListConnectedTo]="[doneList]"
+                    [cdkDropListData]="todo()"
+                    class="ingredients-list"
+                    (cdkDropListDropped)="drop($event)">
+                    @for(item of todo(); track item.idAdcional) {
+                        <div class="ingredient-card" cdkDrag>
+                            <div class="ingredient-content">
+                                <div class="ingredient-icon">🍴</div>
+                                <div class="ingredient-info">
+                                    <h3>{{item.nombre}}</h3>
+                                    <span class="price">${{item.precio}}</span>
+                                </div>
+                            </div>
+                            <div class="drag-indicator">⋮⋮</div>
+                        </div>
+                    }
+                    @if(todo().length === 0 && currentStep() === 'tortilla') {
+                        <div class="empty-message">
+                            <p>✨ Ya seleccionaste tu tortilla</p>
+                        </div>
+                    }
+                    @if(currentStep() !== 'tortilla') {
+                        <div class="info-message">
+                            <p>💡 Puedes agregar varios ingredientes de esta categoría</p>
+                        </div>
                     }
                 </div>
-                <button 
-                    class="nav-btn btn-next" 
-                    (click)="goToNextStep()"
-                    [disabled]="!canGoToNextStep() || currentStep() === 'extras'">
-                    Siguiente →
-                </button>
             </div>
 
-            <div
-                cdkDropList
-                id="todoList"
-                #todoList="cdkDropList"
-                [cdkDropListConnectedTo]="[doneList]"
-                [cdkDropListData]="todo()"
-                class="ingredients-list"
-                (cdkDropListDropped)="drop($event)">
-                @for(item of todo(); track item.idAdcional) {
-                    <div class="ingredient-card" cdkDrag>
-                        <div class="ingredient-content">
-                            <div class="ingredient-icon">🍴</div>
-                            <div class="ingredient-info">
-                                <h3>{{item.nombre}}</h3>
-                                <span class="price">${{item.precio}}</span>
-                            </div>
+            <!-- Panel de Resumen -->
+            <div class="summary-panel">
+                <div class="panel-header">
+                    <h2>Resumen del Pedido</h2>
+                    <span class="total-price">Total: ${{totalPrice()}}</span>
+                </div>
+                <div class="summary-content">
+                    @if(done().length === 0) {
+                        <div class="empty-summary">
+                            <p style="color: #ff6b35;">Aún no has agregado ingredientes</p>
                         </div>
-                        <div class="drag-indicator">⋮⋮</div>
-                    </div>
-                }
-                @if(todo().length === 0 && currentStep() === 'tortilla') {
-                    <div class="empty-message">
-                        <p>✨ Ya seleccionaste tu tortilla</p>
-                    </div>
-                }
-                @if(currentStep() !== 'tortilla') {
-                    <div class="info-message">
-                        <p>💡 Puedes agregar varios ingredientes de esta categoría</p>
-                    </div>
-                }
+                    } @else {
+                        <div class="summary-list">
+                            @for(item of done(); track item.idAdcional) {
+                                <div class="summary-item">
+                                    <span class="summary-item-name">• {{item.nombre}}</span>
+                                    <span class="summary-item-price">${{(item.precio || 0) * (item.cantidad || 1)}}</span>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
             </div>
         </div>
 
@@ -76,7 +103,6 @@
         <div class="taco-panel">
             <div class="panel-header">
                 <h2>Tu Taco</h2>
-                <span class="total-price">Total: ${{totalPrice()}}</span>
             </div>
             <div
                 cdkDropList
@@ -95,7 +121,7 @@
                     </div>
                 } @else {
                     <div class="taco-visual-container">
-                        <!-- Ingredientes apilados (todo excepto salsas) -->
+                        <!-- Ingredientes apilados (sin salsas) -->
                         <div class="taco-stacked-ingredients">
                             @for(item of done(); track item.idAdcional; let idx = $index) {
                                 @if(item.nombre && !item.nombre.toLowerCase().includes('salsa') && !item.nombre.toLowerCase().includes('pico')) {
@@ -103,23 +129,21 @@
                                         <img [src]="item.image" [alt]="item.nombre" class="ingredient-image">
                                         <div class="item-label">
                                             <span class="item-name">{{item.nombre}}</span>
-                                            <span class="item-price">${{item.precio}}</span>
                                         </div>
                                     </div>
                                 }
                             }
                         </div>
-                        
-                        <!-- Salsas en fila separada -->
+
+                        <!-- Salsas en la parte inferior -->
                         @if(getSalsas().length > 0) {
-                            <div class="taco-salsas-row">
-                                <h3 class="salsas-title">Salsas:</h3>
-                                <div class="salsas-container">
+                            <div class="salsas-section">
+                                <h3 class="salsas-section-title">Salsas:</h3>
+                                <div class="salsas-display">
                                     @for(salsa of getSalsas(); track salsa.idAdcional) {
-                                        <div class="salsa-item" cdkDrag>
-                                            <img [src]="salsa.image" [alt]="salsa.nombre" class="salsa-image">
-                                            <span class="salsa-name">{{salsa.nombre}}</span>
-                                            <span class="salsa-price">${{salsa.precio}}</span>
+                                        <div class="salsa-display-item">
+                                            <img [src]="salsa.image" [alt]="salsa.nombre" class="salsa-display-image">
+                                            <span class="salsa-display-name">{{salsa.nombre}}</span>
                                         </div>
                                     }
                                 </div>
