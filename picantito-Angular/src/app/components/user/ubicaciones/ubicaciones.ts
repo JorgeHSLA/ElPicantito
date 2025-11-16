@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
+import { SUCURSALES, Sucursal } from '../../../models/sucursal';
 
 @Component({
   selector: 'app-ubicaciones',
@@ -12,8 +13,8 @@ import * as L from 'leaflet';
 export class UbicacionesComponent implements OnInit, AfterViewInit {
   private map!: L.Map;
   
-  // Coordenadas de Bogotá (puedes modificar estas coordenadas)
-  private bogotaCoords = { lat: 4.687062983237386, lng: -74.07370802922286 };
+  // Lista de sucursales de El Picantito
+  sucursales: Sucursal[] = SUCURSALES;
 
   ngOnInit(): void {
     // Fix para los iconos de Leaflet
@@ -25,8 +26,12 @@ export class UbicacionesComponent implements OnInit, AfterViewInit {
   }
 
   private initMap(): void {
-    // Inicializar el mapa centrado en Bogotá
-    this.map = L.map('map').setView([this.bogotaCoords.lat, this.bogotaCoords.lng], 13);
+    // Calcular centro entre todas las sucursales
+    const centerLat = this.sucursales.reduce((sum, s) => sum + s.lat, 0) / this.sucursales.length;
+    const centerLng = this.sucursales.reduce((sum, s) => sum + s.lng, 0) / this.sucursales.length;
+    
+    // Inicializar el mapa
+    this.map = L.map('map').setView([centerLat, centerLng], 12);
 
     // Agregar capa de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -34,16 +39,31 @@ export class UbicacionesComponent implements OnInit, AfterViewInit {
       maxZoom: 19
     }).addTo(this.map);
 
-    // Agregar marcador en las coordenadas de Bogotá
-    const marker = L.marker([this.bogotaCoords.lat, this.bogotaCoords.lng]).addTo(this.map);
-    
-    // Puedes agregar un popup al marcador
-    marker.bindPopup('<div style="color: black;"><b>El Picantito</b><br>Centro Comercial Cafam Floresta Local 67<br>Av. 68 #90 - 88, Bogotá</div>').openPopup();
+    // Agregar marcador para cada sucursal
+    this.sucursales.forEach((sucursal, index) => {
+      const marker = L.marker([sucursal.lat, sucursal.lng]).addTo(this.map);
+      
+      const popupContent = `
+        <div style="color: black; min-width: 200px;">
+          <h6 style="margin: 0 0 8px 0; color: #ffc107; font-weight: bold;">🌮 El Picantito</h6>
+          <p style="margin: 4px 0; font-weight: 600;">${sucursal.nombre}</p>
+          <p style="margin: 4px 0; font-size: 0.9em;">${sucursal.direccion}</p>
+          <p style="margin: 4px 0; font-size: 0.9em;">📞 ${sucursal.telefono}</p>
+          <p style="margin: 4px 0; font-size: 0.9em;">🕐 ${sucursal.horario}</p>
+        </div>
+      `;
+      
+      marker.bindPopup(popupContent);
+      
+      // Abrir el popup de la primera sucursal
+      if (index === 0) {
+        marker.openPopup();
+      }
+    });
 
-    // Aquí puedes agregar más marcadores para otras sucursales
-    // Ejemplo:
-    // const sucursal2 = L.marker([4.6097, -74.0817]).addTo(this.map);
-    // sucursal2.bindPopup('<div style="color: black;"><b>El Picantito</b><br>Sucursal 2</div>');
+    // Ajustar vista para mostrar todas las sucursales
+    const bounds = L.latLngBounds(this.sucursales.map(s => [s.lat, s.lng]));
+    this.map.fitBounds(bounds, { padding: [50, 50] });
   }
 
   private fixLeafletIconPath(): void {

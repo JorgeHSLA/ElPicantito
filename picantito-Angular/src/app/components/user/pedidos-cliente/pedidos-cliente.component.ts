@@ -5,6 +5,7 @@ import { PedidoRestService, PedidoDto } from '../../../services/tienda/pedido-re
 import { PedidoManagerService } from '../../../services/tienda/pedido-manager.service';
 import { AuthService } from '../../../services/auth.service';
 import { PedidoCompleto } from '../../../models/pedido-completo';
+import { obtenerSucursalMasCercana, Sucursal } from '../../../models/sucursal';
 import * as L from 'leaflet';
 
 @Component({
@@ -37,8 +38,8 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
   private routePolyline: L.Polyline | null = null;
   private pollingInterval: any = null;
 
-  // Coordenadas
-  restaurantLocation = { lat: 4.7110, lng: -74.0721, name: 'El Picantito' };
+  // Coordenadas (se actualizarán dinámicamente)
+  restaurantLocation: { lat: number; lng: number; name: string } | null = null;
   customerLocation = { lat: 4.6097, lng: -74.0817, name: 'Tu ubicación' };
 
   ngOnInit(): void {
@@ -148,10 +149,71 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
 
   seleccionarPedido(pedido: PedidoCompleto): void {
     this.pedidoSeleccionado.set(pedido);
-    // Actualizar mapa cuando se selecciona un pedido
-    setTimeout(() => {
-      this.updateMapForStatus(pedido.estado);
-    }, 100);
+    // Actualizar ubicación del cliente basado en la dirección del pedido
+    this.actualizarUbicacionCliente(pedido.direccion);
+  }
+
+  private async actualizarUbicacionCliente(direccion: string): Promise<void> {
+    try {
+      console.log('🔍 Geocodificando dirección:', direccion);
+      
+      // Usar Nominatim API para geocoding (OpenStreetMap)
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(direccion + ', Bogotá, Colombia')}&limit=1`;
+      console.log('📡 URL Nominatim:', url);
+      
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'ElPicantito/1.0'
+        }
+      });
+      const data = await response.json();
+      console.log('📦 Respuesta Nominatim:', data);
+
+      if (data && data.length > 0) {
+        const lat = parseFloat(data[0].lat);
+        const lng = parseFloat(data[0].lon);
+        const displayName = data[0].display_name;
+        
+        // Actualizar ubicación del cliente
+        this.customerLocation = {
+          lat: lat,
+          lng: lng,
+          name: direccion
+        };
+
+        console.log(`✅ Dirección geocodificada exitosamente:`);
+        console.log(`   📍 Dirección buscada: ${direccion}`);
+        console.log(`   📍 Resultado: ${displayName}`);
+        console.log(`   📍 Coordenadas: (${lat}, ${lng})`);
+      } else {
+        console.warn('⚠️ No se pudo geocodificar la dirección:', direccion);
+        // Usar ubicación por defecto si falla
+        this.customerLocation = { lat: 4.6097, lng: -74.0817, name: direccion };
+      }
+
+      // Reinicializar el mapa con la nueva ubicación
+      setTimeout(() => {
+        console.log('🗺️ Reinicializando mapa con ubicación:', this.customerLocation);
+        this.initializeMap();
+        const pedido = this.pedidoSeleccionado();
+        if (pedido) {
+          this.updateMapForStatus(pedido.estado);
+        }
+      }, 100);
+
+    } catch (error) {
+      console.error('❌ Error en geocoding:', error);
+      // Usar ubicación por defecto
+      this.customerLocation = { lat: 4.6097, lng: -74.0817, name: direccion };
+      
+      setTimeout(() => {
+        this.initializeMap();
+        const pedido = this.pedidoSeleccionado();
+        if (pedido) {
+          this.updateMapForStatus(pedido.estado);
+        }
+      }, 100);
+    }
   }
 
   ngAfterViewInit() {
@@ -180,6 +242,14 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
   private initializeMap() {
     const mapContainer = document.getElementById('trackingMap');
     if (!mapContainer) return;
+
+    // Determinar sucursal más cercana al cliente
+    const sucursalMasCercana = obtenerSucursalMasCercana(this.customerLocation.lat, this.customerLocation.lng);
+    this.restaurantLocation = {
+      lat: sucursalMasCercana.lat,
+      lng: sucursalMasCercana.lng,
+      name: sucursalMasCercana.nombre
+    };
 
     // Limpiar mapa anterior si existe
     if (this.map) {
@@ -221,7 +291,7 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
       [this.restaurantLocation.lat, this.restaurantLocation.lng],
       { icon: restaurantIcon }
     ).addTo(this.map);
-    this.restaurantMarker.bindPopup('<b>🌮 El Picantito</b><br>Tu pedido está aquí');
+    this.restaurantMarker.bindPopup(`<b>🌮 ${this.restaurantLocation.name}</b><br>${sucursalMasCercana.direccion}`);
 
     this.customerMarker = L.marker(
       [this.customerLocation.lat, this.customerLocation.lng],
@@ -237,7 +307,7 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   private updateMapForStatus(estado: string) {
-    if (!this.map) return;
+    if (!this.map || !this.restaurantLocation) return;
 
     // Limpiar ruta anterior
     if (this.routePolyline) {
@@ -255,14 +325,8 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
         break;
 
       case 'ENVIADO':
-        // Mostrar ruta óptima entre restaurante y cliente
-        this.drawRoute();
-        // Ajustar vista para mostrar ambos puntos
-        const bounds = L.latLngBounds([
-          [this.restaurantLocation.lat, this.restaurantLocation.lng],
-          [this.customerLocation.lat, this.customerLocation.lng]
-        ]);
-        this.map.fitBounds(bounds, { padding: [50, 50] });
+        // Mostrar ruta óptima entre restaurante y cliente usando OSRM
+        this.drawRouteWithOSRM();
         break;
 
       case 'ENTREGADO':
@@ -277,10 +341,53 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
-  private drawRoute() {
-    if (!this.map) return;
+  private async drawRouteWithOSRM() {
+    if (!this.map || !this.restaurantLocation) return;
 
-    // Crear una ruta simple directa
+    try {
+      // Construir URL para OSRM API (servicio público de routing)
+      const url = `https://router.project-osrm.org/route/v1/driving/${this.restaurantLocation.lng},${this.restaurantLocation.lat};${this.customerLocation.lng},${this.customerLocation.lat}?overview=full&geometries=geojson`;
+      
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.code === 'Ok' && data.routes && data.routes.length > 0) {
+        const route = data.routes[0];
+        const coordinates = route.geometry.coordinates;
+
+        // Convertir coordenadas de [lng, lat] a [lat, lng] para Leaflet
+        const latLngs: L.LatLngExpression[] = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
+
+        // Dibujar la ruta
+        this.routePolyline = L.polyline(latLngs, {
+          color: '#28a745',
+          weight: 5,
+          opacity: 0.8,
+          lineJoin: 'round'
+        }).addTo(this.map);
+
+        const distanciaKm = (route.distance / 1000).toFixed(1);
+        const tiempoMin = Math.round(route.duration / 60);
+        
+        this.routePolyline.bindPopup(`🚚 Ruta de entrega<br>📏 ${distanciaKm} km<br>⏱️ ~${tiempoMin} min`);
+
+        // Ajustar vista para mostrar toda la ruta
+        const bounds = L.latLngBounds(latLngs);
+        this.map!.fitBounds(bounds, { padding: [50, 50] });
+      } else {
+        // Fallback a línea directa si OSRM falla
+        this.drawRouteFallback();
+      }
+    } catch (error) {
+      console.error('Error obteniendo ruta de OSRM:', error);
+      // Fallback a línea directa
+      this.drawRouteFallback();
+    }
+  }
+
+  private drawRouteFallback() {
+    if (!this.map || !this.restaurantLocation) return;
+
     const routeCoordinates: L.LatLngExpression[] = [
       [this.restaurantLocation.lat, this.restaurantLocation.lng],
       [this.customerLocation.lat, this.customerLocation.lng]
@@ -293,7 +400,11 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
       dashArray: '10, 10'
     }).addTo(this.map);
 
-    this.routePolyline.bindPopup('🚚 Ruta de entrega');
+    this.routePolyline.bindPopup('🚚 Ruta de entrega (estimada)');
+
+    // Ajustar vista
+    const bounds = L.latLngBounds(routeCoordinates);
+    this.map.fitBounds(bounds, { padding: [50, 50] });
   }
 
   formatearAdicionales(adicionales: any[]): string {
