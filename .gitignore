@@ -78,3 +78,6 @@ picantito-Angular/.vscode/*
 # System files
 .DS_Store
 Thumbs.db
+
+# Spring Boot sensitive config
+src/main/resources/application.properties
