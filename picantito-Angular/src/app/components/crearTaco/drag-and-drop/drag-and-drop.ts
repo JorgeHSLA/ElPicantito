@@ -1,10 +1,14 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem, DragDropModule } from '@angular/cdk/drag-drop';
 import { Component, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { Item } from '../../../models/crearTaco/item';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
 import { ProductoService } from '../../../services/tienda/producto.service';
+import { CarritoService } from '../../../services/carrito.service';
 import { CommonModule } from '@angular/common';
 import { Adicional } from '../../../models/adicional';
+import { Producto } from '../../../models/producto';
+import { AdicionalSeleccionado } from '../../../models/cart-item';
 @Component({
   selector: 'app-drag-and-drop',
   standalone: true,
@@ -29,9 +33,17 @@ export class DragAndDrop {
   private salsas = signal<Item[]>([]);
   private extras = signal<Item[]>([]);
 
+  // Estados de la UI
+  loading = signal(false);
+  error = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
+  productoBase = signal<Producto | null>(null);
+
   constructor(
     private productoService: ProductoService,
     private adicionalService: AdicionalService,
+    private carritoService: CarritoService,
+    private router: Router
   ) {}
 
 
@@ -45,6 +57,7 @@ export class DragAndDrop {
     this.productoService.getProductoByName('Taco Personalizado').subscribe({
       next: (producto) => {
         if (producto && producto.id) {
+          this.productoBase.set(producto);
           // 2. Usar el ID del producto para obtener los adicionales asociados
           this.adicionalService.getAdicionalesPorProducto(producto.id).subscribe({
             next: (adicionales) => {
@@ -398,5 +411,136 @@ export class DragAndDrop {
       item.nombre?.toLowerCase().includes('salsa') || 
       item.nombre?.toLowerCase().includes('pico')
     );
+  }
+
+  /**
+   * Verifica si el taco puede ser agregado al carrito
+   */
+  get puedeAgregarAlCarrito(): boolean {
+    const doneItems = this.done();
+    const tortillaIds = this.tortillas().map(t => t.idAdcional);
+    const proteinaIds = this.proteinas().map(p => p.idAdcional);
+    
+    const tieneTortilla = doneItems.some(item => tortillaIds.includes(item.idAdcional));
+    const tieneProteina = doneItems.some(item => proteinaIds.includes(item.idAdcional));
+    
+    return tieneTortilla && tieneProteina && doneItems.length > 0;
+  }
+
+  /**
+   * Agregar el taco personalizado al carrito
+   */
+  agregarAlCarrito(): void {
+    if (!this.puedeAgregarAlCarrito) {
+      this.error.set('Debes seleccionar al menos una tortilla y una proteína para crear tu taco');
+      setTimeout(() => this.error.set(null), 3000);
+      return;
+    }
+
+    const productoBaseValue = this.productoBase();
+    if (!productoBaseValue) {
+      this.error.set('Error: No se pudo cargar el producto base');
+      setTimeout(() => this.error.set(null), 3000);
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set(null);
+
+    try {
+      const doneItems = this.done();
+      const descripcion = this.generarDescripcionTaco(doneItems);
+      
+      const productoParaCarrito: Producto = {
+        ...productoBaseValue,
+        descripcion: descripcion,
+        precioDeVenta: 0,
+        activo: true,
+        disponible: true
+      };
+
+      const adicionalesSeleccionados: AdicionalSeleccionado[] = this.construirAdicionalesSeleccionados(doneItems);
+      
+      this.carritoService.agregarItemConAdicionales(productoParaCarrito, 1, adicionalesSeleccionados);
+
+      this.successMessage.set('¡Taco personalizado agregado al carrito exitosamente!');
+      this.loading.set(false);
+
+      setTimeout(() => {
+        this.router.navigate(['/tienda']);
+      }, 1500);
+    } catch (error) {
+      console.error('Error al agregar al carrito:', error);
+      this.error.set('Error al agregar el taco al carrito');
+      this.loading.set(false);
+    }
+  }
+
+  /**
+   * Construir lista de adicionales seleccionados para el carrito
+   */
+  private construirAdicionalesSeleccionados(items: Item[]): AdicionalSeleccionado[] {
+    const adicionalesSeleccionados: AdicionalSeleccionado[] = [];
+    const todosAdicionalesCargados = this.adcionales();
+
+    for (const item of items) {
+      const adicionalCompleto = todosAdicionalesCargados.find(a => a.id === item.idAdcional);
+      
+      if (adicionalCompleto) {
+        const precio = adicionalCompleto.precioDeVenta || adicionalCompleto.precio || 0;
+        adicionalesSeleccionados.push({
+          adicional: adicionalCompleto,
+          cantidad: item.cantidad || 1,
+          subtotal: precio * (item.cantidad || 1)
+        });
+      }
+    }
+
+    return adicionalesSeleccionados;
+  }
+
+  /**
+   * Generar descripción del taco basada en los items seleccionados
+   */
+  private generarDescripcionTaco(items: Item[]): string {
+    const tortillaIds = this.tortillas().map(t => t.idAdcional);
+    const proteinaIds = this.proteinas().map(p => p.idAdcional);
+    const salsaIds = this.salsas().map(s => s.idAdcional);
+    const extraIds = this.extras().map(e => e.idAdcional);
+
+    let descripcion = '';
+
+    // Tortilla
+    const tortilla = items.find(item => tortillaIds.includes(item.idAdcional));
+    if (tortilla) {
+      descripcion += `Tortilla: ${tortilla.nombre}\n`;
+    }
+
+    // Proteínas
+    const proteinas = items.filter(item => proteinaIds.includes(item.idAdcional));
+    if (proteinas.length > 0) {
+      descripcion += `Proteínas: ${proteinas.map(p => `${p.nombre} (x${p.cantidad})`).join(', ')}\n`;
+    }
+
+    // Salsas
+    const salsas = items.filter(item => salsaIds.includes(item.idAdcional));
+    if (salsas.length > 0) {
+      descripcion += `Salsas: ${salsas.map(s => `${s.nombre} (x${s.cantidad})`).join(', ')}\n`;
+    }
+
+    // Extras
+    const extras = items.filter(item => extraIds.includes(item.idAdcional));
+    if (extras.length > 0) {
+      descripcion += `Extras: ${extras.map(e => `${e.nombre} (x${e.cantidad})`).join(', ')}\n`;
+    }
+
+    return descripcion;
+  }
+
+  /**
+   * Cancelar y volver a la tienda
+   */
+  cancelar(): void {
+    this.router.navigate(['/tienda']);
   }
 }

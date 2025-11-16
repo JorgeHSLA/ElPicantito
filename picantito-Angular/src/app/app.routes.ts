@@ -31,11 +31,16 @@ export const routes: Routes = [
   },
   {
     path: 'crear-taco',
+    loadComponent: () => import('./components/crearTaco/drag-and-drop/drag-and-drop').then(m => m.DragAndDrop)
+  },
+  {
+    path: 'crear-taco-old',
     loadComponent: () => import('./components/crearTaco/crear-taco/crear-taco').then(m => m.CrearTaco)
   },
   {
     path: 'drag-and-drop',
-    loadComponent: () => import('./components/crearTaco/drag-and-drop/drag-and-drop').then(m => m.DragAndDrop)
+    redirectTo: '/crear-taco',
+    pathMatch: 'full'
   },
   {
     path: 'mi-perfil',

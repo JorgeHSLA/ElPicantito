@@ -129,10 +129,36 @@
                 }
             </div>
             
+            <!-- Mensajes de estado -->
+            @if(error()) {
+                <div class="alert alert-error">
+                    {{ error() }}
+                </div>
+            }
+            @if(successMessage()) {
+                <div class="alert alert-success">
+                    {{ successMessage() }}
+                </div>
+            }
+
             @if(done().length > 0) {
                 <div class="action-buttons">
-                    <button class="btn-primary">Agregar al Carrito</button>
-                    <button class="btn-secondary" (click)="clearTaco()">Limpiar</button>
+                    <button 
+                        class="btn-primary" 
+                        (click)="agregarAlCarrito()"
+                        [disabled]="!puedeAgregarAlCarrito || loading()">
+                        @if(loading()) {
+                            <span>Agregando...</span>
+                        } @else {
+                            <span>Agregar al Carrito</span>
+                        }
+                    </button>
+                    <button class="btn-secondary" (click)="clearTaco()" [disabled]="loading()">Limpiar</button>
+                    <button class="btn-cancel" (click)="cancelar()" [disabled]="loading()">Cancelar</button>
+                </div>
+            } @else {
+                <div class="action-buttons">
+                    <button class="btn-cancel" (click)="cancelar()">Volver a la Tienda</button>
                 </div>
             }
         </div>
