@@ -139,6 +139,12 @@
                                         <div class="item-label">
                                             <span class="item-name">{{item.nombre}}</span>
                                         </div>
+                                        
+                                        <!-- Preview personalizado para el drag -->
+                                        <div *cdkDragPreview class="drag-preview-custom">
+                                            <img [src]="item.image" [alt]="item.nombre" class="preview-image">
+                                            <span class="preview-name">{{item.nombre}}</span>
+                                        </div>
                                     </div>
                                 }
                             }
