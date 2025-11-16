@@ -71,6 +71,16 @@
             </button>
           </div>
         </form>
+
+        <!-- Enlace de olvidé mi contraseña -->
+        <div class="text-center mt-3 mb-3">
+          <button 
+            type="button" 
+            class="btn btn-link text-decoration-none text-warning fw-semibold"
+            (click)="openResetModal()">
+            <i class="bi bi-key me-1"></i>¿Olvidaste tu contraseña?
+          </button>
+        </div>
         
         <div class="text-center mt-3">
           <span style="color: black;">¿No tienes cuenta?</span>
@@ -85,3 +95,233 @@
     </aside>
   </div>
 </main>
+
+<!-- Modal de Recuperación de Contraseña - Estilo similar al registro -->
+<div class="verification-modal-overlay" *ngIf="showResetModal()" (click)="closeResetModal()">
+  <div class="verification-modal" (click)="$event.stopPropagation()">
+    
+    <!-- Paso 1: Ingresar Email -->
+    <div *ngIf="resetStep() === 'email'">
+      <div class="verification-header">
+        <div class="verification-icon">
+          <i class="bi bi-key-fill"></i>
+        </div>
+        <h3>Recuperar Contraseña</h3>
+        <p>Ingresa tu correo electrónico y te enviaremos un código de verificación.</p>
+      </div>
+
+      <div class="verification-body">
+        <!-- Mensaje de error -->
+        <div *ngIf="resetError()" class="alert alert-danger mb-3">
+          <i class="bi bi-x-circle me-2"></i>{{ resetError() }}
+        </div>
+
+        <div class="code-input-container">
+          <label for="resetEmail" class="form-label">Correo Electrónico</label>
+          <input 
+            type="email" 
+            class="form-control form-control-lg" 
+            id="resetEmail" 
+            placeholder="tu@email.com"
+            [value]="resetEmail()"
+            (input)="resetEmail.set($any($event.target).value)"
+            [disabled]="isSendingCode()">
+        </div>
+
+        <div class="verification-actions">
+          <button 
+            type="button" 
+            class="btn btn-warning btn-lg w-100"
+            (click)="sendResetCode()"
+            [disabled]="isSendingCode()">
+            <span *ngIf="!isSendingCode()">
+              <i class="bi bi-send me-2"></i>Enviar Código
+            </span>
+            <span *ngIf="isSendingCode()">
+              <span class="spinner-border spinner-border-sm me-2"></span>Enviando...
+            </span>
+          </button>
+        </div>
+
+        <div class="text-center mt-3">
+          <button class="btn btn-link text-muted" (click)="closeResetModal()">
+            Cancelar y volver
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 2: Verificar Código -->
+    <div *ngIf="resetStep() === 'code'">
+      <div class="verification-header">
+        <div class="verification-icon">
+          <i class="bi bi-envelope-fill"></i>
+        </div>
+        <h3>Verifica tu correo</h3>
+        <p>Hemos enviado un código de 6 dígitos a:</p>
+        <strong class="email-display">{{ resetEmail() }}</strong>
+      </div>
+
+      <div class="verification-body">
+        <!-- Mensaje de error -->
+        <div *ngIf="resetError()" class="alert alert-danger mb-3">
+          <i class="bi bi-x-circle me-2"></i>{{ resetError() }}
+        </div>
+
+        <!-- Mensaje de éxito -->
+        <div *ngIf="resetSuccess()" class="alert alert-success mb-3">
+          <i class="bi bi-check-circle me-2"></i>{{ resetSuccess() }}
+        </div>
+
+        <!-- Input para el código -->
+        <div class="code-input-container">
+          <label for="resetCode" class="form-label">Código de verificación</label>
+          <input 
+            type="text" 
+            id="resetCode"
+            class="form-control form-control-lg text-center code-input"
+            maxlength="6"
+            placeholder="000000"
+            [value]="resetCode()"
+            (input)="resetCode.set($any($event.target).value.toUpperCase())"
+            [disabled]="isLoading()"
+            (keyup.enter)="verifyResetCode()"
+            style="letter-spacing: 8px; font-size: 24px; font-weight: 700;">
+        </div>
+
+        <!-- Botones -->
+        <div class="verification-actions">
+          <button 
+            class="btn btn-warning btn-lg w-100 mb-2"
+            (click)="verifyResetCode()"
+            [disabled]="isLoading() || resetCode().length !== 6">
+            <span *ngIf="!isLoading()">
+              <i class="bi bi-check-circle me-2"></i>Verificar Código
+            </span>
+            <span *ngIf="isLoading()">
+              <span class="spinner-border spinner-border-sm me-2"></span>Verificando...
+            </span>
+          </button>
+
+          <button 
+            class="btn btn-outline-secondary w-100"
+            (click)="resendCode()"
+            [disabled]="resendTimeout() > 0 || isSendingCode()">
+            <span *ngIf="resendTimeout() > 0">
+              Reenviar código en {{ resendTimeout() }}s
+            </span>
+            <span *ngIf="resendTimeout() === 0 && !isSendingCode()">
+              <i class="bi bi-arrow-clockwise me-2"></i>Reenviar código
+            </span>
+            <span *ngIf="isSendingCode()">
+              <span class="spinner-border spinner-border-sm me-2"></span>Enviando...
+            </span>
+          </button>
+        </div>
+
+        <!-- Botón cancelar -->
+        <div class="text-center mt-3">
+          <button class="btn btn-link text-muted" (click)="backToEmail()">
+            Cambiar correo electrónico
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 3: Opción después de verificar -->
+    <div *ngIf="resetStep() === 'verified'">
+      <div class="verification-header">
+        <div class="verification-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <h3>¡Código Verificado!</h3>
+        <p>Tu identidad ha sido confirmada. ¿Qué deseas hacer?</p>
+      </div>
+
+      <div class="verification-body">
+        <div class="verification-actions">
+          <button 
+            class="btn btn-warning btn-lg w-100 mb-2"
+            (click)="resetStep.set('password')">
+            <i class="bi bi-key me-2"></i>Cambiar Contraseña
+          </button>
+
+          <button 
+            class="btn btn-success btn-lg w-100"
+            (click)="continueToLogin()">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 4: Nueva Contraseña -->
+    <div *ngIf="resetStep() === 'password'">
+      <div class="verification-header">
+        <div class="verification-icon">
+          <i class="bi bi-lock-fill"></i>
+        </div>
+        <h3>Nueva Contraseña</h3>
+        <p>Crea una contraseña segura para tu cuenta.</p>
+      </div>
+
+      <div class="verification-body">
+        <!-- Mensaje de error -->
+        <div *ngIf="resetError()" class="alert alert-danger mb-3">
+          <i class="bi bi-x-circle me-2"></i>{{ resetError() }}
+        </div>
+
+        <!-- Mensaje de éxito -->
+        <div *ngIf="resetSuccess()" class="alert alert-success mb-3">
+          <i class="bi bi-check-circle me-2"></i>{{ resetSuccess() }}
+        </div>
+
+        <div class="code-input-container mb-3">
+          <label for="newPassword" class="form-label">Nueva Contraseña</label>
+          <input 
+            type="password" 
+            class="form-control form-control-lg" 
+            id="newPassword" 
+            placeholder="Mínimo 6 caracteres"
+            [value]="newPassword()"
+            (input)="newPassword.set($any($event.target).value)"
+            [disabled]="isLoading()">
+        </div>
+
+        <div class="code-input-container">
+          <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+          <input 
+            type="password" 
+            class="form-control form-control-lg" 
+            id="confirmPassword" 
+            placeholder="Repite tu contraseña"
+            [value]="confirmPassword()"
+            (input)="confirmPassword.set($any($event.target).value)"
+            [disabled]="isLoading()">
+        </div>
+
+        <div class="verification-actions">
+          <button 
+            type="button" 
+            class="btn btn-warning btn-lg w-100"
+            (click)="resetPassword()"
+            [disabled]="isLoading()">
+            <span *ngIf="!isLoading()">
+              <i class="bi bi-check-circle me-2"></i>Actualizar Contraseña
+            </span>
+            <span *ngIf="isLoading()">
+              <span class="spinner-border spinner-border-sm me-2"></span>Actualizando...
+            </span>
+          </button>
+        </div>
+
+        <div class="text-center mt-3">
+          <button class="btn btn-link text-muted" (click)="resetStep.set('verified')">
+            Volver atrás
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

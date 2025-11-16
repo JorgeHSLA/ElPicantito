@@ -2,7 +2,6 @@ package com.picantito.picantito.service;
 
 import com.picantito.picantito.entities.VerificationCode;
 import com.picantito.picantito.repository.VerificationCodeRepository;
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -155,6 +154,209 @@ public class EmailService {
     public void cleanExpiredCodes() {
         verificationCodeRepository.deleteByExpirationTimeBefore(LocalDateTime.now());
         log.info("Códigos expirados eliminados");
+    }
+    
+    /**
+     * Envía un código de recuperación de contraseña
+     */
+    @Transactional
+    public String sendPasswordResetCode(String email) {
+        try {
+            // Limpiar código anterior si existe
+            try {
+                verificationCodeRepository.deleteByEmail(email);
+            } catch (Exception e) {
+                log.warn("No se pudieron eliminar códigos anteriores para {}: {}", email, e.getMessage());
+            }
+            
+            // Generar nuevo código
+            String code = generateVerificationCode();
+            
+            // Guardar en la base de datos
+            VerificationCode verificationCode = new VerificationCode();
+            verificationCode.setEmail(email);
+            verificationCode.setCode(code);
+            verificationCode.setExpirationTime(LocalDateTime.now().plusMinutes(CODE_EXPIRATION_MINUTES));
+            verificationCode.setVerified(false);
+            verificationCode.setCreatedAt(LocalDateTime.now());
+            
+            verificationCodeRepository.save(verificationCode);
+            
+            log.info("Código de recuperación generado y guardado para {}: {}", email, code);
+            
+            // Enviar correo de forma asíncrona
+            try {
+                sendPasswordResetEmailAsync(email, code);
+            } catch (Exception e) {
+                log.error("Error al enviar email de recuperación a {}, pero el código fue guardado: {}", email, code, e);
+            }
+            
+            return "Código de recuperación enviado exitosamente";
+            
+        } catch (Exception e) {
+            log.error("Error al generar código de recuperación para {}", email, e);
+            throw new RuntimeException("Error al enviar el código de recuperación: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Envía el email de recuperación de contraseña de forma asíncrona
+     */
+    @Async
+    public void sendPasswordResetEmailAsync(String to, String code) {
+        try {
+            log.info("Intentando enviar email de recuperación a {} con código {}", to, code);
+            
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            helper.setFrom("elpicantitotacosautenticos@gmail.com");
+            helper.setTo(to);
+            helper.setSubject("🔐 Recuperación de Contraseña - El Picantito");
+            
+            String htmlContent = buildPasswordResetEmailTemplate(code);
+            helper.setText(htmlContent, true);
+            
+            mailSender.send(message);
+            log.info("✅ Email de recuperación enviado exitosamente a {}", to);
+            
+        } catch (Exception e) {
+            log.error("❌ Error al enviar email de recuperación a {}: {}", to, e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Template HTML para el correo de recuperación de contraseña
+     */
+    private String buildPasswordResetEmailTemplate(String code) {
+        return """
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                    body {
+                        font-family: 'Arial', sans-serif;
+                        background-color: #f4f4f4;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: 40px auto;
+                        background: white;
+                        border-radius: 16px;
+                        overflow: hidden;
+                        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+                    }
+                    .header {
+                        background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+                        color: white;
+                        padding: 30px;
+                        text-align: center;
+                        border-bottom: 4px solid #ffc107;
+                    }
+                    .header h1 {
+                        margin: 0;
+                        font-size: 28px;
+                    }
+                    .header p {
+                        margin: 10px 0 0 0;
+                        font-size: 14px;
+                        opacity: 0.9;
+                    }
+                    .content {
+                        padding: 40px 30px;
+                        text-align: center;
+                    }
+                    .content h2 {
+                        color: #212529;
+                        margin: 0 0 20px 0;
+                        font-size: 24px;
+                    }
+                    .content p {
+                        color: #6c757d;
+                        line-height: 1.6;
+                        margin: 0 0 30px 0;
+                        font-size: 16px;
+                    }
+                    .code-box {
+                        background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+                        border: 3px solid #ffc107;
+                        border-radius: 12px;
+                        padding: 30px;
+                        margin: 30px 0;
+                    }
+                    .code {
+                        font-size: 42px;
+                        font-weight: 800;
+                        color: #212529;
+                        letter-spacing: 8px;
+                        font-family: 'Courier New', monospace;
+                        margin: 0;
+                    }
+                    .warning {
+                        background: #fff3cd;
+                        border-left: 4px solid #ffc107;
+                        padding: 15px;
+                        margin: 30px 0;
+                        text-align: left;
+                        border-radius: 8px;
+                    }
+                    .warning p {
+                        margin: 5px 0;
+                        color: #856404;
+                        font-size: 14px;
+                    }
+                    .footer {
+                        background: #f8f9fa;
+                        padding: 25px 30px;
+                        text-align: center;
+                        border-top: 1px solid #e9ecef;
+                    }
+                    .footer p {
+                        margin: 0;
+                        color: #6c757d;
+                        font-size: 13px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>🔐 Recuperación de Contraseña</h1>
+                        <p>El Picantito - Tacos Auténticos</p>
+                    </div>
+                    <div class="content">
+                        <h2>¡Hola!</h2>
+                        <p>
+                            Recibimos una solicitud para restablecer tu contraseña.<br>
+                            Utiliza el siguiente código para continuar:
+                        </p>
+                        <div class="code-box">
+                            <div class="code">""" + code + """
+                            </div>
+                        </div>
+                        <div class="warning">
+                            <p><strong>⏱️ Este código expira en 5 minutos</strong></p>
+                            <p>⚠️ Si no solicitaste este cambio, ignora este correo</p>
+                            <p>🔒 Nunca compartas este código con nadie</p>
+                        </div>
+                        <p style="margin-top: 30px;">
+                            Ingresa este código en la página de recuperación para crear una nueva contraseña.
+                        </p>
+                    </div>
+                    <div class="footer">
+                        <p>
+                            Este es un correo automático, por favor no respondas.<br>
+                            © 2025 El Picantito - Todos los derechos reservados
+                        </p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """;
     }
     
     /**
