@@ -38,6 +38,7 @@ public class SecurityConfig {
                 // Rutas públicas
                 .requestMatchers("/api/usuarios/login", "/api/usuarios/registro").permitAll()
                 .requestMatchers("/api/usuarios").permitAll() // POST crear usuario
+                .requestMatchers("/api/verification/**").permitAll() // Endpoints de verificación de email
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 

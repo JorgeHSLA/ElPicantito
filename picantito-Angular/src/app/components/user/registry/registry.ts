@@ -4,6 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthNavbarComponent } from '../../shared/auth-navbar/auth-navbar';
 import { AuthService } from '../../../services/auth.service';
+import { VerificationService } from '../../../services/verification.service';
 
 declare var bootstrap: any;
 
@@ -31,9 +32,19 @@ export class RegistryComponent implements OnInit, AfterViewInit {
   error: string | null = null;
   success: string | null = null;
 
+  // Control de verificación por email
+  showVerificationStep = false;
+  verificationCode = '';
+  isEmailVerified = false;
+  isSendingCode = false;
+  codeError: string | null = null;
+  resendTimeout = 0;
+  private resendInterval: any;
+
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private verificationService: VerificationService
   ) {}
 
   ngOnInit(): void {
@@ -54,12 +65,119 @@ export class RegistryComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // Enviar código de verificación
+  sendVerificationCode(): void {
+    if (!this.registryForm.correo) {
+      this.error = 'Por favor ingresa un correo electrónico';
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.registryForm.correo)) {
+      this.error = 'Por favor ingresa un correo electrónico válido';
+      return;
+    }
+
+    this.isSendingCode = true;
+    this.error = null;
+    this.codeError = null;
+
+    this.verificationService.sendVerificationCode(this.registryForm.correo).subscribe({
+      next: (response) => {
+        console.log('Código enviado:', response);
+        this.showVerificationStep = true;
+        this.success = '¡Código enviado! Revisa tu correo electrónico';
+        this.isSendingCode = false;
+        this.startResendTimeout();
+      },
+      error: (error) => {
+        console.error('Error al enviar código:', error);
+        this.error = 'Error al enviar el código. Intenta de nuevo.';
+        this.isSendingCode = false;
+      }
+    });
+  }
+
+  // Verificar código ingresado
+  verifyEmailCode(): void {
+    if (!this.verificationCode || this.verificationCode.length !== 6) {
+      this.codeError = 'El código debe tener 6 caracteres';
+      return;
+    }
+
+    this.isLoading = true;
+    this.codeError = null;
+
+    this.verificationService.verifyCode(this.registryForm.correo, this.verificationCode).subscribe({
+      next: (response) => {
+        console.log('Código verificado:', response);
+        if (response.verified) {
+          this.isEmailVerified = true;
+          this.success = '¡Email verificado correctamente!';
+          this.showVerificationStep = false;
+          this.isLoading = false;
+          // Proceder con el registro automáticamente
+          setTimeout(() => this.completeRegistration(), 1000);
+        } else {
+          this.codeError = 'Código inválido o expirado';
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.error('Error al verificar código:', error);
+        this.codeError = 'Código inválido o expirado';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // Reenviar código
+  resendCode(): void {
+    if (this.resendTimeout > 0) return;
+    this.verificationCode = '';
+    this.sendVerificationCode();
+  }
+
+  // Temporizador para reenvío
+  private startResendTimeout(): void {
+    this.resendTimeout = 60;
+    this.resendInterval = setInterval(() => {
+      this.resendTimeout--;
+      if (this.resendTimeout <= 0) {
+        clearInterval(this.resendInterval);
+      }
+    }, 1000);
+  }
+
+  // Cancelar verificación
+  cancelVerification(): void {
+    this.showVerificationStep = false;
+    this.verificationCode = '';
+    this.codeError = null;
+    if (this.resendInterval) {
+      clearInterval(this.resendInterval);
+      this.resendTimeout = 0;
+    }
+  }
+
   // Métodos del formulario
   onSubmit(): void {
     if (!this.isValidForm()) {
       return;
     }
 
+    // Si el email no está verificado, mostrar modal de verificación
+    if (!this.isEmailVerified) {
+      this.sendVerificationCode();
+      return;
+    }
+
+    // Si ya está verificado, proceder con el registro
+    this.completeRegistration();
+  }
+
+  // Completar el registro después de la verificación
+  private completeRegistration(): void {
     this.isLoading = true;
     this.error = null;
 
@@ -140,6 +258,13 @@ export class RegistryComponent implements OnInit, AfterViewInit {
     return true;
   }
 
+  // Limpiar mensajes
+  clearMessages(): void {
+    this.error = null;
+    this.success = null;
+    this.codeError = null;
+  }
+
   // Navegación
   navigateToLogin(): void {
     this.router.navigate(['/login']);
@@ -147,11 +272,5 @@ export class RegistryComponent implements OnInit, AfterViewInit {
 
   navigateToHome(): void {
     this.router.navigate(['/home']);
-  }
-
-  // Limpiar mensajes
-  clearMessages(): void {
-    this.error = null;
-    this.success = null;
   }
 }

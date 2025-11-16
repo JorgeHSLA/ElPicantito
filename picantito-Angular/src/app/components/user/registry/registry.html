@@ -136,3 +136,81 @@
     </aside>
   </div>
 </main>
+
+<!-- Modal de Verificación de Email -->
+<div class="verification-modal-overlay" *ngIf="showVerificationStep" (click)="cancelVerification()">
+  <div class="verification-modal" (click)="$event.stopPropagation()">
+    <div class="verification-header">
+      <div class="verification-icon">
+        <i class="bi bi-envelope-fill"></i>
+      </div>
+      <h3>Verifica tu correo</h3>
+      <p>Hemos enviado un código de 6 dígitos a:</p>
+      <strong class="email-display">{{ registryForm.correo }}</strong>
+    </div>
+
+    <div class="verification-body">
+      <!-- Mensaje de error del código -->
+      <div *ngIf="codeError" class="alert alert-danger mb-3">
+        <i class="bi bi-x-circle me-2"></i>
+        {{ codeError }}
+      </div>
+
+      <!-- Input para el código -->
+      <div class="code-input-container">
+        <label for="verificationCode" class="form-label">Código de verificación</label>
+        <input 
+          type="text" 
+          id="verificationCode"
+          class="form-control form-control-lg text-center code-input"
+          [(ngModel)]="verificationCode"
+          maxlength="6"
+          placeholder="000000"
+          [disabled]="isLoading"
+          (keyup.enter)="verifyEmailCode()"
+          style="letter-spacing: 8px; font-size: 24px; font-weight: 700;">
+      </div>
+
+      <!-- Botones -->
+      <div class="verification-actions">
+        <button 
+          class="btn btn-warning btn-lg w-100 mb-2"
+          (click)="verifyEmailCode()"
+          [disabled]="isLoading || verificationCode.length !== 6">
+          <span *ngIf="!isLoading">
+            <i class="bi bi-check-circle me-2"></i>
+            Verificar Código
+          </span>
+          <span *ngIf="isLoading">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Verificando...
+          </span>
+        </button>
+
+        <button 
+          class="btn btn-outline-secondary w-100"
+          (click)="resendCode()"
+          [disabled]="resendTimeout > 0 || isSendingCode">
+          <span *ngIf="resendTimeout > 0">
+            Reenviar código en {{ resendTimeout }}s
+          </span>
+          <span *ngIf="resendTimeout === 0 && !isSendingCode">
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            Reenviar código
+          </span>
+          <span *ngIf="isSendingCode">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Enviando...
+          </span>
+        </button>
+      </div>
+
+      <!-- Botón cancelar -->
+      <div class="text-center mt-3">
+        <button class="btn btn-link text-muted" (click)="cancelVerification()">
+          Cancelar y volver
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
