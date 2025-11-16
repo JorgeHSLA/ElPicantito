@@ -216,7 +216,7 @@
 
 .stacked-item {
     position: absolute;
-    width: 100%;
+    width: 90%;
     bottom: 0;
     left: 50%;
     cursor: move;
