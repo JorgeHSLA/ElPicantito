@@ -124,17 +124,34 @@ export class MiPerfilComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.authService.eliminarUsuario(this.usuario.id!).subscribe({
       next: () => {
-        this.success = 'Cuenta eliminada exitosamente';
+        // Cerrar el modal primero
         this.closeDeleteModal();
-  this.authService.logout();
-  this.carritoService.limpiarTodoElSistema();
-        setTimeout(() => {
-          this.router.navigate(['/home']);
-        }, 2000);
-        this.isLoading = false;
+        
+        // Limpiar el carrito
+        this.carritoService.limpiarTodoElSistema();
+        
+        // Hacer logout para limpiar la sesión
+        this.authService.logout().subscribe({
+          next: () => {
+            // Mostrar mensaje de éxito
+            this.success = 'Cuenta eliminada exitosamente. Serás redirigido...';
+            
+            // Redirigir después de un breve delay
+            setTimeout(() => {
+              this.isLoading = false;
+              this.router.navigate(['/home']);
+            }, 1500);
+          },
+          error: () => {
+            // Aunque falle el logout, igual redirigir
+            this.isLoading = false;
+            this.router.navigate(['/home']);
+          }
+        });
       },
       error: () => {
         this.error = 'Error al eliminar la cuenta';
+        this.closeDeleteModal();
         this.isLoading = false;
       }
     });

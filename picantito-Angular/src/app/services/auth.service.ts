@@ -22,10 +22,10 @@ interface LoginResponse {
 export class AuthService {
   private readonly API_URL = 'http://localhost:9998/api/usuarios';
   
-  // Signal para el usuario logueado
-  private loggedUserSignal = signal<Usuario | null>(null);
+  // Signal para el usuario logueado (público para permitir actualizaciones externas)
+  loggedUserSignal = signal<Usuario | null>(null);
   
-  // Getter público para el signal
+  // Getter público para el signal (modo readonly)
   get loggedUser() {
     return this.loggedUserSignal.asReadonly();
   }

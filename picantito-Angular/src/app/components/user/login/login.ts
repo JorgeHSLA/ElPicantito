@@ -244,20 +244,32 @@ export class LoginComponent {
       return;
     }
 
-    // Guardar la información del usuario en localStorage (simulando login)
+    // Guardar el token y tipo de token en localStorage
     localStorage.setItem('token', this.loginDataFromVerification.token);
-    localStorage.setItem('userId', this.loginDataFromVerification.id.toString());
-    localStorage.setItem('nombreUsuario', this.loginDataFromVerification.nombreUsuario);
-    localStorage.setItem('nombreCompleto', this.loginDataFromVerification.nombreCompleto);
-    localStorage.setItem('correo', this.loginDataFromVerification.correo);
+    localStorage.setItem('tokenType', this.loginDataFromVerification.type || 'Bearer');
+    
+    // Crear objeto de usuario para guardar en localStorage y signal
+    const userData = {
+      id: this.loginDataFromVerification.id,
+      nombreUsuario: this.loginDataFromVerification.nombreUsuario,
+      nombreCompleto: this.loginDataFromVerification.nombreCompleto,
+      correo: this.loginDataFromVerification.correo,
+      roles: this.loginDataFromVerification.roles
+    };
+    
+    localStorage.setItem('loggedUser', JSON.stringify(userData));
     localStorage.setItem('roles', JSON.stringify(this.loginDataFromVerification.roles));
+    
+    // Actualizar el signal de usuario logueado en el servicio de autenticación
+    this.authService.loggedUserSignal.set(userData);
 
     // Cerrar el modal
     this.closeResetModal();
     
+    // Mostrar mensaje de éxito
+    console.log('✅ Inicio de sesión automático exitoso');
+    
     // Redirigir según el rol del usuario
     this.authService.redirectByRole();
-    // para facilitar el inicio de sesión
-    alert('✅ Tu identidad ha sido verificada. Ahora puedes iniciar sesión con tu correo y contraseña.');
   }
 }
