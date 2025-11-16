@@ -592,7 +592,7 @@ export class DragAndDrop {
               !item.nombre.toLowerCase().includes('pico')
     );
     const baseHeight = 500;
-    const heightPerItem = 20;
+    const heightPerItem = 5;
     return baseHeight + (Math.max(0, nonSalsaItems.length - 1) * heightPerItem);
   }
 
@@ -606,7 +606,7 @@ export class DragAndDrop {
               !item.nombre.toLowerCase().includes('pico')
     );
     const baseHeight = 450;
-    const heightPerItem = 20;
+    const heightPerItem = 5;
     return baseHeight + (Math.max(0, nonSalsaItems.length - 1) * heightPerItem);
   }
 
