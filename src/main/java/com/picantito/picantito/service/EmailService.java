@@ -562,8 +562,8 @@ public class EmailService {
                         <p style="margin: 10px 0 0 0; font-size: 18px; color: #ffffff; opacity: 0.95;">¡Gracias por tu pedido!</p>
                     </div>
                     <div style="padding: 40px 30px;">
-                        <p style="font-size: 18px; color: #333; margin-bottom: 20px;">
-                            Hola <strong>%s</strong>,
+                        <p style="font-size: 18px; color: #1a1a1a; margin-bottom: 20px;">
+                            Hola <strong style="color: #000;">%s</strong>,
                         </p>
                         <div style="background: linear-gradient(135deg, #28a745 0%%, #20c997 100%%); padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0; box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);">
                             <div style="font-size: 56px; margin-bottom: 10px;">🎉</div>
@@ -572,11 +572,11 @@ public class EmailService {
                             <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #ffffff;">$%,.2f</p>
                         </div>
                         <div style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin: 25px 0;">
-                            <h3 style="margin: 0 0 15px 0; color: #333; font-size: 18px;">📍 Dirección de Entrega</h3>
-                            <p style="margin: 0; color: #555; font-size: 16px; line-height: 1.5;">%s</p>
+                            <h3 style="margin: 0 0 15px 0; color: #1a1a1a; font-size: 18px;">📍 Dirección de Entrega</h3>
+                            <p style="margin: 0; color: #1a1a1a; font-size: 16px; line-height: 1.5;">%s</p>
                         </div>
-                        <p style="font-size: 16px; color: #2c3e50; line-height: 1.8; text-align: center; margin: 30px 0;">
-                            <strong style="color: #1a1a1a;">Hemos recibido tu pedido exitosamente.</strong><br>
+                        <p style="font-size: 16px; color: #1a1a1a; line-height: 1.8; text-align: center; margin: 30px 0;">
+                            <strong style="color: #000;">Hemos recibido tu pedido exitosamente.</strong><br>
                             Nuestro restaurante está procesando tu orden y pronto comenzaremos a preparar<br>
                             tus deliciosos tacos con los mejores ingredientes frescos.
                         </p>
@@ -599,7 +599,7 @@ public class EmailService {
                                 ✅ Recibido → 👨‍🍳 En Preparación → 🚚 En Camino → 🎉 Entregado
                             </p>
                         </div>
-                        <p style="font-size: 13px; color: #666666; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center;">
+                        <p style="font-size: 13px; color: #1a1a1a; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center;">
                             Te mantendremos informado por correo sobre cada cambio en el estado de tu pedido.
                         </p>
                     </div>
@@ -693,7 +693,7 @@ public class EmailService {
                             <h2 style="margin: 0; font-size: 24px; color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">%s</h2>
                             <p style="margin: 10px 0 0 0; font-size: 14px; color: #ffffff; opacity: 0.95;">Pedido #%d</p>
                         </div>
-                        <p style="font-size: 16px; color: #2c3e50; line-height: 1.7; text-align: center;">
+                        <p style="font-size: 16px; color: #1a1a1a; line-height: 1.7; text-align: center;">
                             %s
                         </p>
                         <div style="text-align: center; margin: 30px 0;">
@@ -702,8 +702,8 @@ public class EmailService {
                                 Ver Seguimiento en Tiempo Real
                             </a>
                         </div>
-                        <p style="font-size: 14px; color: #666666; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
-                            <strong style="color: #1a1a1a;">Nota:</strong> Puedes seguir el estado de tu pedido en tiempo real desde tu perfil en nuestra aplicación.
+                        <p style="font-size: 14px; color: #1a1a1a; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+                            <strong style="color: #000;">Nota:</strong> Puedes seguir el estado de tu pedido en tiempo real desde tu perfil en nuestra aplicación.
                         </p>
                     </div>
                     <div style="background-color: #1a1a1a; padding: 20px; text-align: center; border-top: 4px solid #ffc107;">

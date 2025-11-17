@@ -19,5 +19,6 @@ public class LoginResponse {
     private String nombreUsuario;
     private String nombreCompleto;
     private String correo;
+    private String telefono;
     private Set<String> roles;
 }

@@ -141,7 +141,7 @@
                             </label>
                             <div class="delivery-address-display">
                                 <div class="address-text" *ngIf="customerInfo.direccion; else noAddress">
-                                    {{ customerInfo.direccion }}
+                                    {{ getDireccionParaMostrar() }}
                                 </div>
                                 <ng-template #noAddress>
                                     <div class="address-text text-muted-custom">
@@ -377,7 +377,7 @@
             <button type="button" 
                     class="btn btn-success" 
                     (click)="confirmMapLocation()"
-                    [disabled]="!!locationErrorMessage() || !customerInfo.direccionTemporal.trim()">
+                    [disabled]="!isLocationValid() || isLoadingLocation()">
                 <i class="bi bi-check-circle me-1"></i>
                 Confirmar Ubicación
             </button>

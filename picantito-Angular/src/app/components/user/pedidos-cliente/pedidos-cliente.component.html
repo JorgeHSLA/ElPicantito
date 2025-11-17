@@ -124,7 +124,7 @@
                     <div *ngFor="let pedido of pedidosFiltrados()" 
                          class="order-list-item"
                          [class.selected]="pedidoSeleccionado()?.id === pedido.id"
-                         (click)="seleccionarPedido(pedido)">
+                         (click)="toggleSeleccionarPedido(pedido)">
                         
                         <!-- Order ID and Badge -->
                         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -191,7 +191,12 @@
                                 </div>
                                 <div class="info-col">
                                     <label>Fecha de Entrega</label>
-                                    <span>{{ pedidoSeleccionado()!.fechaEntrega | date:'dd/MM/yyyy HH:mm' }}</span>
+                                    <span *ngIf="pedidoSeleccionado()!.estado === 'ENTREGADO' && pedidoSeleccionado()!.fechaEntrega">
+                                        {{ pedidoSeleccionado()!.fechaEntrega | date:'dd/MM/yyyy HH:mm' }}
+                                    </span>
+                                    <span *ngIf="pedidoSeleccionado()!.estado !== 'ENTREGADO'" class="text-warning">
+                                        <i class="bi bi-clock-history me-1"></i>Aún no entregado
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -204,7 +209,7 @@
                                 Dirección de Entrega
                             </h5>
                             <div class="address-text">
-                                {{ pedidoSeleccionado()!.direccion }}
+                                {{ getDireccionSinCoordenadas(pedidoSeleccionado()!.direccion) }}
                             </div>
                         </div>
                     </div>

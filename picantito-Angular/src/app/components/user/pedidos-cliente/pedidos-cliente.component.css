@@ -212,10 +212,37 @@
     height: 100%;
     text-align: center;
     color: #6c757d;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+    border-radius: 16px;
+    margin: 2rem;
 }
 
 .no-selection-state i {
     color: #ffc107;
+    animation: pulse 2s infinite;
+}
+
+.no-selection-state h4 {
+    color: #212529;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.no-selection-state p {
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
 }
 
 /* Order Detail Content */

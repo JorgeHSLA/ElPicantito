@@ -117,6 +117,7 @@ public class PasswordResetController {
                         .nombreUsuario(user.getNombreUsuario())
                         .nombreCompleto(user.getNombreCompleto())
                         .correo(user.getCorreo())
+                        .telefono(user.getTelefono())
                         .roles(roles)
                         .build();
                 

@@ -41,6 +41,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
   selectedCoordinates: { lat: number, lng: number } | null = null;
   isLoadingLocation = signal(false);
   locationErrorMessage = signal<string>('');
+  isLocationValid = signal(false); // Para habilitar/deshabilitar botón de confirmar
   
   // Coordenadas por defecto (Bogotá, Colombia - Centro)
   private defaultCoords = { lat: 4.6097, lng: -74.0817 };
@@ -171,6 +172,13 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
 
     if (this.erroresValidacion.length > 0) {
       console.log('❌ Errores de validación:', this.erroresValidacion);
+      // Scroll automático al contenedor de errores
+      setTimeout(() => {
+        const errorContainer = document.querySelector('.alert-danger');
+        if (errorContainer) {
+          errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
       return;
     }
 
@@ -267,10 +275,13 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
 
   loadUserData() {
     const usuario = this.authService.loggedUser();
+    console.log('📞 Usuario completo:', usuario);
+    console.log('📞 Teléfono del usuario:', usuario?.telefono);
     if (usuario) {
       // Cargar teléfono y correo del usuario
       this.customerInfo.telefono = usuario.telefono || '';
       this.customerInfo.correo = usuario.correo || '';
+      console.log('📞 customerInfo después de cargar:', this.customerInfo);
       // Guardar valores originales
       this.telefonoOriginal = this.customerInfo.telefono;
       this.correoOriginal = this.customerInfo.correo;
@@ -342,6 +353,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
     }
     this.customerInfo.direccionTemporal = direccionSinCoords;
     this.locationErrorMessage.set('');
+    this.isLocationValid.set(direccionSinCoords.trim().length > 0); // Habilitar si ya hay dirección
     this.showMapModal.set(true);
     
     // Inicializar el mapa después de que el DOM esté listo
@@ -495,6 +507,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
           if (!this.isInBogota(lat, lng)) {
             this.locationErrorMessage.set('La dirección está fuera de Bogotá');
             this.selectedCoordinates = null;
+            this.isLocationValid.set(false); // Deshabilitar botón
             return;
           }
           
@@ -503,6 +516,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
           console.log('✅ Coordenadas encontradas:', { lat, lng });
           console.log('✅ Dirección completa de Nominatim:', data[0].display_name);
           this.locationErrorMessage.set('');
+          this.isLocationValid.set(true); // Habilitar botón de confirmar
           
           // Actualizar el mapa y marcador (solo visualización)
           if (this.map && this.marker) {
@@ -512,6 +526,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
         } else {
           this.locationErrorMessage.set('No se encontró la dirección. Por favor, verifica que sea válida.');
           this.selectedCoordinates = null;
+          this.isLocationValid.set(false); // Deshabilitar botón
           console.log('❌ Dirección no encontrada');
         }
       })
@@ -520,6 +535,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
         this.isLoadingLocation.set(false);
         this.locationErrorMessage.set('Error al buscar la dirección. Por favor, intenta nuevamente.');
         this.selectedCoordinates = null;
+        this.isLocationValid.set(false); // Deshabilitar botón
       });
   }
 
@@ -552,6 +568,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
           }
           
           this.customerInfo.direccionTemporal = formattedAddress;
+          this.isLocationValid.set(true); // Habilitar botón
         }
       })
       .catch(error => {
@@ -576,6 +593,15 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
   }
 
   // ==================== UTILIDADES ====================
+
+  // Método para obtener dirección sin coordenadas para mostrar al usuario
+  getDireccionParaMostrar(): string {
+    const direccion = this.customerInfo.direccion;
+    if (direccion.includes('|')) {
+      return direccion.split('|')[0];
+    }
+    return direccion;
+  }
 
   formatearMoneda(valor: number): string {
     return this.pedidoManager.formatearMoneda(valor);

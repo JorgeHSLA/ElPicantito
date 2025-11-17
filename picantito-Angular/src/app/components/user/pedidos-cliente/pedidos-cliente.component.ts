@@ -35,12 +35,18 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
   private map: L.Map | null = null;
   private restaurantMarker: L.Marker | null = null;
   private customerMarker: L.Marker | null = null;
+  private deliveryMarker: L.Marker | null = null; // Marcador del repartidor
   private routePolyline: L.Polyline | null = null;
   private pollingInterval: any = null;
+  private deliveryTrackingInterval: any = null; // Intervalo para tracking simulado
 
   // Coordenadas (se actualizarán dinámicamente)
   restaurantLocation: { lat: number; lng: number; name: string } | null = null;
   customerLocation = { lat: 4.6097, lng: -74.0817, name: 'Tu ubicación' };
+  
+  // Tracking simulado del repartidor
+  private deliveryProgress = 0; // 0 a 1 (0% a 100%)
+  private deliveryRoute: L.LatLng[] = []; // Ruta calculada
 
   // Signal para mostrar mensaje de éxito
   showSuccessMessage = signal(false);
@@ -91,13 +97,9 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
           const pedido = pedidosOrdenados.find(p => p.id === pedidoCreado);
           if (pedido) {
             this.pedidoSeleccionado.set(pedido);
-          } else if (pedidosOrdenados.length > 0) {
-            this.pedidoSeleccionado.set(pedidosOrdenados[0]);
           }
-        } else if (pedidosOrdenados.length > 0) {
-          // Seleccionar el primer pedido automáticamente
-          this.pedidoSeleccionado.set(pedidosOrdenados[0]);
         }
+        // NO seleccionar automáticamente ningún pedido si no viene de crear uno nuevo
         
         // Iniciar polling para actualizar estados cada 30 segundos
         this.startPolling();
@@ -175,10 +177,30 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
+  // Toggle: seleccionar o deseleccionar pedido
+  toggleSeleccionarPedido(pedido: PedidoCompleto): void {
+    if (this.pedidoSeleccionado()?.id === pedido.id) {
+      // Si ya está seleccionado, deseleccionar
+      this.pedidoSeleccionado.set(null);
+    } else {
+      // Seleccionar nuevo pedido
+      this.seleccionarPedido(pedido);
+    }
+  }
+
   seleccionarPedido(pedido: PedidoCompleto): void {
     this.pedidoSeleccionado.set(pedido);
     // Actualizar ubicación del cliente basado en la dirección del pedido
     this.actualizarUbicacionCliente(pedido.direccion);
+  }
+
+  // Método para extraer dirección sin coordenadas
+  getDireccionSinCoordenadas(direccion: string): string {
+    if (!direccion) return '';
+    if (direccion.includes('|')) {
+      return direccion.split('|')[0];
+    }
+    return direccion;
   }
 
   private async actualizarUbicacionCliente(direccion: string): Promise<void> {
@@ -305,6 +327,9 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
       clearInterval(this.pollingInterval);
       this.pollingInterval = null;
     }
+
+    // Detener tracking simulado
+    this.stopSimulatedDeliveryTracking();
     
     // Limpiar el mapa al destruir el componente
     if (this.map) {
@@ -355,6 +380,9 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
   private updateMapForStatus(estado: string) {
     if (!this.map || !this.restaurantLocation) return;
 
+    // Detener tracking simulado si existe
+    this.stopSimulatedDeliveryTracking();
+
     // Limpiar elementos del mapa
     if (this.routePolyline) {
       this.map.removeLayer(this.routePolyline);
@@ -388,11 +416,13 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
         break;
 
       case 'ENVIADO':
-        console.log('🚚 ENVIADO: Mostrar sucursal, cliente y ruta');
+        console.log('🚚 ENVIADO: Mostrar sucursal, cliente, ruta y tracking simulado');
         // Mostrar sucursal, cliente y ruta
         this.createRestaurantMarker();
         this.createCustomerMarker();
         this.drawRouteWithOSRM();
+        // Iniciar tracking simulado del repartidor
+        this.startSimulatedDeliveryTracking();
         break;
 
       case 'ENTREGADO':
@@ -476,6 +506,14 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
         // Convertir coordenadas de [lng, lat] a [lat, lng] para Leaflet
         const latLngs: L.LatLngExpression[] = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
 
+        // Guardar ruta para tracking simulado
+        this.deliveryRoute = latLngs.map(coord => {
+          if (Array.isArray(coord)) {
+            return L.latLng(coord[0], coord[1]);
+          }
+          return coord as L.LatLng;
+        });
+
         // Dibujar la ruta
         this.routePolyline = L.polyline(latLngs, {
           color: '#28a745',
@@ -509,6 +547,12 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
     const routeCoordinates: L.LatLngExpression[] = [
       [this.restaurantLocation.lat, this.restaurantLocation.lng],
       [this.customerLocation.lat, this.customerLocation.lng]
+    ];
+
+    // Guardar ruta simple para tracking simulado
+    this.deliveryRoute = [
+      L.latLng(this.restaurantLocation.lat, this.restaurantLocation.lng),
+      L.latLng(this.customerLocation.lat, this.customerLocation.lng)
     ];
 
     this.routePolyline = L.polyline(routeCoordinates, {
@@ -616,5 +660,92 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
     }
     
     return subtotal;
+  }
+
+  // ==================== TRACKING SIMULADO DEL REPARTIDOR ====================
+
+  private startSimulatedDeliveryTracking() {
+    // Detener tracking anterior si existe
+    this.stopSimulatedDeliveryTracking();
+
+    // Resetear progreso
+    this.deliveryProgress = 0;
+
+    console.log('🚗 Iniciando tracking simulado del repartidor');
+
+    // Actualizar posición cada 3 segundos
+    this.deliveryTrackingInterval = setInterval(() => {
+      this.deliveryProgress += 0.02; // Incrementar 2% cada 3 segundos (completará en ~2.5 minutos)
+
+      if (this.deliveryProgress >= 1) {
+        this.deliveryProgress = 1;
+        this.stopSimulatedDeliveryTracking();
+        console.log('✅ Repartidor llegó al destino (simulado)');
+      }
+
+      this.updateDeliveryMarkerPosition();
+    }, 3000);
+  }
+
+  private stopSimulatedDeliveryTracking() {
+    if (this.deliveryTrackingInterval) {
+      clearInterval(this.deliveryTrackingInterval);
+      this.deliveryTrackingInterval = null;
+    }
+
+    // Remover marcador del repartidor si existe
+    if (this.deliveryMarker && this.map) {
+      this.map.removeLayer(this.deliveryMarker);
+      this.deliveryMarker = null;
+    }
+  }
+
+  private updateDeliveryMarkerPosition() {
+    if (!this.map || !this.restaurantLocation || this.deliveryRoute.length === 0) return;
+
+    // Calcular posición interpolada en la ruta
+    const totalPoints = this.deliveryRoute.length;
+    const currentIndex = Math.floor(this.deliveryProgress * (totalPoints - 1));
+    const nextIndex = Math.min(currentIndex + 1, totalPoints - 1);
+
+    const currentPoint = this.deliveryRoute[currentIndex];
+    const nextPoint = this.deliveryRoute[nextIndex];
+
+    // Interpolación entre puntos
+    const segmentProgress = (this.deliveryProgress * (totalPoints - 1)) - currentIndex;
+    const lat = currentPoint.lat + (nextPoint.lat - currentPoint.lat) * segmentProgress;
+    const lng = currentPoint.lng + (nextPoint.lng - currentPoint.lng) * segmentProgress;
+
+    // Crear o actualizar marcador del repartidor
+    if (!this.deliveryMarker) {
+      const deliveryIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        shadowUrl: 'assets/leaflet/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+
+      this.deliveryMarker = L.marker([lat, lng], {
+        icon: deliveryIcon
+      }).addTo(this.map);
+
+      this.deliveryMarker.bindPopup(`
+        <div style="text-align: center;">
+          <strong style="color: #28a745;">🚚 Repartidor en camino</strong><br>
+          <small>${Math.round(this.deliveryProgress * 100)}% del trayecto</small>
+        </div>
+      `);
+    } else {
+      // Actualizar posición del marcador existente
+      this.deliveryMarker.setLatLng([lat, lng]);
+      this.deliveryMarker.getPopup()?.setContent(`
+        <div style="text-align: center;">
+          <strong style="color: #28a745;">🚚 Repartidor en camino</strong><br>
+          <small>${Math.round(this.deliveryProgress * 100)}% del trayecto</small>
+        </div>
+      `);
+    }
   }
 }
