@@ -3,17 +3,13 @@
   @import 'carrusel.css';
   @import '../../../assets/styles/css/dark-hc.css';
   @import '../../../assets/styles/creaTaco.css';
-  
-  /* Prevenir scroll horizontal en el componente home */
+  /* Fondo decorativo global para la página de home */
+
   :host {
       display: block;
       position: relative;
       min-height: 100vh;
-      overflow-x: hidden;
-      max-width: 100%;
   }
-  
-  /* Fondo decorativo global para la página de home */
 
   :host::before {
       content: '';
@@ -168,13 +164,11 @@
           font-size: 2rem;
       }
   }
-  /* Features section */
+  /* Feature cards */
 
   .features-section {
       position: relative;
       z-index: 1;
-      overflow: hidden;
-      width: 100%;
   }
 
   .features-section::before {
@@ -196,7 +190,6 @@
   .features-section .container {
       position: relative;
       z-index: 1;
-      max-width: 100%;
   }
 
   .feature-card {

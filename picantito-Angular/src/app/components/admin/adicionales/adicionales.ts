@@ -20,12 +20,12 @@ import { ProductoService } from '../../../services/tienda/producto.service';
 export class AdicionalesComponent implements OnInit {
   adicionales = signal<Adicional[]>([]);
   adicionalesFiltrados = signal<Adicional[]>([]);
-  
+
   // Filtros y búsqueda
   searchTerm = signal('');
   filtroDisponibilidad = signal('todos');
   filtroOrden = signal('id-asc');
-  
+
   productoAdicionales = signal<ProductoAdicional[]>([]);
   productos = signal<Producto[]>([]);
   nuevoAdicional = signal<Adicional>({
@@ -37,10 +37,10 @@ export class AdicionalesComponent implements OnInit {
     disponible: true,
     activo: true
   });
-  
+
   selectedAdicionalId = signal<number | null>(null);
   productosAsociados = signal<ProductoAdicional[]>([]);
-  
+
   successMessage = signal('');
   errorMessage = signal('');
 
@@ -71,22 +71,22 @@ export class AdicionalesComponent implements OnInit {
 
   aplicarFiltros() {
     let resultado = [...this.adicionales()];
-    
+
     const termino = this.searchTerm().toLowerCase();
     if (termino) {
-      resultado = resultado.filter(a => 
+      resultado = resultado.filter(a =>
         a.nombre?.toLowerCase().includes(termino) ||
         a.descripcion?.toLowerCase().includes(termino)
       );
     }
-    
+
     const disponibilidad = this.filtroDisponibilidad();
     if (disponibilidad === 'disponibles') {
       resultado = resultado.filter(a => a.disponible === true);
     } else if (disponibilidad === 'no-disponibles') {
       resultado = resultado.filter(a => a.disponible === false);
     }
-    
+
     const orden = this.filtroOrden();
     switch(orden) {
       case 'id-asc':
@@ -108,7 +108,7 @@ export class AdicionalesComponent implements OnInit {
         resultado.sort((a, b) => (b.precioDeVenta || 0) - (a.precioDeVenta || 0));
         break;
     }
-    
+
     this.adicionalesFiltrados.set(resultado);
   }
 
@@ -136,36 +136,36 @@ export class AdicionalesComponent implements OnInit {
 
   saveAdicional() {
     let adicional = this.nuevoAdicional();
-    
+
     // Validaciones básicas
     if (!adicional.nombre || adicional.nombre.trim() === '') {
       this.errorMessage.set('El nombre del adicional es requerido');
       return;
     }
-    
+
     if (!adicional.precioDeVenta || adicional.precioDeVenta <= 0) {
       this.errorMessage.set('El precio de venta debe ser mayor a cero');
       return;
     }
-    
+
     if (!adicional.precioDeAdquisicion || adicional.precioDeAdquisicion <= 0) {
       this.errorMessage.set('El precio de adquisición debe ser mayor a cero');
       return;
     }
-    
+
     if (!adicional.cantidad || adicional.cantidad <= 0) {
       this.errorMessage.set('La cantidad debe ser mayor a cero');
       return;
     }
-    
+
     // Compatibilidad hacia atrás
     if (adicional.precio && !adicional.precioDeVenta) {
       adicional = { ...adicional, precioDeVenta: adicional.precio };
     }
-    
+
     // Limpiar mensaje de error previo
     this.errorMessage.set('');
-    
+
     this.adicionalService.crearAdicional(adicional).subscribe({
       next: () => {
         this.successMessage.set('Adicional guardado exitosamente');

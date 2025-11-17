@@ -17,12 +17,12 @@ import { ProductoService } from '../../../services/tienda/producto.service';
 export class ProductosComponent implements OnInit {
   productos = signal<Producto[]>([]);
   productosFiltrados = signal<Producto[]>([]);
-  
+
   // Filtros y búsqueda
   searchTerm = signal('');
   filtroDisponibilidad = signal('todos'); // 'todos', 'disponibles', 'no-disponibles'
   filtroOrden = signal('id-asc'); // 'id-asc', 'id-desc', 'nombre-asc', 'nombre-desc', 'precio-asc', 'precio-desc'
-  
+
   nuevoProducto = signal<Producto>({
     nombre: '',
     descripcion: '',
@@ -32,7 +32,7 @@ export class ProductosComponent implements OnInit {
     calificacion: 5,
     disponible: true
   });
-  
+
   successMessage = signal('');
   errorMessage = signal('');
 
@@ -40,13 +40,13 @@ export class ProductosComponent implements OnInit {
 
   ngOnInit() {
     this.loadProductos();
-    
+
     // Configurar filtrado automático cuando cambian los filtros
     this.setupFilters();
   }
 
   setupFilters() {
-    // En Angular con signals, puedes usar effect() pero para simplificar, 
+    // En Angular con signals, puedes usar effect() pero para simplificar,
     // llamaremos aplicarFiltros() manualmente después de cada cambio
   }
 
@@ -66,16 +66,16 @@ export class ProductosComponent implements OnInit {
 
   aplicarFiltros() {
     let resultado = [...this.productos()];
-    
+
     // Filtrar por búsqueda
     const termino = this.searchTerm().toLowerCase();
     if (termino) {
-      resultado = resultado.filter(p => 
+      resultado = resultado.filter(p =>
         p.nombre?.toLowerCase().includes(termino) ||
         p.descripcion?.toLowerCase().includes(termino)
       );
     }
-    
+
     // Filtrar por disponibilidad
     const disponibilidad = this.filtroDisponibilidad();
     if (disponibilidad === 'disponibles') {
@@ -83,7 +83,7 @@ export class ProductosComponent implements OnInit {
     } else if (disponibilidad === 'no-disponibles') {
       resultado = resultado.filter(p => p.disponible === false);
     }
-    
+
     // Ordenar
     const orden = this.filtroOrden();
     switch(orden) {
@@ -106,7 +106,7 @@ export class ProductosComponent implements OnInit {
         resultado.sort((a, b) => (b.precioDeVenta || 0) - (a.precioDeVenta || 0));
         break;
     }
-    
+
     this.productosFiltrados.set(resultado);
   }
 

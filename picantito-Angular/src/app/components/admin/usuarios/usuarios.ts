@@ -17,13 +17,13 @@ import { AuthService } from '../../../services/auth.service';
 export class UsuariosComponent implements OnInit {
   usuarios = signal<Usuario[]>([]);
   usuariosFiltrados = signal<Usuario[]>([]);
-  
+
   // Filtros y búsqueda
   searchTerm = signal('');
   filtroRol = signal('todos'); // 'todos', 'ADMIN', 'OPERADOR', 'CLIENTE', 'REPARTIDOR'
   filtroEstado = signal('todos'); // 'todos', 'activos', 'inactivos'
   filtroOrden = signal('id-asc');
-  
+
   nuevoUsuario = signal<Usuario>({
     nombreCompleto: '',
     nombreUsuario: '',
@@ -58,29 +58,29 @@ export class UsuariosComponent implements OnInit {
 
   aplicarFiltros() {
     let resultado = [...this.usuarios()];
-    
+
     const termino = this.searchTerm().toLowerCase();
     if (termino) {
-      resultado = resultado.filter(u => 
+      resultado = resultado.filter(u =>
         u.nombreCompleto?.toLowerCase().includes(termino) ||
         u.nombreUsuario?.toLowerCase().includes(termino) ||
         u.correo?.toLowerCase().includes(termino) ||
         u.telefono?.includes(termino)
       );
     }
-    
+
     const rol = this.filtroRol();
     if (rol !== 'todos') {
       resultado = resultado.filter(u => u.rol === rol);
     }
-    
+
     const estado = this.filtroEstado();
     if (estado === 'activos') {
       resultado = resultado.filter(u => u.activo === true);
     } else if (estado === 'inactivos') {
       resultado = resultado.filter(u => u.activo === false);
     }
-    
+
     const orden = this.filtroOrden();
     switch(orden) {
       case 'id-asc':
@@ -96,7 +96,7 @@ export class UsuariosComponent implements OnInit {
         resultado.sort((a, b) => (b.nombreCompleto || '').localeCompare(a.nombreCompleto || ''));
         break;
     }
-    
+
     this.usuariosFiltrados.set(resultado);
   }
 
@@ -134,12 +134,12 @@ export class UsuariosComponent implements OnInit {
       this.errorMessage.set('Complete todos los campos obligatorios');
       return;
     }
-    
+
     // Asegurar que tenga un rol válido
     if (!usuario.rol) {
       usuario.rol = 'CLIENTE';
     }
-    
+
     // Crear un objeto plano para enviar al backend (sin signals)
     const usuarioData: Usuario = {
       nombreCompleto: usuario.nombreCompleto,
@@ -150,10 +150,10 @@ export class UsuariosComponent implements OnInit {
       rol: usuario.rol,
       activo: usuario.activo
     };
-    
+
     console.log('🔍 Usuario a crear:', usuarioData);
     console.log('🔍 Rol seleccionado:', usuarioData.rol);
-    
+
     this.authService.crearUsuario(usuarioData).subscribe({
       next: () => {
         this.successMessage.set('Usuario guardado exitosamente');
@@ -185,11 +185,11 @@ export class UsuariosComponent implements OnInit {
   }
 
   resetForm() {
-    this.nuevoUsuario.set({ 
-      nombreCompleto: '', 
-      nombreUsuario: '', 
-      telefono: '', 
-      correo: '', 
+    this.nuevoUsuario.set({
+      nombreCompleto: '',
+      nombreUsuario: '',
+      telefono: '',
+      correo: '',
       contrasenia: '',
       rol: 'CLIENTE',
       activo: true

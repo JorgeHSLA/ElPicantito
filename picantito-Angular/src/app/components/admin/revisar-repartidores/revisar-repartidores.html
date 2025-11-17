@@ -29,19 +29,11 @@
                             <div class="row g-3 mb-4">
                                 <div class="col-md-3">
                                     <label class="form-label text-dark">🔍 Buscar</label>
-                                    <input 
-                                        type="text" 
-                                        class="form-control" 
-                                        placeholder="Buscar por ID, cliente..."
-                                        [value]="searchTerm()"
-                                        (input)="onSearchChange($any($event.target).value)">
+                                    <input type="text" class="form-control" placeholder="Buscar por ID, cliente..." [value]="searchTerm()" (input)="onSearchChange($any($event.target).value)">
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label text-dark">Estado</label>
-                                    <select 
-                                        class="form-select" 
-                                        [value]="filtroEstado()"
-                                        (change)="onFiltroEstadoChange($any($event.target).value)">
+                                    <select class="form-select" [value]="filtroEstado()" (change)="onFiltroEstadoChange($any($event.target).value)">
                                         <option value="todos">Todos</option>
                                         <option value="recibido">Recibido</option>
                                         <option value="cocinando">Cocinando</option>
@@ -51,10 +43,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label text-dark">Repartidor</label>
-                                    <select 
-                                        class="form-select" 
-                                        [value]="filtroRepartidor()"
-                                        (change)="onFiltroRepartidorChange($any($event.target).value)">
+                                    <select class="form-select" [value]="filtroRepartidor()" (change)="onFiltroRepartidorChange($any($event.target).value)">
                                         <option value="todos">Todos</option>
                                         @for (rep of repartidoresActivos(); track rep.id) {
                                             <option [value]="rep.id">{{ rep.nombreCompleto }}</option>
@@ -63,10 +52,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label text-dark">Ordenar</label>
-                                    <select 
-                                        class="form-select" 
-                                        [value]="filtroOrden()"
-                                        (change)="onFiltroOrdenChange($any($event.target).value)">
+                                    <select class="form-select" [value]="filtroOrden()" (change)="onFiltroOrdenChange($any($event.target).value)">
                                         <option value="id-desc">ID (nuevo a viejo)</option>
                                         <option value="id-asc">ID (viejo a nuevo)</option>
                                         <option value="fecha-desc">Fecha (reciente)</option>
