@@ -131,7 +131,7 @@ export class DragAndDrop {
     return {
       idAdcional: adicional.id,
       nombre: adicional.nombre || 'Sin nombre',
-      image: this.getImageForAdicional(adicional.nombre || ''),
+      image: adicional.imagen || this.getImageForAdicional(adicional.nombre || ''),
       precio: adicional.precioDeVenta || 0,
       cantidad: 1
     };
@@ -140,8 +140,18 @@ export class DragAndDrop {
   private getImageForAdicional(nombre: string): string {
     const nombreLower = nombre.toLowerCase();
     
-    // Tortillas
+    // Tortillas - detectar tipo específico
     if (nombreLower.includes('tortilla')) {
+      if (nombreLower.includes('harina')) {
+        return '/images/crearTaco/tortillas/tortillaHarina.png';
+      }
+      if (nombreLower.includes('integral')) {
+        return '/images/crearTaco/tortillas/tortillaIntegral.png';
+      }
+      if (nombreLower.includes('maiz') || nombreLower.includes('maíz')) {
+        return '/images/crearTaco/tortillas/tortillaMaiz.png';
+      }
+      // Si no se especifica el tipo, usar imagen genérica
       return '/images/crearTaco/tortillas/tortilla.png';
     }
     
@@ -181,15 +191,15 @@ export class DragAndDrop {
     
     // Quesos
     if (nombreLower.includes('oaxaca')) {
-      return '/images/crearTaco/quesos/oaxaca.jpg';
+      return '/images/crearTaco/extras/quesoOaxaca.png';
     }
     if (nombreLower.includes('cotija')) {
-      return '/images/crearTaco/quesos/cotija.jpg';
+      return '/images/crearTaco/extras/quesoCotija.png';
     }
     
     // Vegetales
     if (nombreLower.includes('lechuga')) {
-      return '/images/crearTaco/vegetales/lechuga.jpg';
+      return '/images/crearTaco/extras/lechuga.png';
     }
     
     // Imagen por defecto
@@ -267,8 +277,8 @@ export class DragAndDrop {
       this.canGoToNextStep.set(
         doneItems.some(item => proteinaIds.includes(item.idAdcional))
       );
-    } else {
-      // Salsas y extras son opcionales
+    } else if (currentStepValue === 'extras' || currentStepValue === 'salsa') {
+      // Extras y salsas son opcionales
       this.canGoToNextStep.set(true);
     }
   }
@@ -277,11 +287,11 @@ export class DragAndDrop {
     const currentStepValue = this.currentStep();
     
     if (currentStepValue === 'tortilla') {
+      this.loadCategoryItems('extras');
+    } else if (currentStepValue === 'extras') {
       this.loadCategoryItems('proteína');
     } else if (currentStepValue === 'proteína') {
       this.loadCategoryItems('salsa');
-    } else if (currentStepValue === 'salsa') {
-      this.loadCategoryItems('extras');
     }
     
     this.updateCanGoToNextStep();
@@ -290,12 +300,12 @@ export class DragAndDrop {
   goToPreviousStep() {
     const currentStepValue = this.currentStep();
     
-    if (currentStepValue === 'proteína') {
+    if (currentStepValue === 'extras') {
       this.loadCategoryItems('tortilla');
+    } else if (currentStepValue === 'proteína') {
+      this.loadCategoryItems('extras');
     } else if (currentStepValue === 'salsa') {
       this.loadCategoryItems('proteína');
-    } else if (currentStepValue === 'extras') {
-      this.loadCategoryItems('salsa');
     }
     
     this.updateCanGoToNextStep();
@@ -308,6 +318,15 @@ export class DragAndDrop {
   }
 
   drop(event: CdkDragDrop<Item[]>) {
+    console.log('=== DROP EVENT START ===');
+    console.log('Previous container:', event.previousContainer.id);
+    console.log('Current container:', event.container.id);
+    console.log('Previous index:', event.previousIndex);
+    console.log('Current step:', this.currentStep());
+    console.log('TODO signal array:', this.todo());
+    console.log('DONE signal array:', this.done());
+    console.log('event.item.data (el item arrastrado):', event.item.data);
+    
     const tortillaIds = this.tortillas().map(t => t.idAdcional);
     
     if(event.previousContainer === event.container) {
@@ -325,8 +344,11 @@ export class DragAndDrop {
       const currentStepValue = this.currentStep();
       // Transferir entre listas diferentes
       if(event.previousContainer.id === 'todoList') {
-        // De TODO a DONE
-        const item = event.previousContainer.data[event.previousIndex];
+        // De TODO a DONE - Usar event.item.data que tiene el item correcto
+        const item = event.item.data as Item;
+        console.log('Item arrastrado desde TODO:', item);
+        console.log('Nombre del item:', item?.nombre);
+        console.log('ID del item:', item?.idAdcional);
         if (currentStepValue === 'tortilla') {
           // Para tortillas: solo una permitida, reemplazar si ya existe
           const doneItems = this.done();
@@ -342,22 +364,15 @@ export class DragAndDrop {
           const newDone = this.sortDoneWithTortillaFirst([item, ...filteredDone]);
           this.done.set(newDone);
           // Actualizar todo: remover la seleccionada y agregar la anterior si existía
-          const sourceItems = [...event.previousContainer.data];
-          sourceItems.splice(event.previousIndex, 1);
+          const sourceItems = this.todo().filter(t => t.idAdcional !== item.idAdcional);
           if (previousTortilla) {
             sourceItems.push(previousTortilla);
           }
           this.todo.set(sourceItems);
         } else {
           // Para otros ingredientes: permitir múltiples
-          const sourceItems = [...event.previousContainer.data];
-          let targetItems = [...event.container.data];
-          transferArrayItem(
-            sourceItems,
-            targetItems,
-            event.previousIndex,
-            event.currentIndex
-          );
+          const sourceItems = this.todo().filter(t => t.idAdcional !== item.idAdcional);
+          let targetItems = [...this.done(), item];
           // Ordenar done para que la tortilla quede de primera
           targetItems = this.sortDoneWithTortillaFirst(targetItems);
           this.todo.set(sourceItems);
@@ -365,14 +380,9 @@ export class DragAndDrop {
         }
       } else {
         // De DONE a TODO
-        let sourceItems = [...event.previousContainer.data];
-        const targetItems = [...event.container.data];
-        transferArrayItem(
-          sourceItems,
-          targetItems,
-          event.previousIndex,
-          event.currentIndex
-        );
+        const item = event.item.data as Item;
+        let sourceItems = this.done().filter(d => d.idAdcional !== item.idAdcional);
+        const targetItems = [...this.todo(), item];
         // Ordenar done para que la tortilla quede de primera
         sourceItems = this.sortDoneWithTortillaFirst(sourceItems);
         this.done.set(sourceItems);
@@ -592,8 +602,10 @@ export class DragAndDrop {
               !item.nombre.toLowerCase().includes('pico')
     );
     const baseHeight = 500;
-    const heightPerItem = 5;
-    return baseHeight + (Math.max(0, nonSalsaItems.length - 1) * heightPerItem);
+    // Crecimiento reducido para evitar demasiado espacio
+    const itemsThatGoUp = Math.max(0, nonSalsaItems.length - 2);
+    const heightPerItem = 20;
+    return baseHeight + (itemsThatGoUp * heightPerItem);
   }
 
   /**
@@ -606,8 +618,32 @@ export class DragAndDrop {
               !item.nombre.toLowerCase().includes('pico')
     );
     const baseHeight = 450;
-    const heightPerItem = 5;
-    return baseHeight + (Math.max(0, nonSalsaItems.length - 1) * heightPerItem);
+    // Crecimiento reducido para evitar demasiado espacio
+    const itemsThatGoUp = Math.max(0, nonSalsaItems.length - 2);
+    const heightPerItem = 20;
+    return baseHeight + (itemsThatGoUp * heightPerItem);
+  }
+
+  /**
+   * Calcula el desplazamiento vertical para cada ingrediente
+   * La tortilla (idx 0) y el primer ingrediente (idx 1) quedan al mismo nivel
+   * A partir del tercer elemento (idx 2) comienzan a subir
+   */
+  getIngredientTranslateY(item: any): number {
+    // Obtener solo los items que no son salsas
+    const nonSalsaItems = this.done().filter(
+      i => i.nombre && 
+           !i.nombre.toLowerCase().includes('salsa') && 
+           !i.nombre.toLowerCase().includes('pico')
+    );
+    
+    // Encontrar el índice de este item entre los no-salsa
+    const index = nonSalsaItems.findIndex(i => i.idAdcional === item.idAdcional);
+    
+    if (index <= 1) {
+      return 0; // Tortilla y primer ingrediente al mismo nivel
+    }
+    return (index - 1) * -40; // A partir del segundo ingrediente, subir 40px por cada uno
   }
 
   /**

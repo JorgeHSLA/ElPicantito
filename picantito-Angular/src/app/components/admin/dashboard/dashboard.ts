@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, AfterViewInit, ElementRef } from '@angular/core';
 import { ProductoService } from '../../../services/tienda/producto.service';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
 import { AuthService } from '../../../services/auth.service';
@@ -16,16 +16,16 @@ import { AdminSidebarComponent } from '../../shared/admin-sidebar/admin-sidebar.
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
   totalProductos = signal(0);
   totalUsuarios = signal(0);
   totalAdicionales = signal(0);
-  
+
   // Estadísticas
   estadisticas = signal<Estadisticas | null>(null);
   ventasPorDiaArray = signal<{ fecha: string; monto: number }[]>([]);
   maxVenta = signal(0);
-  
+
   // Productos y Adicionales con nombres
   productosMap = signal<Map<number, string>>(new Map());
   adicionalesMap = signal<Map<number, string>>(new Map());
@@ -35,7 +35,8 @@ export class DashboardComponent implements OnInit {
     private productoService: ProductoService,
     private adicionalService: AdicionalService,
     private authService: AuthService,
-    private estadisticasService: EstadisticasService
+    private estadisticasService: EstadisticasService,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit() {
@@ -43,6 +44,51 @@ export class DashboardComponent implements OnInit {
     this.cargarEstadisticas();
     this.cargarProductosYAdicionales();
     this.cargarClientes();
+  }
+
+  ngAfterViewInit() {
+    // Pequeño delay para asegurar que el DOM esté completamente renderizado
+    setTimeout(() => {
+      this.setupScrollAnimations();
+    }, 100);
+  }
+
+  private setupScrollAnimations() {
+    const observerOptions = {
+      threshold: 0.05, // Reduce el threshold para activar antes
+      rootMargin: '50px 0px -50px 0px' // Activa cuando el elemento está cerca del viewport
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate__animated');
+          const animationType = entry.target.getAttribute('data-animation') || 'animate__fadeInUp';
+          entry.target.classList.add(animationType);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observar todos los elementos con la clase scroll-reveal
+    const elements = this.elementRef.nativeElement.querySelectorAll('.scroll-reveal');
+    elements.forEach((el: Element) => {
+      // Forzar el check inicial para elementos ya visibles
+      const rect = el.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (isVisible) {
+        // Si el elemento ya está visible, animarlo inmediatamente
+        setTimeout(() => {
+          el.classList.add('animate__animated');
+          const animationType = el.getAttribute('data-animation') || 'animate__fadeInUp';
+          el.classList.add(animationType);
+        }, 50);
+      } else {
+        // Si no está visible, observarlo para cuando aparezca
+        observer.observe(el);
+      }
+    });
   }
 
   private cargarDatosBasicos() {
@@ -64,13 +110,13 @@ export class DashboardComponent implements OnInit {
     this.estadisticasService.obtenerEstadisticas().subscribe({
       next: (stats) => {
         this.estadisticas.set(stats);
-        
+
         // Procesar ventas por día para la gráfica
         const ventasArray = Object.entries(stats.ventasPorDia)
           .map(([fecha, monto]) => ({ fecha, monto }))
           .sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime())
           .slice(-30); // Últimos 30 días
-        
+
         this.ventasPorDiaArray.set(ventasArray);
         this.maxVenta.set(Math.max(...ventasArray.map(v => v.monto)));
       },
@@ -141,15 +187,15 @@ export class DashboardComponent implements OnInit {
   obtenerEtiquetasEjeY(): string[] {
     const max = this.maxVenta();
     if (max === 0) return ['$0'];
-    
+
     const etiquetas: string[] = [];
     const numEtiquetas = 5;
-    
+
     for (let i = numEtiquetas; i >= 0; i--) {
       const valor = (max / numEtiquetas) * i;
       etiquetas.push(this.formatearMoneda(valor));
     }
-    
+
     return etiquetas;
   }
 

@@ -35,12 +35,22 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
   private map: L.Map | null = null;
   private restaurantMarker: L.Marker | null = null;
   private customerMarker: L.Marker | null = null;
+  private deliveryMarker: L.Marker | null = null; // Marcador del repartidor
   private routePolyline: L.Polyline | null = null;
   private pollingInterval: any = null;
+  private deliveryTrackingInterval: any = null; // Intervalo para tracking simulado
 
   // Coordenadas (se actualizarán dinámicamente)
   restaurantLocation: { lat: number; lng: number; name: string } | null = null;
   customerLocation = { lat: 4.6097, lng: -74.0817, name: 'Tu ubicación' };
+  
+  // Tracking simulado del repartidor
+  private deliveryProgress = 0; // 0 a 1 (0% a 100%)
+  private deliveryRoute: L.LatLng[] = []; // Ruta calculada
+
+  // Signal para mostrar mensaje de éxito
+  showSuccessMessage = signal(false);
+  newPedidoId = signal<number | null>(null);
 
   ngOnInit(): void {
     // Verificar autenticación
@@ -48,6 +58,21 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
       this.router.navigate(['/login']);
       return;
     }
+
+    // Verificar si viene de crear un pedido
+    this.route.queryParams.subscribe(params => {
+      if (params['pedidoCreado']) {
+        this.newPedidoId.set(+params['pedidoCreado']);
+        this.showSuccessMessage.set(true);
+        // El usuario cierra el modal manualmente, no automáticamente
+        
+        // Limpiar query params
+        this.router.navigate([], {
+          queryParams: {},
+          replaceUrl: true
+        });
+      }
+    });
 
     // Obtener usuario actual en lugar de usar parámetro de ruta
     const usuario = this.authService.loggedUser();
@@ -66,10 +91,15 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
         this.pedidosFiltrados.set(pedidosOrdenados);
         this.loading.set(false);
         
-        // Seleccionar el primer pedido automáticamente
-        if (pedidosOrdenados.length > 0) {
-          this.pedidoSeleccionado.set(pedidosOrdenados[0]);
+        // Si viene de crear pedido, seleccionar ese pedido
+        const pedidoCreado = this.newPedidoId();
+        if (pedidoCreado) {
+          const pedido = pedidosOrdenados.find(p => p.id === pedidoCreado);
+          if (pedido) {
+            this.pedidoSeleccionado.set(pedido);
+          }
         }
+        // NO seleccionar automáticamente ningún pedido si no viene de crear uno nuevo
         
         // Iniciar polling para actualizar estados cada 30 segundos
         this.startPolling();
@@ -147,48 +177,116 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
+  // Toggle: seleccionar o deseleccionar pedido
+  toggleSeleccionarPedido(pedido: PedidoCompleto): void {
+    if (this.pedidoSeleccionado()?.id === pedido.id) {
+      // Si ya está seleccionado, deseleccionar
+      this.pedidoSeleccionado.set(null);
+    } else {
+      // Seleccionar nuevo pedido
+      this.seleccionarPedido(pedido);
+    }
+  }
+
   seleccionarPedido(pedido: PedidoCompleto): void {
     this.pedidoSeleccionado.set(pedido);
     // Actualizar ubicación del cliente basado en la dirección del pedido
     this.actualizarUbicacionCliente(pedido.direccion);
   }
 
+  // Método para extraer dirección sin coordenadas
+  getDireccionSinCoordenadas(direccion: string): string {
+    if (!direccion) return '';
+    if (direccion.includes('|')) {
+      return direccion.split('|')[0];
+    }
+    return direccion;
+  }
+
   private async actualizarUbicacionCliente(direccion: string): Promise<void> {
     try {
-      console.log('🔍 Geocodificando dirección:', direccion);
+      console.log('🔍 ===== ACTUALIZAR UBICACIÓN CLIENTE =====');
+      console.log('📥 Dirección recibida:', direccion);
+      console.log('📥 Tipo de dirección:', typeof direccion);
+      console.log('📥 Longitud:', direccion?.length);
+      console.log('🔍 Contiene "|":', direccion.includes('|'));
       
-      // Usar Nominatim API para geocoding (OpenStreetMap)
-      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(direccion + ', Bogotá, Colombia')}&limit=1`;
-      console.log('📡 URL Nominatim:', url);
+      // Verificar si la dirección contiene coordenadas en formato "Dirección|lat,lng"
+      let lat: number, lng: number;
+      let direccionLimpia = direccion;
       
-      const response = await fetch(url, {
-        headers: {
-          'User-Agent': 'ElPicantito/1.0'
-        }
-      });
-      const data = await response.json();
-      console.log('📦 Respuesta Nominatim:', data);
-
-      if (data && data.length > 0) {
-        const lat = parseFloat(data[0].lat);
-        const lng = parseFloat(data[0].lon);
-        const displayName = data[0].display_name;
+      if (direccion && direccion.includes('|')) {
+        console.log('✅ Detectado formato con coordenadas');
+        const partes = direccion.split('|');
+        console.log('📦 Partes separadas:', partes);
         
-        // Actualizar ubicación del cliente
-        this.customerLocation = {
-          lat: lat,
-          lng: lng,
-          name: direccion
-        };
-
-        console.log(`✅ Dirección geocodificada exitosamente:`);
-        console.log(`   📍 Dirección buscada: ${direccion}`);
-        console.log(`   📍 Resultado: ${displayName}`);
-        console.log(`   📍 Coordenadas: (${lat}, ${lng})`);
+        direccionLimpia = partes[0];
+        const coordsString = partes[1];
+        console.log('📍 String de coordenadas:', coordsString);
+        
+        const coords = coordsString.split(',');
+        console.log('🎯 Coordenadas separadas:', coords);
+        
+        lat = parseFloat(coords[0]);
+        lng = parseFloat(coords[1]);
+        
+        console.log('🔢 Coordenadas parseadas:', { lat, lng });
+        console.log('✅ ¿Son números válidos?', !isNaN(lat) && !isNaN(lng));
+        
+        // VERIFICAR que las coordenadas sean válidas
+        if (!isNaN(lat) && !isNaN(lng)) {
+          // Actualizar ubicación del cliente directamente
+          this.customerLocation = {
+            lat: lat,
+            lng: lng,
+            name: direccionLimpia
+          };
+          
+          console.log('✅✅✅ UBICACIÓN ACTUALIZADA CORRECTAMENTE:');
+          console.log('   📍 Dirección:', direccionLimpia);
+          console.log('   📍 Coordenadas:', { lat, lng });
+          console.log('   📍 customerLocation:', this.customerLocation);
+        } else {
+          console.error('❌ Coordenadas inválidas después del parsing');
+          throw new Error('Coordenadas inválidas');
+        }
+        
       } else {
-        console.warn('⚠️ No se pudo geocodificar la dirección:', direccion);
-        // Usar ubicación por defecto si falla
-        this.customerLocation = { lat: 4.6097, lng: -74.0817, name: direccion };
+        console.log('⚠️ NO detectado pipe "|", buscando con Nominatim...');
+        // Fallback: usar Nominatim API para geocoding si no hay coordenadas
+        console.log('⚠️ Dirección sin coordenadas, usando Nominatim...');
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(direccionLimpia + ', Bogotá, Colombia')}&limit=1`;
+        console.log('📡 URL Nominatim:', url);
+        
+        const response = await fetch(url, {
+          headers: {
+            'User-Agent': 'ElPicantito/1.0'
+          }
+        });
+        const data = await response.json();
+        console.log('📦 Respuesta Nominatim:', data);
+
+        if (data && data.length > 0) {
+          lat = parseFloat(data[0].lat);
+          lng = parseFloat(data[0].lon);
+          const displayName = data[0].display_name;
+        
+          // Actualizar ubicación del cliente
+          this.customerLocation = {
+            lat: lat,
+            lng: lng,
+            name: direccionLimpia
+          };
+
+          console.log(`✅ Dirección geocodificada exitosamente:`);
+          console.log(`   📍 Dirección buscada: ${direccionLimpia}`);
+          console.log(`   📍 Resultado: ${displayName}`);
+          console.log(`   📍 Coordenadas: (${lat}, ${lng})`);
+        } else {
+          console.warn('⚠️ No se pudo geocodificar la dirección:', direccionLimpia);
+          // Usar ubicación por defecto si falla
+          this.customerLocation = { lat: 4.6097, lng: -74.0817, name: direccionLimpia };
+        }
       }
 
       // Reinicializar el mapa con la nueva ubicación
@@ -229,6 +327,9 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
       clearInterval(this.pollingInterval);
       this.pollingInterval = null;
     }
+
+    // Detener tracking simulado
+    this.stopSimulatedDeliveryTracking();
     
     // Limpiar el mapa al destruir el componente
     if (this.map) {
@@ -265,7 +366,84 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
       maxZoom: 19
     }).addTo(this.map);
 
-    // Configurar íconos personalizados
+    console.log('🗺️ Mapa inicializado');
+    console.log('   🏪 Restaurante:', this.restaurantLocation);
+    console.log('   👤 Cliente:', this.customerLocation);
+
+    // Actualizar mapa según estado inicial (esto creará los marcadores necesarios)
+    const pedido = this.pedidoSeleccionado();
+    if (pedido) {
+      this.updateMapForStatus(pedido.estado);
+    }
+  }
+
+  private updateMapForStatus(estado: string) {
+    if (!this.map || !this.restaurantLocation) return;
+
+    // Detener tracking simulado si existe
+    this.stopSimulatedDeliveryTracking();
+
+    // Limpiar elementos del mapa
+    if (this.routePolyline) {
+      this.map.removeLayer(this.routePolyline);
+      this.routePolyline = null;
+    }
+    if (this.restaurantMarker) {
+      this.map.removeLayer(this.restaurantMarker);
+      this.restaurantMarker = null;
+    }
+    if (this.customerMarker) {
+      this.map.removeLayer(this.customerMarker);
+      this.customerMarker = null;
+    }
+
+    const estadoUpper = estado.toUpperCase();
+    console.log('🔄 Actualizando mapa para estado:', estadoUpper);
+
+    switch (estadoUpper) {
+      case 'RECIBIDO':
+        console.log('📥 RECIBIDO: Solo mostrar sucursal');
+        // Solo mostrar marcador de sucursal
+        this.createRestaurantMarker();
+        this.map.setView([this.restaurantLocation.lat, this.restaurantLocation.lng], 15);
+        break;
+
+      case 'COCINANDO':
+        console.log('👨‍🍳 COCINANDO: Solo mostrar sucursal');
+        // Solo mostrar marcador de sucursal
+        this.createRestaurantMarker();
+        this.map.setView([this.restaurantLocation.lat, this.restaurantLocation.lng], 15);
+        break;
+
+      case 'ENVIADO':
+        console.log('🚚 ENVIADO: Mostrar sucursal, cliente, ruta y tracking simulado');
+        // Mostrar sucursal, cliente y ruta
+        this.createRestaurantMarker();
+        this.createCustomerMarker();
+        this.drawRouteWithOSRM();
+        // Iniciar tracking simulado del repartidor
+        this.startSimulatedDeliveryTracking();
+        break;
+
+      case 'ENTREGADO':
+        console.log('✅ ENTREGADO: Solo mostrar cliente');
+        // Solo mostrar marcador del cliente
+        this.createCustomerMarker();
+        this.map.setView([this.customerLocation.lat, this.customerLocation.lng], 15);
+        break;
+
+      default:
+        console.log('❓ Estado desconocido - Vista por defecto');
+        this.createRestaurantMarker();
+        this.createCustomerMarker();
+        this.map.setView([this.restaurantLocation.lat, this.restaurantLocation.lng], 13);
+        break;
+    }
+  }
+
+  private createRestaurantMarker() {
+    if (!this.map || !this.restaurantLocation) return;
+
     const restaurantIcon = L.icon({
       iconUrl: 'assets/leaflet/marker-icon.png',
       iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
@@ -275,6 +453,20 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     });
+
+    this.restaurantMarker = L.marker(
+      [this.restaurantLocation.lat, this.restaurantLocation.lng],
+      { icon: restaurantIcon }
+    ).addTo(this.map);
+    
+    this.restaurantMarker.bindPopup(
+      `<div style="color: #d32f2f; font-weight: bold;">🏪 ${this.restaurantLocation.name}</div>`,
+      { closeButton: false }
+    );
+  }
+
+  private createCustomerMarker() {
+    if (!this.map) return;
 
     const customerIcon = L.icon({
       iconUrl: 'assets/leaflet/marker-icon.png',
@@ -286,59 +478,15 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
       shadowSize: [41, 41]
     });
 
-    // Agregar marcadores
-    this.restaurantMarker = L.marker(
-      [this.restaurantLocation.lat, this.restaurantLocation.lng],
-      { icon: restaurantIcon }
-    ).addTo(this.map);
-    this.restaurantMarker.bindPopup(`<b>🌮 ${this.restaurantLocation.name}</b><br>${sucursalMasCercana.direccion}`);
-
     this.customerMarker = L.marker(
       [this.customerLocation.lat, this.customerLocation.lng],
       { icon: customerIcon }
     ).addTo(this.map);
-    this.customerMarker.bindPopup('<b>📍 Tu ubicación</b><br>Destino de entrega');
-
-    // Actualizar mapa según estado inicial
-    const pedido = this.pedidoSeleccionado();
-    if (pedido) {
-      this.updateMapForStatus(pedido.estado);
-    }
-  }
-
-  private updateMapForStatus(estado: string) {
-    if (!this.map || !this.restaurantLocation) return;
-
-    // Limpiar ruta anterior
-    if (this.routePolyline) {
-      this.map.removeLayer(this.routePolyline);
-      this.routePolyline = null;
-    }
-
-    const estadoUpper = estado.toUpperCase();
-
-    switch (estadoUpper) {
-      case 'RECIBIDO':
-      case 'COCINANDO':
-        // Centrar en el restaurante
-        this.map.setView([this.restaurantLocation.lat, this.restaurantLocation.lng], 15);
-        break;
-
-      case 'ENVIADO':
-        // Mostrar ruta óptima entre restaurante y cliente usando OSRM
-        this.drawRouteWithOSRM();
-        break;
-
-      case 'ENTREGADO':
-        // Centrar en la ubicación del cliente
-        this.map.setView([this.customerLocation.lat, this.customerLocation.lng], 15);
-        break;
-
-      default:
-        // Por defecto mostrar ambos puntos
-        this.map.setView([this.restaurantLocation.lat, this.restaurantLocation.lng], 13);
-        break;
-    }
+    
+    this.customerMarker.bindPopup(
+      `<div style="color: #1976d2; font-weight: bold;">📍 ${this.customerLocation.name}</div>`,
+      { closeButton: false }
+    );
   }
 
   private async drawRouteWithOSRM() {
@@ -357,6 +505,14 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
 
         // Convertir coordenadas de [lng, lat] a [lat, lng] para Leaflet
         const latLngs: L.LatLngExpression[] = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
+
+        // Guardar ruta para tracking simulado
+        this.deliveryRoute = latLngs.map(coord => {
+          if (Array.isArray(coord)) {
+            return L.latLng(coord[0], coord[1]);
+          }
+          return coord as L.LatLng;
+        });
 
         // Dibujar la ruta
         this.routePolyline = L.polyline(latLngs, {
@@ -391,6 +547,12 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
     const routeCoordinates: L.LatLngExpression[] = [
       [this.restaurantLocation.lat, this.restaurantLocation.lng],
       [this.customerLocation.lat, this.customerLocation.lng]
+    ];
+
+    // Guardar ruta simple para tracking simulado
+    this.deliveryRoute = [
+      L.latLng(this.restaurantLocation.lat, this.restaurantLocation.lng),
+      L.latLng(this.customerLocation.lat, this.customerLocation.lng)
     ];
 
     this.routePolyline = L.polyline(routeCoordinates, {
@@ -498,5 +660,92 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
     }
     
     return subtotal;
+  }
+
+  // ==================== TRACKING SIMULADO DEL REPARTIDOR ====================
+
+  private startSimulatedDeliveryTracking() {
+    // Detener tracking anterior si existe
+    this.stopSimulatedDeliveryTracking();
+
+    // Resetear progreso
+    this.deliveryProgress = 0;
+
+    console.log('🚗 Iniciando tracking simulado del repartidor');
+
+    // Actualizar posición cada 3 segundos
+    this.deliveryTrackingInterval = setInterval(() => {
+      this.deliveryProgress += 0.02; // Incrementar 2% cada 3 segundos (completará en ~2.5 minutos)
+
+      if (this.deliveryProgress >= 1) {
+        this.deliveryProgress = 1;
+        this.stopSimulatedDeliveryTracking();
+        console.log('✅ Repartidor llegó al destino (simulado)');
+      }
+
+      this.updateDeliveryMarkerPosition();
+    }, 3000);
+  }
+
+  private stopSimulatedDeliveryTracking() {
+    if (this.deliveryTrackingInterval) {
+      clearInterval(this.deliveryTrackingInterval);
+      this.deliveryTrackingInterval = null;
+    }
+
+    // Remover marcador del repartidor si existe
+    if (this.deliveryMarker && this.map) {
+      this.map.removeLayer(this.deliveryMarker);
+      this.deliveryMarker = null;
+    }
+  }
+
+  private updateDeliveryMarkerPosition() {
+    if (!this.map || !this.restaurantLocation || this.deliveryRoute.length === 0) return;
+
+    // Calcular posición interpolada en la ruta
+    const totalPoints = this.deliveryRoute.length;
+    const currentIndex = Math.floor(this.deliveryProgress * (totalPoints - 1));
+    const nextIndex = Math.min(currentIndex + 1, totalPoints - 1);
+
+    const currentPoint = this.deliveryRoute[currentIndex];
+    const nextPoint = this.deliveryRoute[nextIndex];
+
+    // Interpolación entre puntos
+    const segmentProgress = (this.deliveryProgress * (totalPoints - 1)) - currentIndex;
+    const lat = currentPoint.lat + (nextPoint.lat - currentPoint.lat) * segmentProgress;
+    const lng = currentPoint.lng + (nextPoint.lng - currentPoint.lng) * segmentProgress;
+
+    // Crear o actualizar marcador del repartidor
+    if (!this.deliveryMarker) {
+      const deliveryIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        shadowUrl: 'assets/leaflet/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+
+      this.deliveryMarker = L.marker([lat, lng], {
+        icon: deliveryIcon
+      }).addTo(this.map);
+
+      this.deliveryMarker.bindPopup(`
+        <div style="text-align: center;">
+          <strong style="color: #28a745;">🚚 Repartidor en camino</strong><br>
+          <small>${Math.round(this.deliveryProgress * 100)}% del trayecto</small>
+        </div>
+      `);
+    } else {
+      // Actualizar posición del marcador existente
+      this.deliveryMarker.setLatLng([lat, lng]);
+      this.deliveryMarker.getPopup()?.setContent(`
+        <div style="text-align: center;">
+          <strong style="color: #28a745;">🚚 Repartidor en camino</strong><br>
+          <small>${Math.round(this.deliveryProgress * 100)}% del trayecto</small>
+        </div>
+      `);
+    }
   }
 }

@@ -231,3 +231,17 @@ main.container .row.g-4::before {
         gap: 1rem;
     }
 }
+
+
+/* Animaciones de scroll reveal para productos */
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-reveal.animate__animated {
+    opacity: 1;
+    transform: translateY(0);
+}

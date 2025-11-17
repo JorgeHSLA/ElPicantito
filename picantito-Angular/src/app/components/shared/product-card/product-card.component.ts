@@ -20,12 +20,12 @@ export class ProductCardComponent {
 
   getStarsArray(calificacion: number | undefined): any[] {
     const rating = calificacion || 0;
-    return Array(Math.round(rating)).fill(0);
+    return Array.from({ length: Math.round(rating) }, (_, i) => i);
   }
 
   getEmptyStarsArray(calificacion: number | undefined): any[] {
     const rating = calificacion || 0;
-    return Array(5 - Math.round(rating)).fill(0);
+    return Array.from({ length: 5 - Math.round(rating) }, (_, i) => i);
   }
 
 

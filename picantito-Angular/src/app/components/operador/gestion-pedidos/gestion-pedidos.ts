@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GestionPedidosService } from '../../../services/gestion-pedidos.service';
@@ -22,9 +22,10 @@ interface PedidosPorEstado {
   templateUrl: './gestion-pedidos.html',
   styleUrl: './gestion-pedidos.css'
 })
-export class GestionPedidos implements OnInit {
+export class GestionPedidos implements OnInit, AfterViewInit {
   private gestionPedidosService = inject(GestionPedidosService);
   private repartidorService = inject(RepartidorService);
+  private elementRef = inject(ElementRef);
 
   pedidos: PedidoCompleto[] = [];
   pedidosPorEstado: PedidosPorEstado = {
@@ -37,13 +38,14 @@ export class GestionPedidos implements OnInit {
   repartidoresDisponibles: Repartidor[] = [];
   todosRepartidores: Repartidor[] = [];
   repartidorSeleccionado: { [pedidoId: number]: number } = {};
-  
+
   loading = false;
+  processingPedidoId: number | null = null; // Para saber qué pedido se está procesando
   error: string | null = null;
   successMessage: string | null = null;
 
   estadosOrdenados = ['recibido', 'cocinando', 'enviado', 'entregado'];
-  
+
   estadosLabels: { [key: string]: string } = {
     'recibido': 'Recibido',
     'cocinando': 'Cocinando',
@@ -56,6 +58,55 @@ export class GestionPedidos implements OnInit {
     this.cargarRepartidores();
   }
 
+  ngAfterViewInit(): void {
+    setTimeout(() => this.setupScrollAnimations(), 150);
+  }
+
+  setupScrollAnimations(): void {
+    const elements = this.elementRef.nativeElement.querySelectorAll('.scroll-reveal');
+
+    // Primero remover las clases de animación anteriores
+    elements.forEach((element: Element) => {
+      const htmlElement = element as HTMLElement;
+      htmlElement.classList.remove('animate__animated', 'animate__fadeInUp', 'animate__fadeInDown');
+      htmlElement.style.opacity = '0';
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const element = entry.target as HTMLElement;
+            const animation = element.dataset['animation'] || 'fadeInUp';
+            element.style.opacity = '1';
+            element.classList.add('animate__animated', `animate__${animation}`);
+            observer.unobserve(element);
+          }
+        });
+      },
+      {
+        threshold: 0.05,
+        rootMargin: '50px 0px -50px 0px'
+      }
+    );
+
+    elements.forEach((element: Element, index: number) => {
+      const htmlElement = element as HTMLElement;
+      const rect = htmlElement.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (isVisible) {
+        setTimeout(() => {
+          const animation = htmlElement.dataset['animation'] || 'fadeInUp';
+          htmlElement.style.opacity = '1';
+          htmlElement.classList.add('animate__animated', `animate__${animation}`);
+        }, index * 100);
+      } else {
+        observer.observe(element);
+      }
+    });
+  }
+
   cargarPedidos(): void {
     this.loading = true;
     this.error = null;
@@ -65,6 +116,10 @@ export class GestionPedidos implements OnInit {
         this.pedidos = pedidos;
         this.organizarPedidosPorEstado();
         this.loading = false;
+        // Solo aplicar animaciones en la carga inicial
+        if (!this.pedidos || this.pedidos.length === 0) {
+          setTimeout(() => this.setupScrollAnimations(), 150);
+        }
       },
       error: (err) => {
         this.error = 'Error al cargar los pedidos';
@@ -111,7 +166,7 @@ export class GestionPedidos implements OnInit {
   avanzarEstado(pedido: PedidoCompleto): void {
     const estadoActual = pedido.estado.toLowerCase();
     const indiceActual = this.estadosOrdenados.indexOf(estadoActual);
-    
+
     if (indiceActual === -1 || indiceActual >= this.estadosOrdenados.length - 1) {
       this.error = 'No se puede avanzar más el estado del pedido';
       return;
@@ -126,7 +181,7 @@ export class GestionPedidos implements OnInit {
         this.error = 'Debe seleccionar un repartidor antes de enviar el pedido';
         return;
       }
-      
+
       // Primero asignar el repartidor
       this.asignarRepartidor(pedido.id, repartidorId, nuevoEstado);
     } else {
@@ -136,7 +191,7 @@ export class GestionPedidos implements OnInit {
   }
 
   asignarRepartidor(pedidoId: number, repartidorId: number, nuevoEstado: string): void {
-    this.loading = true;
+    this.processingPedidoId = pedidoId;
     this.error = null;
 
     this.gestionPedidosService.asignarRepartidor({ pedidoId, repartidorId }).subscribe({
@@ -147,8 +202,8 @@ export class GestionPedidos implements OnInit {
       error: (err) => {
         this.error = err.error || 'Error al asignar repartidor';
         console.error('Error:', err);
-        this.loading = false;
-        
+        this.processingPedidoId = null;
+
         // Limpiar mensaje de error después de 5 segundos
         setTimeout(() => {
           this.error = null;
@@ -158,25 +213,42 @@ export class GestionPedidos implements OnInit {
   }
 
   actualizarEstadoPedido(pedidoId: number, nuevoEstado: string): void {
-    this.loading = true;
+    this.processingPedidoId = pedidoId;
     this.error = null;
+
+    // Agregar clase de animación de salida al pedido que se va a mover
+    const pedidoElement = document.querySelector(`[data-pedido-id="${pedidoId}"]`);
+    if (pedidoElement) {
+      pedidoElement.classList.add('animate__animated', 'animate__fadeOutRight', 'animate__faster');
+    }
 
     this.gestionPedidosService.actualizarEstado(pedidoId, nuevoEstado).subscribe({
       next: (pedidoActualizado) => {
         this.successMessage = `Pedido #${pedidoId} actualizado a ${this.estadosLabels[nuevoEstado]}`;
-        
-        // Actualizar el pedido en la lista local
-        const index = this.pedidos.findIndex(p => p.id === pedidoId);
-        if (index !== -1) {
-          this.pedidos[index] = pedidoActualizado;
-        }
-        
-        this.organizarPedidosPorEstado();
-        
-        // Recargar lista de repartidores para actualizar disponibilidad
-        this.cargarRepartidores();
-        
-        this.loading = false;
+
+        // Esperar a que termine la animación de salida
+        setTimeout(() => {
+          // Actualizar el pedido en la lista local
+          const index = this.pedidos.findIndex(p => p.id === pedidoId);
+          if (index !== -1) {
+            this.pedidos[index] = pedidoActualizado;
+          }
+
+          this.organizarPedidosPorEstado();
+
+          // Recargar lista de repartidores para actualizar disponibilidad
+          this.cargarRepartidores();
+
+          this.processingPedidoId = null;
+
+          // Animar solo el nuevo elemento en su nueva columna
+          setTimeout(() => {
+            const nuevoElement = document.querySelector(`[data-pedido-id="${pedidoId}"]`);
+            if (nuevoElement) {
+              nuevoElement.classList.add('animate__animated', 'animate__fadeInLeft', 'animate__faster');
+            }
+          }, 50);
+        }, 400);
 
         // Limpiar mensaje después de 3 segundos
         setTimeout(() => {
@@ -191,7 +263,12 @@ export class GestionPedidos implements OnInit {
       error: (err) => {
         this.error = 'Error al actualizar el estado del pedido';
         console.error('Error:', err);
-        this.loading = false;
+        this.processingPedidoId = null;
+
+        // Remover animación de salida si hubo error
+        if (pedidoElement) {
+          pedidoElement.classList.remove('animate__animated', 'animate__fadeOutRight', 'animate__faster');
+        }
       }
     });
   }
@@ -203,7 +280,7 @@ export class GestionPedidos implements OnInit {
 
   getColorEstadoRepartidor(estado: string | undefined): string {
     if (!estado) return 'bg-secondary';
-    
+
     switch (estado.toUpperCase()) {
       case 'DISPONIBLE':
         return 'bg-success';

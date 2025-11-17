@@ -71,9 +71,27 @@ public class PedidoController {
             if (pedidoDTO.getRepartidorId() != null) {
                 return new ResponseEntity<>("error, el repartidor debe ser nulo para crear un pedido:", HttpStatus.BAD_REQUEST);
             }
-            System.out.println("Recibido DTO: " + pedidoDTO);
+            System.out.println("📥 Recibido DTO: " + pedidoDTO);
+            System.out.println("📍 Dirección recibida: " + pedidoDTO.getDireccion());
             Pedido nuevoPedido = pedidoService.crearPedido(pedidoDTO);
             PedidoResponseDTO responseDTO = pedidoMapper.toDTO(nuevoPedido);
+            
+            // Enviar email de confirmación al cliente
+            try {
+                String emailCliente = nuevoPedido.getCliente().getCorreo();
+                String nombreCliente = nuevoPedido.getCliente().getNombreCompleto();
+                emailService.enviarConfirmacionPedidoCreado(
+                    emailCliente,
+                    nombreCliente,
+                    nuevoPedido.getId(),
+                    nuevoPedido.getPrecioDeVenta().doubleValue(),
+                    nuevoPedido.getDireccion()
+                );
+                System.out.println("Email de confirmación enviado a: " + emailCliente);
+            } catch (Exception emailError) {
+                System.err.println("Error enviando email de confirmación: " + emailError.getMessage());
+                // No fallar la creación del pedido si el email falla
+            }
             
             return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         } catch (Exception e) {

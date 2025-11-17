@@ -41,16 +41,17 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
   selectedCoordinates: { lat: number, lng: number } | null = null;
   isLoadingLocation = signal(false);
   locationErrorMessage = signal<string>('');
+  isLocationValid = signal(false); // Para habilitar/deshabilitar botón de confirmar
   
   // Coordenadas por defecto (Bogotá, Colombia - Centro)
   private defaultCoords = { lat: 4.6097, lng: -74.0817 };
   
   // Límites de Bogotá (aproximados)
   private bogotaBounds = {
-    north: 4.8347,  // Norte de Bogotá
-    south: 4.4711,  // Sur de Bogotá
-    east: -73.9937, // Este de Bogotá
-    west: -74.2239  // Oeste de Bogotá
+    north: 4.8347,
+    south: 4.4711,
+    east: -73.9937,
+    west: -74.2239
   };
 
   // Estados de edición
@@ -171,10 +172,18 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
 
     if (this.erroresValidacion.length > 0) {
       console.log('❌ Errores de validación:', this.erroresValidacion);
+      // Scroll automático al contenedor de errores
+      setTimeout(() => {
+        const errorContainer = document.querySelector('.alert-danger');
+        if (errorContainer) {
+          errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
       return;
     }
 
     console.log('🔄 Procesando pedido...');
+    console.log('📤 Dirección enviada al backend:', this.customerInfo.direccion);
     this.isProcessingOrder.set(true);
 
     // Usar siempre el nuevo sistema (sin fecha de entrega)
@@ -194,11 +203,21 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
         });
         this.showOrderConfirmationModal.set(true);
         
-        // Navegar después de 3 segundos
+        // Navegar al pedido específico después de 1.5 segundos
+        const clienteId = this.authService.loggedUser()?.id;
         setTimeout(() => {
           this.closeOrderConfirmationModal();
-          this.router.navigate(['/pedidos']);
-        }, 3000);
+          // Redirigir a la página de pedidos del cliente con parámetro de éxito
+          if (clienteId) {
+            this.router.navigate([`/cliente/${clienteId}/pedidos`], {
+              queryParams: { pedidoCreado: pedidoCreado.id }
+            });
+          } else {
+            this.router.navigate(['/pedidos'], {
+              queryParams: { pedidoCreado: pedidoCreado.id }
+            });
+          }
+        }, 1500);
       },
       error: (error) => {
         console.error('❌ Error al procesar pedido:', error);
@@ -256,10 +275,13 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
 
   loadUserData() {
     const usuario = this.authService.loggedUser();
+    console.log('📞 Usuario completo:', usuario);
+    console.log('📞 Teléfono del usuario:', usuario?.telefono);
     if (usuario) {
       // Cargar teléfono y correo del usuario
       this.customerInfo.telefono = usuario.telefono || '';
       this.customerInfo.correo = usuario.correo || '';
+      console.log('📞 customerInfo después de cargar:', this.customerInfo);
       // Guardar valores originales
       this.telefonoOriginal = this.customerInfo.telefono;
       this.correoOriginal = this.customerInfo.correo;
@@ -324,11 +346,17 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
   }
 
   openMapModal() {
-    // Copiar la dirección actual al campo temporal
-    this.customerInfo.direccionTemporal = this.customerInfo.direccion;
+    // Extraer solo la parte de texto de la dirección (sin coordenadas previas)
+    let direccionSinCoords = this.customerInfo.direccion;
+    if (direccionSinCoords.includes('|')) {
+      direccionSinCoords = direccionSinCoords.split('|')[0];
+    }
+    this.customerInfo.direccionTemporal = direccionSinCoords;
     this.locationErrorMessage.set('');
+    this.isLocationValid.set(direccionSinCoords.trim().length > 0); // Habilitar si ya hay dirección
     this.showMapModal.set(true);
-    // Pequeño delay para asegurar que el DOM esté listo
+    
+    // Inicializar el mapa después de que el DOM esté listo
     setTimeout(() => {
       this.initMap();
     }, 100);
@@ -343,18 +371,26 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
   }
 
   confirmMapLocation() {
-    // Validar que la dirección esté en Bogotá antes de confirmar
-    if (this.locationErrorMessage()) {
-      return; // No permitir confirmar si hay error
-    }
-    
     if (!this.customerInfo.direccionTemporal.trim()) {
-      this.locationErrorMessage.set('Por favor, selecciona una ubicación en el mapa o escribe una dirección');
+      this.locationErrorMessage.set('Por favor, escribe una dirección');
       return;
     }
 
-    // Confirmar la dirección temporal como la dirección final
-    this.customerInfo.direccion = this.customerInfo.direccionTemporal;
+    console.log('🔍 ===== CONFIRMAR UBICACIÓN =====');
+    console.log('📍 Dirección escrita:', this.customerInfo.direccionTemporal);
+    console.log('🎯 Coordenadas encontradas:', this.selectedCoordinates);
+
+    // Guardar dirección con coordenadas si las tenemos
+    if (this.selectedCoordinates) {
+      const coordsString = `|${this.selectedCoordinates.lat},${this.selectedCoordinates.lng}`;
+      this.customerInfo.direccion = this.customerInfo.direccionTemporal + coordsString;
+      console.log('✅ GUARDADO FINAL:', this.customerInfo.direccion);
+    } else {
+      // Si no hay coordenadas, solo guardar el texto
+      this.customerInfo.direccion = this.customerInfo.direccionTemporal;
+      console.log('⚠️ Guardado solo texto (sin coordenadas)');
+    }
+    
     this.closeMapModalWithConfirmation();
   }
 
@@ -365,13 +401,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
     this.destroyMap();
   }
 
-  // Validar si las coordenadas están dentro de Bogotá
-  private isInBogota(lat: number, lng: number): boolean {
-    return lat >= this.bogotaBounds.south && 
-           lat <= this.bogotaBounds.north && 
-           lng >= this.bogotaBounds.west && 
-           lng <= this.bogotaBounds.east;
-  }
+
 
   private initMap() {
     if (this.map) {
@@ -381,34 +411,16 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
     // Usar coordenadas seleccionadas o coordenadas por defecto
     const initialCoords = this.selectedCoordinates || this.defaultCoords;
 
-    // Crear el mapa con límites máximos para Bogotá
+    // Crear el mapa sin restricciones geográficas
     this.map = L.map('map-container', {
       center: [initialCoords.lat, initialCoords.lng],
-      zoom: 13,
-      maxBounds: [
-        [this.bogotaBounds.south - 0.05, this.bogotaBounds.west - 0.05],
-        [this.bogotaBounds.north + 0.05, this.bogotaBounds.east + 0.05]
-      ],
-      maxBoundsViscosity: 0.8
+      zoom: 13
     });
 
     // Agregar capa de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
-      maxZoom: 19,
-      minZoom: 11
-    }).addTo(this.map);
-
-    // Agregar rectángulo visual para mostrar los límites de Bogotá
-    L.rectangle([
-      [this.bogotaBounds.south, this.bogotaBounds.west],
-      [this.bogotaBounds.north, this.bogotaBounds.east]
-    ], {
-      color: '#28a745',
-      weight: 2,
-      fillOpacity: 0.05,
-      dashArray: '5, 10',
-      interactive: false // No permitir interacción con el rectángulo
+      maxZoom: 19
     }).addTo(this.map);
 
     // Configurar ícono personalizado del marcador
@@ -422,7 +434,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
       shadowSize: [41, 41]
     });
 
-    // Crear marcador inicial
+    // Crear marcador inicial (arrastrable y con eventos)
     this.marker = L.marker([initialCoords.lat, initialCoords.lng], {
       icon: customIcon,
       draggable: true
@@ -432,17 +444,24 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
     this.marker.on('dragend', () => {
       if (this.marker) {
         const position = this.marker.getLatLng();
-        this.selectedCoordinates = { lat: position.lat, lng: position.lng };
-        this.reverseGeocode(position.lat, position.lng);
+        if (this.isInBogota(position.lat, position.lng)) {
+          this.selectedCoordinates = { lat: position.lat, lng: position.lng };
+          this.reverseGeocode(position.lat, position.lng);
+        } else {
+          this.locationErrorMessage.set('Ubicación fuera de Bogotá');
+          this.marker.setLatLng([this.selectedCoordinates?.lat || this.defaultCoords.lat, this.selectedCoordinates?.lng || this.defaultCoords.lng]);
+        }
       }
     });
 
-    // Evento click en el mapa para mover el marcador
+    // Evento click en el mapa
     this.map.on('click', (e: L.LeafletMouseEvent) => {
-      if (this.marker) {
+      if (this.marker && this.isInBogota(e.latlng.lat, e.latlng.lng)) {
         this.marker.setLatLng(e.latlng);
         this.selectedCoordinates = { lat: e.latlng.lat, lng: e.latlng.lng };
         this.reverseGeocode(e.latlng.lat, e.latlng.lng);
+      } else {
+        this.locationErrorMessage.set('Ubicación fuera de Bogotá');
       }
     });
 
@@ -460,13 +479,22 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  // Geocodificación desde el modal: convertir dirección a coordenadas
+  private isInBogota(lat: number, lng: number): boolean {
+    return lat >= this.bogotaBounds.south &&
+           lat <= this.bogotaBounds.north &&
+           lng >= this.bogotaBounds.west &&
+           lng <= this.bogotaBounds.east;
+  }
+
+  // Geocodificación: convertir dirección escrita a coordenadas
   private geocodeAddressFromModal(address: string) {
     if (!address.trim() || !this.map || !this.marker) return;
 
     this.isLoadingLocation.set(true);
     this.locationErrorMessage.set('');
     const searchQuery = encodeURIComponent(`${address}, Bogotá, Colombia`);
+    
+    console.log('🔍 Buscando dirección:', address);
     
     fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${searchQuery}&limit=1&countrycodes=co`)
       .then(response => response.json())
@@ -476,48 +504,51 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
           const lat = parseFloat(data[0].lat);
           const lng = parseFloat(data[0].lon);
           
-          // Validar que esté en Bogotá
           if (!this.isInBogota(lat, lng)) {
-            this.locationErrorMessage.set('Esta dirección está fuera de Bogotá. Solo realizamos entregas en Bogotá.');
+            this.locationErrorMessage.set('La dirección está fuera de Bogotá');
+            this.selectedCoordinates = null;
+            this.isLocationValid.set(false); // Deshabilitar botón
             return;
           }
           
+          // Guardar las coordenadas obtenidas
           this.selectedCoordinates = { lat, lng };
+          console.log('✅ Coordenadas encontradas:', { lat, lng });
+          console.log('✅ Dirección completa de Nominatim:', data[0].display_name);
           this.locationErrorMessage.set('');
+          this.isLocationValid.set(true); // Habilitar botón de confirmar
           
+          // Actualizar el mapa y marcador (solo visualización)
           if (this.map && this.marker) {
             this.map.setView([lat, lng], 15);
             this.marker.setLatLng([lat, lng]);
           }
         } else {
-          this.locationErrorMessage.set('No se encontró la dirección. Por favor, verifica que sea una dirección válida en Bogotá.');
+          this.locationErrorMessage.set('No se encontró la dirección. Por favor, verifica que sea válida.');
+          this.selectedCoordinates = null;
+          this.isLocationValid.set(false); // Deshabilitar botón
+          console.log('❌ Dirección no encontrada');
         }
       })
       .catch(error => {
-        console.error('Error en geocodificación:', error);
+        console.error('❌ Error en geocodificación:', error);
         this.isLoadingLocation.set(false);
         this.locationErrorMessage.set('Error al buscar la dirección. Por favor, intenta nuevamente.');
+        this.selectedCoordinates = null;
+        this.isLocationValid.set(false); // Deshabilitar botón
       });
   }
 
-  // Geocodificación inversa: convertir coordenadas a dirección
-  private reverseGeocode(lat: number, lng: number) {
-    // Validar que esté en Bogotá
-    if (!this.isInBogota(lat, lng)) {
-      this.locationErrorMessage.set('Esta ubicación está fuera de Bogotá. Solo realizamos entregas en Bogotá.');
-      this.isLoadingLocation.set(false);
-      return;
-    }
 
+
+  private reverseGeocode(lat: number, lng: number) {
     this.isLoadingLocation.set(true);
-    this.locationErrorMessage.set('');
     
     fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
       .then(response => response.json())
       .then(data => {
         this.isLoadingLocation.set(false);
         if (data && data.display_name) {
-          // Extraer dirección relevante
           const address = data.address;
           let formattedAddress = '';
           
@@ -536,19 +567,17 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
             formattedAddress = data.display_name.split(',').slice(0, 3).join(',');
           }
           
-          // Actualizar la dirección temporal en el modal
           this.customerInfo.direccionTemporal = formattedAddress;
-          this.locationErrorMessage.set('');
+          this.isLocationValid.set(true); // Habilitar botón
         }
       })
       .catch(error => {
-        console.error('Error en geocodificación inversa:', error);
+        console.error('Error en reverseGeocode:', error);
         this.isLoadingLocation.set(false);
-        this.locationErrorMessage.set('Error al obtener la dirección. Por favor, intenta nuevamente.');
       });
   }
 
-  // Detectar cambios en el campo de dirección temporal (en el modal)
+  // Detectar cambios en el campo de dirección (debounce para no buscar en cada tecla)
   onAddressChangeInModal() {
     // Limpiar timeout anterior
     if (this.geocodingTimeout) {
@@ -564,6 +593,15 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
   }
 
   // ==================== UTILIDADES ====================
+
+  // Método para obtener dirección sin coordenadas para mostrar al usuario
+  getDireccionParaMostrar(): string {
+    const direccion = this.customerInfo.direccion;
+    if (direccion.includes('|')) {
+      return direccion.split('|')[0];
+    }
+    return direccion;
+  }
 
   formatearMoneda(valor: number): string {
     return this.pedidoManager.formatearMoneda(valor);

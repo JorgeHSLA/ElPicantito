@@ -10,17 +10,17 @@
         <!-- MAIN -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
             <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                <h1 class="h2 text-white">Revisar Repartidores</h1>
+                <h1 class="h2 text-white animate__animated animate__fadeInDown">Revisar Repartidores</h1>
             </div>
 
             <!-- Mensajes -->
-            <div *ngIf="errorMessage()" class="alert alert-danger">{{ errorMessage() }}</div>
-            <div *ngIf="successMessage()" class="alert alert-success">{{ successMessage() }}</div>
+            <div *ngIf="errorMessage()" class="alert alert-danger animate__animated animate__slideInDown">{{ errorMessage() }}</div>
+            <div *ngIf="successMessage()" class="alert alert-success animate__animated animate__slideInDown">{{ successMessage() }}</div>
 
             <!-- Listas -->
             <div class="row g-4">
                 <section class="col-12">
-                    <div class="card shadow-sm">
+                    <div class="card shadow-sm animate__animated animate__fadeIn">
                         <div class="card-header bg-dark text-white">
                             <h5 class="mb-0">Pedidos</h5>
                         </div>
@@ -49,7 +49,7 @@
                                                 @if (((pedido.estado || '').toLowerCase() === 'entregado') && pedido.repartidorId) {
                                                 <span class="text-dark">Repartidor ID: <strong>{{ pedido.repartidorId }}</strong></span> } @else {
                                                 <div class="d-flex gap-2 align-items-center">
-                                                                                                        <select class="form-select form-select-sm" [(ngModel)]="repartidorSeleccionado[pedido.id]">
+                                                    <select class="form-select form-select-sm" [(ngModel)]="repartidorSeleccionado[pedido.id]">
                                                                 <option [ngValue]="undefined">Seleccionar repartidor</option>
                                                                 @for (r of repartidoresActivos(); track r.id) {
                                                                     <option [ngValue]="r.id" [disabled]="isRepartidorInactivo(r)">
@@ -57,10 +57,10 @@
                                                                     </option>
                                                                 }
                                                             </select>
-                                                                                                                         <button type="button" class="btn btn-sm btn-outline-secondary" (click)="asignarRepartidorDirecto(pedido.id)" [disabled]="isAsignarDisabled(pedido.id)">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary hvr-grow" (click)="asignarRepartidorDirecto(pedido.id)" [disabled]="isAsignarDisabled(pedido.id)">
                                 Asignar
                               </button>
-                                                                                                                         <button type="button" class="btn btn-sm btn-primary" [disabled]="!puedeAvanzar(pedido.estado) || isBloqueadoAvanzar(pedido)" (click)="avanzarEstado(pedido)">
+                                                    <button type="button" class="btn btn-sm btn-primary hvr-grow" [disabled]="!puedeAvanzar(pedido.estado) || isBloqueadoAvanzar(pedido)" (click)="avanzarEstado(pedido)">
                                 Avanzar estado
                               </button>
                                                 </div>
@@ -105,10 +105,10 @@
                                             <td><span class="badge bg-success">{{ r.estado || '—' }}</span></td>
                                             <td>
                                                 <div class="d-flex gap-2">
-                                                    <button type="button" class="btn btn-sm btn-outline-success" (click)="activarRepartidor(r.id!)">
+                                                    <button type="button" class="btn btn-sm btn-outline-success hvr-grow" (click)="activarRepartidor(r.id!)">
                               Activar
                             </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="desactivarRepartidor(r.id!)">
+                                                    <button type="button" class="btn btn-sm btn-outline-danger hvr-grow" (click)="desactivarRepartidor(r.id!)">
                               Desactivar
                             </button>
                                                 </div>

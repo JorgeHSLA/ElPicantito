@@ -36,7 +36,7 @@
                     <button 
                         class="nav-btn btn-next" 
                         (click)="goToNextStep()"
-                        [disabled]="!canGoToNextStep() || currentStep() === 'extras'">
+                        [disabled]="!canGoToNextStep() || currentStep() === 'salsa'">
                         Siguiente →
                     </button>
                 </div>
@@ -50,9 +50,11 @@
                     class="ingredients-list"
                     (cdkDropListDropped)="drop($event)">
                     @for(item of todo(); track item.idAdcional) {
-                        <div class="ingredient-card" cdkDrag>
+                        <div class="ingredient-card" cdkDrag [cdkDragData]="item">
                             <div class="ingredient-content">
-                                <div class="ingredient-icon">🍴</div>
+                                <div class="ingredient-icon">
+                                    <img [src]="item.image" [alt]="item.nombre">
+                                </div>
                                 <div class="ingredient-info">
                                     <h3>{{item.nombre}}</h3>
                                     <span class="price">${{item.precio}}</span>
@@ -131,9 +133,11 @@
                             @for(item of done(); track item.idAdcional; let idx = $index) {
                                 @if(item.nombre && !item.nombre.toLowerCase().includes('salsa') && !item.nombre.toLowerCase().includes('pico')) {
                                     <div class="stacked-item" 
-                                         [class.tortilla-item]="idx === 0" 
-                                         [style.transform]="'translate(-50%, 0) translateY(' + (idx * -40) + 'px)'"
-                                         cdkDrag>
+                                         [class.tortilla-item]="idx === 0"
+                                         [class.extra-item]="item.nombre.toLowerCase().includes('queso') || item.nombre.toLowerCase().includes('lechuga')" 
+                                         [style.transform]="'translate(-50%, 0) translateY(' + getIngredientTranslateY(item) + 'px)'"
+                                         cdkDrag
+                                         [cdkDragData]="item">
                                         <img [src]="item.image" [alt]="item.nombre" class="ingredient-image">
                                         <div class="item-label">
                                             <span class="item-name">{{item.nombre}}</span>
@@ -155,7 +159,7 @@
                                 <h3 class="salsas-section-title">Salsas:</h3>
                                 <div class="salsas-display">
                                     @for(salsa of getSalsas(); track salsa.idAdcional) {
-                                        <div class="salsa-display-item">
+                                        <div class="salsa-display-item" cdkDrag [cdkDragData]="salsa">
                                             <img [src]="salsa.image" [alt]="salsa.nombre" class="salsa-display-image">
                                             <span class="salsa-display-name">{{salsa.nombre}}</span>
                                         </div>

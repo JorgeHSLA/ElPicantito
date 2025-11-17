@@ -141,7 +141,7 @@
                             </label>
                             <div class="delivery-address-display">
                                 <div class="address-text" *ngIf="customerInfo.direccion; else noAddress">
-                                    {{ customerInfo.direccion }}
+                                    {{ getDireccionParaMostrar() }}
                                 </div>
                                 <ng-template #noAddress>
                                     <div class="address-text text-muted-custom">
@@ -346,8 +346,8 @@
                           id="direccionModal" 
                           [(ngModel)]="customerInfo.direccionTemporal" 
                           (input)="onAddressChangeInModal()"
-                          placeholder="Ej: Calle 45 #12-34, Chapinero, Bogotá" 
-                          rows="2"></textarea>
+                          placeholder="Ej: Carrera 7 #32-16, Teusaquillo, Bogotá&#10;Calle 100 #15-20, Chicó, Bogotá&#10;Diagonal 40A Sur, Nueva Villa Mayor, Bogotá" 
+                          rows="3"></textarea>
                 <small class="text-muted d-block mt-1">
                     <i class="bi bi-lightbulb-fill me-1"></i>
                     El marcador se actualizara automaticamente
@@ -377,7 +377,7 @@
             <button type="button" 
                     class="btn btn-success" 
                     (click)="confirmMapLocation()"
-                    [disabled]="!!locationErrorMessage() || !customerInfo.direccionTemporal.trim()">
+                    [disabled]="!isLocationValid() || isLoadingLocation()">
                 <i class="bi bi-check-circle me-1"></i>
                 Confirmar Ubicación
             </button>
@@ -418,9 +418,14 @@
         </div>
 
         <!-- Mensaje informativo -->
+        <div class="order-confirmation-message" style="margin-bottom: 15px;">
+            <i class="bi bi-envelope-check-fill" style="color: #28a745; font-size: 1.2rem;"></i>
+            <span style="color: #333; font-weight: 500;">Hemos enviado un correo de confirmación</span>
+        </div>
+        
         <div class="order-confirmation-message">
             <i class="bi bi-hourglass-split"></i>
-            <span>Redirigiendo al rastreo de pedido</span>
+            <span>Redirigiendo al seguimiento de tu pedido</span>
             <div class="loading-dots">
                 <span></span>
                 <span></span>

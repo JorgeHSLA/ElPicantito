@@ -2,12 +2,16 @@
     margin-left: 250px;
     width: calc(100% - 250px);
     min-height: calc(100vh - 85px);
-    background: #2D1529; /* purple base background */
+    background: #2D1529;
+    /* purple base background */
     padding: 0;
-    color: white; /* text color for readability on dark background */
+    color: white;
+    /* text color for readability on dark background */
 }
 
+
 /* Tarjetas de estadísticas mejoradas */
+
 .stat-card {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
@@ -64,7 +68,9 @@
     font-size: 0.8rem;
 }
 
+
 /* Colores de las tarjetas */
+
 .stat-card-primary {
     background: linear-gradient(135deg, rgba(13, 110, 253, 0.2), rgba(13, 110, 253, 0.1));
 }
@@ -113,7 +119,9 @@
     background: linear-gradient(135deg, rgba(108, 117, 125, 0.3), rgba(108, 117, 125, 0.15));
 }
 
+
 /* Tarjeta de repartidores */
+
 .repartidores-card {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -137,7 +145,9 @@
     padding: 1.5rem;
 }
 
+
 /* Items de repartidor */
+
 .repartidor-item {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
@@ -232,14 +242,25 @@
         margin-left: 0;
         width: 100%;
     }
-
     .stat-card {
         height: auto;
         min-height: 120px;
     }
-
     .stat-value {
         font-size: 2rem;
     }
 }
 
+
+/* Animaciones de scroll reveal */
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-reveal.animate__animated {
+    opacity: 1;
+    transform: translateY(0);
+}

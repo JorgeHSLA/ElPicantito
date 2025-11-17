@@ -122,8 +122,12 @@
     flex: 1;
     text-align: center;
     font-weight: 600;
-    color: #d84315;
+    color: #ff6b35;
     font-size: 1rem;
+}
+
+.step-info span {
+    color: #ff6b35 !important;
 }
 
 .nav-btn {
@@ -176,7 +180,7 @@
 }
 
 .taco-list {
-    padding: 2rem;
+    padding: 5px;
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
@@ -216,7 +220,7 @@
 
 .stacked-item {
     position: absolute;
-    width: 90%;
+    width: 65%;
     bottom: 0;
     left: 50%;
     cursor: move;
@@ -225,10 +229,15 @@
     max-height: fit-content;
 }
 
+/* Extras (quesos y lechuga) un 10% más pequeños */
+.stacked-item.extra-item {
+    width: 58.5%;
+}
+
 /* La tortilla (primer elemento) debe ser más grande y estar en la base */
 .stacked-item:first-child,
 .stacked-item.tortilla-item {
-    width: 120%;
+    width: 70%;
     transform: translate(-50%, 0) translateY(0px) !important;
     z-index: 0 !important;
 }
@@ -245,11 +254,12 @@
     display: block;
 }
 
-/* La tortilla siempre debe ser más grande - debe estar DESPUÉS de .ingredient-image */
+/* La tortilla siempre debe ser más grande, so debe estar DESPUÉS de .ingredient-image */
 .stacked-item:first-child .ingredient-image,
 .stacked-item.tortilla-item .ingredient-image {
-    height: 400px !important;
-    width: 100% !important;
+    height: 367.5px !important;
+    width: 105% !important;
+    margin-left: -2.5%;
 }
 
 .item-label {
@@ -304,6 +314,8 @@
     padding: 0.5rem 0.75rem;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: move;
+    user-select: none;
 }
 
 .salsa-display-image {
@@ -416,6 +428,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+}
+
+.ingredient-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .taco-ingredient .ingredient-icon {
