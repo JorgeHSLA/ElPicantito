@@ -47,46 +47,49 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // Pequeño delay para asegurar que el DOM esté completamente renderizado
+    // Delay para asegurar que el DOM esté completamente renderizado
     setTimeout(() => {
       this.setupScrollAnimations();
-    }, 100);
+    }, 150);
   }
 
   private setupScrollAnimations() {
-    const observerOptions = {
-      threshold: 0.05, // Reduce el threshold para activar antes
-      rootMargin: '50px 0px -50px 0px' // Activa cuando el elemento está cerca del viewport
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate__animated');
-          const animationType = entry.target.getAttribute('data-animation') || 'animate__fadeInUp';
-          entry.target.classList.add(animationType);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    // Observar todos los elementos con la clase scroll-reveal
     const elements = this.elementRef.nativeElement.querySelectorAll('.scroll-reveal');
-    elements.forEach((el: Element) => {
-      // Forzar el check inicial para elementos ya visibles
-      const rect = el.getBoundingClientRect();
-      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const element = entry.target as HTMLElement;
+            const animation = element.dataset['animation'] || 'fadeInUp';
+            element.style.opacity = '1';
+            element.classList.add('animate__animated', `animate__${animation}`);
+            observer.unobserve(element);
+          }
+        });
+      },
+      {
+        threshold: 0.05,
+        rootMargin: '50px 0px -50px 0px'
+      }
+    );
 
+    // Verificar cada elemento
+    elements.forEach((element: Element, index: number) => {
+      const htmlElement = element as HTMLElement;
+      const rect = htmlElement.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+      
       if (isVisible) {
-        // Si el elemento ya está visible, animarlo inmediatamente
+        // Si ya está visible, animarlo inmediatamente con delay progresivo
         setTimeout(() => {
-          el.classList.add('animate__animated');
-          const animationType = el.getAttribute('data-animation') || 'animate__fadeInUp';
-          el.classList.add(animationType);
-        }, 50);
+          const animation = htmlElement.dataset['animation'] || 'fadeInUp';
+          htmlElement.style.opacity = '1';
+          htmlElement.classList.add('animate__animated', `animate__${animation}`);
+        }, index * 100); // 100ms entre cada elemento
       } else {
-        // Si no está visible, observarlo para cuando aparezca
-        observer.observe(el);
+        // Si no está visible, observarlo
+        observer.observe(element);
       }
     });
   }
