@@ -1,18 +1,29 @@
 /* Estilos para la tarjeta de valor */
 
 .value-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
     border-radius: 15px;
-    background: #fff;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    background: transparent;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 193, 7, 0.6);
     cursor: pointer;
+    padding: 2rem;
 }
 
 .value-card:hover {
-    transform: translateY(-5px) scale(1.03);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    transform: translateY(-5px);
+    border-color: rgba(255, 193, 7, 0.9);
 }
 
 .value-icon {
     margin-bottom: 1rem;
+}
+
+.value-card h5 {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.value-card p {
+    color: #ffffff;
 }
