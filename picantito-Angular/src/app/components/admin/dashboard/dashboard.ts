@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   private setupScrollAnimations() {
     const elements = this.elementRef.nativeElement.querySelectorAll('.scroll-reveal');
-    
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       const htmlElement = element as HTMLElement;
       const rect = htmlElement.getBoundingClientRect();
       const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-      
+
       if (isVisible) {
         // Si ya está visible, animarlo inmediatamente con delay progresivo
         setTimeout(() => {

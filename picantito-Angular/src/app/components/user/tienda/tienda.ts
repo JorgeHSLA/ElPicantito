@@ -32,7 +32,7 @@ export class TiendaComponent implements OnInit, AfterViewInit {
   loggedUser: any = null; // Aquí integrarás con tu servicio de autenticación
 
   constructor(
-    private productoService: ProductoService, 
+    private productoService: ProductoService,
     private router: Router,
     private elementRef: ElementRef
   ) {}
@@ -44,7 +44,7 @@ export class TiendaComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     // Inicializar componentes Bootstrap
     this.initializeBootstrapComponents();
-    
+
     // Esperar a que los productos se carguen antes de inicializar animaciones
     setTimeout(() => {
       this.setupScrollAnimations();
@@ -61,7 +61,7 @@ export class TiendaComponent implements OnInit, AfterViewInit {
 
   private setupScrollAnimations(): void {
     const revealElements = this.elementRef.nativeElement.querySelectorAll('.scroll-reveal');
-    
+
     if (revealElements.length === 0) return;
 
     const observer = new IntersectionObserver((entries) => {
@@ -69,13 +69,13 @@ export class TiendaComponent implements OnInit, AfterViewInit {
         if (entry.isIntersecting) {
           const element = entry.target as HTMLElement;
           const animation = element.dataset['animation'] || 'animate__fadeInUp';
-          
+
           // Añadir animación más rápida
           setTimeout(() => {
             element.style.opacity = '1';
             element.classList.add('animate__animated', animation, 'animate__faster');
           }, index * 30); // Delay más corto entre elementos
-          
+
           observer.unobserve(element);
         }
       });
@@ -120,11 +120,11 @@ export class TiendaComponent implements OnInit, AfterViewInit {
   private filtrarProductos(): void {
     console.log('Filtrando por categoría:', this.categoriaSeleccionada);
     console.log('Productos base:', this.productos);
-    
+
     if (this.categoriaSeleccionada === 'Todos') {
       this.productosFiltrados = [...this.productos];
     } else if (this.categoriaSeleccionada === 'Disponibles') {
-      this.productosFiltrados = this.productos.filter(producto => 
+      this.productosFiltrados = this.productos.filter(producto =>
         producto.disponible === true || (producto.disponible as any) === 1
       );
     } else if (this.categoriaSeleccionada === 'No Disponibles') {
@@ -134,7 +134,7 @@ export class TiendaComponent implements OnInit, AfterViewInit {
     } else {
       this.productosFiltrados = [...this.productos];
     }
-    
+
     console.log('Productos filtrados resultado:', this.productosFiltrados);
   }
 

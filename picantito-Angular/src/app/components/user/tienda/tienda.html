@@ -61,8 +61,7 @@
 
     <!-- Error message -->
     <div *ngIf="error" class="alert alert-danger text-center" role="alert">
-        <i class="bi bi-exclamation-triangle me-2"></i>
-        {{ error }}
+        <i class="bi bi-exclamation-triangle me-2"></i> {{ error }}
     </div>
 
     <!-- Productos -->
@@ -74,7 +73,7 @@
             </app-product-card>
         </div>
         }
-        
+
         <!-- Mensaje cuando no hay productos -->
         @if (productosFiltrados.length === 0) {
         <div class="col-12 text-center py-5">

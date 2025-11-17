@@ -232,7 +232,9 @@ main.container .row.g-4::before {
     }
 }
 
+
 /* Animaciones de scroll reveal para productos - MÁS RÁPIDAS */
+
 .scroll-reveal {
     opacity: 0;
     transform: translateY(20px);
@@ -244,7 +246,9 @@ main.container .row.g-4::before {
     transform: translateY(0);
 }
 
+
 /* Hacer las animaciones más rápidas */
+
 .animate__faster {
     animation-duration: 0.4s !important;
 }

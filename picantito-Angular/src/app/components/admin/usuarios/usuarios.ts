@@ -16,6 +16,14 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class UsuariosComponent implements OnInit {
   usuarios = signal<Usuario[]>([]);
+  usuariosFiltrados = signal<Usuario[]>([]);
+  
+  // Filtros y búsqueda
+  searchTerm = signal('');
+  filtroRol = signal('todos'); // 'todos', 'ADMIN', 'OPERADOR', 'CLIENTE', 'REPARTIDOR'
+  filtroEstado = signal('todos'); // 'todos', 'activos', 'inactivos'
+  filtroOrden = signal('id-asc');
+  
   nuevoUsuario = signal<Usuario>({
     nombreCompleto: '',
     nombreUsuario: '',
@@ -42,9 +50,82 @@ export class UsuariosComponent implements OnInit {
           return (a.id || 0) - (b.id || 0);
         });
         this.usuarios.set(usuariosOrdenados);
+        this.aplicarFiltros();
       },
       error: () => this.errorMessage.set('No se pudieron cargar los usuarios')
     });
+  }
+
+  aplicarFiltros() {
+    let resultado = [...this.usuarios()];
+    
+    const termino = this.searchTerm().toLowerCase();
+    if (termino) {
+      resultado = resultado.filter(u => 
+        u.nombreCompleto?.toLowerCase().includes(termino) ||
+        u.nombreUsuario?.toLowerCase().includes(termino) ||
+        u.correo?.toLowerCase().includes(termino) ||
+        u.telefono?.includes(termino)
+      );
+    }
+    
+    const rol = this.filtroRol();
+    if (rol !== 'todos') {
+      resultado = resultado.filter(u => u.rol === rol);
+    }
+    
+    const estado = this.filtroEstado();
+    if (estado === 'activos') {
+      resultado = resultado.filter(u => u.activo === true);
+    } else if (estado === 'inactivos') {
+      resultado = resultado.filter(u => u.activo === false);
+    }
+    
+    const orden = this.filtroOrden();
+    switch(orden) {
+      case 'id-asc':
+        resultado.sort((a, b) => (a.id || 0) - (b.id || 0));
+        break;
+      case 'id-desc':
+        resultado.sort((a, b) => (b.id || 0) - (a.id || 0));
+        break;
+      case 'nombre-asc':
+        resultado.sort((a, b) => (a.nombreCompleto || '').localeCompare(b.nombreCompleto || ''));
+        break;
+      case 'nombre-desc':
+        resultado.sort((a, b) => (b.nombreCompleto || '').localeCompare(a.nombreCompleto || ''));
+        break;
+    }
+    
+    this.usuariosFiltrados.set(resultado);
+  }
+
+  onSearchChange(value: string) {
+    this.searchTerm.set(value);
+    this.aplicarFiltros();
+  }
+
+  onFiltroRolChange(value: string) {
+    this.filtroRol.set(value);
+    this.aplicarFiltros();
+  }
+
+  onFiltroEstadoChange(value: string) {
+    this.filtroEstado.set(value);
+    this.aplicarFiltros();
+  }
+
+  onFiltroOrdenChange(value: string) {
+    this.filtroOrden.set(value);
+    this.aplicarFiltros();
+  }
+
+  limpiarFiltros() {
+    this.searchTerm.set('');
+    this.filtroRol.set('todos');
+    this.filtroEstado.set('todos');
+    this.filtroOrden.set('id-asc');
+    this.aplicarFiltros();
   }
 
   saveUsuario() {

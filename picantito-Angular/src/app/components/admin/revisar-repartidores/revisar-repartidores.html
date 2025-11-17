@@ -24,6 +24,69 @@
                         <div class="card-header bg-dark text-white">
                             <h5 class="mb-0">Pedidos</h5>
                         </div>
+                        <div class="card-body">
+                            <!-- FILTROS Y BÚSQUEDA -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-3">
+                                    <label class="form-label text-dark">🔍 Buscar</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        placeholder="Buscar por ID, cliente..."
+                                        [value]="searchTerm()"
+                                        (input)="onSearchChange($any($event.target).value)">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label text-dark">Estado</label>
+                                    <select 
+                                        class="form-select" 
+                                        [value]="filtroEstado()"
+                                        (change)="onFiltroEstadoChange($any($event.target).value)">
+                                        <option value="todos">Todos</option>
+                                        <option value="recibido">Recibido</option>
+                                        <option value="cocinando">Cocinando</option>
+                                        <option value="enviado">Enviado</option>
+                                        <option value="entregado">Entregado</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label text-dark">Repartidor</label>
+                                    <select 
+                                        class="form-select" 
+                                        [value]="filtroRepartidor()"
+                                        (change)="onFiltroRepartidorChange($any($event.target).value)">
+                                        <option value="todos">Todos</option>
+                                        @for (rep of repartidoresActivos(); track rep.id) {
+                                            <option [value]="rep.id">{{ rep.nombreCompleto }}</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label text-dark">Ordenar</label>
+                                    <select 
+                                        class="form-select" 
+                                        [value]="filtroOrden()"
+                                        (change)="onFiltroOrdenChange($any($event.target).value)">
+                                        <option value="id-desc">ID (nuevo a viejo)</option>
+                                        <option value="id-asc">ID (viejo a nuevo)</option>
+                                        <option value="fecha-desc">Fecha (reciente)</option>
+                                        <option value="fecha-asc">Fecha (antigua)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label text-dark">&nbsp;</label>
+                                    <button class="btn btn-secondary w-100" (click)="limpiarFiltros()">
+                                        <i class="bi bi-x-circle me-1"></i>Limpiar
+                                    </button>
+                                </div>
+                            </div>
+
+                            @if (pedidosFiltrados().length === 0) {
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i>No se encontraron pedidos con los filtros aplicados.
+                            </div>
+                            }
+                        </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
                                 <table class="table table-striped mb-0">
@@ -38,7 +101,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @for (pedido of pedidosActivos(); track pedido.id) {
+                                        @for (pedido of pedidosFiltrados(); track pedido.id) {
                                         <tr>
                                             <td>{{ pedido.id }}</td>
                                             <td>{{ pedido.clienteNombre }}</td>

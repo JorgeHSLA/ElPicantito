@@ -35,6 +35,56 @@
                     <h5 class="mb-0 text-white">Lista de Adicionales</h5>
                 </div>
                 <div class="card-body">
+                    <!-- FILTROS Y BÚSQUEDA -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label text-white">🔍 Buscar</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                placeholder="Buscar por nombre o descripción..."
+                                [value]="searchTerm()"
+                                (input)="onSearchChange($any($event.target).value)">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-white">Disponibilidad</label>
+                            <select 
+                                class="form-select" 
+                                [value]="filtroDisponibilidad()"
+                                (change)="onFiltroDisponibilidadChange($any($event.target).value)">
+                                <option value="todos">Todos</option>
+                                <option value="disponibles">Disponibles</option>
+                                <option value="no-disponibles">No Disponibles</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-white">Ordenar por</label>
+                            <select 
+                                class="form-select" 
+                                [value]="filtroOrden()"
+                                (change)="onFiltroOrdenChange($any($event.target).value)">
+                                <option value="id-asc">ID (menor a mayor)</option>
+                                <option value="id-desc">ID (mayor a menor)</option>
+                                <option value="nombre-asc">Nombre (A-Z)</option>
+                                <option value="nombre-desc">Nombre (Z-A)</option>
+                                <option value="precio-asc">Precio (menor a mayor)</option>
+                                <option value="precio-desc">Precio (mayor a menor)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label text-white">&nbsp;</label>
+                            <button class="btn btn-secondary w-100" (click)="limpiarFiltros()">
+                                <i class="bi bi-x-circle me-1"></i>Limpiar
+                            </button>
+                        </div>
+                    </div>
+
+                    @if (adicionalesFiltrados().length === 0) {
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>No se encontraron adicionales con los filtros aplicados.
+                    </div>
+                    }
+
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -51,7 +101,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for (adicional of adicionales(); track adicional.id) {
+                                @for (adicional of adicionalesFiltrados(); track adicional.id) {
                                 <tr>
                                     <td>{{ adicional.id }}</td>
                                     <td>{{ adicional.nombre }}</td>

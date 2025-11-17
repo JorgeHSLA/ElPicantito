@@ -19,6 +19,13 @@ import { ProductoService } from '../../../services/tienda/producto.service';
 })
 export class AdicionalesComponent implements OnInit {
   adicionales = signal<Adicional[]>([]);
+  adicionalesFiltrados = signal<Adicional[]>([]);
+  
+  // Filtros y búsqueda
+  searchTerm = signal('');
+  filtroDisponibilidad = signal('todos');
+  filtroOrden = signal('id-asc');
+  
   productoAdicionales = signal<ProductoAdicional[]>([]);
   productos = signal<Producto[]>([]);
   nuevoAdicional = signal<Adicional>({
@@ -56,9 +63,75 @@ export class AdicionalesComponent implements OnInit {
           return (a.id || 0) - (b.id || 0);
         });
         this.adicionales.set(adicionalesOrdenados);
+        this.aplicarFiltros();
       },
       error: () => this.errorMessage.set('Error al cargar adicionales')
     });
+  }
+
+  aplicarFiltros() {
+    let resultado = [...this.adicionales()];
+    
+    const termino = this.searchTerm().toLowerCase();
+    if (termino) {
+      resultado = resultado.filter(a => 
+        a.nombre?.toLowerCase().includes(termino) ||
+        a.descripcion?.toLowerCase().includes(termino)
+      );
+    }
+    
+    const disponibilidad = this.filtroDisponibilidad();
+    if (disponibilidad === 'disponibles') {
+      resultado = resultado.filter(a => a.disponible === true);
+    } else if (disponibilidad === 'no-disponibles') {
+      resultado = resultado.filter(a => a.disponible === false);
+    }
+    
+    const orden = this.filtroOrden();
+    switch(orden) {
+      case 'id-asc':
+        resultado.sort((a, b) => (a.id || 0) - (b.id || 0));
+        break;
+      case 'id-desc':
+        resultado.sort((a, b) => (b.id || 0) - (a.id || 0));
+        break;
+      case 'nombre-asc':
+        resultado.sort((a, b) => (a.nombre || '').localeCompare(b.nombre || ''));
+        break;
+      case 'nombre-desc':
+        resultado.sort((a, b) => (b.nombre || '').localeCompare(a.nombre || ''));
+        break;
+      case 'precio-asc':
+        resultado.sort((a, b) => (a.precioDeVenta || 0) - (b.precioDeVenta || 0));
+        break;
+      case 'precio-desc':
+        resultado.sort((a, b) => (b.precioDeVenta || 0) - (a.precioDeVenta || 0));
+        break;
+    }
+    
+    this.adicionalesFiltrados.set(resultado);
+  }
+
+  onSearchChange(value: string) {
+    this.searchTerm.set(value);
+    this.aplicarFiltros();
+  }
+
+  onFiltroDisponibilidadChange(value: string) {
+    this.filtroDisponibilidad.set(value);
+    this.aplicarFiltros();
+  }
+
+  onFiltroOrdenChange(value: string) {
+    this.filtroOrden.set(value);
+    this.aplicarFiltros();
+  }
+
+  limpiarFiltros() {
+    this.searchTerm.set('');
+    this.filtroDisponibilidad.set('todos');
+    this.filtroOrden.set('id-asc');
+    this.aplicarFiltros();
   }
 
   saveAdicional() {
