@@ -11,6 +11,41 @@
     <hr class="mt-4 mb-0" style="opacity:.1">
 </section>
 
+<!-- Modal de Éxito del Pedido -->
+<div class="modal fade show" tabindex="-1" [style.display]="showSuccessMessage() ? 'block' : 'none'" 
+     *ngIf="showSuccessMessage()" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title d-flex align-items-center">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          ¡Pedido Creado Exitosamente!
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="showSuccessMessage.set(false)"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center py-3">
+          <i class="bi bi-check-circle text-success" style="font-size: 4rem;"></i>
+          <h4 class="mt-3 mb-3">Tu pedido #{{ newPedidoId() }} ha sido recibido</h4>
+          <p class="text-muted mb-3">
+            Tu orden está siendo procesada. Hemos enviado un correo de confirmación 
+            y te notificaremos sobre cada cambio de estado.
+          </p>
+          <div class="alert alert-info mb-0">
+            <i class="bi bi-info-circle me-2"></i>
+            Puedes ver el seguimiento en tiempo real en el mapa de arriba.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="showSuccessMessage.set(false)">
+          <i class="bi bi-check-lg me-1"></i> Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <main class="container-fluid py-4">
     <!-- Loading State -->
     <div *ngIf="loading()" class="text-center py-5">
@@ -234,22 +269,6 @@
                         </h5>
                         <div class="map-container">
                             <div id="trackingMap" class="tracking-map"></div>
-                            
-                            <!-- Leyenda del mapa -->
-                            <div class="map-legend">
-                                <div class="legend-item">
-                                    <i class="bi bi-house-fill text-primary"></i>
-                                    <span>El Picantito</span>
-                                </div>
-                                <div class="legend-item">
-                                    <i class="bi bi-geo-alt-fill text-danger"></i>
-                                    <span>Tu ubicación</span>
-                                </div>
-                                <div *ngIf="pedidoSeleccionado() && pedidoSeleccionado()!.estado.toUpperCase() === 'ENVIADO'" class="legend-item">
-                                    <i class="bi bi-dash-lg text-success" style="font-weight: bold;"></i>
-                                    <span>Ruta de entrega</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
 

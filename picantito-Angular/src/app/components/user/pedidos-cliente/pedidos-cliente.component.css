@@ -5,6 +5,18 @@
     border-bottom: 4px solid #ffc107;
 }
 
+/* ==================== ANIMACIÓN MENSAJE DE ÉXITO ==================== */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* ==================== FILTER BUTTONS ==================== */
 .pedidos-header {
     padding: 0 1rem;

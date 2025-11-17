@@ -520,6 +520,105 @@ public class EmailService {
     }
 
     /**
+     * Envía un correo de confirmación cuando se crea un nuevo pedido
+     */
+    @Async
+    public void enviarConfirmacionPedidoCreado(String destinatario, String nombreCliente, 
+                                                Integer pedidoId, Double total, String direccion) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            helper.setFrom("noreply@elpicantito.com");
+            helper.setTo(destinatario);
+            helper.setSubject("🌮 ¡Pedido Confirmado! - El Picantito #" + pedidoId);
+            
+            String contenido = construirHtmlPedidoCreado(nombreCliente, pedidoId, total, direccion);
+            helper.setText(contenido, true);
+            
+            mailSender.send(message);
+            log.info("Email de confirmación de pedido enviado exitosamente a: {}", destinatario);
+            
+        } catch (Exception e) {
+            log.error("Error al enviar email de confirmación a {}: {}", destinatario, e.getMessage());
+        }
+    }
+
+    /**
+     * Construye el HTML del mensaje de confirmación de pedido creado
+     */
+    private String construirHtmlPedidoCreado(String nombreCliente, Integer pedidoId, Double total, String direccion) {
+        return """
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+                <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 15px; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+                    <div style="background: linear-gradient(135deg, #28a745 0%%, #20c997 100%%); padding: 30px; text-align: center;">
+                        <h1 style="margin: 0; font-size: 32px; color: #ffffff;">🌮 El Picantito</h1>
+                        <p style="margin: 10px 0 0 0; font-size: 18px; color: #ffffff; opacity: 0.95;">¡Gracias por tu pedido!</p>
+                    </div>
+                    <div style="padding: 40px 30px;">
+                        <p style="font-size: 18px; color: #333; margin-bottom: 20px;">
+                            Hola <strong>%s</strong>,
+                        </p>
+                        <div style="background: linear-gradient(135deg, #28a745 0%%, #20c997 100%%); padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0; box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);">
+                            <div style="font-size: 56px; margin-bottom: 10px;">🎉</div>
+                            <h2 style="margin: 0; font-size: 26px; font-weight: bold; color: #ffffff;">¡PEDIDO CONFIRMADO!</h2>
+                            <p style="margin: 15px 0 5px 0; font-size: 16px; color: #ffffff; opacity: 0.95;">Pedido #%d</p>
+                            <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #ffffff;">$%,.2f</p>
+                        </div>
+                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin: 25px 0;">
+                            <h3 style="margin: 0 0 15px 0; color: #333; font-size: 18px;">📍 Dirección de Entrega</h3>
+                            <p style="margin: 0; color: #555; font-size: 16px; line-height: 1.5;">%s</p>
+                        </div>
+                        <p style="font-size: 16px; color: #2c3e50; line-height: 1.8; text-align: center; margin: 30px 0;">
+                            <strong style="color: #1a1a1a;">Hemos recibido tu pedido exitosamente.</strong><br>
+                            Nuestro restaurante está procesando tu orden y pronto comenzaremos a preparar<br>
+                            tus deliciosos tacos con los mejores ingredientes frescos.
+                        </p>
+                        <div style="background-color: #fff8e1; border-left: 4px solid #ffa000; padding: 15px; margin: 25px 0; border-radius: 5px;">
+                            <p style="margin: 0; color: #e65100; font-size: 14px;">
+                                <strong>💡 ¿Sabías que?</strong> Puedes seguir el estado de tu pedido en tiempo real y ver la ruta de entrega en el mapa.
+                            </p>
+                        </div>
+                        <div style="text-align: center; margin: 35px 0;">
+                            <a href="http://localhost:4200/cliente/pedidos" 
+                               style="display: inline-block; background-color: #ffc107; color: #000000; padding: 16px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 17px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);">
+                                🗺️ Ver Seguimiento en Tiempo Real
+                            </a>
+                        </div>
+                        <div style="margin-top: 30px; padding: 20px; background-color: #e3f2fd; border-radius: 10px; border: 1px solid #90caf9; text-align: center;">
+                            <p style="margin: 0 0 10px 0; font-size: 16px; color: #01579b; font-weight: bold;">
+                                Estados de tu pedido:
+                            </p>
+                            <p style="margin: 5px 0; font-size: 14px; color: #1a1a1a;">
+                                ✅ Recibido → 👨‍🍳 En Preparación → 🚚 En Camino → 🎉 Entregado
+                            </p>
+                        </div>
+                        <p style="font-size: 13px; color: #666666; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center;">
+                            Te mantendremos informado por correo sobre cada cambio en el estado de tu pedido.
+                        </p>
+                    </div>
+                    <div style="background-color: #1a1a1a; padding: 25px; text-align: center; border-top: 4px solid #ffc107;">
+                        <p style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold; color: #ffc107;">
+                            🌮 El Picantito - Tacos Auténticos
+                        </p>
+                        <p style="margin: 0; font-size: 12px; color: #cccccc;">
+                            Este es un correo automático, por favor no respondas.<br>
+                            © 2025 El Picantito - Todos los derechos reservados
+                        </p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """.formatted(nombreCliente, pedidoId, total, direccion);
+    }
+
+    /**
      * Construye el HTML del mensaje de notificación según el estado
      */
     private String construirHtmlCambioEstado(String nombreCliente, Long pedidoId, String estado) {
@@ -581,34 +680,34 @@ public class EmailService {
             </head>
             <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
                 <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 15px; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
-                    <div style="background: linear-gradient(135deg, #212529 0%%, #343a40 100%%); color: white; padding: 30px; text-align: center;">
-                        <h1 style="margin: 0; font-size: 28px;">🌮 El Picantito</h1>
-                        <p style="margin: 10px 0 0 0; opacity: 0.9;">Actualización de tu Pedido</p>
+                    <div style="background: linear-gradient(135deg, #212529 0%%, #343a40 100%%); padding: 30px; text-align: center;">
+                        <h1 style="margin: 0; font-size: 28px; color: #ffffff;">🌮 El Picantito</h1>
+                        <p style="margin: 10px 0 0 0; color: #ffffff; opacity: 0.9;">Actualización de tu Pedido</p>
                     </div>
                     <div style="padding: 40px 30px;">
-                        <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
-                            Hola <strong>%s</strong>,
+                        <p style="font-size: 16px; color: #1a1a1a; margin-bottom: 20px;">
+                            Hola <strong style="color: #000;">%s</strong>,
                         </p>
-                        <div style="background-color: %s; color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 30px 0;">
+                        <div style="background-color: %s; padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0; box-shadow: 0 4px 8px rgba(0,0,0,0.15);">
                             <div style="font-size: 48px; margin-bottom: 10px;">%s</div>
-                            <h2 style="margin: 0; font-size: 24px;">%s</h2>
-                            <p style="margin: 10px 0 0 0; font-size: 14px;">Pedido #%d</p>
+                            <h2 style="margin: 0; font-size: 24px; color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">%s</h2>
+                            <p style="margin: 10px 0 0 0; font-size: 14px; color: #ffffff; opacity: 0.95;">Pedido #%d</p>
                         </div>
-                        <p style="font-size: 16px; color: #555; line-height: 1.6; text-align: center;">
+                        <p style="font-size: 16px; color: #2c3e50; line-height: 1.7; text-align: center;">
                             %s
                         </p>
                         <div style="text-align: center; margin: 30px 0;">
-                            <a href="http://localhost:4200/cliente/tu-id/pedidos" 
-                               style="display: inline-block; background-color: #ffc107; color: #1a1a1a; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                            <a href="http://localhost:4200/cliente/pedidos" 
+                               style="display: inline-block; background-color: #ffc107; color: #000000; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
                                 Ver Seguimiento en Tiempo Real
                             </a>
                         </div>
-                        <p style="font-size: 14px; color: #888; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-                            <strong>Nota:</strong> Puedes seguir el estado de tu pedido en tiempo real desde tu perfil en nuestra aplicación.
+                        <p style="font-size: 14px; color: #666666; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+                            <strong style="color: #1a1a1a;">Nota:</strong> Puedes seguir el estado de tu pedido en tiempo real desde tu perfil en nuestra aplicación.
                         </p>
                     </div>
-                    <div style="background-color: #f8f9fa; padding: 20px; text-align: center; color: #6c757d; font-size: 12px;">
-                        <p style="margin: 0;">
+                    <div style="background-color: #1a1a1a; padding: 20px; text-align: center; border-top: 4px solid #ffc107;">
+                        <p style="margin: 0; font-size: 12px; color: #cccccc;">
                             Este es un correo automático, por favor no respondas.<br>
                             © 2025 El Picantito - Todos los derechos reservados
                         </p>
