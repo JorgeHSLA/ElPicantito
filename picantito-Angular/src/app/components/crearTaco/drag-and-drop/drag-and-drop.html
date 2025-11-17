@@ -52,7 +52,9 @@
                     @for(item of todo(); track item.idAdcional) {
                         <div class="ingredient-card" cdkDrag [cdkDragData]="item">
                             <div class="ingredient-content">
-                                <div class="ingredient-icon">🍴</div>
+                                <div class="ingredient-icon">
+                                    <img [src]="item.image" [alt]="item.nombre">
+                                </div>
                                 <div class="ingredient-info">
                                     <h3>{{item.nombre}}</h3>
                                     <span class="price">${{item.precio}}</span>
