@@ -176,7 +176,7 @@
 }
 
 .taco-list {
-    padding: 2rem;
+    padding: 5px;
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;

@@ -602,8 +602,10 @@ export class DragAndDrop {
               !item.nombre.toLowerCase().includes('pico')
     );
     const baseHeight = 500;
-    const heightPerItem = 5;
-    return baseHeight + (Math.max(0, nonSalsaItems.length - 1) * heightPerItem);
+    // Crecimiento reducido para evitar demasiado espacio
+    const itemsThatGoUp = Math.max(0, nonSalsaItems.length - 2);
+    const heightPerItem = 20;
+    return baseHeight + (itemsThatGoUp * heightPerItem);
   }
 
   /**
@@ -616,8 +618,10 @@ export class DragAndDrop {
               !item.nombre.toLowerCase().includes('pico')
     );
     const baseHeight = 450;
-    const heightPerItem = 5;
-    return baseHeight + (Math.max(0, nonSalsaItems.length - 1) * heightPerItem);
+    // Crecimiento reducido para evitar demasiado espacio
+    const itemsThatGoUp = Math.max(0, nonSalsaItems.length - 2);
+    const heightPerItem = 20;
+    return baseHeight + (itemsThatGoUp * heightPerItem);
   }
 
   /**
