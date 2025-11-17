@@ -140,8 +140,18 @@ export class DragAndDrop {
   private getImageForAdicional(nombre: string): string {
     const nombreLower = nombre.toLowerCase();
     
-    // Tortillas
+    // Tortillas - detectar tipo específico
     if (nombreLower.includes('tortilla')) {
+      if (nombreLower.includes('harina')) {
+        return '/images/crearTaco/tortillas/tortillaHarina.png';
+      }
+      if (nombreLower.includes('integral')) {
+        return '/images/crearTaco/tortillas/tortillaIntegral.png';
+      }
+      if (nombreLower.includes('maiz') || nombreLower.includes('maíz')) {
+        return '/images/crearTaco/tortillas/tortillaMaiz.png';
+      }
+      // Si no se especifica el tipo, usar imagen genérica
       return '/images/crearTaco/tortillas/tortilla.png';
     }
     
@@ -308,6 +318,15 @@ export class DragAndDrop {
   }
 
   drop(event: CdkDragDrop<Item[]>) {
+    console.log('=== DROP EVENT START ===');
+    console.log('Previous container:', event.previousContainer.id);
+    console.log('Current container:', event.container.id);
+    console.log('Previous index:', event.previousIndex);
+    console.log('Current step:', this.currentStep());
+    console.log('TODO signal array:', this.todo());
+    console.log('DONE signal array:', this.done());
+    console.log('event.item.data (el item arrastrado):', event.item.data);
+    
     const tortillaIds = this.tortillas().map(t => t.idAdcional);
     
     if(event.previousContainer === event.container) {
@@ -325,8 +344,11 @@ export class DragAndDrop {
       const currentStepValue = this.currentStep();
       // Transferir entre listas diferentes
       if(event.previousContainer.id === 'todoList') {
-        // De TODO a DONE
-        const item = event.previousContainer.data[event.previousIndex];
+        // De TODO a DONE - Usar event.item.data que tiene el item correcto
+        const item = event.item.data as Item;
+        console.log('Item arrastrado desde TODO:', item);
+        console.log('Nombre del item:', item?.nombre);
+        console.log('ID del item:', item?.idAdcional);
         if (currentStepValue === 'tortilla') {
           // Para tortillas: solo una permitida, reemplazar si ya existe
           const doneItems = this.done();
@@ -342,22 +364,15 @@ export class DragAndDrop {
           const newDone = this.sortDoneWithTortillaFirst([item, ...filteredDone]);
           this.done.set(newDone);
           // Actualizar todo: remover la seleccionada y agregar la anterior si existía
-          const sourceItems = [...event.previousContainer.data];
-          sourceItems.splice(event.previousIndex, 1);
+          const sourceItems = this.todo().filter(t => t.idAdcional !== item.idAdcional);
           if (previousTortilla) {
             sourceItems.push(previousTortilla);
           }
           this.todo.set(sourceItems);
         } else {
           // Para otros ingredientes: permitir múltiples
-          const sourceItems = [...event.previousContainer.data];
-          let targetItems = [...event.container.data];
-          transferArrayItem(
-            sourceItems,
-            targetItems,
-            event.previousIndex,
-            event.currentIndex
-          );
+          const sourceItems = this.todo().filter(t => t.idAdcional !== item.idAdcional);
+          let targetItems = [...this.done(), item];
           // Ordenar done para que la tortilla quede de primera
           targetItems = this.sortDoneWithTortillaFirst(targetItems);
           this.todo.set(sourceItems);
@@ -365,14 +380,9 @@ export class DragAndDrop {
         }
       } else {
         // De DONE a TODO
-        let sourceItems = [...event.previousContainer.data];
-        const targetItems = [...event.container.data];
-        transferArrayItem(
-          sourceItems,
-          targetItems,
-          event.previousIndex,
-          event.currentIndex
-        );
+        const item = event.item.data as Item;
+        let sourceItems = this.done().filter(d => d.idAdcional !== item.idAdcional);
+        const targetItems = [...this.todo(), item];
         // Ordenar done para que la tortilla quede de primera
         sourceItems = this.sortDoneWithTortillaFirst(sourceItems);
         this.done.set(sourceItems);
