@@ -9,6 +9,8 @@
       display: block;
       position: relative;
       min-height: 100vh;
+      overflow-x: hidden;
+      width: 100%;
   }
 
   :host::before {
@@ -32,6 +34,7 @@
   .recommended-carousel {
       position: relative;
       overflow: hidden;
+      max-width: 100%;
   }
 
   .recommended-carousel-container {
@@ -169,6 +172,8 @@
   .features-section {
       position: relative;
       z-index: 1;
+      overflow-x: hidden;
+      max-width: 100%;
   }
 
   .features-section::before {
