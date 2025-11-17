@@ -225,6 +225,11 @@
     max-height: fit-content;
 }
 
+/* Extras (quesos y lechuga) un 10% más pequeños */
+.stacked-item.extra-item {
+    width: 58.5%;
+}
+
 /* La tortilla (primer elemento) debe ser más grande y estar en la base */
 .stacked-item:first-child,
 .stacked-item.tortilla-item {
@@ -305,6 +310,8 @@
     padding: 0.5rem 0.75rem;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: move;
+    user-select: none;
 }
 
 .salsa-display-image {

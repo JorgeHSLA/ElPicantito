@@ -625,7 +625,17 @@ export class DragAndDrop {
    * La tortilla (idx 0) y el primer ingrediente (idx 1) quedan al mismo nivel
    * A partir del tercer elemento (idx 2) comienzan a subir
    */
-  getIngredientTranslateY(index: number): number {
+  getIngredientTranslateY(item: any): number {
+    // Obtener solo los items que no son salsas
+    const nonSalsaItems = this.done().filter(
+      i => i.nombre && 
+           !i.nombre.toLowerCase().includes('salsa') && 
+           !i.nombre.toLowerCase().includes('pico')
+    );
+    
+    // Encontrar el índice de este item entre los no-salsa
+    const index = nonSalsaItems.findIndex(i => i.idAdcional === item.idAdcional);
+    
     if (index <= 1) {
       return 0; // Tortilla y primer ingrediente al mismo nivel
     }

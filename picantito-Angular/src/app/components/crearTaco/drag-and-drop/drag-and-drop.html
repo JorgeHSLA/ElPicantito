@@ -133,8 +133,9 @@
                             @for(item of done(); track item.idAdcional; let idx = $index) {
                                 @if(item.nombre && !item.nombre.toLowerCase().includes('salsa') && !item.nombre.toLowerCase().includes('pico')) {
                                     <div class="stacked-item" 
-                                         [class.tortilla-item]="idx === 0" 
-                                         [style.transform]="'translate(-50%, 0) translateY(' + getIngredientTranslateY(idx) + 'px)'"
+                                         [class.tortilla-item]="idx === 0"
+                                         [class.extra-item]="item.nombre.toLowerCase().includes('queso') || item.nombre.toLowerCase().includes('lechuga')" 
+                                         [style.transform]="'translate(-50%, 0) translateY(' + getIngredientTranslateY(item) + 'px)'"
                                          cdkDrag
                                          [cdkDragData]="item">
                                         <img [src]="item.image" [alt]="item.nombre" class="ingredient-image">
@@ -158,7 +159,7 @@
                                 <h3 class="salsas-section-title">Salsas:</h3>
                                 <div class="salsas-display">
                                     @for(salsa of getSalsas(); track salsa.idAdcional) {
-                                        <div class="salsa-display-item">
+                                        <div class="salsa-display-item" cdkDrag [cdkDragData]="salsa">
                                             <img [src]="salsa.image" [alt]="salsa.nombre" class="salsa-display-image">
                                             <span class="salsa-display-name">{{salsa.nombre}}</span>
                                         </div>
