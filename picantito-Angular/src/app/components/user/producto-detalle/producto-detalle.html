@@ -74,10 +74,10 @@
 
                     <!-- Calificación -->
                     <div class="rating mb-3">
-                        @for (star of getStarsArray(producto.calificacion); track $index) {
+                        @for (star of getStarsArray(producto.calificacion); track star) {
                             <i class="bi bi-star-fill text-warning"></i>
                         }
-                        @for (emptyStar of getEmptyStarsArray(producto.calificacion); track $index) {
+                        @for (emptyStar of getEmptyStarsArray(producto.calificacion); track emptyStar) {
                             <i class="bi bi-star text-warning"></i>
                         }
                         <span class="ms-2 text-muted">({{ producto.calificacion || 0 }}/5)</span>
@@ -291,10 +291,10 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ productoRel.nombre }}</h5>
                                     <div class="rating mb-2">
-                                        @for (star of getStarsArray(productoRel.calificacion); track $index) {
+                                        @for (star of getStarsArray(productoRel.calificacion); track star) {
                                             <i class="bi bi-star-fill text-warning"></i>
                                         }
-                                        @for (emptyStar of getEmptyStarsArray(productoRel.calificacion); track $index) {
+                                        @for (emptyStar of getEmptyStarsArray(productoRel.calificacion); track emptyStar) {
                                             <i class="bi bi-star text-warning"></i>
                                         }
                                     </div>
