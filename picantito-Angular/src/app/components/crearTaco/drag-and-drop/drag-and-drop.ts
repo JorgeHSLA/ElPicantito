@@ -131,7 +131,7 @@ export class DragAndDrop {
     return {
       idAdcional: adicional.id,
       nombre: adicional.nombre || 'Sin nombre',
-      image: this.getImageForAdicional(adicional.nombre || ''),
+      image: adicional.imagen || this.getImageForAdicional(adicional.nombre || ''),
       precio: adicional.precioDeVenta || 0,
       cantidad: 1
     };
@@ -191,15 +191,15 @@ export class DragAndDrop {
     
     // Quesos
     if (nombreLower.includes('oaxaca')) {
-      return '/images/crearTaco/quesos/oaxaca.jpg';
+      return '/images/crearTaco/extras/quesoOaxaca.png';
     }
     if (nombreLower.includes('cotija')) {
-      return '/images/crearTaco/quesos/cotija.jpg';
+      return '/images/crearTaco/extras/quesoCotija.png';
     }
     
     // Vegetales
     if (nombreLower.includes('lechuga')) {
-      return '/images/crearTaco/vegetales/lechuga.jpg';
+      return '/images/crearTaco/extras/lechuga.png';
     }
     
     // Imagen por defecto
@@ -277,8 +277,8 @@ export class DragAndDrop {
       this.canGoToNextStep.set(
         doneItems.some(item => proteinaIds.includes(item.idAdcional))
       );
-    } else {
-      // Salsas y extras son opcionales
+    } else if (currentStepValue === 'extras' || currentStepValue === 'salsa') {
+      // Extras y salsas son opcionales
       this.canGoToNextStep.set(true);
     }
   }
@@ -287,11 +287,11 @@ export class DragAndDrop {
     const currentStepValue = this.currentStep();
     
     if (currentStepValue === 'tortilla') {
+      this.loadCategoryItems('extras');
+    } else if (currentStepValue === 'extras') {
       this.loadCategoryItems('proteína');
     } else if (currentStepValue === 'proteína') {
       this.loadCategoryItems('salsa');
-    } else if (currentStepValue === 'salsa') {
-      this.loadCategoryItems('extras');
     }
     
     this.updateCanGoToNextStep();
@@ -300,12 +300,12 @@ export class DragAndDrop {
   goToPreviousStep() {
     const currentStepValue = this.currentStep();
     
-    if (currentStepValue === 'proteína') {
+    if (currentStepValue === 'extras') {
       this.loadCategoryItems('tortilla');
+    } else if (currentStepValue === 'proteína') {
+      this.loadCategoryItems('extras');
     } else if (currentStepValue === 'salsa') {
       this.loadCategoryItems('proteína');
-    } else if (currentStepValue === 'extras') {
-      this.loadCategoryItems('salsa');
     }
     
     this.updateCanGoToNextStep();
@@ -618,6 +618,18 @@ export class DragAndDrop {
     const baseHeight = 450;
     const heightPerItem = 5;
     return baseHeight + (Math.max(0, nonSalsaItems.length - 1) * heightPerItem);
+  }
+
+  /**
+   * Calcula el desplazamiento vertical para cada ingrediente
+   * La tortilla (idx 0) y el primer ingrediente (idx 1) quedan al mismo nivel
+   * A partir del tercer elemento (idx 2) comienzan a subir
+   */
+  getIngredientTranslateY(index: number): number {
+    if (index <= 1) {
+      return 0; // Tortilla y primer ingrediente al mismo nivel
+    }
+    return (index - 1) * -40; // A partir del segundo ingrediente, subir 40px por cada uno
   }
 
   /**

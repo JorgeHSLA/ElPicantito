@@ -216,7 +216,7 @@
 
 .stacked-item {
     position: absolute;
-    width: 90%;
+    width: 65%;
     bottom: 0;
     left: 50%;
     cursor: move;
@@ -228,7 +228,7 @@
 /* La tortilla (primer elemento) debe ser más grande y estar en la base */
 .stacked-item:first-child,
 .stacked-item.tortilla-item {
-    width: 120%;
+    width: 70%;
     transform: translate(-50%, 0) translateY(0px) !important;
     z-index: 0 !important;
 }
@@ -245,11 +245,12 @@
     display: block;
 }
 
-/* La tortilla siempre debe ser más grande - debe estar DESPUÉS de .ingredient-image */
+/* La tortilla siempre debe ser más grande, so debe estar DESPUÉS de .ingredient-image */
 .stacked-item:first-child .ingredient-image,
 .stacked-item.tortilla-item .ingredient-image {
-    height: 400px !important;
-    width: 100% !important;
+    height: 367.5px !important;
+    width: 105% !important;
+    margin-left: -2.5%;
 }
 
 .item-label {
