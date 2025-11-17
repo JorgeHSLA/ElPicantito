@@ -235,120 +235,34 @@ public class EmailService {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <style>
-                    body {
-                        font-family: 'Arial', sans-serif;
-                        background-color: #f4f4f4;
-                        margin: 0;
-                        padding: 0;
-                    }
-                    .container {
-                        max-width: 600px;
-                        margin: 40px auto;
-                        background: white;
-                        border-radius: 16px;
-                        overflow: hidden;
-                        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-                    }
-                    .header {
-                        background: linear-gradient(135deg, #212529 0%, #343a40 100%);
-                        color: white;
-                        padding: 30px;
-                        text-align: center;
-                        border-bottom: 4px solid #ffc107;
-                    }
-                    .header h1 {
-                        margin: 0;
-                        font-size: 28px;
-                    }
-                    .header p {
-                        margin: 10px 0 0 0;
-                        font-size: 14px;
-                        opacity: 0.9;
-                    }
-                    .content {
-                        padding: 40px 30px;
-                        text-align: center;
-                    }
-                    .content h2 {
-                        color: #212529;
-                        margin: 0 0 20px 0;
-                        font-size: 24px;
-                    }
-                    .content p {
-                        color: #6c757d;
-                        line-height: 1.6;
-                        margin: 0 0 30px 0;
-                        font-size: 16px;
-                    }
-                    .code-box {
-                        background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
-                        border: 3px solid #ffc107;
-                        border-radius: 12px;
-                        padding: 30px;
-                        margin: 30px 0;
-                    }
-                    .code {
-                        font-size: 42px;
-                        font-weight: 800;
-                        color: #212529;
-                        letter-spacing: 8px;
-                        font-family: 'Courier New', monospace;
-                        margin: 0;
-                    }
-                    .warning {
-                        background: #fff3cd;
-                        border-left: 4px solid #ffc107;
-                        padding: 15px;
-                        margin: 30px 0;
-                        text-align: left;
-                        border-radius: 8px;
-                    }
-                    .warning p {
-                        margin: 5px 0;
-                        color: #856404;
-                        font-size: 14px;
-                    }
-                    .footer {
-                        background: #f8f9fa;
-                        padding: 25px 30px;
-                        text-align: center;
-                        border-top: 1px solid #e9ecef;
-                    }
-                    .footer p {
-                        margin: 0;
-                        color: #6c757d;
-                        font-size: 13px;
-                    }
-                </style>
             </head>
-            <body>
-                <div class="container">
-                    <div class="header">
-                        <h1>🔐 Recuperación de Contraseña</h1>
-                        <p>El Picantito - Tacos Auténticos</p>
+            <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                    <div style="background-color: #212529; padding: 30px; text-align: center; border-bottom: 4px solid #ffc107;">
+                        <h1 style="margin: 0; font-size: 28px; color: #ffffff;">🔐 Recuperación de Contraseña</h1>
+                        <p style="margin: 10px 0 0 0; font-size: 14px; color: #ffffff;">El Picantito - Tacos Auténticos</p>
                     </div>
-                    <div class="content">
-                        <h2>¡Hola!</h2>
-                        <p>
+                    <div style="padding: 40px 30px; text-align: center;">
+                        <h2 style="color: #212529; margin: 0 0 20px 0; font-size: 24px;">¡Hola!</h2>
+                        <p style="color: #6c757d; line-height: 1.6; margin: 0 0 30px 0; font-size: 16px;">
                             Recibimos una solicitud para restablecer tu contraseña.<br>
                             Utiliza el siguiente código para continuar:
                         </p>
-                        <div class="code-box">
-                            <div class="code">""" + code + """
+                        <div style="background-color: #fff9e6; border: 3px solid #ffc107; border-radius: 12px; padding: 30px; margin: 30px 0;">
+                            <div style="font-size: 42px; font-weight: 800; color: #212529; letter-spacing: 8px; font-family: 'Courier New', monospace; margin: 0;">""" + code + """
                             </div>
                         </div>
-                        <div class="warning">
-                            <p><strong>⏱️ Este código expira en 5 minutos</strong></p>
-                            <p>⚠️ Si no solicitaste este cambio, ignora este correo</p>
-                            <p>🔒 Nunca compartas este código con nadie</p>
+                        <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 30px 0; text-align: left; border-radius: 8px;">
+                            <p style="margin: 5px 0; color: #856404; font-size: 14px;"><strong>⏱️ Este código expira en 5 minutos</strong></p>
+                            <p style="margin: 5px 0; color: #856404; font-size: 14px;">⚠️ Si no solicitaste este cambio, ignora este correo</p>
+                            <p style="margin: 5px 0; color: #856404; font-size: 14px;">🔒 Nunca compartas este código con nadie</p>
                         </div>
-                        <p style="margin-top: 30px;">
+                        <p style="color: #6c757d; line-height: 1.6; margin: 30px 0 0 0; font-size: 16px;">
                             Ingresa este código en la página de recuperación para crear una nueva contraseña.
                         </p>
                     </div>
-                    <div class="footer">
-                        <p>
+                    <div style="background-color: #f8f9fa; padding: 25px 30px; text-align: center; border-top: 1px solid #e9ecef;">
+                        <p style="margin: 0; color: #6c757d; font-size: 13px;">
                             Este es un correo automático, por favor no respondas.<br>
                             © 2025 El Picantito - Todos los derechos reservados
                         </p>
@@ -369,112 +283,25 @@ public class EmailService {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <style>
-                    body {
-                        font-family: 'Arial', sans-serif;
-                        background-color: #f4f4f4;
-                        margin: 0;
-                        padding: 0;
-                    }
-                    .container {
-                        max-width: 600px;
-                        margin: 40px auto;
-                        background: white;
-                        border-radius: 16px;
-                        overflow: hidden;
-                        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-                    }
-                    .header {
-                        background: linear-gradient(135deg, #212529 0%, #343a40 100%);
-                        color: white;
-                        padding: 30px;
-                        text-align: center;
-                        border-bottom: 4px solid #ffc107;
-                    }
-                    .header h1 {
-                        margin: 0;
-                        font-size: 28px;
-                    }
-                    .header p {
-                        margin: 10px 0 0 0;
-                        font-size: 14px;
-                        opacity: 0.9;
-                    }
-                    .content {
-                        padding: 40px 30px;
-                        text-align: center;
-                    }
-                    .content h2 {
-                        color: #212529;
-                        margin: 0 0 20px 0;
-                        font-size: 24px;
-                    }
-                    .content p {
-                        color: #6c757d;
-                        line-height: 1.6;
-                        margin: 0 0 30px 0;
-                        font-size: 16px;
-                    }
-                    .code-box {
-                        background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
-                        border: 3px solid #ffc107;
-                        border-radius: 12px;
-                        padding: 30px;
-                        margin: 30px 0;
-                    }
-                    .code {
-                        font-size: 42px;
-                        font-weight: 800;
-                        color: #212529;
-                        letter-spacing: 8px;
-                        font-family: 'Courier New', monospace;
-                        margin: 0;
-                    }
-                    .warning {
-                        background: #fff3cd;
-                        border-left: 4px solid #ffc107;
-                        padding: 15px;
-                        margin: 30px 0;
-                        text-align: left;
-                        border-radius: 8px;
-                    }
-                    .warning p {
-                        margin: 0;
-                        color: #856404;
-                        font-size: 14px;
-                    }
-                    .footer {
-                        background: #f8f9fa;
-                        padding: 20px 30px;
-                        text-align: center;
-                        color: #6c757d;
-                        font-size: 12px;
-                        border-top: 1px solid #dee2e6;
-                    }
-                    .footer a {
-                        color: #ffc107;
-                        text-decoration: none;
-                    }
-                </style>
             </head>
-            <body>
-                <div class="container">
-                    <div class="header">
-                        <h1>🌮 El Picantito</h1>
-                        <p>Tacos Auténticos</p>
+            <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                    <div style="background-color: #212529; padding: 30px; text-align: center; border-bottom: 4px solid #ffc107;">
+                        <h1 style="margin: 0; font-size: 28px; color: #ffffff;">🌮 El Picantito</h1>
+                        <p style="margin: 10px 0 0 0; font-size: 14px; color: #ffffff;">Tacos Auténticos</p>
                     </div>
-                    <div class="content">
-                        <h2>Verificación de Correo Electrónico</h2>
-                        <p>
+                    <div style="padding: 40px 30px; text-align: center;">
+                        <h2 style="color: #212529; margin: 0 0 20px 0; font-size: 24px;">Verificación de Correo Electrónico</h2>
+                        <p style="color: #6c757d; line-height: 1.6; margin: 0 0 30px 0; font-size: 16px;">
                             Hemos recibido una solicitud para verificar tu correo electrónico.
                             Usa el siguiente código para completar tu registro:
                         </p>
-                        <div class="code-box">
-                            <p class="code">""" + code + """
+                        <div style="background-color: #fff9e6; border: 3px solid #ffc107; border-radius: 12px; padding: 30px; margin: 30px 0;">
+                            <p style="font-size: 42px; font-weight: 800; color: #212529; letter-spacing: 8px; font-family: 'Courier New', monospace; margin: 0;">""" + code + """
                             </p>
                         </div>
-                        <div class="warning">
-                            <p>
+                        <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 30px 0; text-align: left; border-radius: 8px;">
+                            <p style="margin: 0; color: #856404; font-size: 14px;">
                                 <strong>⚠️ Importante:</strong><br>
                                 • Este código es válido por 5 minutos<br>
                                 • No compartas este código con nadie<br>
@@ -482,8 +309,8 @@ public class EmailService {
                             </p>
                         </div>
                     </div>
-                    <div class="footer">
-                        <p>
+                    <div style="background-color: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #dee2e6;">
+                        <p style="margin: 0; color: #6c757d; font-size: 12px;">
                             Este es un correo automático, por favor no respondas.<br>
                             © 2025 El Picantito - Todos los derechos reservados
                         </p>
@@ -555,62 +382,48 @@ public class EmailService {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
             </head>
-            <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
-                <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 15px; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
-                    <div style="background: linear-gradient(135deg, #28a745 0%%, #20c997 100%%); padding: 30px; text-align: center;">
-                        <h1 style="margin: 0; font-size: 32px; color: #ffffff;">🌮 El Picantito</h1>
-                        <p style="margin: 10px 0 0 0; font-size: 18px; color: #ffffff; opacity: 0.95;">¡Gracias por tu pedido!</p>
+            <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+                <div style="max-width:600px; margin:40px auto; background:#fff; border-radius:15px; overflow:hidden; box-shadow:0 0 20px rgba(0,0,0,0.1);">
+                    <div style="background:#212529; padding:30px; text-align:center;">
+                        <h1 style="margin:0; font-size:28px; color:#fff;">🌮 El Picantito</h1>
+                        <p style="margin:10px 0 0 0; color:#fff;">¡Gracias por tu pedido!</p>
                     </div>
-                    <div style="padding: 40px 30px;">
-                        <p style="font-size: 18px; color: #1a1a1a; margin-bottom: 20px;">
-                            Hola <strong style="color: #000;">%s</strong>,
+                    <div style="padding:40px 30px;">
+                        <p style="font-size:16px; color:#1a1a1a; margin-bottom:20px;">Hola <strong style="color:#000;">%s</strong>,</p>
+                        <div style="background-color:#F75226; padding:25px; border-radius:12px; text-align:center; margin:30px 0; box-shadow:0 4px 8px rgba(0,0,0,0.15);">
+                            <div style="font-size:48px; margin-bottom:10px;">✅</div>
+                            <h2 style="margin:0; font-size:24px; color:#fff; text-shadow:1px 1px 2px rgba(0,0,0,0.3);">¡PEDIDO CONFIRMADO!</h2>
+                            <p style="margin:10px 0 0 0; font-size:14px; color:#fff; opacity:0.95;">Pedido #%d</p>
+                        </div>
+                        <div style="background-color:#f8f9fa; padding:20px; border-radius:10px; margin:25px 0; border-left:4px solid #28a745;">
+                            <h3 style="margin:0 0 10px 0; color:#1a1a1a; font-size:16px;">💰 Total del Pedido</h3>
+                            <p style="margin:0; color:#1a1a1a; font-size:24px; font-weight:bold;">$%,.2f</p>
+                        </div>
+                        <div style="background-color:#f8f9fa; padding:20px; border-radius:10px; margin:25px 0; border-left:4px solid #ffc107;">
+                            <h3 style="margin:0 0 10px 0; color:#1a1a1a; font-size:16px;">📍 Dirección de Entrega</h3>
+                            <p style="margin:0; color:#1a1a1a; font-size:15px; line-height:1.5;">%s</p>
+                        </div>
+                        <p style="font-size:16px; color:#1a1a1a; line-height:1.7; text-align:center;">
+                            Hemos recibido tu pedido exitosamente. Nuestro restaurante está procesando tu orden y pronto comenzaremos a preparar tus deliciosos tacos con los mejores ingredientes frescos.
                         </p>
-                        <div style="background: linear-gradient(135deg, #28a745 0%%, #20c997 100%%); padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0; box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);">
-                            <div style="font-size: 56px; margin-bottom: 10px;">🎉</div>
-                            <h2 style="margin: 0; font-size: 26px; font-weight: bold; color: #ffffff;">¡PEDIDO CONFIRMADO!</h2>
-                            <p style="margin: 15px 0 5px 0; font-size: 16px; color: #ffffff; opacity: 0.95;">Pedido #%d</p>
-                            <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #ffffff;">$%,.2f</p>
-                        </div>
-                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin: 25px 0;">
-                            <h3 style="margin: 0 0 15px 0; color: #1a1a1a; font-size: 18px;">📍 Dirección de Entrega</h3>
-                            <p style="margin: 0; color: #1a1a1a; font-size: 16px; line-height: 1.5;">%s</p>
-                        </div>
-                        <p style="font-size: 16px; color: #1a1a1a; line-height: 1.8; text-align: center; margin: 30px 0;">
-                            <strong style="color: #000;">Hemos recibido tu pedido exitosamente.</strong><br>
-                            Nuestro restaurante está procesando tu orden y pronto comenzaremos a preparar<br>
-                            tus deliciosos tacos con los mejores ingredientes frescos.
-                        </p>
-                        <div style="background-color: #fff8e1; border-left: 4px solid #ffa000; padding: 15px; margin: 25px 0; border-radius: 5px;">
-                            <p style="margin: 0; color: #e65100; font-size: 14px;">
-                                <strong>💡 ¿Sabías que?</strong> Puedes seguir el estado de tu pedido en tiempo real y ver la ruta de entrega en el mapa.
+                        <div style="background-color:#fff3cd; border-left:4px solid #ffc107; padding:15px; margin:25px 0; border-radius:5px;">
+                            <p style="margin:0; color:#856404; font-size:14px;">
+                                <strong>💡 ¿Sabías que?</strong> Puedes seguir el estado de tu pedido en tiempo real y ver la ruta de entrega en el mapa desde tu perfil.
                             </p>
                         </div>
-                        <div style="text-align: center; margin: 35px 0;">
-                            <a href="http://localhost:4200/cliente/pedidos" 
-                               style="display: inline-block; background-color: #ffc107; color: #000000; padding: 16px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 17px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);">
-                                🗺️ Ver Seguimiento en Tiempo Real
-                            </a>
+                        <div style="text-align:center; margin:30px 0;">
+                            <a href="http://localhost:4200/cliente/pedidos" style="display:inline-block; background-color:#ffc107; color:#000; padding:15px 30px; text-decoration:none; border-radius:8px; font-weight:bold; font-size:16px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">Ver Seguimiento en Tiempo Real</a>
                         </div>
-                        <div style="margin-top: 30px; padding: 20px; background-color: #e3f2fd; border-radius: 10px; border: 1px solid #90caf9; text-align: center;">
-                            <p style="margin: 0 0 10px 0; font-size: 16px; color: #01579b; font-weight: bold;">
-                                Estados de tu pedido:
-                            </p>
-                            <p style="margin: 5px 0; font-size: 14px; color: #1a1a1a;">
-                                ✅ Recibido → 👨‍🍳 En Preparación → 🚚 En Camino → 🎉 Entregado
-                            </p>
+                        <div style="background-color:#e3f2fd; padding:20px; border-radius:10px; margin:25px 0; border-left:4px solid #2196f3;">
+                            <p style="margin:0 0 10px 0; font-size:15px; color:#01579b; font-weight:bold;">Estados de tu pedido:</p>
+                            <p style="margin:0; font-size:14px; color:#1a1a1a;">✅ Recibido → 👨‍🍳 En Preparación → 🚚 En Camino → 🎉 Entregado</p>
                         </div>
-                        <p style="font-size: 13px; color: #1a1a1a; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center;">
-                            Te mantendremos informado por correo sobre cada cambio en el estado de tu pedido.
+                        <p style="font-size:14px; color:#1a1a1a; margin-top:30px; padding-top:20px; border-top:1px solid #ddd;">
+                            <strong style="color:#000;">Nota:</strong> Te mantendremos informado por correo sobre cada cambio en el estado de tu pedido.
                         </p>
                     </div>
-                    <div style="background-color: #1a1a1a; padding: 25px; text-align: center; border-top: 4px solid #ffc107;">
-                        <p style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold; color: #ffc107;">
-                            🌮 El Picantito - Tacos Auténticos
-                        </p>
-                        <p style="margin: 0; font-size: 12px; color: #cccccc;">
-                            Este es un correo automático, por favor no respondas.<br>
-                            © 2025 El Picantito - Todos los derechos reservados
-                        </p>
+                    <div style="background-color:#1a1a1a; padding:20px; text-align:center; border-top:4px solid #ffc107;">
+                        <p style="margin:0; font-size:12px; color:#ccc;">Este es un correo automático, por favor no respondas.<br>© 2025 El Picantito - Todos los derechos reservados</p>
                     </div>
                 </div>
             </body>
@@ -680,9 +493,9 @@ public class EmailService {
             </head>
             <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
                 <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 15px; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
-                    <div style="background: linear-gradient(135deg, #212529 0%%, #343a40 100%%); padding: 30px; text-align: center;">
+                    <div style="background-color: #212529; padding: 30px; text-align: center;">
                         <h1 style="margin: 0; font-size: 28px; color: #ffffff;">🌮 El Picantito</h1>
-                        <p style="margin: 10px 0 0 0; color: #ffffff; opacity: 0.9;">Actualización de tu Pedido</p>
+                        <p style="margin: 10px 0 0 0; color: #ffffff;">Actualización de tu Pedido</p>
                     </div>
                     <div style="padding: 40px 30px;">
                         <p style="font-size: 16px; color: #1a1a1a; margin-bottom: 20px;">
