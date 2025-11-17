@@ -43,7 +43,10 @@ export class TiendaComponent implements OnInit, AfterViewInit {
 
     this.productoService.getProductosActivos().subscribe({
       next: (productos) => {
-        this.productos = productos;
+        // Filtrar el "Taco Personalizado" ya que no se debe comprar desde la tienda
+        this.productos = productos.filter(p => 
+          p.nombre?.toLowerCase() !== 'taco personalizado'
+        );
         this.filtrarProductos();
         this.isLoading = false;
       },
@@ -89,11 +92,11 @@ export class TiendaComponent implements OnInit, AfterViewInit {
 
   // Métodos helper para las estrellas
   getStarsArray(rating: number): number[] {
-    return Array(rating).fill(0);
+    return Array.from({ length: rating }, (_, i) => i);
   }
 
   getEmptyStarsArray(rating: number): number[] {
-    return Array(5 - rating).fill(0);
+    return Array.from({ length: 5 - rating }, (_, i) => i);
   }
 
   // Navegación y acciones

@@ -2,9 +2,221 @@
     margin-left: 250px;
     width: calc(100% - 250px);
     min-height: calc(100vh - 85px);
-    background: #2D1529; /* purple base background */
+    background: #2D1529;
+    /* purple base background */
     padding: 0;
-    color: white; /* text color for readability on dark background */
+    color: white;
+    /* text color for readability on dark background */
+}
+
+
+/* Contenedor principal con fondo diferenciado */
+
+.content-wrapper {
+    background: linear-gradient(135deg, #4A2C48 0%, #3A1C38 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(255, 255, 255, 0.05) inset;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    margin: 0 1rem;
+    min-height: 500px;
+}
+
+.content-wrapper h2 {
+    color: #fff;
+    font-weight: 700;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+
+/* Mejorar las cards de estado */
+
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    font-weight: 600;
+}
+
+
+/* Animación para el pedido individual cuando cambia de estado */
+
+.pedido-item {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.border-bottom {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.border-bottom:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+    transform: translateX(5px);
+}
+
+
+/* Animación suave para la salida del pedido */
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+}
+
+
+/* Animación suave para la entrada del pedido */
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+/* Evitar que toda la columna se recargue */
+
+.card-body {
+    transition: none !important;
+}
+
+
+/* Solo animar el contador de badges */
+
+.badge {
+    transition: all 0.3s ease;
+}
+
+.badge.animate-count {
+    animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+
+/* Animación para botones de acción */
+
+.btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* Animación de las alertas */
+
+.alert {
+    animation-duration: 0.5s;
+}
+
+
+/* Efecto de carga suave */
+
+.card-body {
+    transition: opacity 0.3s ease;
+}
+
+.loading .card-body {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
+/* Animaciones de scroll reveal */
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.scroll-reveal.animate__animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* Animación suave para cuando aparecen/desaparecen elementos */
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeOutScale {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.col-md-6 {
+    animation: fadeInScale 0.4s ease-out;
 }
 
 @media (max-width: 991.98px) {
@@ -12,34 +224,43 @@
         margin-left: 0;
         width: 100%;
     }
+    .content-wrapper {
+        margin: 0 0.5rem;
+        padding: 1.5rem;
+        border-radius: 10px;
+    }
 }
+
 
 /* Estilos para el selector de repartidor */
+
 .form-select option {
-  padding: 8px;
+    padding: 8px;
 }
 
+
 /* Indicador visual de estado del repartidor */
+
 .estado-badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-left: 4px;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 4px;
 }
 
 .estado-disponible {
-  background-color: #28a745;
-  color: white;
+    background-color: #28a745;
+    color: white;
 }
 
 .estado-ocupado {
-  background-color: #ffc107;
-  color: #000;
+    background-color: #ffc107;
+    color: #000;
 }
 
 .estado-inactivo {
-  background-color: #dc3545;
-  color: white;
+    background-color: #dc3545;
+    color: white;
 }

@@ -1,139 +1,136 @@
 <app-operador-navbar></app-operador-navbar>
 
 <div class="d-flex">
-  <app-operador-sidebar></app-operador-sidebar>
-  
-  <div class="operador-content">
-    <div class="container-fluid py-4">
-      <div class="row mb-4">
-        <div class="col-12">
-          <h2 class="mb-3">
-            <i class="bi bi-speedometer2 me-2"></i>
-            Dashboard de Operador
-          </h2>
-      
-      <!-- Error -->
-      <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        {{ error }}
-        <button type="button" class="btn-close" (click)="error = null"></button>
-      </div>
+    <app-operador-sidebar></app-operador-sidebar>
 
-      <!-- Loading spinner -->
-      <div *ngIf="loading" class="text-center my-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Cargando...</span>
-        </div>
-      </div>
-    </div>
-  </div>
+    <div class="operador-content">
+        <div class="container-fluid py-4">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="mb-3">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard de Operador
+                    </h2>
 
-  <!-- Estadísticas -->
-  <div *ngIf="!loading" class="row g-4 mb-4">
-    <!-- Total de pedidos -->
-    <div class="col-md-6 col-lg-4">
-      <div class="stat-card stat-card-primary">
-        <div class="stat-icon">
-          <i class="bi bi-cart-check"></i>
-        </div>
-        <div class="stat-content">
-          <h6 class="stat-label">Total Pedidos</h6>
-          <h2 class="stat-value">{{ estadisticas.total }}</h2>
-        </div>
-      </div>
-    </div>
+                    <!-- Error -->
+                    <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}
+                        <button type="button" class="btn-close" (click)="error = null"></button>
+                    </div>
 
-    <!-- Pedidos recibidos -->
-    <div class="col-md-6 col-lg-4">
-      <div class="stat-card stat-card-info">
-        <div class="stat-icon">
-          <i class="bi bi-inbox"></i>
-        </div>
-        <div class="stat-content">
-          <h6 class="stat-label">Recibidos</h6>
-          <h2 class="stat-value">{{ estadisticas.recibidos }}</h2>
-        </div>
-      </div>
-    </div>
+                    <!-- Loading spinner -->
+                    <div *ngIf="loading" class="text-center my-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Pedidos en preparación -->
-    <div class="col-md-6 col-lg-4">
-      <div class="stat-card stat-card-warning">
-        <div class="stat-icon">
-          <i class="bi bi-fire"></i>
-        </div>
-        <div class="stat-content">
-          <h6 class="stat-label">En Preparación</h6>
-          <h2 class="stat-value">{{ estadisticas.cocinando }}</h2>
-        </div>
-      </div>
-    </div>
+            <!-- Estadísticas -->
+            <div *ngIf="!loading" class="row g-4 mb-4">
+                <!-- Total de pedidos -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card stat-card-primary scroll-reveal" data-animation="animate__fadeInUp">
+                        <div class="stat-icon">
+                            <i class="bi bi-cart-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h6 class="stat-label">Total Pedidos</h6>
+                            <h2 class="stat-value">{{ estadisticas.total }}</h2>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- Pedidos enviados -->
-    <div class="col-md-6 col-lg-4">
-      <div class="stat-card stat-card-success">
-        <div class="stat-icon">
-          <i class="bi bi-truck"></i>
-        </div>
-        <div class="stat-content">
-          <h6 class="stat-label">En Camino</h6>
-          <h2 class="stat-value">{{ estadisticas.enviados }}</h2>
-        </div>
-      </div>
-    </div>
+                <!-- Pedidos recibidos -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card stat-card-info scroll-reveal" data-animation="animate__fadeInUp">
+                        <div class="stat-icon">
+                            <i class="bi bi-inbox"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h6 class="stat-label">Recibidos</h6>
+                            <h2 class="stat-value">{{ estadisticas.recibidos }}</h2>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- Pedidos entregados -->
-    <div class="col-md-6 col-lg-4">
-      <div class="stat-card stat-card-light">
-        <div class="stat-icon">
-          <i class="bi bi-check-circle"></i>
-        </div>
-        <div class="stat-content">
-          <h6 class="stat-label">Entregados</h6>
-          <h2 class="stat-value">{{ estadisticas.entregados }}</h2>
-        </div>
-      </div>
-    </div>
+                <!-- Pedidos en preparación -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card stat-card-warning scroll-reveal" data-animation="animate__fadeInUp">
+                        <div class="stat-icon">
+                            <i class="bi bi-fire"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h6 class="stat-label">En Preparación</h6>
+                            <h2 class="stat-value">{{ estadisticas.cocinando }}</h2>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- Repartidores disponibles -->
-    <div class="col-md-6 col-lg-4">
-      <div class="stat-card stat-card-secondary">
-        <div class="stat-icon">
-          <i class="bi bi-person-badge"></i>
-        </div>
-        <div class="stat-content">
-          <h6 class="stat-label">Repartidores Disponibles</h6>
-          <h2 class="stat-value">{{ estadisticas.repartidoresDisponibles }}</h2>
-          <small class="stat-detail">de {{ repartidores.length }} total</small>
-        </div>
-      </div>
-    </div>
-  </div>
+                <!-- Pedidos enviados -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card stat-card-success scroll-reveal" data-animation="animate__fadeInLeft">
+                        <div class="stat-icon">
+                            <i class="bi bi-truck"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h6 class="stat-label">En Camino</h6>
+                            <h2 class="stat-value">{{ estadisticas.enviados }}</h2>
+                        </div>
+                    </div>
+                </div>
 
-  <!-- Lista de Repartidores -->
-  <div *ngIf="!loading && repartidores.length > 0" class="row mb-4">
-    <div class="col-12">
-      <div class="card repartidores-card">
-        <div class="card-header">
-          <h5 class="mb-0">
-            <i class="bi bi-people-fill me-2"></i>
-            Estado de Repartidores
-          </h5>
-        </div>
-        <div class="card-body">
-          <div class="row g-3">
-            <div *ngFor="let repartidor of repartidores" class="col-md-6 col-lg-4">
-              <div class="repartidor-item" [ngClass]="{
+                <!-- Pedidos entregados -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card stat-card-light scroll-reveal" data-animation="animate__fadeInLeft">
+                        <div class="stat-icon">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h6 class="stat-label">Entregados</h6>
+                            <h2 class="stat-value">{{ estadisticas.entregados }}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Repartidores disponibles -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card stat-card-secondary scroll-reveal" data-animation="animate__fadeInLeft">
+                        <div class="stat-icon">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h6 class="stat-label">Repartidores Disponibles</h6>
+                            <h2 class="stat-value">{{ estadisticas.repartidoresDisponibles }}</h2>
+                            <small class="stat-detail">de {{ repartidores.length }} total</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Repartidores -->
+            <div *ngIf="!loading && repartidores.length > 0" class="row mb-4">
+                <div class="col-12">
+                    <div class="card repartidores-card scroll-reveal" data-animation="animate__fadeInUp">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="bi bi-people-fill me-2"></i> Estado de Repartidores
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div *ngFor="let repartidor of repartidores" class="col-md-6 col-lg-4">
+                                    <div class="repartidor-item" [ngClass]="{
                 'repartidor-disponible': repartidor.estado === 'DISPONIBLE',
                 'repartidor-ocupado': repartidor.estado === 'OCUPADO',
                 'repartidor-inactivo': repartidor.estado !== 'DISPONIBLE' && repartidor.estado !== 'OCUPADO'
               }">
-                <div class="repartidor-avatar">
-                  <i class="bi bi-person-circle"></i>
-                </div>
-                <div class="repartidor-info">
-                  <h6 class="repartidor-nombre">{{ repartidor.nombreCompleto }}</h6>
-                  <span class="repartidor-estado-badge">
+                                        <div class="repartidor-avatar">
+                                            <i class="bi bi-person-circle"></i>
+                                        </div>
+                                        <div class="repartidor-info">
+                                            <h6 class="repartidor-nombre">{{ repartidor.nombreCompleto }}</h6>
+                                            <span class="repartidor-estado-badge">
                     <i class="bi" [ngClass]="{
                       'bi-check-circle-fill': repartidor.estado === 'DISPONIBLE',
                       'bi-hourglass-split': repartidor.estado === 'OCUPADO',
@@ -141,24 +138,23 @@
                     }"></i>
                     {{ repartidor.estado || 'Sin estado' }}
                   </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Mensaje si no hay repartidores -->
-  <div *ngIf="!loading && repartidores.length === 0" class="row mb-4">
-    <div class="col-12">
-      <div class="alert alert-warning">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        No hay repartidores registrados en el sistema
-      </div>
+            <!-- Mensaje si no hay repartidores -->
+            <div *ngIf="!loading && repartidores.length === 0" class="row mb-4">
+                <div class="col-12">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> No hay repartidores registrados en el sistema
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-    </div>
-  </div>
 </div>

@@ -277,10 +277,10 @@ export class ProductoDetalleComponent implements OnInit {
 
   // Métodos helper para las estrellas
   getStarsArray(rating: number | undefined): number[] {
-    return Array(rating || 0).fill(0);
+    return Array.from({ length: rating || 0 }, (_, i) => i);
   }
 
   getEmptyStarsArray(rating: number | undefined): number[] {
-    return Array(5 - (rating || 0)).fill(0);
+    return Array.from({ length: 5 - (rating || 0) }, (_, i) => i);
   }
 }

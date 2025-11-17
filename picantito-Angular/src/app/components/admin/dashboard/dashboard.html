@@ -1,353 +1,345 @@
 <app-admin-navbar></app-admin-navbar>
 
 <div class="container-fluid">
-  <div class="row">
-    <!-- SIDEBAR -->
-    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-      <app-admin-sidebar></app-admin-sidebar>
-    </nav>
+    <div class="row">
+        <!-- SIDEBAR -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <app-admin-sidebar></app-admin-sidebar>
+        </nav>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Panel Administrativo</h1>
-      </div>
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Panel Administrativo</h1>
+            </div>
 
-      <!-- ACCIONES RÁPIDAS -->
-      <div class="row mb-5">
-        <div class="col-12">
-          <h4 class="mb-3">Acciones Rápidas</h4>
-          <div class="row">
-            <div class="col-md-4 mb-3">
-              <div class="card text-center">
-                <div class="card-body">
-                  <i class="bi bi-plus-circle fs-1 text-warning mb-3"></i>
-                  <h5 class="card-title">Nuevo Producto</h5>
-                  <a routerLink="/admin/productos" class="btn btn-warning">Ir a Productos</a>
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-md-4 mb-3">
-              <div class="card text-center">
-                <div class="card-body">
-                  <i class="bi bi-people fs-1 text-success mb-3"></i>
-                  <h5 class="card-title">Gestionar Usuarios</h5>
-                  <a routerLink="/admin/usuarios" class="btn btn-success">Ver Usuarios</a>
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-md-4 mb-3">
-              <div class="card text-center">
-                <div class="card-body">
-                  <i class="bi bi-box-seam fs-1 text-info mb-3"></i>
-                  <h5 class="card-title">Ver Pedidos</h5>
-                  <a routerLink="/admin/pedidos" class="btn btn-info">Gestionar Pedidos</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ESTADÍSTICAS -->
-      <div class="row mb-4">
-        <div class="col-xl-3 col-md-6 mb-4">
-          <div class="card stats-card bg-warning">
-            <div class="card-body">
-              <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                  <div class="stats-label text-dark text-uppercase mb-1">
-                    Total Productos
-                  </div>
-                  <div class="stats-number text-dark">{{ totalProductos() }}</div>
-                </div>
-                <div class="col-auto">
-                  <i class="bi bi-box fs-2 text-dark"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
-          <div class="card stats-card bg-success">
-            <div class="card-body">
-              <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                  <div class="stats-label text-light text-uppercase mb-1">
-                    Total Usuarios
-                  </div>
-                  <div class="stats-number text-light">{{ totalUsuarios() }}</div>
-                </div>
-                <div class="col-auto">
-                  <i class="bi bi-people fs-2 text-light"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
-          <div class="card stats-card bg-info">
-            <div class="card-body">
-              <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                  <div class="stats-label text-light text-uppercase mb-1">
-                    Total Adicionales
-                  </div>
-                  <div class="stats-number text-light">{{ totalAdicionales() }}</div>
-                </div>
-                <div class="col-auto">
-                  <i class="bi bi-plus-circle fs-2 text-light"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
-          <div class="card stats-card bg-primary">
-            <div class="card-body">
-              <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                  <div class="stats-label text-light text-uppercase mb-1">
-                    Total Pedidos
-                  </div>
-                  <div class="stats-number text-light">{{ estadisticas()?.totalPedidos || 0 }}</div>
-                </div>
-                <div class="col-auto">
-                  <i class="bi bi-cart-check fs-2 text-light"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- INGRESOS -->
-      @if(estadisticas()) {
-        <div class="row mb-4">
-          <div class="col-md-6 mb-4">
-            <div class="card stats-card-ingresos-grande">
-              <div class="card-body text-center">
-                <h4 class="card-title mb-4">
-                  <i class="bi bi-cash-stack text-success"></i> Ingresos Totales
-                </h4>
-                <h1 class="text-success mb-0 display-4">{{ formatearMoneda(estadisticas()!.ingresosTotales) }}</h1>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 mb-4">
-            <div class="card stats-card-ingresos-grande">
-              <div class="card-body text-center">
-                <h4 class="card-title mb-4">
-                  <i class="bi bi-piggy-bank text-primary"></i> Ingresos Netos
-                </h4>
-                <h1 class="text-primary mb-0 display-4">{{ formatearMoneda(estadisticas()!.ingresosNetos) }}</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- GRÁFICA DE VENTAS POR DÍA -->
-        <div class="row mb-4">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title mb-4">
-                  <i class="bi bi-graph-up"></i> Ventas de los Últimos 30 Días
-                </h5>
-                <div class="chart-container">
-                  <!-- Eje Y -->
-                  <div class="chart-y-axis">
-                    @for(label of obtenerEtiquetasEjeY(); track label) {
-                      <div class="chart-y-label">{{ label }}</div>
-                    }
-                  </div>
-                  
-                  <!-- Área de barras -->
-                  <div class="chart-bars-wrapper">
-                    <div class="chart-bars">
-                      @for(venta of ventasPorDiaArray(); track venta.fecha) {
-                        <div class="chart-bar-wrapper">
-                          <div class="chart-value">{{ formatearMoneda(venta.monto) }}</div>
-                          <div class="chart-bar" 
-                               [style.height.%]="calcularAlturaBarra(venta.monto)"
-                               [title]="formatearMoneda(venta.monto)">
-                          </div>
-                          <div class="chart-label">{{ formatearFecha(venta.fecha) }}</div>
-                        </div>
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- PRODUCTOS MÁS Y MENOS VENDIDOS -->
-        <div class="row mb-4">
-          <div class="col-md-6 mb-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title mb-3">
-                  <i class="bi bi-trophy text-warning"></i> Top 5 Productos Más Vendidos
-                </h5>
-                <ul class="list-group list-group-flush">
-                  @for(id of estadisticas()!.productosMasVendidos.slice(0, 5); track id; let i = $index) {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <span class="text-black-custom">
-                        <span class="badge bg-warning text-dark me-2">{{ i + 1 }}</span>
-                        {{ obtenerNombreProducto(id) }}
-                      </span>
-                      <i class="bi bi-star-fill text-warning"></i>
-                    </li>
-                  }
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 mb-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title mb-3">
-                  <i class="bi bi-arrow-down-circle text-danger"></i> Top 5 Productos Menos Vendidos
-                </h5>
-                <ul class="list-group list-group-flush">
-                  @for(id of estadisticas()!.productosMenosVendidos.slice(0, 5); track id; let i = $index) {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <span class="text-black-custom">
-                        <span class="badge bg-secondary me-2">{{ i + 1 }}</span>
-                        {{ obtenerNombreProducto(id) }}
-                      </span>
-                      <i class="bi bi-arrow-down text-danger"></i>
-                    </li>
-                  }
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ADICIONALES MÁS Y MENOS CONSUMIDOS -->
-        <div class="row mb-4">
-          <div class="col-md-6 mb-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title mb-3">
-                  <i class="bi bi-plus-circle-fill text-success"></i> Top 5 Adicionales Más Consumidos
-                </h5>
-                <ul class="list-group list-group-flush">
-                  @for(id of estadisticas()!.adicionalesMasConsumidos.slice(0, 5); track id; let i = $index) {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <span class="text-black-custom">
-                        <span class="badge bg-success me-2">{{ i + 1 }}</span>
-                        {{ obtenerNombreAdicional(id) }}
-                      </span>
-                      <i class="bi bi-heart-fill text-success"></i>
-                    </li>
-                  }
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 mb-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title mb-3">
-                  <i class="bi bi-dash-circle text-secondary"></i> Top 5 Adicionales Menos Consumidos
-                </h5>
-                <ul class="list-group list-group-flush">
-                  @for(id of estadisticas()!.adicionalesMenosConsumidos.slice(0, 5); track id; let i = $index) {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <span class="text-black-custom">
-                        <span class="badge bg-secondary me-2">{{ i + 1 }}</span>
-                        {{ obtenerNombreAdicional(id) }}
-                      </span>
-                      <i class="bi bi-arrow-down text-secondary"></i>
-                    </li>
-                  }
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- PRODUCTOS RECOMENDADOS Y NO RECOMENDADOS -->
-        <div class="row mb-4">
-          <div class="col-md-6 mb-4">
-            <div class="card border-success">
-              <div class="card-body">
-                <h5 class="card-title mb-3">
-                  <i class="bi bi-hand-thumbs-up-fill text-success"></i> Productos Recomendados
-                </h5>
-                <ul class="list-group list-group-flush">
-                  @for(id of estadisticas()!.productosRecomendados.slice(0, 5); track id) {
-                    <li class="list-group-item text-black-custom">
-                      <i class="bi bi-check-circle-fill text-success me-2"></i>
-                      {{ obtenerNombreProducto(id) }}
-                    </li>
-                  }
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 mb-4">
-            <div class="card border-warning">
-              <div class="card-body">
-                <h5 class="card-title mb-3">
-                  <i class="bi bi-exclamation-triangle-fill text-warning"></i> Productos No Recomendados
-                </h5>
-                <ul class="list-group list-group-flush">
-                  @for(id of estadisticas()!.productosNoRecomendados.slice(0, 5); track id) {
-                    <li class="list-group-item text-black-custom">
-                      <i class="bi bi-exclamation-circle-fill text-warning me-2"></i>
-                      {{ obtenerNombreProducto(id) }}
-                    </li>
-                  }
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- MEJORES CLIENTES -->
-        <div class="row mb-4">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title mb-3">
-                  <i class="bi bi-people-fill text-info"></i> Mejores Clientes
-                </h5>
-                <div class="row">
-                  @for(clienteId of estadisticas()!.mejoresClientes; track clienteId) {
-                    <div class="col-md-4 mb-3">
-                      <div class="card bg-light">
-                        <div class="card-body">
-                          <div class="d-flex align-items-center">
-                            <i class="bi bi-person-circle fs-1 text-info me-3"></i>
-                            <div>
-                              <h6 class="mb-1 text-black-custom">{{ obtenerNombreCliente(clienteId) }}</h6>
-                              <small class="text-muted">{{ obtenerTelefonoCliente(clienteId) }}</small><br>
-                              <small class="text-muted">{{ obtenerCorreoCliente(clienteId) }}</small>
+            <!-- ACCIONES RÁPIDAS -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h4 class="mb-3">Acciones Rápidas</h4>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card text-center hvr-float scroll-reveal" data-animation="animate__fadeInUp">
+                                <div class="card-body">
+                                    <i class="bi bi-plus-circle fs-1 text-warning mb-3"></i>
+                                    <h5 class="card-title">Nuevo Producto</h5>
+                                    <a routerLink="/admin/productos" class="btn btn-warning hvr-grow">Ir a Productos</a>
+                                </div>
                             </div>
-                          </div>
                         </div>
-                      </div>
+
+                        <div class="col-md-4 mb-3">
+                            <div class="card text-center hvr-float scroll-reveal" data-animation="animate__fadeInUp" style="animation-delay: 0.1s;">
+                                <div class="card-body">
+                                    <i class="bi bi-people fs-1 text-success mb-3"></i>
+                                    <h5 class="card-title">Gestionar Usuarios</h5>
+                                    <a routerLink="/admin/usuarios" class="btn btn-success hvr-grow">Ver Usuarios</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <div class="card text-center hvr-float scroll-reveal" data-animation="animate__fadeInUp" style="animation-delay: 0.2s;">
+                                <div class="card-body">
+                                    <i class="bi bi-box-seam fs-1 text-info mb-3"></i>
+                                    <h5 class="card-title">Ver Pedidos</h5>
+                                    <a routerLink="/admin/pedidos" class="btn btn-info hvr-grow">Gestionar Pedidos</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  }
                 </div>
-              </div>
             </div>
-          </div>
-        </div>
-      }
-    </main>
-  </div>
+
+            <!-- ESTADÍSTICAS -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stats-card bg-warning scroll-reveal" data-animation="animate__fadeInLeft">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="stats-label text-dark text-uppercase mb-1">
+                                        Total Productos
+                                    </div>
+                                    <div class="stats-number text-dark">{{ totalProductos() }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-box fs-2 text-dark"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stats-card bg-success scroll-reveal" data-animation="animate__fadeInLeft" style="animation-delay: 0.1s;">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="stats-label text-light text-uppercase mb-1">
+                                        Total Usuarios
+                                    </div>
+                                    <div class="stats-number text-light">{{ totalUsuarios() }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-people fs-2 text-light"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stats-card bg-info scroll-reveal" data-animation="animate__fadeInRight" style="animation-delay: 0.1s;">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="stats-label text-light text-uppercase mb-1">
+                                        Total Adicionales
+                                    </div>
+                                    <div class="stats-number text-light">{{ totalAdicionales() }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-plus-circle fs-2 text-light"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stats-card bg-primary scroll-reveal" data-animation="animate__fadeInRight">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="stats-label text-light text-uppercase mb-1">
+                                        Total Pedidos
+                                    </div>
+                                    <div class="stats-number text-light">{{ estadisticas()?.totalPedidos || 0 }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-cart-check fs-2 text-light"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INGRESOS -->
+            @if(estadisticas()) {
+            <div class="row mb-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card stats-card-ingresos-grande scroll-reveal" data-animation="animate__zoomIn">
+                        <div class="card-body text-center">
+                            <h4 class="card-title mb-4">
+                                <i class="bi bi-cash-stack text-success"></i> Ingresos Totales
+                            </h4>
+                            <h1 class="text-success mb-0 display-4">{{ formatearMoneda(estadisticas()!.ingresosTotales) }}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card stats-card-ingresos-grande scroll-reveal" data-animation="animate__zoomIn" style="animation-delay: 0.2s;">
+                        <div class="card-body text-center">
+                            <h4 class="card-title mb-4">
+                                <i class="bi bi-piggy-bank text-primary"></i> Ingresos Netos
+                            </h4>
+                            <h1 class="text-primary mb-0 display-4">{{ formatearMoneda(estadisticas()!.ingresosNetos) }}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRÁFICA DE VENTAS POR DÍA -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card scroll-reveal" data-animation="animate__fadeInUp">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">
+                                <i class="bi bi-graph-up"></i> Ventas de los Últimos 30 Días
+                            </h5>
+                            <div class="chart-container">
+                                <!-- Eje Y -->
+                                <div class="chart-y-axis">
+                                    @for(label of obtenerEtiquetasEjeY(); track label) {
+                                    <div class="chart-y-label">{{ label }}</div>
+                                    }
+                                </div>
+
+                                <!-- Área de barras -->
+                                <div class="chart-bars-wrapper">
+                                    <div class="chart-bars">
+                                        @for(venta of ventasPorDiaArray(); track venta.fecha) {
+                                        <div class="chart-bar-wrapper">
+                                            <div class="chart-value">{{ formatearMoneda(venta.monto) }}</div>
+                                            <div class="chart-bar" [style.height.%]="calcularAlturaBarra(venta.monto)" [title]="formatearMoneda(venta.monto)">
+                                            </div>
+                                            <div class="chart-label">{{ formatearFecha(venta.fecha) }}</div>
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCTOS MÁS Y MENOS VENDIDOS -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card scroll-reveal" data-animation="animate__fadeInLeft">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">
+                                <i class="bi bi-trophy text-warning"></i> Top 5 Productos Más Vendidos
+                            </h5>
+                            <ul class="list-group list-group-flush">
+                                @for(id of estadisticas()!.productosMasVendidos.slice(0, 5); track id; let i = $index) {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="text-black-custom">
+                        <span class="badge bg-warning text-dark me-2">{{ i + 1 }}</span> {{ obtenerNombreProducto(id) }}
+                                    </span>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card scroll-reveal" data-animation="animate__fadeInRight">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">
+                                <i class="bi bi-arrow-down-circle text-danger"></i> Top 5 Productos Menos Vendidos
+                            </h5>
+                            <ul class="list-group list-group-flush">
+                                @for(id of estadisticas()!.productosMenosVendidos.slice(0, 5); track id; let i = $index) {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="text-black-custom">
+                        <span class="badge bg-secondary me-2">{{ i + 1 }}</span> {{ obtenerNombreProducto(id) }}
+                                    </span>
+                                    <i class="bi bi-arrow-down text-danger"></i>
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADICIONALES MÁS Y MENOS CONSUMIDOS -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card scroll-reveal" data-animation="animate__fadeInLeft">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">
+                                <i class="bi bi-plus-circle-fill text-success"></i> Top 5 Adicionales Más Consumidos
+                            </h5>
+                            <ul class="list-group list-group-flush">
+                                @for(id of estadisticas()!.adicionalesMasConsumidos.slice(0, 5); track id; let i = $index) {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="text-black-custom">
+                        <span class="badge bg-success me-2">{{ i + 1 }}</span> {{ obtenerNombreAdicional(id) }}
+                                    </span>
+                                    <i class="bi bi-heart-fill text-success"></i>
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card scroll-reveal" data-animation="animate__fadeInRight">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">
+                                <i class="bi bi-dash-circle text-secondary"></i> Top 5 Adicionales Menos Consumidos
+                            </h5>
+                            <ul class="list-group list-group-flush">
+                                @for(id of estadisticas()!.adicionalesMenosConsumidos.slice(0, 5); track id; let i = $index) {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="text-black-custom">
+                        <span class="badge bg-secondary me-2">{{ i + 1 }}</span> {{ obtenerNombreAdicional(id) }}
+                                    </span>
+                                    <i class="bi bi-arrow-down text-secondary"></i>
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCTOS RECOMENDADOS Y NO RECOMENDADOS -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card border-success scroll-reveal" data-animation="animate__bounceInLeft">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">
+                                <i class="bi bi-hand-thumbs-up-fill text-success"></i> Productos Recomendados
+                            </h5>
+                            <ul class="list-group list-group-flush">
+                                @for(id of estadisticas()!.productosRecomendados.slice(0, 5); track id) {
+                                <li class="list-group-item text-black-custom">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i> {{ obtenerNombreProducto(id) }}
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card border-warning scroll-reveal" data-animation="animate__bounceInRight">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">
+                                <i class="bi bi-exclamation-triangle-fill text-warning"></i> Productos No Recomendados
+                            </h5>
+                            <ul class="list-group list-group-flush">
+                                @for(id of estadisticas()!.productosNoRecomendados.slice(0, 5); track id) {
+                                <li class="list-group-item text-black-custom">
+                                    <i class="bi bi-exclamation-circle-fill text-warning me-2"></i> {{ obtenerNombreProducto(id) }}
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MEJORES CLIENTES -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card scroll-reveal" data-animation="animate__fadeInUp">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">
+                                <i class="bi bi-people-fill text-info"></i> Mejores Clientes
+                            </h5>
+                            <div class="row">
+                                @for(clienteId of estadisticas()!.mejoresClientes; track clienteId) {
+                                <div class="col-md-4 mb-3">
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-person-circle fs-1 text-info me-3"></i>
+                                                <div>
+                                                    <h6 class="mb-1 text-black-custom">{{ obtenerNombreCliente(clienteId) }}</h6>
+                                                    <small class="text-muted">{{ obtenerTelefonoCliente(clienteId) }}</small><br>
+                                                    <small class="text-muted">{{ obtenerCorreoCliente(clienteId) }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </main>
+    </div>
 </div>

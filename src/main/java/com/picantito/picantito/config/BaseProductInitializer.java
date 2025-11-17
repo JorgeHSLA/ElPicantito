@@ -33,7 +33,7 @@ public class BaseProductInitializer {
                             .descripcion("Base para construir tacos personalizados (precio base 0)")
                             .precioDeVenta(0f)
                             .precioDeAdquisicion(0f)
-                            .imagen("https://i.imgur.com/0V0Taco.png")
+                            .imagen("https://i.imgur.com/nDSixlG.png")
                             .disponible(true)
                             .calificacion(5)
                             .activo(true)

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, AfterViewInit, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GestionPedidosService } from '../../../services/gestion-pedidos.service';
 import { RepartidorService } from '../../../services/repartidor.service';
@@ -13,9 +13,10 @@ import { OperadorSidebarComponent } from '../../shared/operador-sidebar/operador
   templateUrl: './dashboard-operador.html',
   styleUrl: './dashboard-operador.css'
 })
-export class DashboardOperador implements OnInit {
+export class DashboardOperador implements OnInit, AfterViewInit {
   private gestionPedidosService = inject(GestionPedidosService);
   private repartidorService = inject(RepartidorService);
+  private elementRef = inject(ElementRef);
 
   pedidos: PedidoCompleto[] = [];
   repartidores: Repartidor[] = [];
@@ -35,6 +36,46 @@ export class DashboardOperador implements OnInit {
     this.cargarEstadisticas();
   }
 
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.setupScrollAnimations();
+    }, 100);
+  }
+
+  private setupScrollAnimations() {
+    const observerOptions = {
+      threshold: 0.05,
+      rootMargin: '50px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate__animated');
+          const animationType = entry.target.getAttribute('data-animation') || 'animate__fadeInUp';
+          entry.target.classList.add(animationType);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    const elements = this.elementRef.nativeElement.querySelectorAll('.scroll-reveal');
+    elements.forEach((el: Element, index: number) => {
+      const rect = el.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (isVisible) {
+        setTimeout(() => {
+          el.classList.add('animate__animated');
+          const animationType = el.getAttribute('data-animation') || 'animate__fadeInUp';
+          el.classList.add(animationType);
+        }, index * 100);
+      } else {
+        observer.observe(el);
+      }
+    });
+  }
+
   cargarEstadisticas(): void {
     this.loading = true;
     this.error = null;
@@ -45,6 +86,10 @@ export class DashboardOperador implements OnInit {
         this.pedidos = pedidos;
         this.calcularEstadisticas();
         this.loading = false;
+        // Inicializar animaciones después de cargar
+        setTimeout(() => {
+          this.setupScrollAnimations();
+        }, 150);
       },
       error: (err) => {
         this.error = 'Error al cargar las estadísticas';
@@ -71,19 +116,19 @@ export class DashboardOperador implements OnInit {
     this.estadisticas.recibidos = this.pedidos.filter(
       p => p.estado.toLowerCase() === 'recibido'
     ).length;
-    
+
     this.estadisticas.cocinando = this.pedidos.filter(
       p => p.estado.toLowerCase() === 'cocinando'
     ).length;
-    
+
     this.estadisticas.enviados = this.pedidos.filter(
       p => p.estado.toLowerCase() === 'enviado'
     ).length;
-    
+
     this.estadisticas.entregados = this.pedidos.filter(
       p => p.estado.toLowerCase() === 'entregado'
     ).length;
-    
+
     this.estadisticas.total = this.pedidos.length;
   }
 }

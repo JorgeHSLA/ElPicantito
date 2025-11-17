@@ -1,169 +1,142 @@
 <app-admin-navbar></app-admin-navbar>
 
 <div class="container-fluid">
-  <div class="row">
-    <!-- SIDEBAR -->
-    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-      <app-admin-sidebar></app-admin-sidebar>
-    </nav>
+    <div class="row">
+        <!-- SIDEBAR -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <app-admin-sidebar></app-admin-sidebar>
+        </nav>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2 text-white">Gestión de Usuarios</h1>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoUsuarioModal">
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2 text-white animate__animated animate__fadeInDown">Gestión de Usuarios</h1>
+                <button class="btn btn-success hvr-grow" data-bs-toggle="modal" data-bs-target="#nuevoUsuarioModal">
           <i class="bi bi-person-plus me-2"></i>Nuevo Usuario
         </button>
-      </div>
+            </div>
 
-      <!-- ALERTAS -->
-      @if (successMessage()) {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          <span>{{ successMessage() }}</span>
-          <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
-        </div>
-      }
-      @if (errorMessage()) {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <span>{{ errorMessage() }}</span>
-          <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
-        </div>
-      }
+            <!-- ALERTAS -->
+            @if (successMessage()) {
+            <div class="alert alert-success alert-dismissible fade show animate__animated animate__slideInDown" role="alert">
+                <span>{{ successMessage() }}</span>
+                <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
+            </div>
+            } @if (errorMessage()) {
+            <div class="alert alert-danger alert-dismissible fade show animate__animated animate__slideInDown" role="alert">
+                <span>{{ errorMessage() }}</span>
+                <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+            </div>
+            }
 
-      <!-- TABLA DE USUARIOS -->
-      <div class="card">
-        <div class="card-header">
-          <h5 class="mb-0 text-white">Lista de Usuarios</h5>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre Completo</th>
-                  <th>Usuario</th>
-                  <th>Teléfono</th>
-                  <th>Correo</th>
-                  <th>Tipo</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (usuario of usuarios(); track usuario.id) {
-                  <tr>
-                    <td>{{ usuario.id }}</td>
-                    <td>{{ usuario.nombreCompleto }}</td>
-                    <td>{{ usuario.nombreUsuario }}</td>
-                    <td>{{ usuario.telefono }}</td>
-                    <td>{{ usuario.correo }}</td>
-                    <td>
-                      @if (usuario.rol === 'ADMIN') {
-                        <span class="badge bg-danger">Admin</span>
-                      } @else if (usuario.rol === 'OPERADOR') {
-                        <span class="badge bg-warning">Operador</span>
-                      } @else if (usuario.rol === 'REPARTIDOR') {
-                        <span class="badge bg-info">Repartidor</span>
-                      } @else {
-                        <span class="badge bg-primary">Usuario</span>
-                      }
-                    </td>
-                    <td>
-                      <a [routerLink]="['/admin/usuarios/edit', usuario.id]" 
-                         class="btn btn-sm btn-outline-primary me-1">
-                        <i class="bi bi-pencil"></i>
-                      </a>
-                      @if (usuario.nombreUsuario !== 'admin') {
-                        <button class="btn btn-sm btn-outline-danger"
-                                (click)="deleteUsuario(usuario.id!)">
+            <!-- TABLA DE USUARIOS -->
+            <div class="card animate__animated animate__fadeIn">
+                <div class="card-header">
+                    <h5 class="mb-0 text-white">Lista de Usuarios</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Usuario</th>
+                                    <th>Teléfono</th>
+                                    <th>Correo</th>
+                                    <th>Tipo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (usuario of usuarios(); track usuario.id) {
+                                <tr>
+                                    <td>{{ usuario.id }}</td>
+                                    <td>{{ usuario.nombreCompleto }}</td>
+                                    <td>{{ usuario.nombreUsuario }}</td>
+                                    <td>{{ usuario.telefono }}</td>
+                                    <td>{{ usuario.correo }}</td>
+                                    <td>
+                                        @if (usuario.rol === 'ADMIN') {
+                                        <span class="badge bg-danger">Admin</span> } @else if (usuario.rol === 'OPERADOR') {
+                                        <span class="badge bg-warning">Operador</span> } @else if (usuario.rol === 'REPARTIDOR') {
+                                        <span class="badge bg-info">Repartidor</span> } @else {
+                                        <span class="badge bg-primary">Usuario</span> }
+                                    </td>
+                                    <td>
+                                        <a [routerLink]="['/admin/usuarios/edit', usuario.id]" class="btn btn-sm btn-outline-primary me-1 hvr-grow">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        @if (usuario.nombreUsuario !== 'admin') {
+                                        <button class="btn btn-sm btn-outline-danger hvr-grow" (click)="deleteUsuario(usuario.id!)">
                           <i class="bi bi-trash"></i>
-                        </button>
-                      }
-                    </td>
-                  </tr>
-                }
-                @if (usuarios().length === 0) {
-                  <tr>
-                    <td colspan="7" class="text-center text-muted">No hay usuarios registrados</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+                        </button> }
+                                    </td>
+                                </tr>
+                                } @if (usuarios().length === 0) {
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">No hay usuarios registrados</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 </div>
 
 <!-- MODAL NUEVO USUARIO -->
 <div class="modal fade" id="nuevoUsuarioModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Nuevo Usuario</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <form (ngSubmit)="saveUsuario()">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="nombreCompleto" class="form-label">Nombre Completo:</label>
-            <input type="text" class="form-control" id="nombreCompleto" 
-                   [value]="nuevoUsuario().nombreCompleto"
-                   (input)="updateUsuarioField('nombreCompleto', $any($event.target).value)"
-                   required>
-          </div>
-          
-          <div class="mb-3">
-            <label for="nombreUsuario" class="form-label">Nombre de Usuario:</label>
-            <input type="text" class="form-control" id="nombreUsuario" 
-                   [value]="nuevoUsuario().nombreUsuario"
-                   (input)="updateUsuarioField('nombreUsuario', $any($event.target).value)"
-                   required>
-          </div>
-          
-          <div class="mb-3">
-            <label for="telefono" class="form-label">Teléfono:</label>
-            <input type="tel" class="form-control" id="telefono" 
-                   [value]="nuevoUsuario().telefono"
-                   (input)="updateUsuarioField('telefono', $any($event.target).value)"
-                   required>
-          </div>
-          
-          <div class="mb-3">
-            <label for="correo" class="form-label">Correo:</label>
-            <input type="email" class="form-control" id="correo" 
-                   [value]="nuevoUsuario().correo"
-                   (input)="updateUsuarioField('correo', $any($event.target).value)"
-                   required>
-          </div>
-          
-          <div class="mb-3">
-            <label for="contrasenia" class="form-label">Contraseña:</label>
-            <input type="password" class="form-control" id="contrasenia" 
-                   [value]="nuevoUsuario().contrasenia"
-                   (input)="updateUsuarioField('contrasenia', $any($event.target).value)"
-                   required>
-          </div>
-          
-          <div class="mb-3">
-            <label for="rol" class="form-label">Rol:</label>
-            <select class="form-select" id="rol"
-                    [value]="nuevoUsuario().rol || 'CLIENTE'"
-                    (change)="updateUsuarioField('rol', $any($event.target).value)"
-                    required>
+    <div class="modal-dialog">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form (ngSubmit)="saveUsuario()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombreCompleto" class="form-label">Nombre Completo:</label>
+                        <input type="text" class="form-control" id="nombreCompleto" [value]="nuevoUsuario().nombreCompleto" (input)="updateUsuarioField('nombreCompleto', $any($event.target).value)" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="nombreUsuario" class="form-label">Nombre de Usuario:</label>
+                        <input type="text" class="form-control" id="nombreUsuario" [value]="nuevoUsuario().nombreUsuario" (input)="updateUsuarioField('nombreUsuario', $any($event.target).value)" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="telefono" class="form-label">Teléfono:</label>
+                        <input type="tel" class="form-control" id="telefono" [value]="nuevoUsuario().telefono" (input)="updateUsuarioField('telefono', $any($event.target).value)" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="correo" class="form-label">Correo:</label>
+                        <input type="email" class="form-control" id="correo" [value]="nuevoUsuario().correo" (input)="updateUsuarioField('correo', $any($event.target).value)" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contrasenia" class="form-label">Contraseña:</label>
+                        <input type="password" class="form-control" id="contrasenia" [value]="nuevoUsuario().contrasenia" (input)="updateUsuarioField('contrasenia', $any($event.target).value)" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="rol" class="form-label">Rol:</label>
+                        <select class="form-select" id="rol" [value]="nuevoUsuario().rol || 'CLIENTE'" (change)="updateUsuarioField('rol', $any($event.target).value)" required>
               <option value="CLIENTE">Cliente</option>
               <option value="ADMIN">Administrador</option>
               <option value="OPERADOR">Operador</option>
               <option value="REPARTIDOR">Repartidor</option>
             </select>
-          </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary hvr-shrink" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success hvr-grow">Guardar Usuario</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-success">Guardar Usuario</button>
-        </div>
-      </form>
     </div>
-  </div>
 </div>

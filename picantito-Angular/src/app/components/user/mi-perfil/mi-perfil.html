@@ -1,157 +1,116 @@
 <!-- CONTENIDO PRINCIPAL -->
 <main class="py-5" style="background-color: #2d1529; min-height: 100vh;">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-12">
-        <div class="layout-container d-flex gap-4 align-items-start">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="layout-container d-flex gap-4 align-items-start">
 
-          <!-- Columna izquierda -->
-          <div class="left-col flex-grow-1" style="max-width: 35%;">
+                    <!-- Columna izquierda -->
+                    <div class="left-col flex-grow-1" style="max-width: 35%;">
 
-            <!-- Header del perfil -->
-            <div class="text-center mb-5">
-              <div class="profile-avatar mb-3">
-                <img src="images/LogoMinimalist.png" alt="Avatar" class="auth-logo" style="width: 100px; height: 100px;">
-              </div>
-              <h1 class="h2 mb-2 fw-bold" style="color: var(--neutral-text);">{{ usuario.nombreCompleto }}</h1>
-              <p class="text-muted">@{{ usuario.nombreUsuario }}</p>
-              <span *ngIf="isAdmin()" class="badge bg-warning text-dark px-3 py-2">
+                        <!-- Header del perfil -->
+                        <div class="text-center mb-5 animate__animated animate__fadeInDown">
+                            <div class="profile-avatar mb-3">
+                                <img src="images/LogoMinimalist.png" alt="Avatar" class="auth-logo" style="width: 100px; height: 100px;">
+                            </div>
+                            <h1 class="h2 mb-2 fw-bold" style="color: var(--neutral-text);">{{ usuario.nombreCompleto }}</h1>
+                            <p class="text-muted">@{{ usuario.nombreUsuario }}</p>
+                            <span *ngIf="isAdmin()" class="badge bg-warning text-dark px-3 py-2">
                 <i class="bi bi-shield-check me-1"></i>Administrador
               </span>
-              <span *ngIf="!isAdmin()" class="badge-primary px-3 py-2 rounded-pill">
+                            <span *ngIf="!isAdmin()" class="badge-primary px-3 py-2 rounded-pill">
                 <i class="bi bi-person me-1"></i>Usuario
               </span>
-            </div>
+                        </div>
 
-            <!-- Mensajes de estado -->
-            <div *ngIf="success" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-              <i class="bi bi-check-circle me-2"></i>
-              {{ success }}
-              <button type="button" class="btn-close" (click)="clearMessages()"></button>
-            </div>
+                        <!-- Mensajes de estado -->
+                        <div *ngIf="success" class="alert alert-success alert-dismissible fade show mb-4 animate__animated animate__slideInDown" role="alert">
+                            <i class="bi bi-check-circle me-2"></i> {{ success }}
+                            <button type="button" class="btn-close" (click)="clearMessages()"></button>
+                        </div>
 
-            <div *ngIf="error" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-              <i class="bi bi-exclamation-triangle me-2"></i>
-              {{ error }}
-              <button type="button" class="btn-close" (click)="clearMessages()"></button>
-            </div>
+                        <div *ngIf="error" class="alert alert-danger alert-dismissible fade show mb-4 animate__animated animate__slideInDown" role="alert">
+                            <i class="bi bi-exclamation-triangle me-2"></i> {{ error }}
+                            <button type="button" class="btn-close" (click)="clearMessages()"></button>
+                        </div>
 
-            <!-- Tarjetas de información -->
-            <div class="row mb-4">
-              <div class="col-md-12 mb-3">
-                <div class="card profile-card h-100">
-                  <div class="card-body text-center">
-                    <i class="bi bi-calendar-plus fs-3 mb-2" style="color: var(--primary-color);"></i>
-                    <h6 class="card-title fw-semibold">Miembro desde</h6>
-                    <p class="text-muted mb-0">{{ usuario.fechaRegistro }}</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-12 mb-3">
-                <div class="card profile-card h-100">
-                  <div class="card-body text-center">
-                    <i class="bi bi-bag-check fs-3 mb-2" style="color: var(--accent-color);"></i>
-                    <h6 class="card-title fw-semibold">Pedidos realizados</h6>
-                    <p class="text-muted mb-0">{{ usuario.pedidosRealizados }} pedidos</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+                        <!-- Tarjetas de información -->
+                        <div class="row mb-4">
+                            <div class="col-md-12 mb-3">
+                                <div class="card profile-card h-100 animate__animated animate__fadeInUp hvr-float">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-calendar-plus fs-3 mb-2" style="color: var(--primary-color);"></i>
+                                        <h6 class="card-title fw-semibold">Miembro desde</h6>
+                                        <p class="text-muted mb-0">{{ usuario.fechaRegistro }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div class="card profile-card h-100 animate__animated animate__fadeInUp hvr-float" style="animation-delay: 0.1s;">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-bag-check fs-3 mb-2" style="color: var(--accent-color);"></i>
+                                        <h6 class="card-title fw-semibold">Pedidos realizados</h6>
+                                        <p class="text-muted mb-0">{{ usuario.pedidosRealizados }} pedidos</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-          </div>
+                    </div>
 
-          <!-- Columna derecha -->
-          <div class="right-col flex-grow-1" style="max-width: 65%;">
+                    <!-- Columna derecha -->
+                    <div class="right-col flex-grow-1" style="max-width: 65%;">
 
-            <!-- Formulario de edición -->
-            <div class="card profile-card mb-4">
-              <div class="card-header d-flex align-items-center" style="background-color: var(--primary-color); color: white; border-radius: 13px 13px 0 0;">
-                <i class="bi bi-person-gear fs-5 me-2"></i>
-                <h5 class="mb-0 fw-bold">Editar Información Personal</h5>
-              </div>
-              <div class="card-body p-4">
-                <form (ngSubmit)="onUpdateProfile()" novalidate>
-                  <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <label for="nombreCompleto" class="form-label fw-semibold">
+                        <!-- Formulario de edición -->
+                        <div class="card profile-card mb-4 animate__animated animate__fadeInRight">
+                            <div class="card-header d-flex align-items-center" style="background-color: var(--primary-color); color: white; border-radius: 13px 13px 0 0;">
+                                <i class="bi bi-person-gear fs-5 me-2"></i>
+                                <h5 class="mb-0 fw-bold">Editar Información Personal</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <form (ngSubmit)="onUpdateProfile()" novalidate>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="nombreCompleto" class="form-label fw-semibold">
                         <i class="bi bi-person me-2" style="color: var(--primary-color);"></i>Nombre Completo
                       </label>
-                      <input 
-                        type="text" 
-                        class="form-control form-control-lg" 
-                        id="nombreCompleto" 
-                        [(ngModel)]="usuario.nombreCompleto"
-                        name="nombreCompleto"
-                        required
-                        [disabled]="isLoading">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                      <label for="nombreUsuario" class="form-label fw-semibold">
+                                            <input type="text" class="form-control form-control-lg" id="nombreCompleto" [(ngModel)]="usuario.nombreCompleto" name="nombreCompleto" required [disabled]="isLoading">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="nombreUsuario" class="form-label fw-semibold">
                         <i class="bi bi-at me-2" style="color: var(--primary-color);"></i>Nombre de Usuario
                       </label>
-                      <input 
-                        type="text" 
-                        class="form-control form-control-lg" 
-                        id="nombreUsuario" 
-                        [(ngModel)]="usuario.nombreUsuario"
-                        name="nombreUsuario"
-                        required
-                        [disabled]="isLoading">
-                    </div>
-                  </div>
-                  
-                  <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <label for="telefono" class="form-label fw-semibold">
+                                            <input type="text" class="form-control form-control-lg" id="nombreUsuario" [(ngModel)]="usuario.nombreUsuario" name="nombreUsuario" required [disabled]="isLoading">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="telefono" class="form-label fw-semibold">
                         <i class="bi bi-telephone me-2" style="color: var(--primary-color);"></i>Teléfono
                       </label>
-                      <input 
-                        type="tel" 
-                        class="form-control form-control-lg" 
-                        id="telefono" 
-                        [(ngModel)]="usuario.telefono"
-                        name="telefono"
-                        required
-                        [disabled]="isLoading">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                      <label for="correo" class="form-label fw-semibold">
+                                            <input type="tel" class="form-control form-control-lg" id="telefono" [(ngModel)]="usuario.telefono" name="telefono" required [disabled]="isLoading">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="correo" class="form-label fw-semibold">
                         <i class="bi bi-envelope me-2" style="color: var(--primary-color);"></i>Correo Electrónico
                       </label>
-                      <input 
-                        type="email" 
-                        class="form-control form-control-lg" 
-                        id="correo" 
-                        [(ngModel)]="usuario.correo"
-                        name="correo"
-                        required
-                        [disabled]="isLoading">
-                    </div>
-                  </div>
-                  
-                  <div class="mb-4">
-                    <label for="password" class="form-label fw-semibold">
+                                            <input type="email" class="form-control form-control-lg" id="correo" [(ngModel)]="usuario.correo" name="correo" required [disabled]="isLoading">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="password" class="form-label fw-semibold">
                       <i class="bi bi-lock me-2" style="color: var(--primary-color);"></i>Nueva Contraseña
                     </label>
-                    <input 
-                      type="password" 
-                      class="form-control form-control-lg" 
-                      id="password" 
-                      [(ngModel)]="usuario.password"
-                      name="password"
-                      placeholder="Dejar vacío para mantener la actual"
-                      [disabled]="isLoading">
-                    <div class="form-text" style="color: white;">
-                      <i class="bi bi-info-circle me-1"></i>
-                      Deja este campo vacío si no quieres cambiar tu contraseña
-                    </div>
-                  </div>
-                  
-                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button 
-                      type="submit" 
-                      class="btn btn-primary btn-lg px-4"
-                      [disabled]="isLoading">
+                                        <input type="password" class="form-control form-control-lg" id="password" [(ngModel)]="usuario.password" name="password" placeholder="Dejar vacío para mantener la actual" [disabled]="isLoading">
+                                        <div class="form-text" style="color: white;">
+                                            <i class="bi bi-info-circle me-1"></i> Deja este campo vacío si no quieres cambiar tu contraseña
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="submit" class="btn btn-primary btn-lg px-4 hvr-grow" [disabled]="isLoading">
                       <span *ngIf="!isLoading">
                         <i class="bi bi-save me-2"></i>Guardar Cambios
                       </span>
@@ -160,65 +119,57 @@
                         Guardando...
                       </span>
                     </button>
-                  </div>
-                </form>
-              </div>
-            </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
 
-            <!-- Zona peligrosa -->
-            <div class="card danger-zone">
-              <div class="card-header d-flex align-items-center" style="background-color: var(--error-color); color: white; border-radius: 13px 13px 0 0;">
-                <i class="bi bi-exclamation-triangle fs-5 me-2"></i>
-                <h6 class="mb-0 fw-bold">Zona Peligrosa</h6>
-              </div>
-              <div class="card-body">
-                <p class="text-muted mb-3">
-                  Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, asegúrate de que realmente quieres hacer esto.
-                </p>
-                <button 
-                  type="button" 
-                  class="btn btn-danger" 
-                  (click)="openDeleteModal()"
-                  [disabled]="isLoading">
+                        <!-- Zona peligrosa -->
+                        <div class="card danger-zone animate__animated animate__fadeInRight" style="animation-delay: 0.2s;">
+                            <div class="card-header d-flex align-items-center" style="background-color: var(--error-color); color: white; border-radius: 13px 13px 0 0;">
+                                <i class="bi bi-exclamation-triangle fs-5 me-2"></i>
+                                <h6 class="mb-0 fw-bold">Zona Peligrosa</h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted mb-3">
+                                    Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, asegúrate de que realmente quieres hacer esto.
+                                </p>
+                                <button type="button" class="btn btn-danger" (click)="openDeleteModal()" [disabled]="isLoading">
                   <i class="bi bi-trash me-2"></i>Eliminar Cuenta
                 </button>
-              </div>
-            </div>
+                            </div>
+                        </div>
 
-          </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        
-      </div>
     </div>
-  </div>
 </main>
 
 <!-- Modal de confirmación para eliminar cuenta -->
 <div class="modal fade" id="deleteAccountModal" tabindex="-1" [style.display]="showDeleteModal ? 'block' : 'none'">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title d-flex align-items-center" style="color: var(--error-color);">
-          <i class="bi bi-exclamation-triangle me-2"></i>Confirmar Eliminación
-        </h5>
-        <button type="button" class="btn-close" (click)="closeDeleteModal()"></button>
-      </div>
-      <div class="modal-body">
-        <p class="mb-3">¿Estás seguro de que quieres eliminar tu cuenta?</p>
-        <div class="alert alert-warning">
-          <i class="bi bi-info-circle me-2"></i>
-          <strong>Esta acción no se puede deshacer.</strong> Se eliminarán todos tus datos y no podrás recuperar tu cuenta.
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" (click)="closeDeleteModal()" [disabled]="isLoading">
+    <div class="modal-dialog">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <div class="modal-header">
+                <h5 class="modal-title d-flex align-items-center" style="color: var(--error-color);">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close" (click)="closeDeleteModal()"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">¿Estás seguro de que quieres eliminar tu cuenta?</p>
+                <div class="alert alert-warning">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Esta acción no se puede deshacer.</strong> Se eliminarán todos tus datos y no podrás recuperar tu cuenta.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary hvr-shrink" (click)="closeDeleteModal()" [disabled]="isLoading">
           Cancelar
         </button>
-        <button 
-          type="button" 
-          class="btn btn-danger" 
-          (click)="confirmDeleteAccount()"
-          [disabled]="isLoading">
+                <button type="button" class="btn btn-danger hvr-grow" (click)="confirmDeleteAccount()" [disabled]="isLoading">
           <span *ngIf="!isLoading">
             <i class="bi bi-trash me-2"></i>Sí, Eliminar Cuenta
           </span>
@@ -227,7 +178,7 @@
             Eliminando...
           </span>
         </button>
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

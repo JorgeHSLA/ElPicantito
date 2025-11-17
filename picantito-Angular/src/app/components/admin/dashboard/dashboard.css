@@ -210,7 +210,9 @@
     font-size: 0.85rem;
 }
 
+
 /* Mejorar el card-title de las listas */
+
 .card-title {
     color: #ffffff !important;
     font-weight: 700;
@@ -231,6 +233,23 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+
+/* Elementos con scroll-reveal inician con opacidad baja pero visibles */
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+
+/* Cuando se agregan las clases animate__animated, se hacen completamente visibles */
+
+.scroll-reveal.animate__animated {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .card {
