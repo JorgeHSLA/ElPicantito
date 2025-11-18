@@ -239,6 +239,14 @@ INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAd
 INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (19, 'Sprite 350ml', 'Refresco de limón gaseoso y refrescante.', 5000, 2500, 'https://i.imgur.com/2dtG3IU.jpeg', true, 4, true, 'BEBIDA');
 INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (20, 'Agua Mineral', 'Agua con gas en botella individual.', 4000, 2000, 'https://hatsu.co/wp-content/uploads/2023/04/PRODUCTOS-SITIO-WEB_62.png', true, 5, true, 'BEBIDA');
 
+-- Productos predefinidos - ACOMPAÑAMIENTOS
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (21, 'Nachos con Queso', 'Crujientes nachos con salsa de queso cheddar fundido.', 12000, 6000, 'https://www.seriouseats.com/thmb/YBUAG17xy1nWYGPmFcJKeoODTzk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/cheese-sauce-for-cheese-fries-and-nachos-hero-01-e6ccf966688c43ec8025cf9a19678423.jpg', true, 5, true, 'ACOMPAÑAMIENTO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (22, 'Papas Gajo Picantes', 'Papas en gajo sazonadas con especias mexicanas.', 10000, 5000, 'https://editorialtelevisa.brightspotcdn.com/a6/a5/ca0f15c349b0a29b8f96048cd916/papas-gajo-receta-facil-rapida.jpg', true, 4, true, 'ACOMPAÑAMIENTO');
+
+-- Productos predefinidos - POSTRES
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (23, 'Churros con Cajeta', 'Churros dorados con azúcar y canela, servidos con cajeta.', 9000, 4500, 'https://i.ytimg.com/vi/TNVnwihZi6Y/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBeZEDA5pUGCfyiGyXNPO9gF8H79g', true, 5, true, 'POSTRE');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (24, 'Flan Napolitano', 'Flan casero con caramelo suave y cremoso.', 7000, 3500, 'https://cocina-familiar.com/wp-content/uploads/2022/08/flan-napolitano.jpg', true, 5, true, 'POSTRE');
+
 --
 -- Data for Name: pedido_producto; Type: TABLE DATA; Schema: public; Owner: taquito
 --
@@ -416,6 +424,12 @@ INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadPro
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (30, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (31, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (32, 1, 1);
+-- Extras adicionales (IDs 39-43)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (40, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (41, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (42, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (43, 1, 1);
 
 -- Relaciones de otros productos con adicionales generales
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 2, 1);
