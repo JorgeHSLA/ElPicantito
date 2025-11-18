@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { ProductCardComponent } from '../../shared/product-card/product-card.component';
 import { ProductoService } from '../../../services/tienda/producto.service';
 import { Producto } from '../../../models/producto';
@@ -10,7 +11,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-tienda',
   standalone: true,
-  imports: [CommonModule, RouterModule, ProductCardComponent],
+  imports: [CommonModule, RouterModule, FormsModule, ProductCardComponent],
   templateUrl: './tienda.html',
   styleUrls: ['./tienda.css', './pagination.css']
 })
@@ -22,6 +23,13 @@ export class TiendaComponent implements OnInit, AfterViewInit, OnDestroy {
   // Filtros
   categoriaSeleccionada: string = 'Todos';
   categorias = ['Todos', 'Disponibles', 'No Disponibles'];
+  
+  // Filtros por tipo de producto
+  tipoProductoSeleccionado: string = 'Todos los productos';
+  tiposProducto = ['Todos los productos', 'Taco', 'Postre', 'Acompañamiento', 'Bebida'];
+  
+  // Búsqueda de texto
+  textoBusqueda: string = '';
 
   // Productos filtrados
   productosFiltrados: Producto[] = [];
@@ -212,6 +220,23 @@ export class TiendaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paginaActual = 1; // Resetear a la primera página al cambiar filtro
     this.filtrarProductos();
   }
+  
+  filtrarPorTipoProducto(tipo: string): void {
+    this.tipoProductoSeleccionado = tipo;
+    this.paginaActual = 1;
+    this.filtrarProductos();
+  }
+  
+  buscarProductos(texto: string): void {
+    this.textoBusqueda = texto;
+    this.paginaActual = 1;
+    this.filtrarProductos();
+  }
+  
+  limpiarBusqueda(): void {
+    this.textoBusqueda = '';
+    this.filtrarProductos();
+  }
 
   private filtrarProductos(): void {
     console.log('Filtrando por categoría:', this.categoriaSeleccionada);
@@ -222,19 +247,46 @@ export class TiendaComponent implements OnInit, AfterViewInit, OnDestroy {
       !producto.nombre?.toLowerCase().includes('personalizado')
     );
 
-    if (this.categoriaSeleccionada === 'Todos') {
-      this.productosFiltrados = [...productosBase];
-    } else if (this.categoriaSeleccionada === 'Disponibles') {
-      this.productosFiltrados = productosBase.filter(producto =>
+    // Filtrar por disponibilidad
+    if (this.categoriaSeleccionada === 'Disponibles') {
+      productosBase = productosBase.filter(producto =>
         producto.disponible === true || (producto.disponible as any) === 1
       );
     } else if (this.categoriaSeleccionada === 'No Disponibles') {
-      this.productosFiltrados = productosBase.filter(producto =>
+      productosBase = productosBase.filter(producto =>
         producto.disponible === false || (producto.disponible as any) === 0
       );
-    } else {
-      this.productosFiltrados = [...productosBase];
     }
+    
+    // Filtrar por tipo de producto (Taco, Postre, Acompañamiento, Bebida)
+    if (this.tipoProductoSeleccionado !== 'Todos los productos') {
+      productosBase = productosBase.filter(producto => {
+        const categoriaProducto = producto.categoria?.toUpperCase() || '';
+        const tipoLower = this.tipoProductoSeleccionado.toLowerCase();
+        
+        // Mapear el tipo seleccionado a la categoría en la BD
+        let categoriaEsperada = '';
+        if (tipoLower === 'taco') categoriaEsperada = 'TACO';
+        else if (tipoLower === 'postre') categoriaEsperada = 'POSTRE';
+        else if (tipoLower === 'acompañamiento') categoriaEsperada = 'ACOMPAÑAMIENTO';
+        else if (tipoLower === 'bebida') categoriaEsperada = 'BEBIDA';
+        
+        return categoriaProducto === categoriaEsperada;
+      });
+    }
+    
+    // Filtrar por texto de búsqueda
+    if (this.textoBusqueda && this.textoBusqueda.trim() !== '') {
+      const busquedaLower = this.textoBusqueda.toLowerCase().trim();
+      productosBase = productosBase.filter(producto => {
+        const nombreLower = producto.nombre?.toLowerCase() || '';
+        const descripcionLower = producto.descripcion?.toLowerCase() || '';
+        
+        return nombreLower.includes(busquedaLower) || descripcionLower.includes(busquedaLower);
+      });
+    }
+    
+    this.productosFiltrados = productosBase;
 
     console.log('Productos filtrados resultado:', this.productosFiltrados);
     

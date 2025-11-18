@@ -87,6 +87,70 @@
     z-index: 1;
 }
 
+.filters-section {
+    border-bottom: 1px solid #dee2e6;
+    position: relative;
+    z-index: 1;
+}
+
+.filters-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.filters-section .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Buscador de productos */
+.search-bar-wrapper .input-group-text {
+    border-right: none;
+}
+
+.search-bar-wrapper .form-control {
+    border-left: none;
+    box-shadow: none;
+}
+
+.search-bar-wrapper .form-control:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+}
+
+.search-bar-wrapper .input-group:focus-within .input-group-text {
+    border-color: #ffc107;
+}
+
+.search-bar-wrapper .btn-outline-secondary {
+    border-color: #dee2e6;
+}
+
+.search-bar-wrapper .btn-outline-secondary:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+/* Responsive para filtros */
+@media (max-width: 991px) {
+    .search-bar-wrapper {
+        margin-top: 1rem;
+    }
+}
+
 main.container {
     position: relative;
     z-index: 1;
