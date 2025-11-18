@@ -86,7 +86,7 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="holderName" class="form-label">Nombre del Titular *</label>
-                                    <input type="text" class="form-control" id="holderName" [(ngModel)]="cardData.holderName" placeholder="Como aparece en la tarjeta">
+                                    <input type="text" class="form-control" id="holderName" [(ngModel)]="cardData.holderName" placeholder="Nombre en la tarjeta">
                                 </div>
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                                 </div>
                             </div>
                             <div class="alert alert-info">
-                                <i class="bi bi-info-circle me-2"></i> Recibirás una notificación en tu app Nequi para autorizar el pago.
+                                <i class="bi bi-info-circle me-2"></i> Serás redirigido al portal de pagos de Nequi, donde podrás confirmar la transacción. Recibirás una notificación en tu app Nequi para autorizar el pago.
                             </div>
                         </div>
 
@@ -192,6 +192,36 @@
                   <i class="bi bi-shield-fill-check me-1"></i>
                   Pago 100% seguro y protegido
                 </small>
+                            </div>
+                            
+                            <!-- Términos y Condiciones -->
+                            <div class="mt-3 pt-3 border-top">
+                                <small class="text-muted d-block mb-2">
+                  <i class="bi bi-info-circle me-1"></i>
+                  <strong>Condiciones del Pago:</strong>
+                </small>
+                                <ul class="list-unstyled small text-muted ps-3">
+                                    <li class="mb-2">
+                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        Al confirmar el pago, autorizas el procesamiento de tus datos según nuestra <a href="#" class="text-decoration-none">Política de Privacidad</a>.
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-shield-lock-fill text-primary me-2"></i>
+                                        <strong>No almacenamos</strong> información sensible de tarjetas. Los datos son procesados directamente por pasarelas certificadas PCI DSS.
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-clock-history text-info me-2"></i>
+                                        Tu pedido será confirmado inmediatamente después del pago exitoso.
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-envelope-check text-warning me-2"></i>
+                                        Recibirás un correo de confirmación con los detalles de tu compra.
+                                    </li>
+                                    <li class="mb-0">
+                                        <i class="bi bi-arrow-return-left text-secondary me-2"></i>
+                                        Tienes derecho a retracto según la Ley 1480 de 2011 del Estatuto del Consumidor.
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>

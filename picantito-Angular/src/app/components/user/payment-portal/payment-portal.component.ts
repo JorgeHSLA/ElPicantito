@@ -4,6 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CarritoService } from '../../../services/carrito.service';
 import { AuthService } from '../../../services/auth.service';
+import { PedidoManagerService } from '../../../services/tienda/pedido-manager.service';
 
 interface PaymentMethod {
   id: string;
@@ -23,6 +24,9 @@ export class PaymentPortalComponent {
   selectedPaymentMethod = signal<string>('');
   isProcessingPayment = signal(false);
   total = signal(0);
+  
+  // Datos del checkout (recuperados de sessionStorage)
+  checkoutData: any = null;
 
   // Datos de tarjeta
   cardData = {
@@ -89,6 +93,7 @@ export class PaymentPortalComponent {
   constructor(
     private carritoService: CarritoService,
     private authService: AuthService,
+    private pedidoManager: PedidoManagerService,
     private router: Router
   ) {
     // Verificar autenticación
@@ -96,6 +101,25 @@ export class PaymentPortalComponent {
       this.router.navigate(['/login']);
       return;
     }
+
+    // Recuperar datos del checkout
+    const checkoutDataStr = sessionStorage.getItem('checkoutData');
+    if (!checkoutDataStr) {
+      console.error('No se encontraron datos de checkout');
+      this.router.navigate(['/checkout-summary']);
+      return;
+    }
+    this.checkoutData = JSON.parse(checkoutDataStr);
+    console.log('📦 Datos del checkout recuperados:', this.checkoutData);
+
+    // Obtener correo del usuario autenticado
+    const usuario = this.authService.loggedUser();
+    const userEmail = usuario?.correo || this.checkoutData.correo || '';
+    console.log('📧 Correo del usuario:', userEmail);
+
+    // Auto-llenar campos de correo electrónico
+    this.nequiData.email = userEmail;
+    this.pseData.email = userEmail;
 
     // Verificar que hay productos en el carrito
     const cartItems = this.carritoService.cartItems();
@@ -125,18 +149,44 @@ export class PaymentPortalComponent {
     this.isProcessingPayment.set(true);
 
     try {
+      console.log('💳 Simulando procesamiento de pago...');
       // Simular procesamiento de pago
       await this.simulatePaymentProcess();
 
-  // Limpiar carrito después del pago exitoso
-  this.carritoService.limpiarCarritoCompleto();
-
-      // Mostrar mensaje de éxito y redirigir al rastreo
-      alert('¡Pago procesado exitosamente! Tu pedido ha sido confirmado.');
-      this.router.navigate(['/rastreo-pedido']);    } catch (error) {
+      console.log('✅ Pago simulado exitosamente, creando pedido...');
+      
+      // Crear el pedido después de "pagar"
+      this.pedidoManager.procesarPedidoDesdeCarrito(
+        this.checkoutData.direccion
+      ).subscribe({
+        next: (pedidoCreado) => {
+          console.log('✅ Pedido creado exitosamente:', pedidoCreado);
+          
+          // Limpiar carrito y sessionStorage
+          this.carritoService.limpiarCarritoCompleto();
+          sessionStorage.removeItem('checkoutData');
+          
+          this.isProcessingPayment.set(false);
+          
+          // Redirigir a la página de pedidos del cliente directamente
+          const clienteId = this.authService.loggedUser()?.id;
+          if (clienteId) {
+            this.router.navigate([`/cliente/${clienteId}/pedidos`], {
+              queryParams: { pedidoCreado: pedidoCreado.id }
+            });
+          } else {
+            this.router.navigate(['/tienda']);
+          }
+        },
+        error: (error) => {
+          console.error('❌ Error al crear el pedido:', error);
+          this.isProcessingPayment.set(false);
+          alert('Error al crear el pedido después del pago. Por favor contacta con soporte.');
+        }
+      });
+    } catch (error) {
       console.error('Error al procesar el pago:', error);
       alert('Error al procesar el pago. Por favor intenta de nuevo.');
-    } finally {
       this.isProcessingPayment.set(false);
     }
   }
@@ -182,9 +232,22 @@ export class PaymentPortalComponent {
 
   private simulatePaymentProcess(): Promise<void> {
     return new Promise((resolve) => {
+      // Simular diferentes tiempos según el método de pago
+      const method = this.selectedPaymentMethod();
+      let delay = 2000;
+      
+      if (method === 'pse') {
+        delay = 3000; // PSE tarda más
+      } else if (method === 'nequi') {
+        delay = 1500; // Nequi es más rápido
+      } else if (method === 'cash') {
+        delay = 500; // Efectivo es instantáneo
+      }
+      
+      console.log(`⏳ Simulando pago con ${method} (${delay}ms)...`);
       setTimeout(() => {
         resolve();
-      }, 3000); // Simular 3 segundos de procesamiento
+      }, delay);
     });
   }
 

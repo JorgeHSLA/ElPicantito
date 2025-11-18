@@ -188,49 +188,19 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    console.log('🔄 Procesando pedido...');
-    console.log('📤 Dirección enviada al backend:', this.customerInfo.direccion);
-    this.isProcessingOrder.set(true);
-
-    // Usar siempre el nuevo sistema (sin fecha de entrega)
-    this.pedidoManager.procesarPedidoDesdeCarrito(
-      this.customerInfo.direccion.trim()
-    ).subscribe({
-      next: (pedidoCreado) => {
-        console.log('✅ Pedido creado exitosamente:', pedidoCreado);
-        
-        // Limpiar carrito después del pedido exitoso
-        this.carritoService.limpiarCarritoCompleto();
-        
-        // Mostrar modal de confirmación personalizado
-        this.orderConfirmationData.set({
-          pedidoId: pedidoCreado.id,
-          total: summary!.total
-        });
-        this.showOrderConfirmationModal.set(true);
-        
-        // Navegar al pedido específico después de 1.5 segundos
-        const clienteId = this.authService.loggedUser()?.id;
-        setTimeout(() => {
-          this.closeOrderConfirmationModal();
-          // Redirigir a la página de pedidos del cliente con parámetro de éxito
-          if (clienteId) {
-            this.router.navigate([`/cliente/${clienteId}/pedidos`], {
-              queryParams: { pedidoCreado: pedidoCreado.id }
-            });
-          } else {
-            this.router.navigate(['/pedidos'], {
-              queryParams: { pedidoCreado: pedidoCreado.id }
-            });
-          }
-        }, 1500);
-      },
-      error: (error) => {
-        console.error('❌ Error al procesar pedido:', error);
-        this.erroresValidacion.push('Error al procesar el pedido. Intenta nuevamente.');
-        this.isProcessingOrder.set(false);
-      }
-    });
+    console.log('✅ Validación exitosa, redirigiendo al portal de pagos...');
+    console.log('📤 Dirección para el pedido:', this.customerInfo.direccion);
+    
+    // Guardar la información del pedido en sessionStorage para el portal de pagos
+    sessionStorage.setItem('checkoutData', JSON.stringify({
+      direccion: this.customerInfo.direccion.trim(),
+      telefono: this.customerInfo.telefono,
+      correo: this.customerInfo.correo,
+      observaciones: this.customerInfo.observaciones
+    }));
+    
+    // Redirigir al portal de pagos
+    this.router.navigate(['/payment-portal']);
   }
 
   // Actualizar cantidad de un producto
