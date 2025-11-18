@@ -66,40 +66,36 @@ export class DragAndDrop {
             next: (adicionales) => {
               this.adcionales.set(adicionales);
               
-              // 3. Filtrar por nombres para categorizar (mismo filtro que antes)
+              // 3. Categorizar usando el campo 'categoria' de la base de datos
               this.tortillas.set(
                 adicionales
-                  .filter(a => a.nombre && 
-                              (a.nombre.toLowerCase().includes('tortilla')))
+                  .filter(a => a.categoria === 'TORTILLA')
                   .map(a => this.mapAdicionalToItem(a))
               );
 
               this.proteinas.set(
                 adicionales
-                  .filter(a => a.nombre && 
-                              (a.nombre.toLowerCase().includes('carne') ||
-                               a.nombre.toLowerCase().includes('pollo') ||
-                               a.nombre.toLowerCase().includes('pastor') ||
-                               a.nombre.toLowerCase().includes('carnitas') ||
-                               a.nombre.toLowerCase().includes('chorizo')))
+                  .filter(a => a.categoria === 'PROTEINA')
                   .map(a => this.mapAdicionalToItem(a))
               );
 
               this.salsas.set(
                 adicionales
-                  .filter(a => a.nombre && 
-                              (a.nombre.toLowerCase().includes('salsa') ||
-                               a.nombre.toLowerCase().includes('pico')))
+                  .filter(a => a.categoria === 'SALSA')
                   .map(a => this.mapAdicionalToItem(a))
               );
 
               this.extras.set(
                 adicionales
-                  .filter(a => a.nombre && 
-                              (a.nombre.toLowerCase().includes('queso') ||
-                               a.nombre.toLowerCase().includes('lechuga')))
+                  .filter(a => a.categoria === 'EXTRAS' || a.categoria === 'EXTRA')
                   .map(a => this.mapAdicionalToItem(a))
               );
+
+              console.log('=== ADICIONALES CARGADOS ===');
+              console.log('Tortillas:', this.tortillas().length);
+              console.log('Proteínas:', this.proteinas().length);
+              console.log('Salsas:', this.salsas().length);
+              console.log('Extras:', this.extras().length);
 
               // Inicializar con tortillas
               this.loadCategoryItems('tortilla');
@@ -131,12 +127,16 @@ export class DragAndDrop {
     return {
       idAdcional: adicional.id,
       nombre: adicional.nombre || 'Sin nombre',
-      image: adicional.imagen || this.getImageForAdicional(adicional.nombre || ''),
+      image: adicional.imagen || 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg',
       precio: adicional.precioDeVenta || 0,
       cantidad: 1
     };
   }
 
+  /**
+   * Método legacy - mantener por compatibilidad pero ya no se usa
+   * Las imágenes ahora vienen directamente de la base de datos
+   */
   private getImageForAdicional(nombre: string): string {
     const nombreLower = nombre.toLowerCase();
     

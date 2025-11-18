@@ -80,7 +80,9 @@ CREATE TABLE Adicionales (
     precioDeAdquisicion FLOAT,
     cantidad INTEGER,
     disponible BOOLEAN NOT NULL DEFAULT TRUE,
-    activo BOOLEAN DEFAULT TRUE
+    activo BOOLEAN DEFAULT TRUE,
+    imagen VARCHAR(255),
+    categoria VARCHAR(50)
 );
 
 -- ==========================

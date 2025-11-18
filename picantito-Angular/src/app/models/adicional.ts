@@ -8,7 +8,7 @@ export interface Adicional {
   disponible?: boolean;
   activo?: boolean;
   imagen?: string;
-  categoria?: 'PROTEINA' | 'VEGETAL' | 'SALSA' | 'QUESO' | 'EXTRA';
+  categoria?: 'TORTILLA' | 'PROTEINA' | 'SALSA' | 'EXTRAS' | 'VEGETAL' | 'QUESO' | 'EXTRA';
 
   // COMPATIBILIDAD HACIA ATRÁS - TEMPORAL
   precio?: number; // Mapea a precioDeVenta

@@ -38,6 +38,9 @@ public class Adicional {
     private Integer cantidad;
     private Boolean disponible;
     private Boolean activo = true;
+    
+    private String imagen;
+    private String categoria;
 
     @JsonIgnore
     @OneToMany(mappedBy = "adicional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

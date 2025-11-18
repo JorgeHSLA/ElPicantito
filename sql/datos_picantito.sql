@@ -27,21 +27,45 @@ SET row_security = off;
 
 
 
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (39, 'Aguacate', 'Rebanadas de aguacate fresco', 3000, 2000, 50, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (40, 'Jalapeños', 'Jalapeños en escabeche', 1750, 1000, 80, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (41, 'Salsa Picante', 'Salsa picante casera', 1250, 700, 200, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (42, 'Cebolla Caramelizada', 'Cebolla caramelizada al sartén', 1500, 900, 30, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (43, 'Queso Extra', 'Queso cheddar adicional', 2500, 1500, 100, true, true);
+-- ==========================
+-- ADICIONALES PARA CREAR TACO PERSONALIZADO
+-- ==========================
 
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (30, 'Carne Asada', 'Tiras de res a la parrilla sazonadas', 5000, 3000, 100, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (31, 'Pollo a la Parrilla', 'Pollo marinado y asado jugoso', 4500, 2800, 120, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (32, 'Cerdo Desmechado', 'Carne de cerdo lentamente cocinada', 4800, 2900, 90, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (33, 'Pastor Marinado', 'Cerdo adobado estilo pastor', 5200, 3100, 110, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (34, 'Suadero', 'Res suave cocida lentamente', 5300, 3200, 80, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (35, 'Chorizo Artesanal', 'Chorizo ligeramente picante', 4700, 2600, 95, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (36, 'Tocino Crujiente', 'Tiras de tocino crocante', 4500, 2500, 70, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (37, 'Pescado Empanizado', 'Trozos de pescado blanco empanizado', 5500, 3300, 60, true, true);
-INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo) VALUES (38, 'Camarones al Ajillo', 'Camarones salteados con ajo', 6000, 3600, 50, true, true);
+-- TORTILLAS (IDs: 1-3)
+INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
+(1, 'Tortilla de Maíz', 'Tortilla tradicional de maíz', 500, 300, 100, true, true, 'https://i.imgur.com/5jGtpX4.png', 'TORTILLA'),
+(2, 'Tortilla de Harina', 'Tortilla suave de harina de trigo', 600, 350, 100, true, true, 'https://i.imgur.com/gXaJ3Md.png', 'TORTILLA'),
+(3, 'Tortilla Integral', 'Tortilla integral nutritiva', 700, 400, 100, true, true, 'https://i.imgur.com/tEY5YQX.png', 'TORTILLA');
+
+-- PROTEÍNAS (IDs: 10-14)
+INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
+(10, 'Carne Asada', 'Tiras de res a la parrilla sazonadas', 2500, 1500, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'PROTEINA'),
+(11, 'Pollo', 'Pollo marinado y asado jugoso', 2000, 1200, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'PROTEINA'),
+(12, 'Pastor', 'Cerdo adobado estilo pastor', 2200, 1300, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'PROTEINA'),
+(13, 'Carnitas', 'Cerdo cocinado lentamente', 2300, 1400, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'PROTEINA'),
+(14, 'Chorizo', 'Chorizo ligeramente picante', 2100, 1250, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'PROTEINA');
+
+
+INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
+(20, 'Salsa Verde', 'Salsa verde picante', 300, 150, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
+(21, 'Salsa Roja', 'Salsa roja tradicional', 300, 150, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
+(22, 'Salsa Habanera', 'Salsa habanera muy picante', 400, 200, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
+(23, 'Salsa Chipotle', 'Salsa chipotle ahumada', 400, 200, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
+(24, 'Pico de Gallo', 'Pico de gallo fresco', 500, 250, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA');
+
+
+INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
+(30, 'Queso Oaxaca', 'Queso Oaxaca derretido', 800, 500, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
+(31, 'Queso Cotija', 'Queso Cotija rallado', 700, 450, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
+(32, 'Lechuga', 'Lechuga fresca picada', 200, 100, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS');
+
+-- los extras q puso el marica de jorge
+INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
+(39, 'Aguacate', 'Rebanadas de aguacate fresco', 3000, 2000, 50, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
+(40, 'Jalapeños', 'Jalapeños en escabeche', 1750, 1000, 80, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
+(41, 'Salsa Picante', 'Salsa picante casera', 1250, 700, 200, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
+(42, 'Cebolla Caramelizada', 'Cebolla caramelizada al sartén', 1500, 900, 30, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
+(43, 'Queso Extra', 'Queso cheddar adicional', 2500, 1500, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS');
 
 
 INSERT INTO public.usuarios (id, nombreCompleto, nombreUsuario, telefono, correo, contrasenia, estado, activo) VALUES (1, 'Administrador Principal', 'admin', '3001234567', 'admin@elpicantito.com', 'admin123', NULL, true);
@@ -189,6 +213,10 @@ INSERT INTO public.pedidos (id, precioDeVenta, precioDeAdquisicion, fechaEntrega
 -- Data for Name: productos; Type: TABLE DATA; Schema: public; Owner: taquito
 --
 
+-- Producto base para crear tacos personalizados
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (1, 'Taco Personalizado', 'Base para construir tacos personalizados (precio base 0)', 0, 0, 'https://i.imgur.com/nDSixlG.png', true, 5, true);
+
+-- Productos predefinidos
 INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (2, 'Tacos al Pastor', 'Tortilla de maíz, cerdo marinado, piña y salsa verde.', 20000, 12000, 'https://comedera.com/wp-content/uploads/sites/9/2017/08/tacos-al-pastor-receta.jpg?fit=1316,838&crop=0px,49px,1316px,740px', true, 5, true);
 INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (3, 'Tacos de Pollo', 'Tortilla de trigo, pollo a la parrilla, lechuga y salsa ranch.', 17000, 9000, 'https://imag.bonviveur.com/tacos-de-pollo.webp', true, 4, true);
 INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (4, 'Tacos de Pescado', 'Pescado frito, col morada, crema de chipotle y limón.', 19000, 11000, 'https://images.cookforyourlife.org/wp-content/uploads/2018/08/Lemon-Lime-Fish-Tacos.jpg', true, 5, true);
@@ -365,6 +393,29 @@ INSERT INTO public.pedido_producto_adicional (pedido_producto_id, adicional_id, 
 -- Data for Name: productos_adicionales; Type: TABLE DATA; Schema: public; Owner: taquito
 --
 
+-- Relaciones del producto "Taco Personalizado" (ID=1) con sus adicionales
+-- Tortillas
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (1, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (2, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (3, 1, 1);
+-- Proteínas
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (10, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (11, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (12, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (13, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (14, 1, 1);
+-- Salsas
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (20, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (21, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (22, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (23, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (24, 1, 1);
+-- Extras
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (30, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (31, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (32, 1, 1);
+
+-- Relaciones de otros productos con adicionales generales
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 2, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 3, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (40, 2, 1);
