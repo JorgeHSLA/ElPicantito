@@ -7,6 +7,8 @@ import { PedidoCompleto } from '../../../models/pedido-completo';
 import { Repartidor } from '../../../models/repartidor';
 import { OperadorNavbarComponent } from '../../shared/operador-navbar/operador-navbar.component';
 import { OperadorSidebarComponent } from '../../shared/operador-sidebar/operador-sidebar.component';
+import { obtenerSucursalMasCercana } from '../../../models/sucursal';
+import * as L from 'leaflet';
 
 interface PedidosPorEstado {
   [key: string]: PedidoCompleto[];
@@ -44,6 +46,10 @@ export class GestionPedidos implements OnInit, AfterViewInit {
   error: string | null = null;
   successMessage: string | null = null;
 
+  // Búsqueda
+  searchTerm: string = '';
+  pedidosOriginales: PedidoCompleto[] = [];
+
   estadosOrdenados = ['recibido', 'cocinando', 'enviado', 'entregado'];
 
   estadosLabels: { [key: string]: string } = {
@@ -52,6 +58,13 @@ export class GestionPedidos implements OnInit, AfterViewInit {
     'enviado': 'Enviado',
     'entregado': 'Entregado'
   };
+
+  // Mapas para pedidos enviados
+  private maps: { [pedidoId: number]: L.Map } = {};
+  private deliveryMarkers: { [pedidoId: number]: L.Marker } = {};
+  private deliveryRoutes: { [pedidoId: number]: L.LatLng[] } = {};
+  private deliveryProgress: { [pedidoId: number]: number } = {};
+  private deliveryIntervals: { [pedidoId: number]: any } = {};
 
   ngOnInit(): void {
     this.cargarPedidos();
@@ -114,6 +127,7 @@ export class GestionPedidos implements OnInit, AfterViewInit {
     this.gestionPedidosService.getAllPedidos().subscribe({
       next: (pedidos) => {
         this.pedidos = pedidos;
+        this.pedidosOriginales = [...pedidos]; // Guardar copia original
         this.organizarPedidosPorEstado();
         this.loading = false;
         // Solo aplicar animaciones en la carga inicial
@@ -320,5 +334,204 @@ export class GestionPedidos implements OnInit, AfterViewInit {
       'entregado': 'bg-success'
     };
     return colores[estado.toLowerCase()] || 'bg-secondary';
+  }
+
+  getDireccionSinCoordenadas(direccion: string): string {
+    if (!direccion) return '';
+    // Si la dirección contiene el formato "Dirección|lat,lng", extraer solo la dirección
+    const partes = direccion.split('|');
+    return partes[0] || direccion;
+  }
+
+  // ==================== BÚSQUEDA ====================
+
+  buscarPedidos(): void {
+    if (!this.searchTerm || this.searchTerm.trim() === '') {
+      // Si no hay término de búsqueda, mostrar todos los pedidos
+      this.pedidos = [...this.pedidosOriginales];
+      this.organizarPedidosPorEstado();
+      return;
+    }
+
+    const termino = this.searchTerm.toLowerCase().trim();
+
+    // Filtrar pedidos por ID o nombre de cliente
+    this.pedidos = this.pedidosOriginales.filter(pedido => {
+      // Buscar por ID del pedido
+      const matchId = pedido.id?.toString().includes(termino);
+
+      // Buscar por nombre del cliente
+      const matchCliente = pedido.clienteNombre?.toLowerCase().includes(termino);
+
+      return matchId || matchCliente;
+    });
+
+    this.organizarPedidosPorEstado();
+  }
+
+  limpiarBusqueda(): void {
+    this.searchTerm = '';
+    this.buscarPedidos();
+  }
+
+  // ==================== MAPAS PARA PEDIDOS ENVIADOS ====================
+
+  initMapForPedido(pedidoId: number, direccion: string): void {
+    // Esperar un momento para que el DOM esté listo
+    setTimeout(() => {
+      const mapContainer = document.getElementById(`map-${pedidoId}`);
+      if (!mapContainer) return;
+
+      // Evitar reinicializar si ya existe
+      if (this.maps[pedidoId]) return;
+
+      // Extraer coordenadas del cliente
+      const partes = direccion.split('|');
+      if (partes.length < 2) return;
+
+      const coords = partes[1].split(',');
+      const customerLat = parseFloat(coords[0]);
+      const customerLng = parseFloat(coords[1]);
+
+      if (isNaN(customerLat) || isNaN(customerLng)) return;
+
+      // Obtener sucursal más cercana
+      const sucursal = obtenerSucursalMasCercana(customerLat, customerLng);
+
+      // Crear mapa centrado en la sucursal
+      const map = L.map(`map-${pedidoId}`).setView([sucursal.lat, sucursal.lng], 13);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(map);
+
+      this.maps[pedidoId] = map;
+
+      // Crear marcadores
+      const restaurantIcon = L.icon({
+        iconUrl: 'assets/leaflet/marker-icon.png',
+        iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
+        shadowUrl: 'assets/leaflet/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+
+      const restaurantMarker = L.marker([sucursal.lat, sucursal.lng], { icon: restaurantIcon })
+        .addTo(map)
+        .bindPopup(`<div style="color: #d32f2f; font-weight: bold;">🏪 ${sucursal.nombre}</div>`);
+
+      const customerMarker = L.marker([customerLat, customerLng], { icon: restaurantIcon })
+        .addTo(map)
+        .bindPopup(`<div style="color: #1976d2; font-weight: bold;">📍 Cliente</div>`);
+
+      // Dibujar ruta con OSRM
+      this.drawRouteForPedido(pedidoId, sucursal.lat, sucursal.lng, customerLat, customerLng, map);
+    }, 300);
+  }
+
+  private async drawRouteForPedido(pedidoId: number, restaurantLat: number, restaurantLng: number, customerLat: number, customerLng: number, map: L.Map): Promise<void> {
+    try {
+      const url = `https://router.project-osrm.org/route/v1/driving/${restaurantLng},${restaurantLat};${customerLng},${customerLat}?overview=full&geometries=geojson`;
+      
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.code === 'Ok' && data.routes && data.routes.length > 0) {
+        const route = data.routes[0];
+        const coordinates = route.geometry.coordinates;
+
+        const latLngs: L.LatLngExpression[] = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
+
+        // Guardar ruta para tracking simulado
+        this.deliveryRoutes[pedidoId] = latLngs.map(coord => {
+          if (Array.isArray(coord)) {
+            return L.latLng(coord[0], coord[1]);
+          }
+          return coord as L.LatLng;
+        });
+
+        // Dibujar la ruta
+        L.polyline(latLngs, {
+          color: '#28a745',
+          weight: 5,
+          opacity: 0.7
+        }).addTo(map);
+
+        // Ajustar vista para mostrar toda la ruta
+        const bounds = L.latLngBounds(latLngs as L.LatLngExpression[]);
+        map.fitBounds(bounds, { padding: [50, 50] });
+
+        // Iniciar tracking simulado del repartidor
+        this.startSimulatedTracking(pedidoId, map);
+      }
+    } catch (error) {
+      console.error('Error al dibujar ruta:', error);
+    }
+  }
+
+  private startSimulatedTracking(pedidoId: number, map: L.Map): void {
+    const route = this.deliveryRoutes[pedidoId];
+    if (!route || route.length === 0) return;
+
+    this.deliveryProgress[pedidoId] = 0;
+
+    // Crear marcador del repartidor
+    const deliveryIcon = L.icon({
+      iconUrl: 'assets/leaflet/marker-icon.png',
+      iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
+      shadowUrl: 'assets/leaflet/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+
+    const startPosition = route[0];
+    this.deliveryMarkers[pedidoId] = L.marker(startPosition, { icon: deliveryIcon })
+      .addTo(map)
+      .bindPopup('<div style="color: #ff6600; font-weight: bold;">🚚 Repartidor</div>');
+
+    // Simular movimiento cada 2 segundos
+    this.deliveryIntervals[pedidoId] = setInterval(() => {
+      this.deliveryProgress[pedidoId] += 0.02; // Avanzar 2% cada iteración
+
+      if (this.deliveryProgress[pedidoId] >= 1) {
+        this.deliveryProgress[pedidoId] = 0; // Reiniciar al llegar al final
+      }
+
+      const index = Math.floor(this.deliveryProgress[pedidoId] * (route.length - 1));
+      const newPosition = route[index];
+      
+      if (this.deliveryMarkers[pedidoId]) {
+        this.deliveryMarkers[pedidoId].setLatLng(newPosition);
+      }
+    }, 2000);
+  }
+
+  stopTrackingForPedido(pedidoId: number): void {
+    // Detener intervalo
+    if (this.deliveryIntervals[pedidoId]) {
+      clearInterval(this.deliveryIntervals[pedidoId]);
+      delete this.deliveryIntervals[pedidoId];
+    }
+
+    // Limpiar marcador
+    if (this.deliveryMarkers[pedidoId] && this.maps[pedidoId]) {
+      this.maps[pedidoId].removeLayer(this.deliveryMarkers[pedidoId]);
+      delete this.deliveryMarkers[pedidoId];
+    }
+
+    // Limpiar mapa
+    if (this.maps[pedidoId]) {
+      this.maps[pedidoId].remove();
+      delete this.maps[pedidoId];
+    }
+
+    // Limpiar datos
+    delete this.deliveryRoutes[pedidoId];
+    delete this.deliveryProgress[pedidoId];
   }
 }

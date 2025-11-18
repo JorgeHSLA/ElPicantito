@@ -45,6 +45,12 @@ export class RevisarRepartidoresComponent implements OnInit {
     this.cargarDatos();
   }
 
+  getDireccionSinCoordenadas(direccionCompleta: string | undefined): string {
+    if (!direccionCompleta) return 'Sin dirección';
+    const partes = direccionCompleta.split('|');
+    return partes[0].trim();
+  }
+
   // Utils repartidor
   isRepartidorInactivo(rep?: Repartidor | null): boolean {
     if (!rep) return false;

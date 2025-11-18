@@ -10,6 +10,23 @@
 
                 <h2 class="mb-4"><i class="bi bi-kanban me-2"></i>Gestión de Pedidos</h2>
 
+                <!-- Buscador de pedidos -->
+                <div class="search-container mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-primary text-white">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Buscar por número de pedido o nombre del cliente..." [(ngModel)]="searchTerm" (input)="buscarPedidos()">
+                        <button *ngIf="searchTerm" class="btn btn-outline-secondary" type="button" (click)="limpiarBusqueda()">
+                            <i class="bi bi-x-circle"></i> Limpiar
+                        </button>
+                    </div>
+                    <small class="text-muted d-block mt-1">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Busca por #pedido o nombre del cliente
+                    </small>
+                </div>
+
                 <!-- Mensajes de error y éxito -->
                 <div *ngIf="error" class="alert alert-danger alert-dismissible fade show animate__animated animate__slideInDown animate__faster" role="alert">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}
@@ -76,7 +93,7 @@
                                         <div class="mb-2" *ngIf="pedido.direccion">
                                             <small class="text-muted">
                   <i class="bi bi-geo-alt me-1"></i>
-                  {{ pedido.direccion }}
+                  {{ getDireccionSinCoordenadas(pedido.direccion) }}
                 </small>
                                         </div>
 
@@ -109,6 +126,14 @@
                                             <small class="badge bg-secondary">
                   <i class="bi bi-truck me-1"></i>
                   Repartidor: {{ pedido.repartidorNombre }}
+                </small>
+                                        </div>
+
+                                        <!-- Mapa de seguimiento para pedidos ENVIADO -->
+                                        <div *ngIf="pedido.estado.toLowerCase() === 'enviado' && pedido.direccion" class="mb-3">
+                                            <div [id]="'map-' + pedido.id" style="height: 250px; width: 100%; border-radius: 8px; border: 2px solid #dee2e6;" (mouseenter)="initMapForPedido(pedido.id, pedido.direccion)"></div>
+                                            <small class="text-muted d-block mt-1 text-center">
+                  <i class="bi bi-geo-alt-fill me-1"></i>Seguimiento en tiempo real
                 </small>
                                         </div>
 

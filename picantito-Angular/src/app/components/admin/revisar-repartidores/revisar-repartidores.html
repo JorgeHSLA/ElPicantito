@@ -91,7 +91,7 @@
                                         <tr>
                                             <td>{{ pedido.id }}</td>
                                             <td>{{ pedido.clienteNombre }}</td>
-                                            <td>{{ pedido.direccion }}</td>
+                                            <td>{{ getDireccionSinCoordenadas(pedido.direccion) }}</td>
                                             <td><span class="badge bg-primary text-uppercase">{{ pedido.estado }}</span></td>
                                             <td>{{ pedido.repartidorNombre || '—' }}</td>
                                             <td>
