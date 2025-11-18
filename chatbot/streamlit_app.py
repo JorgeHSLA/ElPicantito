@@ -8,7 +8,6 @@ import json
 SPRINGBOOT_API_BASE = os.environ.get("SPRINGBOOT_API_BASE", "http://localhost:9998")
 
 # === FUNCIONES PARA OBTENER DATOS DE SPRING BOOT ===
-@st.cache_data(ttl=300)  # Cache por 5 minutos
 def obtener_estadisticas(token=None):
     """Obtiene todas las estadísticas del sistema"""
     headers = {"Authorization": f"Bearer {token}"} if token else {}
@@ -560,7 +559,7 @@ if prompt := st.chat_input("🌶️ Hazme una pregunta sobre Elpicantito..."):
     # Llamada a la API en streaming con manejo de errores
     try:
         stream = client.chat.completions.create(
-            model="google/gemini-2.0-flash-exp:free",  # Modelo con mejor límite de tokens
+            model="openrouter/sherlock-think-alpha",
             messages=st.session_state.messages,
             stream=True,
         )

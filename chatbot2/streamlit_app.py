@@ -351,7 +351,7 @@ if prompt := st.chat_input("🌶️ ¿Qué te gustaría saber sobre nuestro men�
     # Llamada a la API en streaming con manejo de errores
     try:
         stream = client.chat.completions.create(
-            model="google/gemini-2.0-flash-exp:free",
+            model="openrouter/sherlock-think-alpha",
             messages=st.session_state.messages,
             stream=True,
         )
