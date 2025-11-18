@@ -2,16 +2,68 @@
 <div class="search-container">
     <div class="input-group search-input-group">
         <input 
+            #searchInput
             type="text" 
             class="form-control search-input" 
             placeholder="Buscar tacos, bebidas..."
-            [(ngModel)]="searchQuery"
-            (keypress)="onKeyPress($event)">
+            [value]="searchQuery()"
+            (input)="onInputChange($any($event.target).value)"
+            (keydown)="onKeyPress($event)"
+            (focus)="searchQuery().length >= 2 && searchResults().length > 0 ? showResults.set(true) : null">
+        <button 
+            *ngIf="searchQuery().length > 0"
+            class="btn clear-btn" 
+            type="button"
+            (click)="clearSearch()">
+            <i class="bi bi-x-lg"></i>
+        </button>
         <button 
             class="btn search-btn" 
             type="button"
             (click)="onSearch()">
             <i class="bi bi-search"></i>
         </button>
+    </div>
+
+    <!-- Dropdown de resultados -->
+    <div class="search-results-dropdown" *ngIf="showResults() && searchResults().length > 0">
+        <div class="search-results-header">
+            <span class="results-count">{{ searchResults().length }} resultado{{ searchResults().length !== 1 ? 's' : '' }}</span>
+            <small class="results-hint">Mostrando máximo 3</small>
+        </div>
+        
+        <div class="search-results-list">
+            <div 
+                *ngFor="let producto of searchResults().slice(0, 3)" 
+                class="search-result-item"
+                (click)="selectProduct(producto)">
+                <img 
+                    [src]="getProductImage(producto)" 
+                    [alt]="producto.nombre"
+                    class="result-image"
+                    onerror="this.src='/images/placeholder-product.png'">
+                <div class="result-info">
+                    <div class="result-name">{{ producto.nombre }}</div>
+                    <div class="result-category">{{ producto.categoria }}</div>
+                </div>
+                <div class="result-price">${{ getProductPrice(producto) | number:'1.2-2' }}</div>
+            </div>
+        </div>
+
+        <div class="search-results-footer" *ngIf="searchResults().length > 3">
+            <button class="btn-ver-todos" (click)="onSearch()">
+                Ver todos los resultados ({{ searchResults().length }})
+                <i class="bi bi-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mensaje cuando no hay resultados -->
+    <div class="search-results-dropdown" *ngIf="showResults() && searchResults().length === 0 && searchQuery().length >= 2">
+        <div class="no-results">
+            <i class="bi bi-search"></i>
+            <p>No se encontraron productos</p>
+            <small>Intenta con otro término de búsqueda</small>
+        </div>
     </div>
 </div>
