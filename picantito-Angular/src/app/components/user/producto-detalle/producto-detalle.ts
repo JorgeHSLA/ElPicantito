@@ -26,7 +26,7 @@ export class ProductoDetalleComponent implements OnInit {
 
   // Productos relacionados (simulados por ahora)
   productosRelacionados: Producto[] = [];
-  
+
   // Adicionales del producto
   adicionales: Adicional[] = [];
   adicionalesLoading = false;
@@ -78,32 +78,52 @@ export class ProductoDetalleComponent implements OnInit {
   }
 
   private cargarProductosRelacionados(): void {
-    // Cargar algunos productos relacionados (excluyendo el actual)
+    // Cargar productos relacionados de la BD (solo tacos, excluyendo el actual y el taco personalizado)
     this.productoService.getProductosActivos().subscribe({
       next: (productos) => {
         this.productosRelacionados = productos
-          .filter(p => p.id !== this.producto?.id)
-          .slice(0, 3); // Solo mostrar 3 productos relacionados
+          .filter(p => {
+            // Excluir el producto actual
+            if (p.id === this.producto?.id) return false;
+
+            const nombreLower = (p.nombre || '').toLowerCase();
+
+            // Excluir el taco personalizado
+            if (nombreLower.includes('personalizado') ||
+                nombreLower.includes('custom') ||
+                nombreLower === 'crea tu taco') {
+              return false;
+            }
+
+            // Solo incluir productos que tengan "taco" en el nombre
+            if (!nombreLower.includes('taco')) {
+              return false;
+            }
+
+            return true;
+          })
+          .slice(0, 5); // Mostrar máximo 5 tacos relacionados
       },
       error: (error) => {
         console.error('Error cargando productos relacionados:', error);
+        this.productosRelacionados = [];
       }
     });
   }
 
   private cargarAdicionales(productoId: number): void {
     this.adicionalesLoading = true;
-    
+
     // Obtener las relaciones producto-adicional para este producto
     this.adicionalService.getProductoAdicionalesByProductoId(productoId).subscribe({
       next: (relaciones: ProductoAdicional[]) => {
         // Para cada relación, obtener los datos completos del adicional
         const adicionalesIds = relaciones.map(rel => rel.adicionalId);
-        
+
         if (adicionalesIds.length > 0) {
           this.adicionalService.getAllAdicionales().subscribe({
             next: (todosAdicionales: Adicional[]) => {
-              this.adicionales = todosAdicionales.filter(adicional => 
+              this.adicionales = todosAdicionales.filter(adicional =>
                 adicionalesIds.includes(adicional.id || 0) && adicional.disponible
               );
               this.adicionalesLoading = false;
@@ -179,7 +199,7 @@ export class ProductoDetalleComponent implements OnInit {
   // Calcular precio total con adicionales
   calcularPrecioTotal(): number {
     const precioBase = (this.producto?.precioDeVenta || this.producto?.precio || 0) * this.cantidad;
-    
+
     let precioAdicionales = 0;
     this.adicionalesSeleccionados.forEach((cantidadAdicional, adicionalId) => {
       const adicional = this.adicionales.find(a => a.id === adicionalId);
@@ -203,7 +223,7 @@ export class ProductoDetalleComponent implements OnInit {
       if (!this.authService.isLoggedIn()) {
         this.isAdding.set(false);
         this.showLoginMessage.set(true);
-        
+
         // Ocultar el mensaje después de 5 segundos
         setTimeout(() => {
           this.showLoginMessage.set(false);
@@ -227,25 +247,25 @@ export class ProductoDetalleComponent implements OnInit {
 
       // USAR SIEMPRE EL NUEVO SISTEMA (CarritoService)
       this.carritoService.agregarItemConAdicionales(
-        this.producto, 
-        this.cantidad, 
+        this.producto,
+        this.cantidad,
         adicionalesParaCarrito
       );
-      
+
       if (adicionalesParaCarrito.length > 0) {
         console.log(`Agregando ${this.cantidad} unidades de ${this.producto.nombre} con ${adicionalesParaCarrito.length} adicionales al carrito`);
       } else {
         console.log(`Agregando ${this.cantidad} unidades de ${this.producto.nombre} al carrito (sin adicionales)`);
       }
-      
+
       // Mostrar feedback visual por un momento
       setTimeout(() => {
         this.isAdding.set(false);
       }, 1000);
-      
+
       // Abrir el carrito para mostrar el producto agregado
       this.carritoService.showCart();
-      
+
       // Limpiar selección de adicionales para próxima compra
       this.limpiarSeleccionAdicionales();
     }
@@ -269,8 +289,20 @@ export class ProductoDetalleComponent implements OnInit {
   // Método para navegar a un producto relacionado
   verProductoRelacionado(id: number | undefined): void {
     if (id) {
+      // Reiniciar el estado antes de navegar
+      this.isLoading = true;
+      this.producto = null;
+      this.productosRelacionados = [];
+      this.adicionales = [];
+      this.limpiarSeleccionAdicionales();
+      this.cantidad = 1;
+
+      // Navegar al nuevo producto
       this.router.navigate(['/producto', id]).then(() => {
+        // Scroll al inicio
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Cargar el nuevo producto
+        this.cargarProducto(id);
       });
     }
   }
