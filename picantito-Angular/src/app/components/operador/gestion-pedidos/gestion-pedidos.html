@@ -130,8 +130,8 @@
                                         </div>
 
                                         <!-- Mapa de seguimiento para pedidos ENVIADO -->
-                                        <div *ngIf="pedido.estado.toLowerCase() === 'enviado' && pedido.direccion" class="mb-3">
-                                            <div [id]="'map-' + pedido.id" style="height: 250px; width: 100%; border-radius: 8px; border: 2px solid #dee2e6;" (mouseenter)="initMapForPedido(pedido.id, pedido.direccion)"></div>
+                                        <div *ngIf="pedido.estado.toLowerCase() === 'enviado' && pedido.direccion" class="mb-3 map-container">
+                                            <div [id]="'map-' + pedido.id" style="height: 250px; width: 100%; border-radius: 8px; border: 2px solid #dee2e6;"></div>
                                             <small class="text-muted d-block mt-1 text-center">
                   <i class="bi bi-geo-alt-fill me-1"></i>Seguimiento en tiempo real
                 </small>

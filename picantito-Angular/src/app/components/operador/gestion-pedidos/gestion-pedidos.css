@@ -173,6 +173,9 @@
     border: none;
     transition: all 0.3s ease;
     overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .card:hover {
@@ -182,6 +185,42 @@
 .card-header {
     border-bottom: 2px solid rgba(255, 255, 255, 0.3);
     font-weight: 600;
+}
+
+.card-body {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Asegurar que todas las columnas tengan la misma altura */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-md-6.col-lg-3 {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hacer que todas las cards tengan la misma altura */
+.col-md-6.col-lg-3 .card {
+    min-height: 400px;
+}
+
+/* Responsive: ajustar altura en diferentes breakpoints */
+@media (max-width: 1199.98px) and (min-width: 768px) {
+    /* En tablet: 2 columnas */
+    .col-md-6.col-lg-3 .card {
+        min-height: 450px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    /* En móvil: 1 columna */
+    .col-md-6.col-lg-3 .card {
+        min-height: 350px;
+    }
 }
 
 
@@ -320,6 +359,42 @@
 .scroll-reveal.animate__animated {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Excluir mapas de las animaciones para evitar conflictos */
+[id^="map-"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 1 !important;
+    transition: none !important;
+}
+
+/* Contenedor del mapa siempre visible */
+.map-container {
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative;
+    z-index: 1;
+    display: block !important;
+    min-height: 250px;
+}
+
+/* Forzar que Leaflet se renderice correctamente */
+.map-container .leaflet-container {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background-color: #e0e0e0;
+    height: 250px !important;
+    width: 100% !important;
+}
+
+/* Asegurar que las animaciones no afecten al mapa */
+.pedido-item .map-container,
+.pedido-item [id^="map-"] {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
 }
 
 
