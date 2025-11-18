@@ -8,6 +8,12 @@ if [ ! -f "pom.xml" ]; then
     exit 1
 fi
 
+# Cargar variables de entorno desde .env si existe
+if [ -f ".env" ]; then
+    echo "Cargando variables de entorno desde .env..."
+    export $(grep -v '^#' .env | xargs)
+fi
+
 echo "Verificando Maven..."
 if [ -f "mvnw" ]; then
     echo "Usando Maven Wrapper..."
