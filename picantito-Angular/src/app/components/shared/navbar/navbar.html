@@ -84,7 +84,7 @@
                                         <i class="bi bi-person me-2"></i>Mi Perfil
                                     </a>
                                 </li>
-                                <li>
+                                <li *ngIf="!isAdmin() && !isOperador()">
                                     <a class="dropdown-item user-dropdown-item" href="#" (click)="goToMyOrders($event)">
                                         <i class="bi bi-bag me-2"></i>Mis Pedidos
                                     </a>

@@ -276,5 +276,6 @@ export class MiPerfilComponent implements OnInit, AfterViewInit {
   }
   logout(): void { this.authService.logout(); this.carritoService.limpiarTodoElSistema(); this.router.navigate(['/home']); }
   isAdmin(): boolean { return this.usuario.rol === 'ADMIN'; }
+  isOperador(): boolean { return this.usuario.rol === 'OPERADOR'; }
   clearMessages(): void { this.error = null; this.success = null; }
 }
