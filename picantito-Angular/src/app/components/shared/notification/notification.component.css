@@ -78,12 +78,34 @@
 
 /* Otros tipos de notificación por si se necesitan en el futuro */
 .notification-error {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #ff1744, #d50000);
   color: #ffffff;
+  border: 2px solid #ff5252;
+  box-shadow: 0 4px 20px rgba(213, 0, 0, 0.5), 0 0 40px rgba(255, 23, 68, 0.3);
+  font-weight: 600;
+  animation: shake 0.5s ease, pulse 2s ease-in-out infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(213, 0, 0, 0.5), 0 0 40px rgba(255, 23, 68, 0.3); }
+  50% { box-shadow: 0 4px 25px rgba(213, 0, 0, 0.7), 0 0 50px rgba(255, 23, 68, 0.5); }
 }
 
 .notification-error .notification-close {
   color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.notification-error .notification-close:hover {
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .notification-success {

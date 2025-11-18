@@ -5,8 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { CarritoService } from '../../../services/carrito.service';
 import { PedidoManagerService } from '../../../services/tienda/pedido-manager.service';
 import { PedidoRestService } from '../../../services/tienda/pedido-rest.service';
+import { ProductoService } from '../../../services/tienda/producto.service';
+import { NotificationService } from '../../../services/notification.service';
 import { AuthService } from '../../../services/auth.service';
 import { CartItem, CartSummary } from '../../../models/cart-item';
+import { Producto } from '../../../models/producto';
 import * as L from 'leaflet';
 
 @Component({
@@ -69,10 +72,30 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
   showOrderConfirmationModal = signal(false);
   orderConfirmationData = signal<{ pedidoId: number, total: number } | null>(null);
 
+  // Modal de recomendaciones antes del pago
+  showRecommendationsModal = signal(false);
+  recommendedProducts = signal<Producto[]>([]);
+  isLoadingRecommendations = signal(false);
+
+  // Productos sugeridos en la parte inferior
+  suggestedProducts = signal<Producto[]>([]);
+  filteredSuggestedProducts = signal<Producto[]>([]);
+  paginatedProducts = signal<Producto[]>([]);
+  currentPage = signal(1);
+  itemsPerPage = 6;
+  totalPages = signal(1);
+  
+  // Filtros
+  searchQuery = signal('');
+  selectedCategory = signal<string>('TODOS');
+  availableCategories = signal<string[]>(['TODOS', 'POSTRE', 'ACOMPAÑAMIENTO', 'BEBIDA']);
+
   constructor(
     private carritoService: CarritoService,
     private pedidoManager: PedidoManagerService,
     private pedidoRestService: PedidoRestService,
+    private productoService: ProductoService,
+    private notificationService: NotificationService,
     private authService: AuthService,
     private router: Router
   ) {
@@ -84,6 +107,9 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
 
     // Cargar datos del usuario
     this.loadUserData();
+
+    // Cargar productos sugeridos
+    this.loadSuggestedProducts();
 
     // Effect para manejar items del carrito (solo sistema nuevo)
     effect(() => {
@@ -115,21 +141,26 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
     
     // Validar dirección
     if (!this.customerInfo.direccion.trim()) {
-      this.erroresValidacion.push('📍 Debes seleccionar una dirección de entrega usando el mapa');
+      this.notificationService.showError('📍 Debes seleccionar una dirección de entrega usando el mapa');
+      return;
     }
 
     // Validar teléfono
     if (!this.customerInfo.telefono.trim()) {
-      this.erroresValidacion.push('📱 El teléfono de contacto es obligatorio');
+      this.notificationService.showError('📱 El teléfono de contacto es obligatorio');
+      return;
     } else if (this.customerInfo.telefono.length < 7) {
-      this.erroresValidacion.push('📱 El teléfono debe tener al menos 7 dígitos');
+      this.notificationService.showError('📱 El teléfono debe tener al menos 7 dígitos');
+      return;
     }
 
     // Validar correo
     if (!this.customerInfo.correo.trim()) {
-      this.erroresValidacion.push('📧 El correo electrónico es obligatorio');
+      this.notificationService.showError('📧 El correo electrónico es obligatorio');
+      return;
     } else if (!this.isValidEmail(this.customerInfo.correo)) {
-      this.erroresValidacion.push('📧 El correo electrónico no es válido');
+      this.notificationService.showError('📧 El correo electrónico no es válido');
+      return;
     }
 
     // Validar usuario autenticado
@@ -143,7 +174,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
     });
     
     if (!usuario || !usuario.id) {
-      this.erroresValidacion.push('No se pudo identificar el usuario. Por favor, inicia sesión nuevamente.');
+      this.notificationService.showError('No se pudo identificar el usuario. Por favor, inicia sesión nuevamente.');
       return;
     }
 
@@ -157,7 +188,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
     
     if (isNaN(clienteId) || clienteId <= 0 || clienteId > 2147483647) {
       console.error('❌ ID de usuario inválido:', usuario.id, 'Tipo:', typeof usuario.id);
-      this.erroresValidacion.push('ID de usuario inválido. Por favor, cierra sesión e inicia sesión nuevamente.');
+      this.notificationService.showError('ID de usuario inválido. Por favor, cierra sesión e inicia sesión nuevamente.');
       return;
     }
 
@@ -170,25 +201,27 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
       console.log('✅ Validación del pedido:', validacion);
       
       if (!validacion.valido) {
-        this.erroresValidacion.push(...validacion.errores);
+        // Mostrar el primer error como notificación
+        if (validacion.errores.length > 0) {
+          this.notificationService.showError(validacion.errores[0]);
+        }
+        return;
       }
     } else {
-      this.erroresValidacion.push('El carrito está vacío');
-    }
-
-    if (this.erroresValidacion.length > 0) {
-      console.log('❌ Errores de validación:', this.erroresValidacion);
-      // Scroll automático al contenedor de errores
-      setTimeout(() => {
-        const errorContainer = document.querySelector('.alert-danger');
-        if (errorContainer) {
-          errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 100);
+      this.notificationService.showError('El carrito está vacío');
       return;
     }
 
-    console.log('✅ Validación exitosa, redirigiendo al portal de pagos...');
+    console.log('✅ Validación exitosa, mostrando recomendaciones...');
+    
+    // En lugar de ir directamente al pago, mostrar modal de recomendaciones
+    this.showRecommendationsModal.set(true);
+    this.loadRandomRecommendations();
+  }
+
+  // Proceder al pago después de ver/agregar recomendaciones
+  proceedToPayment() {
+    console.log('💳 Procediendo al portal de pagos...');
     console.log('📤 Dirección para el pedido:', this.customerInfo.direccion);
     
     // Guardar la información del pedido en sessionStorage para el portal de pagos
@@ -643,4 +676,139 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
   getTotal(): number {
     return this.cartSummary()?.total || 0;
   }
+
+  // ==================== MÉTODOS DE RECOMENDACIONES ====================
+
+  // Cargar productos sugeridos (postres, acompañamientos, bebidas)
+  loadSuggestedProducts() {
+    this.productoService.getProductosActivos().subscribe({
+      next: (productos) => {
+        // Filtrar solo postres, acompañamientos y bebidas
+        const suggested = productos.filter(p => 
+          p.categoria === 'POSTRE' || 
+          p.categoria === 'ACOMPAÑAMIENTO' || 
+          p.categoria === 'BEBIDA'
+        );
+        
+        this.suggestedProducts.set(suggested);
+        this.applyFilters();
+      },
+      error: (err) => {
+        console.error('Error cargando productos sugeridos:', err);
+      }
+    });
+  }
+
+  // Cargar 5 productos aleatorios para el modal de recomendaciones
+  loadRandomRecommendations() {
+    this.isLoadingRecommendations.set(true);
+    this.productoService.getProductosActivos().subscribe({
+      next: (productos) => {
+        // Filtrar solo postres, acompañamientos y bebidas
+        const elegibles = productos.filter(p => 
+          p.categoria === 'POSTRE' || 
+          p.categoria === 'ACOMPAÑAMIENTO' || 
+          p.categoria === 'BEBIDA'
+        );
+        
+        // Seleccionar 4 aleatorios
+        const shuffled = [...elegibles].sort(() => Math.random() - 0.5);
+        this.recommendedProducts.set(shuffled.slice(0, 4));
+        this.isLoadingRecommendations.set(false);
+      },
+      error: (err) => {
+        console.error('Error cargando recomendaciones:', err);
+        this.isLoadingRecommendations.set(false);
+      }
+    });
+  }
+
+  // Agregar producto recomendado al carrito
+  addRecommendedToCart(producto: Producto) {
+    console.log('➕ Agregando producto recomendado:', producto.nombre);
+    this.carritoService.agregarItem(producto, 1);
+    this.notificationService.showSuccess(`✓ ${producto.nombre} agregado al carrito`);
+  }
+
+  // Cerrar modal de recomendaciones y continuar al pago
+  closeRecommendationsModal() {
+    this.showRecommendationsModal.set(false);
+    this.proceedToPayment();
+  }
+
+  // Cancelar modal de recomendaciones
+  skipRecommendations() {
+    this.showRecommendationsModal.set(false);
+    this.proceedToPayment();
+  }
+
+  // ==================== FILTROS Y PAGINACIÓN ====================
+
+  // Aplicar filtros de búsqueda y categoría
+  applyFilters() {
+    let filtered = [...this.suggestedProducts()];
+
+    // Filtrar por categoría
+    if (this.selectedCategory() !== 'TODOS') {
+      filtered = filtered.filter(p => p.categoria === this.selectedCategory());
+    }
+
+    // Filtrar por búsqueda
+    const query = this.searchQuery().toLowerCase().trim();
+    if (query) {
+      filtered = filtered.filter(p => 
+        (p.nombre && p.nombre.toLowerCase().includes(query)) ||
+        (p.descripcion && p.descripcion.toLowerCase().includes(query))
+      );
+    }
+
+    this.filteredSuggestedProducts.set(filtered);
+    this.totalPages.set(Math.ceil(filtered.length / this.itemsPerPage));
+    this.currentPage.set(1);
+    this.updatePaginatedProducts();
+  }
+
+  // Actualizar productos paginados
+  updatePaginatedProducts() {
+    const start = (this.currentPage() - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    const paginated = this.filteredSuggestedProducts().slice(start, end);
+    this.paginatedProducts.set(paginated);
+  }
+
+  // Cambiar página
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
+      this.updatePaginatedProducts();
+      
+      // Scroll a la sección de productos sugeridos
+      setTimeout(() => {
+        const section = document.querySelector('.suggested-products-section');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }
+
+  // Cambiar búsqueda
+  onSearchChange(query: string) {
+    this.searchQuery.set(query);
+    this.applyFilters();
+  }
+
+  // Cambiar categoría
+  onCategoryChange(category: string) {
+    this.selectedCategory.set(category);
+    this.applyFilters();
+  }
+
+  // Agregar producto sugerido de la sección inferior
+  addSuggestedToCart(producto: Producto) {
+    console.log('➕ Agregando producto sugerido:', producto.nombre);
+    this.carritoService.agregarItem(producto, 1);
+    this.notificationService.showSuccess(`✓ ${producto.nombre} agregado al carrito`);
+  }
 }
+
