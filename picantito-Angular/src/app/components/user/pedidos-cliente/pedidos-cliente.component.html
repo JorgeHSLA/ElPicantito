@@ -177,6 +177,20 @@
                         </button>
                     </div>
 
+                    <!-- Mapa de Seguimiento con OpenStreetMap (PRIMERO Y MÁS PEQUEÑO) -->
+                    <div class="detail-section map-section-compact">
+                        <h5 class="section-title">
+                            <i class="bi bi-map me-2"></i>
+                            Seguimiento de Entrega
+                            <span class="ms-2 badge" [ngClass]="getEstadoClass(pedidoSeleccionado()!.estado)">
+                                {{ pedidoSeleccionado()!.estado }}
+                            </span>
+                        </h5>
+                        <div class="map-container-compact">
+                            <div id="trackingMap" class="tracking-map-compact"></div>
+                        </div>
+                    </div>
+
                     <!-- Info Card: Fechas y Dirección -->
                     <div class="info-card">
                         <div class="info-card-section">
@@ -258,22 +272,6 @@
                                 <span class="total-label">Total del Pedido</span>
                                 <span class="total-amount">{{ pedidoSeleccionado()!.precioDeVenta | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Mapa de Seguimiento con OpenStreetMap -->
-                    <div class="detail-section">
-                        <h5 class="section-title">
-                            <i class="bi bi-map me-2"></i>
-                            Seguimiento de Entrega
-                            <span *ngIf="pedidoSeleccionado()" class="ms-2">
-                                <span [ngClass]="getEstadoClass(pedidoSeleccionado()!.estado)">
-                                    {{ pedidoSeleccionado()!.estado }}
-                                </span>
-                            </span>
-                        </h5>
-                        <div class="map-container">
-                            <div id="trackingMap" class="tracking-map"></div>
                         </div>
                     </div>
 
