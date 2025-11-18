@@ -3,34 +3,18 @@
   @import 'carrusel.css';
   @import '../../../assets/styles/css/dark-hc.css';
   @import '../../../assets/styles/creaTaco.css';
-  /* Fondo decorativo global para la página de home */
+  /* Fondo decorativo global para la página de home - ELIMINADO: ahora se usa el fondo global de styles.css */
 
    :host {
       display: block;
-      position: relative;
       min-height: 100vh;
       overflow-x: hidden;
       width: 100%;
       margin-top: 0; /* Cambiado de -105px a 0 para compensar navbar fixed */
       padding-top: 0;
+      background: transparent;
   }
 
-   :host::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('/images/Fondo.png');
-      background-size: 90%;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      opacity: 0.2;
-      z-index: -1;
-      pointer-events: none;
-  }
   /* Estilos específicos para el carrusel infinito */
 
   .recommended-carousel {
@@ -178,20 +162,12 @@
       max-width: 100%;
   }
 
-  .features-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('/images/Fondo.png');
-      background-size: 90%;
-      background-position: center;
-      background-repeat: no-repeat;
-      opacity: 0.2;
-      z-index: -1;
-      pointer-events: none;
+  .features-section {
+      position: relative;
+      z-index: 1;
+      overflow-x: hidden;
+      max-width: 100%;
+      background: transparent;
   }
 
   .features-section .container {

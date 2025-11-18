@@ -141,6 +141,13 @@
 body {
     background-color: #2d1529;
     /* Color sólido nuevo */
+    background-image: 
+        linear-gradient(rgba(45, 21, 41, 0.8), rgba(45, 21, 41, 0.8)),
+        url('/images/Fondo.png');
+    background-size: cover, 100%;
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
+    background-attachment: fixed, fixed;
     font-family: var(--font-body);
     font-weight: 500;
     /* Medium weight para mejor legibilidad */
@@ -151,6 +158,8 @@ body {
     width: 100%;
     max-width: 100vw;
 }
+
+/* Remover el ::before ya que ahora el fondo está directamente en el body */
 
 
 /* Asegurar que el fondo sea continuo en toda la página */

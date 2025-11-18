@@ -29,8 +29,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: 100vw;
-  height: 100%;
-  background-image: url('/images/Fondo.png');
+  height: 100%; 
   background-size: 150%;
   background-position: center;
   background-repeat: no-repeat;
@@ -70,7 +69,6 @@
   transform: translateX(-50%);
   width: 100vw;
   height: 100%;
-  background-image: url('/images/Fondo.png');
   background-size: 150%;
   background-position: center;
   background-repeat: no-repeat;

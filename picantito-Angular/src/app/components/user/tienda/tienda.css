@@ -19,7 +19,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/images/Fondo.png');
     background-size: 150%;
     background-position: center;
     background-repeat: no-repeat;
@@ -45,7 +44,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/images/Fondo.png');
     background-size: 150%;
     background-position: center;
     background-repeat: no-repeat;
@@ -73,7 +71,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/images/Fondo.png');
     background-size: 150%;
     background-position: center;
     background-repeat: no-repeat;
@@ -101,7 +98,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/images/Fondo.png');
     background-size: 150%;
     background-position: center;
     background-repeat: no-repeat;
@@ -179,7 +175,6 @@ main.container .row.g-4::before {
     transform: translateX(-50%);
     width: 100vw;
     height: 100%;
-    background-image: url('/images/Fondo.png');
     background-size: cover;
     background-position: center;
     background-repeat: repeat;
