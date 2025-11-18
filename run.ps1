@@ -59,5 +59,5 @@ if (Test-Path ".\picantito-Angular") {
 
 Write-Host "`nTodos los servicios han sido iniciados exitosamente!" -ForegroundColor Green
 Write-Host "Base de datos: http://localhost:5432" -ForegroundColor Cyan
-Write-Host "Spring Boot: http://localhost:8080" -ForegroundColor Cyan
+Write-Host "Spring Boot: http://localhost:9998" -ForegroundColor Cyan
 Write-Host "Angular: http://localhost:4200" -ForegroundColor Cyan

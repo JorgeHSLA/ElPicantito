@@ -80,12 +80,14 @@ public class PedidoController {
             try {
                 String emailCliente = nuevoPedido.getCliente().getCorreo();
                 String nombreCliente = nuevoPedido.getCliente().getNombreCompleto();
+                Integer clienteId = nuevoPedido.getCliente().getId();
                 emailService.enviarConfirmacionPedidoCreado(
                     emailCliente,
                     nombreCliente,
                     nuevoPedido.getId(),
                     nuevoPedido.getPrecioDeVenta().doubleValue(),
-                    nuevoPedido.getDireccion()
+                    nuevoPedido.getDireccion(),
+                    clienteId
                 );
                 System.out.println("Email de confirmación enviado a: " + emailCliente);
             } catch (Exception emailError) {
@@ -146,11 +148,13 @@ public class PedidoController {
             // Enviar notificación por email
             if (pedido.getCliente() != null && pedido.getCliente().getCorreo() != null) {
                 String nombreCliente = pedido.getCliente().getNombreCompleto();
+                Integer clienteId = pedido.getCliente().getId();
                 emailService.enviarNotificacionCambioEstado(
                     pedido.getCliente().getCorreo(),
                     nombreCliente,
                     pedido.getId().longValue(),
-                    pedido.getEstado()
+                    pedido.getEstado(),
+                    clienteId
                 );
             }
             
@@ -179,11 +183,13 @@ public class PedidoController {
             // Enviar notificación por email
             if (pedido.getCliente() != null && pedido.getCliente().getCorreo() != null) {
                 String nombreCliente = pedido.getCliente().getNombreCompleto();
+                Integer clienteId = pedido.getCliente().getId();
                 emailService.enviarNotificacionCambioEstado(
                     pedido.getCliente().getCorreo(),
                     nombreCliente,
                     pedido.getId().longValue(),
-                    pedido.getEstado()
+                    pedido.getEstado(),
+                    clienteId
                 );
             }
             

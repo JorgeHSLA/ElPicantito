@@ -326,7 +326,7 @@ public class EmailService {
      */
     @Async
     public void enviarNotificacionCambioEstado(String destinatario, String nombreCliente, 
-                                                 Long pedidoId, String nuevoEstado) {
+                                                 Long pedidoId, String nuevoEstado, Integer clienteId) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -335,7 +335,7 @@ public class EmailService {
             helper.setTo(destinatario);
             helper.setSubject("🌮 El Picantito - Actualización de tu Pedido #" + pedidoId);
             
-            String contenido = construirHtmlCambioEstado(nombreCliente, pedidoId, nuevoEstado);
+            String contenido = construirHtmlCambioEstado(nombreCliente, pedidoId, nuevoEstado, clienteId);
             helper.setText(contenido, true);
             
             mailSender.send(message);
@@ -351,7 +351,7 @@ public class EmailService {
      */
     @Async
     public void enviarConfirmacionPedidoCreado(String destinatario, String nombreCliente, 
-                                                Integer pedidoId, Double total, String direccion) {
+                                                Integer pedidoId, Double total, String direccion, Integer clienteId) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -360,7 +360,7 @@ public class EmailService {
             helper.setTo(destinatario);
             helper.setSubject("🌮 ¡Pedido Confirmado! - El Picantito #" + pedidoId);
             
-            String contenido = construirHtmlPedidoCreado(nombreCliente, pedidoId, total, direccion);
+            String contenido = construirHtmlPedidoCreado(nombreCliente, pedidoId, total, direccion, clienteId);
             helper.setText(contenido, true);
             
             mailSender.send(message);
@@ -374,7 +374,12 @@ public class EmailService {
     /**
      * Construye el HTML del mensaje de confirmación de pedido creado
      */
-    private String construirHtmlPedidoCreado(String nombreCliente, Integer pedidoId, Double total, String direccion) {
+    private String construirHtmlPedidoCreado(String nombreCliente, Integer pedidoId, Double total, String direccion, Integer clienteId) {
+        // Ocultar coordenadas si existen en la dirección
+        String direccionSinCoords = direccion;
+        if (direccion != null && direccion.contains("|")) {
+            direccionSinCoords = direccion.substring(0, direccion.indexOf("|"));
+        }
         return """
             <!DOCTYPE html>
             <html lang="es">
@@ -412,29 +417,29 @@ public class EmailService {
                             </p>
                         </div>
                         <div style="text-align:center; margin:30px 0;">
-                            <a href="http://localhost:4200/cliente/pedidos" style="display:inline-block; background-color:#ffc107; color:#000; padding:15px 30px; text-decoration:none; border-radius:8px; font-weight:bold; font-size:16px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">Ver Seguimiento en Tiempo Real</a>
+                            <a href=\"http://localhost:4200/cliente/%d/pedidos\" style=\"display:inline-block; background-color:#ffc107; color:#000; padding:15px 30px; text-decoration:none; border-radius:8px; font-weight:bold; font-size:16px; box-shadow:0 4px 6px rgba(0,0,0,0.2);\">Ver Seguimiento en Tiempo Real</a>
                         </div>
-                        <div style="background-color:#e3f2fd; padding:20px; border-radius:10px; margin:25px 0; border-left:4px solid #2196f3;">
-                            <p style="margin:0 0 10px 0; font-size:15px; color:#01579b; font-weight:bold;">Estados de tu pedido:</p>
-                            <p style="margin:0; font-size:14px; color:#1a1a1a;">✅ Recibido → 👨‍🍳 En Preparación → 🚚 En Camino → 🎉 Entregado</p>
+                        <div style=\"background-color:#e3f2fd; padding:20px; border-radius:10px; margin:25px 0; border-left:4px solid #2196f3;\">
+                            <p style=\"margin:0 0 10px 0; font-size:15px; color:#01579b; font-weight:bold;\">Estados de tu pedido:</p>
+                            <p style=\"margin:0; font-size:14px; color:#1a1a1a;\">✅ Recibido → 👨‍🍳 En Preparación → 🚚 En Camino → 🎉 Entregado</p>
                         </div>
-                        <p style="font-size:14px; color:#1a1a1a; margin-top:30px; padding-top:20px; border-top:1px solid #ddd;">
-                            <strong style="color:#000;">Nota:</strong> Te mantendremos informado por correo sobre cada cambio en el estado de tu pedido.
+                        <p style=\"font-size:14px; color:#1a1a1a; margin-top:30px; padding-top:20px; border-top:1px solid #ddd;\">
+                            <strong style=\"color:#000;\">Nota:</strong> Te mantendremos informado por correo sobre cada cambio en el estado de tu pedido.
                         </p>
                     </div>
-                    <div style="background-color:#1a1a1a; padding:20px; text-align:center; border-top:4px solid #ffc107;">
-                        <p style="margin:0; font-size:12px; color:#ccc;">Este es un correo automático, por favor no respondas.<br>© 2025 El Picantito - Todos los derechos reservados</p>
+                    <div style=\"background-color:#1a1a1a; padding:20px; text-align:center; border-top:4px solid #ffc107;\">
+                        <p style=\"margin:0; font-size:12px; color:#ccc;\">Este es un correo automático, por favor no respondas.<br>© 2025 El Picantito - Todos los derechos reservados</p>
                     </div>
                 </div>
             </body>
             </html>
-            """.formatted(nombreCliente, pedidoId, total, direccion);
+            """.formatted(nombreCliente, pedidoId, total, direccionSinCoords, clienteId);
     }
 
     /**
      * Construye el HTML del mensaje de notificación según el estado
      */
-    private String construirHtmlCambioEstado(String nombreCliente, Long pedidoId, String estado) {
+    private String construirHtmlCambioEstado(String nombreCliente, Long pedidoId, String estado, Integer clienteId) {
         String estadoTitulo;
         String estadoIcono;
         String estadoColor;
@@ -510,7 +515,7 @@ public class EmailService {
                             %s
                         </p>
                         <div style="text-align: center; margin: 30px 0;">
-                            <a href="http://localhost:4200/cliente/pedidos" 
+                            <a href="http://localhost:4200/cliente/%d/pedidos" 
                                style="display: inline-block; background-color: #ffc107; color: #000000; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
                                 Ver Seguimiento en Tiempo Real
                             </a>
@@ -528,6 +533,6 @@ public class EmailService {
                 </div>
             </body>
             </html>
-            """.formatted(nombreCliente, estadoColor, estadoIcono, estadoTitulo, pedidoId, estadoDescripcion);
+            """.formatted(nombreCliente, estadoColor, estadoIcono, estadoTitulo, pedidoId, estadoDescripcion, clienteId);
     }
 }

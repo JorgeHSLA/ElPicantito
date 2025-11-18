@@ -173,6 +173,17 @@ export class GestionPedidos implements OnInit, AfterViewInit {
       enviado: this.pedidos.filter(p => p.estado.toLowerCase() === 'enviado'),
       entregado: this.pedidos.filter(p => p.estado.toLowerCase() === 'entregado')
     };
+    
+    // Inicializar mapas para pedidos enviados después de organizar
+    setTimeout(() => {
+      console.log('Iniciando mapas para pedidos enviados:', this.pedidosPorEstado.enviado.length);
+      this.pedidosPorEstado.enviado.forEach(pedido => {
+        if (pedido.direccion) {
+          console.log('Pedido con dirección:', pedido.id, pedido.direccion);
+          this.initMapForPedido(pedido.id, pedido.direccion);
+        }
+      });
+    }, 1000);
   }
 
   avanzarEstado(pedido: PedidoCompleto): void {
@@ -383,27 +394,63 @@ export class GestionPedidos implements OnInit, AfterViewInit {
   initMapForPedido(pedidoId: number, direccion: string): void {
     // Esperar un momento para que el DOM esté listo
     setTimeout(() => {
+      console.log('Intentando inicializar mapa para pedido:', pedidoId);
       const mapContainer = document.getElementById(`map-${pedidoId}`);
-      if (!mapContainer) return;
+      
+      if (!mapContainer) {
+        console.error('No se encontró el contenedor del mapa para pedido:', pedidoId);
+        return;
+      }
 
       // Evitar reinicializar si ya existe
-      if (this.maps[pedidoId]) return;
+      if (this.maps[pedidoId]) {
+        console.log('Mapa ya existe para pedido:', pedidoId);
+        return;
+      }
+      
+      console.log('Contenedor encontrado, inicializando mapa...');
+      
+      // Forzar visibilidad y tamaño del contenedor del mapa
+      mapContainer.style.opacity = '1';
+      mapContainer.style.visibility = 'visible';
+      mapContainer.style.height = '250px';
+      mapContainer.style.width = '100%';
+      mapContainer.style.display = 'block';
 
       // Extraer coordenadas del cliente
       const partes = direccion.split('|');
-      if (partes.length < 2) return;
+      let customerLat: number;
+      let customerLng: number;
+      
+      if (partes.length < 2) {
+        console.warn('La dirección no tiene coordenadas, usando ubicación por defecto de Bogotá');
+        // Usar coordenadas del centro de Bogotá por defecto
+        customerLat = 4.6097;
+        customerLng = -74.0817;
+      } else {
+        const coords = partes[1].split(',');
+        customerLat = parseFloat(coords[0]);
+        customerLng = parseFloat(coords[1]);
 
-      const coords = partes[1].split(',');
-      const customerLat = parseFloat(coords[0]);
-      const customerLng = parseFloat(coords[1]);
+        if (isNaN(customerLat) || isNaN(customerLng)) {
+          console.warn('Coordenadas inválidas, usando ubicación por defecto de Bogotá');
+          customerLat = 4.6097;
+          customerLng = -74.0817;
+        }
+      }
 
-      if (isNaN(customerLat) || isNaN(customerLng)) return;
+      console.log('Coordenadas del cliente:', customerLat, customerLng);
 
       // Obtener sucursal más cercana
       const sucursal = obtenerSucursalMasCercana(customerLat, customerLng);
 
       // Crear mapa centrado en la sucursal
-      const map = L.map(`map-${pedidoId}`).setView([sucursal.lat, sucursal.lng], 13);
+      console.log('Creando mapa con coordenadas:', sucursal.lat, sucursal.lng);
+      const map = L.map(`map-${pedidoId}`, {
+        center: [sucursal.lat, sucursal.lng],
+        zoom: 13,
+        scrollWheelZoom: false
+      });
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
@@ -411,12 +458,18 @@ export class GestionPedidos implements OnInit, AfterViewInit {
       }).addTo(map);
 
       this.maps[pedidoId] = map;
+      
+      // Forzar que Leaflet recalcule el tamaño del mapa
+      setTimeout(() => {
+        map.invalidateSize();
+        console.log('Mapa inicializado correctamente para pedido:', pedidoId);
+      }, 200);
 
-      // Crear marcadores
+      // Crear marcadores con iconos predeterminados de Leaflet
       const restaurantIcon = L.icon({
-        iconUrl: 'assets/leaflet/marker-icon.png',
-        iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
-        shadowUrl: 'assets/leaflet/marker-shadow.png',
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
         iconSize: [25, 41],
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
@@ -484,9 +537,9 @@ export class GestionPedidos implements OnInit, AfterViewInit {
 
     // Crear marcador del repartidor
     const deliveryIcon = L.icon({
-      iconUrl: 'assets/leaflet/marker-icon.png',
-      iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
-      shadowUrl: 'assets/leaflet/marker-shadow.png',
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
       iconSize: [25, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],

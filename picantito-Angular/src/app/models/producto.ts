@@ -8,6 +8,7 @@ export interface Producto {
   disponible?: boolean;
   calificacion?: number;
   activo?: boolean;
+  categoria?: 'PERSONALIZADO' | 'TACO' | 'BEBIDA' | 'ACOMPAÑAMIENTO' | 'POSTRE';
   
   // COMPATIBILIDAD HACIA ATRÁS - TEMPORAL
   precio?: number; // Mapea a precioDeVenta

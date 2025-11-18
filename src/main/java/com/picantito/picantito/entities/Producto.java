@@ -41,5 +41,7 @@ public class Producto {
     
     @Builder.Default
     private Boolean activo = true;
+    
+    private String categoria;
 }
 

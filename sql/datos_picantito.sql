@@ -61,11 +61,11 @@ INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDe
 
 -- los extras q puso el marica de jorge
 INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
-(39, 'Aguacate', 'Rebanadas de aguacate fresco', 3000, 2000, 50, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
-(40, 'Jalapeños', 'Jalapeños en escabeche', 1750, 1000, 80, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
-(41, 'Salsa Picante', 'Salsa picante casera', 1250, 700, 200, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
-(42, 'Cebolla Caramelizada', 'Cebolla caramelizada al sartén', 1500, 900, 30, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
-(43, 'Queso Extra', 'Queso cheddar adicional', 2500, 1500, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS');
+(39, 'Aguacate', 'Rebanadas de aguacate fresco', 3000, 2000, 50, true, true, 'https://i.imgur.com/EgbZ8iw.png', 'EXTRAS'),
+(40, 'Jalapeños', 'Jalapeños en escabeche', 1750, 1000, 80, true, true, 'https://i.imgur.com/ifcbU2y.png', 'EXTRAS'),
+(41, 'Salsa Picante Carolina Reaper', 'Salsa picante casera', 1250, 700, 200, true, true, 'https://m.media-amazon.com/images/I/61WBBg4TsIL._SL1500_.jpg', 'SALSA'),
+(42, 'Cebolla Caramelizada', 'Cebolla caramelizada al sartén', 1500, 900, 30, true, true, 'https://i.imgur.com/nlc4uDe.png', 'EXTRAS'),
+(43, 'Queso Extra', 'Queso cheddar adicional', 2500, 1500, 100, true, true, 'https://i.imgur.com/c1blL0q.png', 'EXTRAS');
 
 
 INSERT INTO public.usuarios (id, nombreCompleto, nombreUsuario, telefono, correo, contrasenia, estado, activo) VALUES (1, 'Administrador Principal', 'admin', '3001234567', 'admin@elpicantito.com', 'admin123', NULL, true);
@@ -214,28 +214,38 @@ INSERT INTO public.pedidos (id, precioDeVenta, precioDeAdquisicion, fechaEntrega
 --
 
 -- Producto base para crear tacos personalizados
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (1, 'Taco Personalizado', 'Base para construir tacos personalizados (precio base 0)', 0, 0, 'https://i.imgur.com/nDSixlG.png', true, 5, true);
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (1, 'Taco Personalizado', 'Base para construir tacos personalizados (precio base 0)', 0, 0, 'https://i.imgur.com/nDSixlG.png', true, 5, true, 'PERSONALIZADO');
 
--- Productos predefinidos
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (2, 'Tacos al Pastor', 'Tortilla de maíz, cerdo marinado, piña y salsa verde.', 20000, 12000, 'https://comedera.com/wp-content/uploads/sites/9/2017/08/tacos-al-pastor-receta.jpg?fit=1316,838&crop=0px,49px,1316px,740px', true, 5, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (3, 'Tacos de Pollo', 'Tortilla de trigo, pollo a la parrilla, lechuga y salsa ranch.', 17000, 9000, 'https://imag.bonviveur.com/tacos-de-pollo.webp', true, 4, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (4, 'Tacos de Pescado', 'Pescado frito, col morada, crema de chipotle y limón.', 19000, 11000, 'https://images.cookforyourlife.org/wp-content/uploads/2018/08/Lemon-Lime-Fish-Tacos.jpg', true, 5, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (5, 'Tacos Vegetarianos', 'Tortilla integral con champiñones, pimientos y aguacate.', 15000, 8000, 'https://images.cookforyourlife.org/wp-content/uploads/2018/08/Vegan-Cauliflower-and-Butternut-Squash-Taco.jpg', true, 4, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (6, 'Tacos de Carnitas', 'Carne de cerdo confitada, cebolla encurtida y cilantro fresco.', 20000, 12000, 'https://cielitorosado.com/wp-content/uploads/2022/11/CARNITAS-sm.jpg', true, 5, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (20, 'Agua Mineral', 'Agua con gas en botella individual.', 4000, 2000, 'https://hatsu.co/wp-content/uploads/2023/04/PRODUCTOS-SITIO-WEB_62.png', true, 5, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (7, 'Tacos de Barbacoa', 'Carne de res cocinada al vapor con especias, cebolla y chile.', 22000, 13000, 'https://familiakitchen.com/wp-content/uploads/2021/01/iStock-960337396-3beef-barbacoa-tacos-e1695391119564-1024x783.jpg', true, 5, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (8, 'Tacos de Camarón', 'Camarones al ajillo, col rallada y salsa de mango.', 23000, 14000, 'https://images.cookforyourlife.org/wp-content/uploads/2018/08/Spicy-Baja-Style-Shrimp-Tacos.jpg', true, 5, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (9, 'Tacos de Chorizo', 'Tortilla de maíz con chorizo frito, papa y guacamole.', 18000, 9500, 'https://mojo.generalmills.com/api/public/content/Ps7Ba5eym0Sw_towlEcQzQ_gmi_hi_res_jpeg.jpeg?v=1570b7fd&t=16e3ce250f244648bef28c5949fb99ff', true, 4, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (10, 'Tacos de Birria', 'Tacos con carne en su jugo, servidos con consomé para dip.', 24000, 15000, 'https://cdn-ilddihb.nitrocdn.com/MgqZCGPEMHvMRLsisMUCAIMWvgGMxqaj/assets/images/optimized/rev-9522413/www.goya.com/wp-content/uploads/2022/04/birria-tacos-996.jpeg', true, 5, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (11, 'Tacos de Pollo BBQ', 'Pollo en salsa BBQ, lechuga fresca y queso rallado.', 16000, 8500, 'https://www.hola.com/horizon/landscape/65c1404da185-tacos-pollo-barbacoa-t.jpg', true, 4, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (13, 'Tacos de Arrachera', 'Carne arrachera a la parrilla, cebolla caramelizada y queso fresco.', 22000, 13000, 'https://honest-food.net/wp-content/uploads/2019/07/arrachera-tacos-1187x1536.jpg', true, 5, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (15, 'Agua de Tamarindo', 'Refresco natural de tamarindo con azúcar y hielo.', 8000, 4000, 'https://laroussecocina.mx/wp-content/uploads/2020/08/shutterstock-1152533918.jpg.webp', true, 4, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (16, 'Agua de Jamaica', 'Infusión de flor de jamaica con un toque cítrico.', 8000, 4000, 'https://www.infobae.com/resizer/v2/IDNEPYYXRJBFHBLLZZ5BO5OJDY.jpg?auth=dad66630ffc1b14e481b147e19b61f8c5600fa5bc65202fd671c31ab759f8981&smart=true&width=992&height=556&quality=85', true, 5, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (17, 'Coca-Cola 350ml', 'Refresco de cola en presentación individual.', 5000, 2500, 'https://mistiendas.com.co/24280-large_default/coca-cola-botella-x-350ml.jpg', true, 4, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (19, 'Sprite 350ml', 'Refresco de limón gaseoso y refrescante.', 5000, 2500, 'https://i.imgur.com/2dtG3IU.jpeg', true, 4, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (18, 'Pepsi 350ml', 'Refresco de cola con sabor clásico.', 5000, 2500, 'https://i.imgur.com/IwGMUez.jpeg', true, 4, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (12, 'Tacos Veganos', 'Tortilla de maíz con lentejas guisadas, pico de gallo y aguacate.', 14000, 7000, 'https://www.simplotfoods.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2F0dkgxhks0leg%2F4NjBlnghry6LqmRn7PGE7%2F06d7925fbcfed7a9f8a95eb2947e1e4c%2Fvegetarian_20sweet_20potato_20tacos_20K-12_2.jpg%3Ffm%3Dwebp&w=1920&q=75', true, 4, true);
-INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo) VALUES (14, 'Agua de Horchata modificado', 'Bebida fresca a base de arroz, canela y leche.', 8000, 4000, 'https://cdn0.recetasgratis.net/es/posts/5/7/3/agua_de_horchata_74375_600.webp', true, 5, true);
+-- Productos predefinidos - TACOS
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (2, 'Tacos al Pastor', 'Tortilla de maíz, cerdo marinado, piña y salsa verde.', 20000, 12000, 'https://comedera.com/wp-content/uploads/sites/9/2017/08/tacos-al-pastor-receta.jpg?fit=1316,838&crop=0px,49px,1316px,740px', true, 5, true, 'TACO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (3, 'Tacos de Pollo', 'Tortilla de trigo, pollo a la parrilla, lechuga y salsa ranch.', 17000, 9000, 'https://imag.bonviveur.com/tacos-de-pollo.webp', true, 4, true, 'TACO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (4, 'Tacos de Pescado', 'Pescado frito, col morada, crema de chipotle y limón.', 19000, 11000, 'https://images.cookforyourlife.org/wp-content/uploads/2018/08/Lemon-Lime-Fish-Tacos.jpg', true, 5, true, 'TACO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (5, 'Tacos Vegetarianos', 'Tortilla integral con champiñones, pimientos y aguacate.', 15000, 8000, 'https://images.cookforyourlife.org/wp-content/uploads/2018/08/Vegan-Cauliflower-and-Butternut-Squash-Taco.jpg', true, 4, true, 'TACO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (6, 'Tacos de Carnitas', 'Carne de cerdo confitada, cebolla encurtida y cilantro fresco.', 20000, 12000, 'https://cielitorosado.com/wp-content/uploads/2022/11/CARNITAS-sm.jpg', true, 5, true, 'TACO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (7, 'Tacos de Barbacoa', 'Carne de res cocinada al vapor con especias, cebolla y chile.', 22000, 13000, 'https://familiakitchen.com/wp-content/uploads/2021/01/iStock-960337396-3beef-barbacoa-tacos-e1695391119564-1024x783.jpg', true, 5, true, 'TACO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (8, 'Tacos de Camarón', 'Camarones al ajillo, col rallada y salsa de mango.', 23000, 14000, 'https://images.cookforyourlife.org/wp-content/uploads/2018/08/Spicy-Baja-Style-Shrimp-Tacos.jpg', true, 5, true, 'TACO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (9, 'Tacos de Chorizo', 'Tortilla de maíz con chorizo frito, papa y guacamole.', 18000, 9500, 'https://mojo.generalmills.com/api/public/content/Ps7Ba5eym0Sw_towlEcQzQ_gmi_hi_res_jpeg.jpeg?v=1570b7fd&t=16e3ce250f244648bef28c5949fb99ff', true, 4, true, 'TACO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (10, 'Tacos de Birria', 'Tacos con carne en su jugo, servidos con consomé para dip.', 24000, 15000, 'https://cdn-ilddihb.nitrocdn.com/MgqZCGPEMHvMRLsisMUCAIMWvgGMxqaj/assets/images/optimized/rev-9522413/www.goya.com/wp-content/uploads/2022/04/birria-tacos-996.jpeg', true, 5, true, 'TACO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (11, 'Tacos de Pollo BBQ', 'Pollo en salsa BBQ, lechuga fresca y queso rallado.', 16000, 8500, 'https://www.hola.com/horizon/landscape/65c1404da185-tacos-pollo-barbacoa-t.jpg', true, 4, true, 'TACO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (12, 'Tacos Veganos', 'Tortilla de maíz con lentejas guisadas, pico de gallo y aguacate.', 14000, 7000, 'https://www.simplotfoods.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2F0dkgxhks0leg%2F4NjBlnghry6LqmRn7PGE7%2F06d7925fbcfed7a9f8a95eb2947e1e4c%2Fvegetarian_20sweet_20potato_20tacos_20K-12_2.jpg%3Ffm%3Dwebp&w=1920&q=75', true, 4, true, 'TACO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (13, 'Tacos de Arrachera', 'Carne arrachera a la parrilla, cebolla caramelizada y queso fresco.', 22000, 13000, 'https://honest-food.net/wp-content/uploads/2019/07/arrachera-tacos-1187x1536.jpg', true, 5, true, 'TACO');
+
+-- Productos predefinidos - BEBIDAS
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (14, 'Agua de Horchata modificado', 'Bebida fresca a base de arroz, canela y leche.', 8000, 4000, 'https://cdn0.recetasgratis.net/es/posts/5/7/3/agua_de_horchata_74375_600.webp', true, 5, true, 'BEBIDA');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (15, 'Agua de Tamarindo', 'Refresco natural de tamarindo con azúcar y hielo.', 8000, 4000, 'https://laroussecocina.mx/wp-content/uploads/2020/08/shutterstock-1152533918.jpg.webp', true, 4, true, 'BEBIDA');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (16, 'Agua de Jamaica', 'Infusión de flor de jamaica con un toque cítrico.', 8000, 4000, 'https://www.infobae.com/resizer/v2/IDNEPYYXRJBFHBLLZZ5BO5OJDY.jpg?auth=dad66630ffc1b14e481b147e19b61f8c5600fa5bc65202fd671c31ab759f8981&smart=true&width=992&height=556&quality=85', true, 5, true, 'BEBIDA');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (17, 'Coca-Cola 350ml', 'Refresco de cola en presentación individual.', 5000, 2500, 'https://mistiendas.com.co/24280-large_default/coca-cola-botella-x-350ml.jpg', true, 4, true, 'BEBIDA');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (18, 'Pepsi 350ml', 'Refresco de cola con sabor clásico.', 5000, 2500, 'https://i.imgur.com/IwGMUez.jpeg', true, 4, true, 'BEBIDA');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (19, 'Sprite 350ml', 'Refresco de limón gaseoso y refrescante.', 5000, 2500, 'https://i.imgur.com/2dtG3IU.jpeg', true, 4, true, 'BEBIDA');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (20, 'Agua Mineral', 'Agua con gas en botella individual.', 4000, 2000, 'https://hatsu.co/wp-content/uploads/2023/04/PRODUCTOS-SITIO-WEB_62.png', true, 5, true, 'BEBIDA');
+
+-- Productos predefinidos - ACOMPAÑAMIENTOS
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (21, 'Nachos con Queso', 'Crujientes nachos con salsa de queso cheddar fundido.', 12000, 6000, 'https://www.seriouseats.com/thmb/YBUAG17xy1nWYGPmFcJKeoODTzk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/cheese-sauce-for-cheese-fries-and-nachos-hero-01-e6ccf966688c43ec8025cf9a19678423.jpg', true, 5, true, 'ACOMPAÑAMIENTO');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (22, 'Papas Gajo Picantes', 'Papas en gajo sazonadas con especias mexicanas.', 10000, 5000, 'https://editorialtelevisa.brightspotcdn.com/a6/a5/ca0f15c349b0a29b8f96048cd916/papas-gajo-receta-facil-rapida.jpg', true, 4, true, 'ACOMPAÑAMIENTO');
+
+-- Productos predefinidos - POSTRES
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (23, 'Churros con Cajeta', 'Churros dorados con azúcar y canela, servidos con cajeta.', 9000, 4500, 'https://i.ytimg.com/vi/TNVnwihZi6Y/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBeZEDA5pUGCfyiGyXNPO9gF8H79g', true, 5, true, 'POSTRE');
+INSERT INTO public.productos (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, imagen, disponible, calificacion, activo, categoria) VALUES (24, 'Flan Napolitano', 'Flan casero con caramelo suave y cremoso.', 7000, 3500, 'https://cocina-familiar.com/wp-content/uploads/2022/08/flan-napolitano.jpg', true, 5, true, 'POSTRE');
 
 --
 -- Data for Name: pedido_producto; Type: TABLE DATA; Schema: public; Owner: taquito
@@ -393,35 +403,68 @@ INSERT INTO public.pedido_producto_adicional (pedido_producto_id, adicional_id, 
 -- Data for Name: productos_adicionales; Type: TABLE DATA; Schema: public; Owner: taquito
 --
 
--- Relaciones del producto "Taco Personalizado" (ID=1) con sus adicionales
--- Tortillas
+-- ==========================
+-- TACO PERSONALIZADO (ID=1) - Todos los adicionales disponibles
+-- ==========================
+-- Tortillas (solo para personalizado)
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (1, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (2, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (3, 1, 1);
--- Proteínas
+-- Proteínas (solo para personalizado)
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (10, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (11, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (12, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (13, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (14, 1, 1);
--- Salsas
+-- Salsas (para personalizado)
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (20, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (21, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (22, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (23, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (24, 1, 1);
--- Extras
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (41, 1, 1);
+-- Extras (para personalizado)
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (30, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (31, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (32, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (40, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (42, 1, 1);
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (43, 1, 1);
 
--- Relaciones de otros productos con adicionales generales
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 2, 1);
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 3, 1);
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (40, 2, 1);
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (41, 2, 1);
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (42, 2, 1);
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (43, 2, 1);
+-- ==========================
+-- SALSAS DISPONIBLES PARA TODOS LOS TACOS (IDs 2-13)
+-- ==========================
+-- Salsa Verde (ID=20)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (20, 2, 1), (20, 3, 1), (20, 4, 1), (20, 5, 1), (20, 6, 1), (20, 7, 1), (20, 8, 1), (20, 9, 1), (20, 10, 1), (20, 11, 1), (20, 12, 1), (20, 13, 1);
+-- Salsa Roja (ID=21)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (21, 2, 1), (21, 3, 1), (21, 4, 1), (21, 5, 1), (21, 6, 1), (21, 7, 1), (21, 8, 1), (21, 9, 1), (21, 10, 1), (21, 11, 1), (21, 12, 1), (21, 13, 1);
+-- Salsa Habanera (ID=22)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (22, 2, 1), (22, 3, 1), (22, 4, 1), (22, 5, 1), (22, 6, 1), (22, 7, 1), (22, 8, 1), (22, 9, 1), (22, 10, 1), (22, 11, 1), (22, 12, 1), (22, 13, 1);
+-- Salsa Chipotle (ID=23)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (23, 2, 1), (23, 3, 1), (23, 4, 1), (23, 5, 1), (23, 6, 1), (23, 7, 1), (23, 8, 1), (23, 9, 1), (23, 10, 1), (23, 11, 1), (23, 12, 1), (23, 13, 1);
+-- Pico de Gallo (ID=24)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (24, 2, 1), (24, 3, 1), (24, 4, 1), (24, 5, 1), (24, 6, 1), (24, 7, 1), (24, 8, 1), (24, 9, 1), (24, 10, 1), (24, 11, 1), (24, 12, 1), (24, 13, 1);
+-- Salsa Picante (ID=41)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (41, 2, 1), (41, 3, 1), (41, 4, 1), (41, 5, 1), (41, 6, 1), (41, 7, 1), (41, 8, 1), (41, 9, 1), (41, 10, 1), (41, 11, 1), (41, 12, 1), (41, 13, 1);
+
+-- ==========================
+-- EXTRAS COMUNES PARA VARIOS TACOS
+-- ==========================
+-- Aguacate (ID=39) - Popular en todos
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 2, 1), (39, 3, 1), (39, 4, 1), (39, 5, 1), (39, 6, 1), (39, 7, 1), (39, 8, 1), (39, 9, 1), (39, 10, 1), (39, 11, 1), (39, 12, 1), (39, 13, 1);
+-- Jalapeños (ID=40) - Para los que quieren picante
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (40, 2, 1), (40, 3, 1), (40, 4, 1), (40, 6, 1), (40, 7, 1), (40, 8, 1), (40, 9, 1), (40, 10, 1), (40, 11, 1), (40, 13, 1);
+-- Cebolla Caramelizada (ID=42) - Buena con carnes
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (42, 2, 1), (42, 3, 1), (42, 6, 1), (42, 7, 1), (42, 9, 1), (42, 10, 1), (42, 13, 1);
+-- Queso Extra (ID=43) - Popular en varios
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (43, 2, 1), (43, 3, 1), (43, 5, 1), (43, 6, 1), (43, 7, 1), (43, 9, 1), (43, 10, 1), (43, 11, 1), (43, 12, 1), (43, 13, 1);
+-- Queso Oaxaca (ID=30) - Para algunos tacos
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (30, 2, 1), (30, 6, 1), (30, 7, 1), (30, 10, 1), (30, 13, 1);
+-- Queso Cotija (ID=31) - Para algunos tacos
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (31, 2, 1), (31, 3, 1), (31, 6, 1), (31, 9, 1), (31, 11, 1), (31, 13, 1);
+-- Lechuga (ID=32) - Para tacos más frescos
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (32, 3, 1), (32, 4, 1), (32, 5, 1), (32, 8, 1), (32, 11, 1), (32, 12, 1);
 
 
 --
