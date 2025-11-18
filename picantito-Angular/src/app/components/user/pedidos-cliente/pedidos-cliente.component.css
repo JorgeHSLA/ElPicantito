@@ -810,3 +810,119 @@
         justify-content: center;
     }
 }
+
+
+/* ==================== REORDER SECTION ==================== */
+
+.reorder-section {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-reorder {
+    background: linear-gradient(135deg, #FF5630 0%, #d94623 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 86, 48, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-reorder:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(255, 86, 48, 0.6);
+    background: linear-gradient(135deg, #d94623 0%, #b93d21 100%);
+}
+
+.btn-reorder:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(255, 86, 48, 0.4);
+}
+
+.btn-reorder i {
+    font-size: 1.3rem;
+    animation: rotate 2s infinite ease-in-out;
+}
+
+@keyframes rotate {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+}
+
+.reorder-hint {
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+}
+
+.reorder-hint i {
+    color: #FF5630;
+}
+
+
+/* ==================== MODALES DE CONFIRMACIÓN ==================== */
+
+.modal-content {
+    background: linear-gradient(135deg, #2d1529 0%, #1a0d1f 100%);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px 14px 0 0;
+}
+
+.modal-body {
+    color: white;
+}
+
+.modal-body .text-muted {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.modal-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-body .alert {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.modal-body .alert-info {
+    border-color: rgba(13, 202, 240, 0.5);
+}
+
+.modal-body .alert-warning {
+    border-color: rgba(255, 193, 7, 0.5);
+}
