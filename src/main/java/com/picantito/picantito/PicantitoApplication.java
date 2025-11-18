@@ -1,10 +1,11 @@
 package com.picantito.picantito;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import io.github.cdimascio.dotenv.Dotenv;
 
 @SpringBootApplication
 @EnableScheduling
@@ -13,6 +14,7 @@ public class PicantitoApplication {
 	public static void main(String[] args) {
 		// Cargar variables de entorno desde .env
 		Dotenv dotenv = Dotenv.configure()
+				.directory("ElPicantito")
 				.ignoreIfMissing()
 				.load();
 		

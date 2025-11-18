@@ -1,13 +1,30 @@
 #servicios
 services:
-    # chatbot:
-    #   build:
-    #     context: chatbot/          # ruta donde está tu Dockerfile
-    #     dockerfile: Dockerfile
-    #   container_name: elpicantito-chat
-    #   ports:
-    #     - "8501:8501"
-      
+    chatbot:
+      build:
+        context: chatbot/          # ruta donde está tu Dockerfile
+        dockerfile: Dockerfile
+      container_name: elpicantito-chat
+      ports:
+        - "8501:8501"
+      env_file:
+      - .env
+      depends_on:
+        - springboot 
+
+    springboot:  # Nuevo servicio para Spring Boot
+      build:
+        context: .  # Construye desde la raíz (donde está el Dockerfile de Spring Boot)
+        dockerfile: Dockerfile
+      container_name: elpicantito-spring
+      ports:
+        - "9998:9998"
+      env_file:
+        - .env
+      depends_on:
+        - db  # Espera a que la DB inicie  
+
+
   #crear bases de datos 
     db:
       image: postgres:16.1
@@ -27,7 +44,8 @@ services:
         POSTGRES_PASSWORD: 'taquito123'
       ports:
         - '5432:5432'
-
+      env_file:
+      - .env
 # Definición de volúmenes nombrados para persistencia de datos
 volumes:
   postgres_data:
