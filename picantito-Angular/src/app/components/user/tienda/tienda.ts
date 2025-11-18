@@ -214,18 +214,23 @@ export class TiendaComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('Filtrando por categoría:', this.categoriaSeleccionada);
     console.log('Productos base:', this.productos);
 
+    // Primero, excluir productos personalizados de todos los resultados
+    let productosBase = this.productos.filter(producto => 
+      !producto.nombre?.toLowerCase().includes('personalizado')
+    );
+
     if (this.categoriaSeleccionada === 'Todos') {
-      this.productosFiltrados = [...this.productos];
+      this.productosFiltrados = [...productosBase];
     } else if (this.categoriaSeleccionada === 'Disponibles') {
-      this.productosFiltrados = this.productos.filter(producto =>
+      this.productosFiltrados = productosBase.filter(producto =>
         producto.disponible === true || (producto.disponible as any) === 1
       );
     } else if (this.categoriaSeleccionada === 'No Disponibles') {
-      this.productosFiltrados = this.productos.filter(producto =>
+      this.productosFiltrados = productosBase.filter(producto =>
         producto.disponible === false || (producto.disponible as any) === 0
       );
     } else {
-      this.productosFiltrados = [...this.productos];
+      this.productosFiltrados = [...productosBase];
     }
 
     console.log('Productos filtrados resultado:', this.productosFiltrados);
