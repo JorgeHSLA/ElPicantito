@@ -63,7 +63,7 @@ INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDe
 INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
 (39, 'Aguacate', 'Rebanadas de aguacate fresco', 3000, 2000, 50, true, true, 'https://i.imgur.com/EgbZ8iw.png', 'EXTRAS'),
 (40, 'Jalapeños', 'Jalapeños en escabeche', 1750, 1000, 80, true, true, 'https://i.imgur.com/ifcbU2y.png', 'EXTRAS'),
-(41, 'Salsa Picante', 'Salsa picante casera', 1250, 700, 200, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
+(41, 'Salsa Picante Carolina Reaper', 'Salsa picante casera', 1250, 700, 200, true, true, 'https://m.media-amazon.com/images/I/61WBBg4TsIL._SL1500_.jpg', 'SALSA'),
 (42, 'Cebolla Caramelizada', 'Cebolla caramelizada al sartén', 1500, 900, 30, true, true, 'https://i.imgur.com/nlc4uDe.png', 'EXTRAS'),
 (43, 'Queso Extra', 'Queso cheddar adicional', 2500, 1500, 100, true, true, 'https://i.imgur.com/c1blL0q.png', 'EXTRAS');
 
