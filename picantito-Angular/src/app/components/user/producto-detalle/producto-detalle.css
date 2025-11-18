@@ -1,4 +1,5 @@
 /* Importar estilos base */
+
 @import '../../../assets/styles/styles.css';
 @import '../../../assets/styles/css/dark-hc.css';
 
@@ -114,7 +115,9 @@
     border-top: 2px solid #e9ecef;
 }
 
+
 /* Productos relacionados - Estilo exacto del menú (fondo rosa) */
+
 .producto-relacionado-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.25s ease, border-color 0.25s ease;
     border-radius: 15px;
@@ -188,7 +191,9 @@
     margin: 0;
 }
 
+
 /* Animaciones */
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -205,12 +210,13 @@
     animation: fadeIn 0.6s ease-out;
 }
 
+
 /* Responsive */
+
 @media (max-width: 991px) {
     .producto-imagen-container img {
         max-height: 400px;
     }
-    
     .producto-info {
         margin-top: 2rem;
     }
@@ -220,15 +226,12 @@
     .display-5 {
         font-size: 2rem;
     }
-    
     .producto-imagen-container img {
         max-height: 300px;
     }
-    
     .rating i {
         font-size: 1rem;
     }
-    
     .action-buttons {
         position: sticky;
         bottom: 0;
@@ -239,7 +242,9 @@
     }
 }
 
+
 /* Estilos para la sección de adicionales */
+
 .adicionales-section {
     border-top: 2px solid #e9ecef;
 }
@@ -335,18 +340,18 @@
     cursor: not-allowed;
 }
 
+
 /* Responsive para adicionales */
+
 @media (max-width: 768px) {
     .adicional-card {
         min-width: 250px;
         width: 250px;
     }
-    
     .adicional-icon {
         width: 60px;
         height: 60px;
     }
-    
     .adicional-icon i {
         font-size: 2rem !important;
     }
@@ -357,49 +362,42 @@
         min-width: 220px;
         width: 220px;
     }
-    
     .adicional-item .card-body {
         padding: 1rem !important;
     }
-    
     .adicional-item .card-title {
         font-size: 1rem;
     }
 }
 
+
 /* Dark mode support */
+
 @media (prefers-color-scheme: dark) {
     .breadcrumb-section {
         background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
     }
-    
     .producto-imagen-container {
         background: #2d2d2d;
     }
-    
     .total-section {
         background: #1a1a1a;
     }
-    
     .info-adicional .card {
         background: #2d2d2d !important;
         color: #f8f9fa;
     }
-    
     .adicionales-section {
         border-top-color: #444;
     }
-    
     .adicional-item {
         background: #2d2d2d !important;
         color: #f8f9fa;
         border-color: rgba(255, 193, 7, 0.3);
     }
-    
     .adicional-item:hover {
         border-color: var(--accent-color);
     }
-    
     .adicionales-horizontal::-webkit-scrollbar-track {
         background: #2d2d2d;
     }
