@@ -2,8 +2,6 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 
-declare var bootstrap: any;
-
 @Component({
   selector: 'app-herocarrusel',
   standalone: true,
@@ -20,47 +18,138 @@ export class HerocarruselComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.initializeMainCarousel();
+    setTimeout(() => {
+      this.initializeMainCarousel();
+    }, 200);
   }
 
   private initializeMainCarousel(): void {
-    const mainCarousel = document.getElementById('promoCarousel');
-    if (mainCarousel) {
-      const carouselInstance = new bootstrap.Carousel(mainCarousel, {
-        interval: 6000,
-        wrap: true,
-        touch: true,
-        keyboard: true
+    const carousel = document.getElementById('heroCarouselInner');
+    const prevBtn = document.getElementById('heroPrevBtn');
+    const nextBtn = document.getElementById('heroNextBtn');
+
+    if (!carousel || !prevBtn || !nextBtn) {
+      console.warn('Elementos del carrusel hero no encontrados');
+      return;
+    }
+
+    const items = Array.from(carousel.children).filter(child =>
+      !child.classList.contains('clone')
+    ) as HTMLElement[];
+
+    if (items.length === 0) {
+      console.warn('No hay items en el carrusel hero');
+      return;
+    }
+
+    let currentIndex = 0;
+    let autoPlayInterval: any;
+
+    const setupCarousel = () => {
+      // Limpiar todos los event listeners anteriores clonando los botones
+      const newPrevBtn = prevBtn.cloneNode(true) as HTMLElement;
+      const newNextBtn = nextBtn.cloneNode(true) as HTMLElement;
+      prevBtn.replaceWith(newPrevBtn);
+      nextBtn.replaceWith(newNextBtn);
+
+      // Limpiar clones existentes
+      carousel.querySelectorAll('.clone').forEach(clone => clone.remove());
+
+      // Clonar el primer item al final para el efecto infinito
+      const firstClone = items[0].cloneNode(true) as HTMLElement;
+      firstClone.classList.add('clone');
+      carousel.appendChild(firstClone);
+
+      // Clonar el último item al inicio
+      const lastClone = items[items.length - 1].cloneNode(true) as HTMLElement;
+      lastClone.classList.add('clone');
+      carousel.insertBefore(lastClone, carousel.firstChild);
+
+      currentIndex = 1; // Empezar en el primer item real (después del clon)
+      updatePosition(false);
+
+      // Agregar event listeners a los nuevos botones
+      newNextBtn.addEventListener('click', () => {
+        moveCarousel(1);
+        resetAutoPlay();
+      });
+      
+      newPrevBtn.addEventListener('click', () => {
+        moveCarousel(-1);
+        resetAutoPlay();
       });
 
-      // Efectos de hover para los botones de control
-      const prevBtn = mainCarousel.querySelector('.carousel-control-prev');
-      const nextBtn = mainCarousel.querySelector('.carousel-control-next');
+      // Pausar en hover
+      carousel.addEventListener('mouseenter', () => {
+        stopAutoPlay();
+      });
 
-      if (prevBtn && nextBtn) {
-        const addClickEffect = (button: HTMLElement) => {
-          button.style.transform = 'translateY(-50%) scale(0.9)';
-          setTimeout(() => {
-            button.style.transform = 'translateY(-50%) scale(1.1)';
-            setTimeout(() => {
-              button.style.transform = 'translateY(-50%) scale(1)';
-            }, 100);
-          }, 50);
-        };
+      carousel.addEventListener('mouseleave', () => {
+        startAutoPlay();
+      });
 
-        prevBtn.addEventListener('click', () => addClickEffect(prevBtn as HTMLElement));
-        nextBtn.addEventListener('click', () => addClickEffect(nextBtn as HTMLElement));
+      // Iniciar autoplay
+      startAutoPlay();
+    };
 
-        // Pausar en hover
-        mainCarousel.addEventListener('mouseenter', () => {
-          carouselInstance.pause();
-        });
+    const updatePosition = (animate = true) => {
+      const itemWidth = carousel.offsetWidth;
+      const offset = currentIndex * itemWidth;
 
-        mainCarousel.addEventListener('mouseleave', () => {
-          carouselInstance.cycle();
-        });
+      carousel.classList.toggle('no-transition', !animate);
+      (carousel as HTMLElement).style.transform = `translateX(-${offset}px)`;
+
+      if (!animate) {
+        setTimeout(() => carousel.classList.remove('no-transition'), 50);
       }
-    }
+    };
+
+    const moveCarousel = (direction: number) => {
+      const totalWithClones = carousel.children.length;
+
+      currentIndex += direction;
+      updatePosition(true);
+
+      setTimeout(() => {
+        // Loop infinito: si llegamos al final, volver al inicio real
+        if (currentIndex >= totalWithClones - 1) {
+          currentIndex = 1;
+          updatePosition(false);
+        }
+        // Si vamos antes del inicio, ir al final real
+        else if (currentIndex <= 0) {
+          currentIndex = items.length;
+          updatePosition(false);
+        }
+      }, 500);
+    };
+
+    const startAutoPlay = () => {
+      autoPlayInterval = setInterval(() => {
+        moveCarousel(1);
+      }, 5000);
+    };
+
+    const stopAutoPlay = () => {
+      if (autoPlayInterval) {
+        clearInterval(autoPlayInterval);
+      }
+    };
+
+    const resetAutoPlay = () => {
+      stopAutoPlay();
+      startAutoPlay();
+    };
+
+    let resizeTimeout: any;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setupCarousel();
+      }, 250);
+    });
+
+    setupCarousel();
   }
 
   navigateToStore(): void {
