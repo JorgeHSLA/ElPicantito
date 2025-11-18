@@ -1,37 +1,41 @@
 /* =========================
    IMPORTACIONES
    ========================= */
+
 @import '../../../assets/styles/styles.css';
 @import '../../../assets/styles/css/dark-hc.css';
 
 /* =========================
    LAYOUT PRINCIPAL CON FONDO
    ========================= */
+
 :host {
-  min-height: 100vh;
-  display: block;
-  position: relative;
-  background: linear-gradient(135deg, #2d1529 0%, #1a0d1f 100%);
+    min-height: 100vh;
+    display: block;
+    position: relative;
+    background: linear-gradient(135deg, #2d1529 0%, #1a0d1f 100%);
 }
 
 :host::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('/images/Fondo.png');
-  background-size: 150%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  opacity: 0.15;
-  z-index: -1;
-  pointer-events: none;
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
 }
 
+
 /* ==================== HERO SECTION ==================== */
+
 .menu-hero {
     background: rgba(112, 51, 102, 0.6);
     backdrop-filter: blur(10px);
@@ -41,7 +45,9 @@
     z-index: 1;
 }
 
+
 /* ==================== ANIMACIÓN MENSAJE DE ÉXITO ==================== */
+
 @keyframes slideDown {
     from {
         opacity: 0;
@@ -53,7 +59,9 @@
     }
 }
 
+
 /* ==================== FILTER BUTTONS ==================== */
+
 .pedidos-header {
     padding: 0 1rem;
 }
@@ -93,7 +101,9 @@
     font-weight: 700;
 }
 
+
 /* ==================== TWO PANEL LAYOUT ==================== */
+
 .pedidos-content {
     display: flex;
     gap: 1.5rem;
@@ -102,7 +112,9 @@
     padding: 0 1rem;
 }
 
+
 /* ==================== LEFT PANEL: ORDER LIST ==================== */
+
 .order-list-panel {
     flex: 0 0 280px;
     background: rgba(112, 51, 102, 0.8);
@@ -120,7 +132,9 @@
     background: rgba(0, 0, 0, 0.1);
 }
 
+
 /* Custom scrollbar */
+
 .order-list-scroll::-webkit-scrollbar {
     width: 10px;
 }
@@ -141,7 +155,9 @@
     background: linear-gradient(180deg, #d94623 0%, #b93d21 100%);
 }
 
+
 /* Order List Item */
+
 .order-list-item {
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid rgba(255, 255, 255, 0.1);
@@ -212,7 +228,9 @@
     margin-top: 0.375rem;
 }
 
+
 /* ==================== RIGHT PANEL: ORDER DETAILS - MÁS GRANDE ==================== */
+
 .order-detail-panel {
     flex: 1;
     background: rgba(112, 51, 102, 0.8);
@@ -224,7 +242,9 @@
     border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
+
 /* Custom scrollbar for detail panel */
+
 .order-detail-panel::-webkit-scrollbar {
     width: 10px;
 }
@@ -244,7 +264,9 @@
     background: linear-gradient(180deg, #d94623 0%, #b93d21 100%);
 }
 
+
 /* No Selection State */
+
 .no-selection-state {
     display: flex;
     flex-direction: column;
@@ -276,7 +298,8 @@
 }
 
 @keyframes pulse {
-    0%, 100% {
+    0%,
+    100% {
         opacity: 0.6;
         transform: scale(1);
     }
@@ -286,7 +309,9 @@
     }
 }
 
+
 /* Order Detail Content */
+
 .order-detail-content {
     animation: fadeIn 0.4s ease;
 }
@@ -302,7 +327,9 @@
     }
 }
 
+
 /* Detail Header with Cancel Button - MÁS COMPACTO */
+
 .detail-header {
     display: flex;
     justify-content: space-between;
@@ -341,7 +368,9 @@
     background: rgba(220, 53, 69, 1);
 }
 
+
 /* Info Card - Fechas y Dirección juntas - MÁS COMPACTO */
+
 .info-card {
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid rgba(255, 255, 255, 0.1);
@@ -375,7 +404,9 @@
     font-size: 1.1rem;
 }
 
+
 /* Info Row and Columns - MÁS COMPACTO */
+
 .info-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -403,7 +434,9 @@
     font-weight: 500;
 }
 
+
 /* Address Text - MÁS COMPACTO */
+
 .address-text {
     background: rgba(255, 255, 255, 0.05);
     padding: 0.75rem;
@@ -416,12 +449,16 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+
 /* Detail Sections */
+
 .detail-section {
     margin-bottom: 0.75rem;
 }
 
+
 /* Map Container with Leaflet - VERSIÓN COMPACTA (primero en orden) */
+
 .map-section-compact {
     margin-bottom: 0.75rem;
     margin-top: 0 !important;
@@ -441,7 +478,9 @@
     z-index: 1;
 }
 
+
 /* Products List - MÁS COMPACTO */
+
 .products-list {
     display: flex;
     flex-direction: column;
@@ -526,7 +565,9 @@
     color: #FF5630;
 }
 
+
 /* Adicionales - Más compactos */
+
 .product-adicionales {
     background: rgba(255, 86, 48, 0.1);
     border: 1px dashed rgba(255, 86, 48, 0.5);
@@ -567,7 +608,9 @@
     box-shadow: 0 1px 3px rgba(255, 86, 48, 0.3);
 }
 
+
 /* Total Section - MÁS COMPACTA */
+
 .total-section {
     background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
     border-radius: 8px;
@@ -618,7 +661,9 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+
 /* Map Container with Leaflet */
+
 .map-container {
     background-color: #fff;
     border-radius: 12px;
@@ -655,7 +700,9 @@
     font-size: 1.2rem;
 }
 
+
 /* ==================== ESTADO BADGES - MÁS COMPACTOS ==================== */
+
 .badge {
     font-size: 0.7rem;
     font-weight: 700;
@@ -696,12 +743,13 @@
     color: white;
 }
 
+
 /* ==================== RESPONSIVE DESIGN ==================== */
+
 @media (max-width: 1200px) {
     .pedidos-content {
         gap: 1rem;
     }
-    
     .order-list-panel {
         flex: 0 0 280px;
     }
@@ -712,21 +760,17 @@
         flex-direction: column;
         height: auto;
     }
-
     .order-list-panel {
         flex: 0 0 auto;
         max-height: 350px;
     }
-
     .order-detail-panel {
         min-height: 500px;
     }
-
     .detail-header {
         flex-direction: column;
         gap: 1rem;
     }
-
     .btn-cancel {
         width: 100%;
     }
@@ -736,39 +780,31 @@
     .filter-buttons {
         flex-direction: column;
     }
-
     .filter-btn {
         width: 100%;
         text-align: center;
     }
-
     .order-list-panel {
         max-height: 280px;
     }
-
     .info-row {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-
     .total-content {
         flex-direction: column;
         text-align: center;
         padding: 1.5rem;
     }
-
     .product-item {
         flex-direction: column;
     }
-
     .product-number {
         align-self: flex-start;
     }
-
     .adicionales-list {
         flex-direction: column;
     }
-
     .adicional-badge {
         width: 100%;
         justify-content: center;

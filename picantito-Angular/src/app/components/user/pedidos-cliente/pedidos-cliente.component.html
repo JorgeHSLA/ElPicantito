@@ -12,38 +12,34 @@
 </section>
 
 <!-- Modal de Éxito del Pedido -->
-<div class="modal fade show" tabindex="-1" [style.display]="showSuccessMessage() ? 'block' : 'none'" 
-     *ngIf="showSuccessMessage()" style="background-color: rgba(0,0,0,0.5);">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title d-flex align-items-center">
-          <i class="bi bi-check-circle-fill me-2"></i>
-          ¡Pedido Creado Exitosamente!
-        </h5>
-        <button type="button" class="btn-close btn-close-white" (click)="showSuccessMessage.set(false)"></button>
-      </div>
-      <div class="modal-body">
-        <div class="text-center py-3">
-          <i class="bi bi-check-circle text-success" style="font-size: 4rem;"></i>
-          <h4 class="mt-3 mb-3">Tu pedido #{{ newPedidoId() }} ha sido recibido</h4>
-          <p class="text-muted mb-3">
-            Tu orden está siendo procesada. Hemos enviado un correo de confirmación 
-            y te notificaremos sobre cada cambio de estado.
-          </p>
-          <div class="alert alert-info mb-0">
-            <i class="bi bi-info-circle me-2"></i>
-            Puedes ver el seguimiento en tiempo real en el mapa de arriba.
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="showSuccessMessage.set(false)">
+<div class="modal fade show" tabindex="-1" [style.display]="showSuccessMessage() ? 'block' : 'none'" *ngIf="showSuccessMessage()" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill me-2"></i> ¡Pedido Creado Exitosamente!
+                </h5>
+                <button type="button" class="btn-close btn-close-white" (click)="showSuccessMessage.set(false)"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center py-3">
+                    <i class="bi bi-check-circle text-success" style="font-size: 4rem;"></i>
+                    <h4 class="mt-3 mb-3">Tu pedido #{{ newPedidoId() }} ha sido recibido</h4>
+                    <p class="text-muted mb-3">
+                        Tu orden está siendo procesada. Hemos enviado un correo de confirmación y te notificaremos sobre cada cambio de estado.
+                    </p>
+                    <div class="alert alert-info mb-0">
+                        <i class="bi bi-info-circle me-2"></i> Puedes ver el seguimiento en tiempo real en el mapa de arriba.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="showSuccessMessage.set(false)">
           <i class="bi bi-check-lg me-1"></i> Entendido
         </button>
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <main class="container-fluid py-4">
@@ -57,8 +53,7 @@
 
     <!-- Error State -->
     <div *ngIf="!loading() && error()" class="alert alert-danger" role="alert">
-        <i class="bi bi-exclamation-triangle me-2"></i>
-        {{ error() }}
+        <i class="bi bi-exclamation-triangle me-2"></i> {{ error() }}
     </div>
 
     <!-- Empty State -->
@@ -67,49 +62,32 @@
         <h3>No tienes pedidos aún</h3>
         <p class="text-muted mb-4">¡Haz tu primer pedido y disfruta de nuestros deliciosos tacos!</p>
         <a routerLink="/tienda" class="btn btn-warning">
-            <i class="bi bi-shop me-2"></i>
-            Explorar Tienda
+            <i class="bi bi-shop me-2"></i> Explorar Tienda
         </a>
     </div>
 
     <!-- Pedidos Layout: Header + Two Panels -->
     <div *ngIf="!loading() && !error() && pedidos().length > 0" class="pedidos-layout">
-        
+
         <!-- Header con filtros -->
         <div class="pedidos-header mb-3">
             <h5 class="fw-bold mb-3">
-                <i class="bi bi-funnel me-2"></i>
-                Filtrar por estado
+                <i class="bi bi-funnel me-2"></i> Filtrar por estado
             </h5>
             <div class="filter-buttons">
-                <button 
-                    class="filter-btn" 
-                    [class.active]="filtroActivo() === 'TODOS'"
-                    (click)="filtrarPorEstado('TODOS')">
+                <button class="filter-btn" [class.active]="filtroActivo() === 'TODOS'" (click)="filtrarPorEstado('TODOS')">
                     Todos ({{ contarPorEstado('TODOS') }})
                 </button>
-                <button 
-                    class="filter-btn" 
-                    [class.active]="filtroActivo() === 'RECIBIDO'"
-                    (click)="filtrarPorEstado('RECIBIDO')">
+                <button class="filter-btn" [class.active]="filtroActivo() === 'RECIBIDO'" (click)="filtrarPorEstado('RECIBIDO')">
                     Recibidos ({{ contarPorEstado('RECIBIDO') }})
                 </button>
-                <button 
-                    class="filter-btn" 
-                    [class.active]="filtroActivo() === 'COCINANDO'"
-                    (click)="filtrarPorEstado('COCINANDO')">
+                <button class="filter-btn" [class.active]="filtroActivo() === 'COCINANDO'" (click)="filtrarPorEstado('COCINANDO')">
                     En Preparación ({{ contarPorEstado('COCINANDO') }})
                 </button>
-                <button 
-                    class="filter-btn" 
-                    [class.active]="filtroActivo() === 'ENVIADO'"
-                    (click)="filtrarPorEstado('ENVIADO')">
+                <button class="filter-btn" [class.active]="filtroActivo() === 'ENVIADO'" (click)="filtrarPorEstado('ENVIADO')">
                     En Camino ({{ contarPorEstado('ENVIADO') }})
                 </button>
-                <button 
-                    class="filter-btn" 
-                    [class.active]="filtroActivo() === 'ENTREGADO'"
-                    (click)="filtrarPorEstado('ENTREGADO')">
+                <button class="filter-btn" [class.active]="filtroActivo() === 'ENTREGADO'" (click)="filtrarPorEstado('ENTREGADO')">
                     Entregados ({{ contarPorEstado('ENTREGADO') }})
                 </button>
             </div>
@@ -117,15 +95,12 @@
 
         <!-- Two Panel Layout -->
         <div class="pedidos-content">
-            
+
             <!-- LEFT PANEL: Order List (Scrollable) -->
             <div class="order-list-panel">
                 <div class="order-list-scroll">
-                    <div *ngFor="let pedido of pedidosFiltrados()" 
-                         class="order-list-item"
-                         [class.selected]="pedidoSeleccionado()?.id === pedido.id"
-                         (click)="toggleSeleccionarPedido(pedido)">
-                        
+                    <div *ngFor="let pedido of pedidosFiltrados()" class="order-list-item" [class.selected]="pedidoSeleccionado()?.id === pedido.id" (click)="toggleSeleccionarPedido(pedido)">
+
                         <!-- Order ID and Badge -->
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="order-id">#{{ pedido.id }}</span>
@@ -133,13 +108,12 @@
                                 {{ pedido.estado }}
                             </span>
                         </div>
-                        
+
                         <!-- Date -->
                         <div class="order-date">
-                            <i class="bi bi-calendar3 me-1"></i>
-                            {{ pedido.fechaSolicitud | date:'dd/MM/yyyy HH:mm' }}
+                            <i class="bi bi-calendar3 me-1"></i> {{ pedido.fechaSolicitud | date:'dd/MM/yyyy HH:mm' }}
                         </div>
-                        
+
                         <!-- Total -->
                         <div class="order-total">
                             <strong>{{ pedido.precioDeVenta | currency:'COP':'symbol-narrow':'1.0-0' }}</strong>
@@ -150,7 +124,7 @@
 
             <!-- RIGHT PANEL: Order Details -->
             <div class="order-detail-panel">
-                
+
                 <!-- No Selection State -->
                 <div *ngIf="!pedidoSeleccionado()" class="no-selection-state">
                     <i class="bi bi-arrow-left display-1 text-muted mb-3"></i>
@@ -160,7 +134,7 @@
 
                 <!-- Order Selected -->
                 <div *ngIf="pedidoSeleccionado()" class="order-detail-content">
-                    
+
                     <!-- Header con botón de cancelar -->
                     <div class="detail-header">
                         <div class="header-info">
@@ -169,9 +143,7 @@
                                 {{ pedidoSeleccionado()!.estado }}
                             </span>
                         </div>
-                        <button *ngIf="pedidoSeleccionado()!.estado === 'RECIBIDO'" 
-                                class="btn btn-danger btn-cancel" 
-                                (click)="eliminarPedido(pedidoSeleccionado()!.id)">
+                        <button *ngIf="pedidoSeleccionado()!.estado === 'RECIBIDO'" class="btn btn-danger btn-cancel" (click)="eliminarPedido(pedidoSeleccionado()!.id)">
                             <i class="bi bi-x-circle me-2"></i>
                             Cancelar Pedido
                         </button>
@@ -180,8 +152,7 @@
                     <!-- Mapa de Seguimiento con OpenStreetMap (PRIMERO Y MÁS PEQUEÑO) -->
                     <div class="detail-section map-section-compact">
                         <h5 class="section-title">
-                            <i class="bi bi-map me-2"></i>
-                            Seguimiento de Entrega
+                            <i class="bi bi-map me-2"></i> Seguimiento de Entrega
                             <span class="ms-2 badge" [ngClass]="getEstadoClass(pedidoSeleccionado()!.estado)">
                                 {{ pedidoSeleccionado()!.estado }}
                             </span>
@@ -195,8 +166,7 @@
                     <div class="info-card">
                         <div class="info-card-section">
                             <h5 class="section-title">
-                                <i class="bi bi-calendar-event me-2"></i>
-                                Información del Pedido
+                                <i class="bi bi-calendar-event me-2"></i> Información del Pedido
                             </h5>
                             <div class="info-row">
                                 <div class="info-col">
@@ -214,13 +184,12 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="info-card-divider"></div>
-                        
+
                         <div class="info-card-section">
                             <h5 class="section-title">
-                                <i class="bi bi-geo-alt-fill me-2"></i>
-                                Dirección de Entrega
+                                <i class="bi bi-geo-alt-fill me-2"></i> Dirección de Entrega
                             </h5>
                             <div class="address-text">
                                 {{ getDireccionSinCoordenadas(pedidoSeleccionado()!.direccion) }}
@@ -231,8 +200,7 @@
                     <!-- Products Section -->
                     <div class="detail-section">
                         <h5 class="section-title">
-                            <i class="bi bi-bag-fill me-2"></i>
-                            Productos del Pedido
+                            <i class="bi bi-bag-fill me-2"></i> Productos del Pedido
                         </h5>
                         <div class="products-list">
                             <div *ngFor="let producto of pedidoSeleccionado()!.productos; let i = index" class="product-item">
@@ -243,8 +211,7 @@
                                         <span class="product-price">{{ producto.precioProducto | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
                                     </div>
                                     <div class="product-quantity">
-                                        <i class="bi bi-box me-1"></i>
-                                        Cantidad: {{ producto.cantidadProducto }}
+                                        <i class="bi bi-box me-1"></i> Cantidad: {{ producto.cantidadProducto }}
                                     </div>
                                     <div *ngIf="producto.adicionales && producto.adicionales.length > 0" class="product-adicionales">
                                         <div class="adicionales-header">
