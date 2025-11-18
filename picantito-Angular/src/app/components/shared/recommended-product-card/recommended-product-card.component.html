@@ -1,18 +1,15 @@
 <div class="card recommended-card h-100 border-0 shadow-sm overflow-hidden position-relative">
-  <img [src]="producto.imagen || '/images/default-taco.jpg'" class="card-img-top w-100" style="object-fit: cover; height: 200px;" [alt]="producto.nombre">
-  <div class="card-body">
-    @if (producto.calificacion && producto.calificacion > 0) {
-      <div class="rating mb-2">
-        @for (star of [].constructor(producto.calificacion); track star) {
-          <i class="bi bi-star-fill text-warning"></i>
+    <img [src]="producto.imagen || '/images/default-taco.jpg'" class="card-img-top w-100" style="object-fit: cover; height: 200px;" [alt]="producto.nombre">
+    <div class="card-body">
+        @if (producto.calificacion && producto.calificacion > 0) {
+        <div class="rating mb-2">
+            @for (star of [].constructor(producto.calificacion); track star) {
+            <i class="bi bi-star-fill text-warning"></i> } @for (star of [].constructor(5 - producto.calificacion); track star) {
+            <i class="bi bi-star text-muted"></i> }
+        </div>
         }
-        @for (star of [].constructor(5 - producto.calificacion); track star) {
-          <i class="bi bi-star text-muted"></i>
-        }
-      </div>
-    }
-    <h5 class="card-title fw-bold">{{ producto.nombre }}</h5>
-    <p class="card-text text-muted">{{ producto.descripcion }}</p>
-    <span class="h6 text-success fw-bold">${{ (producto.precio || producto.precioDeVenta || 0).toFixed(2) }}</span>
-  </div>
+        <h5 class="card-title fw-bold">{{ producto.nombre }}</h5>
+        <p class="card-text text-muted">{{ producto.descripcion }}</p>
+        <span class="h6 text-success fw-bold">${{ (producto.precio || producto.precioDeVenta || 0).toFixed(2) }}</span>
+    </div>
 </div>

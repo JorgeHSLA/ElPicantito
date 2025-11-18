@@ -13,7 +13,7 @@ import { Producto } from '../../../../models/producto';
   styleUrls: ['./recomendados.css']
 })
 export class RecomendadosComponent implements OnInit, AfterViewInit {
-  
+
   productosRecomendados: Producto[] = [];
   isLoading = true;
 
@@ -41,7 +41,7 @@ export class RecomendadosComponent implements OnInit, AfterViewInit {
           imagen: producto.imagen || '/images/default-taco.jpg'
         }));
         this.isLoading = false;
-        
+
         // Inicializar el carrusel después de que los productos se hayan renderizado
         setTimeout(() => {
           this.initializeRecommendedCarousel();
@@ -66,10 +66,10 @@ export class RecomendadosComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const cards = Array.from(carousel.children).filter(child => 
+    const cards = Array.from(carousel.children).filter(child =>
       !child.classList.contains('clone')
     ) as HTMLElement[];
-    
+
     if (cards.length === 0) {
       console.warn('No hay productos para mostrar en el carrusel');
       return;
@@ -94,7 +94,7 @@ export class RecomendadosComponent implements OnInit, AfterViewInit {
       carousel.querySelectorAll('.clone').forEach(clone => clone.remove());
 
       const visibleCards = getVisibleCards();
-      
+
       // Clonar las primeras cards al final para el efecto infinito
       cards.slice(0, visibleCards).forEach(card => {
         const clone = card.cloneNode(true) as HTMLElement;
@@ -145,7 +145,7 @@ export class RecomendadosComponent implements OnInit, AfterViewInit {
         if (currentIndex >= totalWithClones - visibleCards) {
           currentIndex = visibleCards;
           updatePosition(false);
-        } 
+        }
         // Si vamos antes del inicio, ir al final real
         else if (currentIndex < visibleCards) {
           currentIndex = cards.length + visibleCards - 1;

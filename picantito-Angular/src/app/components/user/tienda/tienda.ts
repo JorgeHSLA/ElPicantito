@@ -62,7 +62,22 @@ export class TiendaComponent implements OnInit, AfterViewInit {
   private setupScrollAnimations(): void {
     const revealElements = this.elementRef.nativeElement.querySelectorAll('.scroll-reveal');
 
-    if (revealElements.length === 0) return;
+    if (revealElements.length === 0) {
+      console.log('No hay elementos con scroll-reveal para animar');
+      return;
+    }
+
+    console.log(`Configurando animaciones para ${revealElements.length} elementos`);
+
+    // Fallback: Si IntersectionObserver no está disponible, mostrar todo inmediatamente
+    if (!('IntersectionObserver' in window)) {
+      console.warn('IntersectionObserver no disponible, mostrando todas las cards');
+      revealElements.forEach((element: Element) => {
+        (element as HTMLElement).style.opacity = '1';
+        (element as HTMLElement).style.transform = 'translateY(0)';
+      });
+      return;
+    }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry: IntersectionObserverEntry, index: number) => {
@@ -73,6 +88,7 @@ export class TiendaComponent implements OnInit, AfterViewInit {
           // Añadir animación más rápida
           setTimeout(() => {
             element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
             element.classList.add('animate__animated', animation, 'animate__faster');
           }, index * 30); // Delay más corto entre elementos
 
@@ -81,32 +97,64 @@ export class TiendaComponent implements OnInit, AfterViewInit {
       });
     }, {
       threshold: 0.1,
-      rootMargin: '0px'
+      rootMargin: '50px' // Empezar la animación antes de que el elemento sea visible
     });
 
     revealElements.forEach((element: Element) => {
       observer.observe(element);
     });
+
+    // Timeout de seguridad: Si después de 2 segundos hay elementos invisibles, mostrarlos
+    setTimeout(() => {
+      revealElements.forEach((element: Element) => {
+        const htmlElement = element as HTMLElement;
+        if (htmlElement.style.opacity === '0' || !htmlElement.style.opacity) {
+          console.warn('Elemento todavía invisible, forzando visibilidad:', element);
+          htmlElement.style.opacity = '1';
+          htmlElement.style.transform = 'translateY(0)';
+        }
+      });
+    }, 2000);
   }
 
   private cargarProductos(): void {
     this.isLoading = true;
     this.error = null;
 
+    console.log('Intentando cargar productos desde:', this.productoService);
+
     this.productoService.getProductosActivos().subscribe({
       next: (productos) => {
-        console.log('Productos cargados desde API:', productos); // Debug
-        // Simplemente asignar todos los productos sin filtrar
-        this.productos = productos;
-        console.log('Total productos asignados:', this.productos.length); // Debug
+        console.log('✅ Productos cargados exitosamente:', productos);
+        console.log('Total de productos recibidos:', productos?.length || 0);
+        
+        this.productos = productos || [];
         this.filtrarProductos();
-        console.log('Productos filtrados:', this.productosFiltrados.length); // Debug
         this.isLoading = false;
+        
+        if (this.productos.length === 0) {
+          console.warn('⚠️ No se encontraron productos en la respuesta');
+        }
       },
       error: (error) => {
-        console.error('Error cargando productos:', error);
-        this.error = 'Error al cargar los productos. Intenta de nuevo.';
+        console.error('❌ Error detallado al cargar productos:', error);
+        console.error('Status:', error.status);
+        console.error('Message:', error.message);
+        console.error('URL:', error.url);
+        
+        if (error.status === 0) {
+          this.error = '❌ No se puede conectar al servidor. Verifica que el backend esté corriendo en http://localhost:9998';
+        } else if (error.status === 404) {
+          this.error = '❌ Endpoint no encontrado. Verifica la ruta de la API.';
+        } else if (error.status === 500) {
+          this.error = '❌ Error en el servidor. Revisa los logs del backend.';
+        } else {
+          this.error = `❌ Error al cargar los productos: ${error.message}`;
+        }
+        
         this.isLoading = false;
+        this.productos = [];
+        this.productosFiltrados = [];
       }
     });
   }

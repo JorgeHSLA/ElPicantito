@@ -236,9 +236,18 @@ main.container .row.g-4::before {
 /* Animaciones de scroll reveal para productos - MÁS RÁPIDAS */
 
 .scroll-reveal {
-    opacity: 0;
-    transform: translateY(20px);
+    /* Remover opacity: 0 inicial para evitar que las cards sean invisibles */
+    opacity: 1;
+    transform: translateY(0);
     transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Solo aplicar la animación inicial si el navegador soporta IntersectionObserver */
+@supports (animation: fadeIn) {
+    .scroll-reveal:not(.animate__animated) {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 }
 
 .scroll-reveal.animate__animated {
