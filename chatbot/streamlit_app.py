@@ -3,16 +3,17 @@ import streamlit as st
 from openai import OpenAI
 import requests
 import json
-
+# para la api de deepseek se openrouter
 # === CONFIGURACIÓN DE LA API DE SPRING BOOT ===
 SPRINGBOOT_API_BASE = os.environ.get("SPRINGBOOT_API_BASE", "http://localhost:9998")
 
 # === FUNCIONES PARA OBTENER DATOS DE SPRING BOOT ===
 @st.cache_data(ttl=300)  # Cache por 5 minutos
-def obtener_estadisticas():
+def obtener_estadisticas(token=None):
     """Obtiene todas las estadísticas del sistema"""
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     try:
-        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/estadisticas/todas", timeout=5)
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/estadisticas/todas", headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
         return None
@@ -20,10 +21,11 @@ def obtener_estadisticas():
         return None
 
 @st.cache_data(ttl=300)
-def obtener_usuarios():
+def obtener_usuarios(token=None):
     """Obtiene información de usuarios (sin contraseñas)"""
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     try:
-        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/usuarios/dto", timeout=5)
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/usuarios/dto", headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
         return None
@@ -31,10 +33,11 @@ def obtener_usuarios():
         return None
 
 @st.cache_data(ttl=300)
-def obtener_adicionales():
+def obtener_adicionales(token=None):
     """Obtiene todos los adicionales disponibles"""
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     try:
-        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional", timeout=5)
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional", headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
         return None
@@ -42,10 +45,11 @@ def obtener_adicionales():
         return None
 
 @st.cache_data(ttl=300)
-def obtener_productos():
+def obtener_productos(token=None):
     """Obtiene todos los productos"""
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     try:
-        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/productos", timeout=5)
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/productos", headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
         return None
@@ -53,28 +57,29 @@ def obtener_productos():
         return None
 
 @st.cache_data(ttl=300)
-def obtener_relaciones_producto_adicional():
+def obtener_relaciones_producto_adicional(token=None):
     """Obtiene las relaciones entre productos y adicionales"""
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     try:
-        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional/productoAdicionales", timeout=5)
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional/productoAdicionales", headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
         return None
     except Exception as e:
         return None
 
-def construir_contexto_sistema():
+def construir_contexto_sistema(token=None):
     """Construye un contexto enriquecido con datos del sistema"""
     contexto_base = """Eres un asistente útil para la página web 'El Picantito', un restaurante mexicano. 
 Responde amablemente a las preguntas sobre las funcionalidades del sitio. 
 Usa un tono cálido y amigable, con toques de humor mexicano cuando sea apropiado."""
     
     # Intentar obtener datos del sistema
-    estadisticas = obtener_estadisticas()
-    usuarios = obtener_usuarios()
-    adicionales = obtener_adicionales()
-    productos = obtener_productos()
-    relaciones = obtener_relaciones_producto_adicional()
+    estadisticas = obtener_estadisticas(token)
+    usuarios = obtener_usuarios(token)
+    adicionales = obtener_adicionales(token)
+    productos = obtener_productos(token)
+    relaciones = obtener_relaciones_producto_adicional(token)
     
     # Agregar información al contexto si está disponible
     contexto_adicional = []
@@ -85,7 +90,16 @@ Usa un tono cálido y amigable, con toques de humor mexicano cuando sea apropiad
         contexto_adicional.append(f"- Ingresos totales: ${estadisticas.get('ingresosTotales', 'N/A')}")
         contexto_adicional.append(f"- Ingresos netos: ${estadisticas.get('ingresosNetos', 'N/A')}")
         if estadisticas.get('productosMasVendidos'):
-            contexto_adicional.append(f"- Productos más vendidos (IDs): {estadisticas['productosMasVendidos']}")
+            # Convertir IDs a nombres
+            ids = estadisticas['productosMasVendidos']
+            nombres = []
+            if productos:
+                for pid in ids:
+                    nombre = next((p.get('nombre') for p in productos if p.get('id') == pid), f"ID {pid}")
+                    nombres.append(nombre)
+                contexto_adicional.append(f"- Productos más vendidos: {', '.join(nombres)}")
+            else:
+                contexto_adicional.append(f"- Productos más vendidos (IDs): {ids}")
     
     if usuarios:
         contexto_adicional.append(f"\n\n=== INFORMACIÓN DE USUARIOS ===")
@@ -299,14 +313,31 @@ st.markdown(
 )
 
 # Mostrar indicador de conexión con Spring Boot
-try:
-    response = requests.get(f"{SPRINGBOOT_API_BASE}/actuator/health", timeout=2)
-    if response.status_code == 200:
-        st.success(f"✅ Conectado a Spring Boot ({SPRINGBOOT_API_BASE})")
-    else:
-        st.warning(f"⚠️ Spring Boot responde pero con estado: {response.status_code}")
-except:
-    st.error(f"❌ No se puede conectar a Spring Boot en {SPRINGBOOT_API_BASE}. Funcionando en modo básico.")
+def verificar_spring_boot():
+    """Verifica si Spring Boot está completamente iniciado"""
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/actuator/health", timeout=2)
+        if response.status_code == 200:
+            # Verificar que el status sea UP
+            data = response.json()
+            if data.get('status') == 'UP':
+                return True, "✅ Conectado a Spring Boot"
+            else:
+                return False, f"⚠️ Spring Boot está iniciando... (status: {data.get('status')})"
+        else:
+            return False, f"⚠️ Spring Boot responde pero con estado: {response.status_code}"
+    except requests.exceptions.Timeout:
+        return False, "⏳ Esperando respuesta de Spring Boot..."
+    except requests.exceptions.ConnectionError:
+        return False, "❌ No se puede conectar a Spring Boot"
+    except Exception as e:
+        return False, f"❌ Error al conectar: {str(e)}"
+
+is_connected, connection_msg = verificar_spring_boot()
+if is_connected:
+    st.success(f"{connection_msg} ({SPRINGBOOT_API_BASE})")
+else:
+    st.info(f"{connection_msg}. El chatbot funcionará con información limitada hasta que Spring Boot esté listo.")
 
 # Configuración de DeepSeek / OpenAI: primero st.secrets, fallback a variables de entorno
 deepseek_api_key = None
@@ -329,79 +360,99 @@ deepseek_base_url = "https://openrouter.ai/api/v1"  # ajustar si usa otro endpoi
 # === CONFIGURACIÓN DE LA API DE SPRING BOOT ===
 SPRINGBOOT_API_BASE = os.environ.get("SPRINGBOOT_API_BASE", "http://localhost:9998")
 
+# === FUNCIÓN PARA OBTENER TOKEN JWT ===
+def obtener_token_jwt():
+    """Obtiene un token JWT para autenticación con Spring Boot"""
+    url = f"{SPRINGBOOT_API_BASE}/api/usuarios/login"
+    payload = {
+        "nombreUsuario": "admin",  
+        "contrasenia": "admin123"  
+    }
+    try:
+        response = requests.post(url, json=payload, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("token")
+        else:
+            st.warning(f"Error en login: {response.status_code} - {response.text}")
+            return None
+    except Exception as e:
+        st.warning(f"Error al obtener token: {e}")
+        return None
+
 # === FUNCIONES PARA OBTENER DATOS DE SPRING BOOT ===
 @st.cache_data(ttl=300)  # Cache por 5 minutos
-def obtener_estadisticas():
+def obtener_estadisticas(token=None):
     """Obtiene todas las estadísticas del sistema"""
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     try:
-        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/estadisticas/todas", timeout=5)
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/estadisticas/todas", headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
         return None
     except Exception as e:
-        st.warning(f"No se pudieron obtener estadísticas: {e}")
         return None
 
 @st.cache_data(ttl=300)
-def obtener_usuarios():
+def obtener_usuarios(token=None):
     """Obtiene información de usuarios (sin contraseñas)"""
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     try:
-        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/usuarios/dto", timeout=5)
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/usuarios/dto", headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
         return None
     except Exception as e:
-        st.warning(f"No se pudieron obtener usuarios: {e}")
         return None
 
 @st.cache_data(ttl=300)
-def obtener_adicionales():
+def obtener_adicionales(token=None):
     """Obtiene todos los adicionales disponibles"""
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     try:
-        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional", timeout=5)
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional", headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
         return None
     except Exception as e:
-        st.warning(f"No se pudieron obtener adicionales: {e}")
         return None
 
 @st.cache_data(ttl=300)
-def obtener_productos():
+def obtener_productos(token=None):
     """Obtiene todos los productos"""
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     try:
-        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/productos", timeout=5)
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/productos", headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
         return None
     except Exception as e:
-        st.warning(f"No se pudieron obtener productos: {e}")
         return None
 
 @st.cache_data(ttl=300)
-def obtener_relaciones_producto_adicional():
+def obtener_relaciones_producto_adicional(token=None):
     """Obtiene las relaciones entre productos y adicionales"""
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     try:
-        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional/productoAdicionales", timeout=5)
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/api/adicional/productoAdicionales", headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
         return None
     except Exception as e:
-        st.warning(f"No se pudieron obtener relaciones: {e}")
         return None
 
-def construir_contexto_sistema():
+def construir_contexto_sistema(token=None):
     """Construye un contexto enriquecido con datos del sistema"""
     contexto_base = """Eres un asistente útil para la página web 'El Picantito', un restaurante mexicano. 
 Responde amablemente a las preguntas sobre las funcionalidades del sitio. 
 Usa un tono cálido y amigable, con toques de humor mexicano cuando sea apropiado."""
     
     # Intentar obtener datos del sistema
-    estadisticas = obtener_estadisticas()
-    usuarios = obtener_usuarios()
-    adicionales = obtener_adicionales()
-    productos = obtener_productos()
-    relaciones = obtener_relaciones_producto_adicional()
+    estadisticas = obtener_estadisticas(token)
+    usuarios = obtener_usuarios(token)
+    adicionales = obtener_adicionales(token)
+    productos = obtener_productos(token)
+    relaciones = obtener_relaciones_producto_adicional(token)
     
     # Agregar información al contexto si está disponible
     contexto_adicional = []
@@ -452,10 +503,13 @@ Usa un tono cálido y amigable, con toques de humor mexicano cuando sea apropiad
     
     return contexto_base
 
+# Obtener token JWT para acceder a endpoints protegidos
+token_jwt = obtener_token_jwt()
+
 # Inicializar historial solo una vez
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "system", "content": construir_contexto_sistema()}
+        {"role": "system", "content": construir_contexto_sistema(token_jwt)}
     ]
 
 # Crear cliente de DeepSeek/OpenAI (capturar fallo de autenticación temprano)
@@ -473,6 +527,32 @@ for message in st.session_state.messages:
 
 # Campo de input
 if prompt := st.chat_input("🌶️ Hazme una pregunta sobre Elpicantito..."):
+    # Verificar conexión con Spring Boot y renovar token si es necesario
+    try:
+        response = requests.get(f"{SPRINGBOOT_API_BASE}/actuator/health", timeout=2)
+        if response.status_code == 200:
+            data = response.json()
+            # Solo renovar token si Spring Boot está completamente UP
+            if data.get('status') == 'UP':
+                # Verificar si necesitamos renovar el token
+                token_jwt = obtener_token_jwt()
+                if token_jwt:
+                    st.session_state.messages[0] = {"role": "system", "content": construir_contexto_sistema(token_jwt)}
+            else:
+                st.warning(f"⚠️ Spring Boot aún está iniciando (status: {data.get('status')}). Por favor, espera un momento.")
+                st.stop()
+        else:
+            st.warning(f"⚠️ Spring Boot responde con estado {response.status_code}. Esperando...")
+            st.stop()
+    except:
+        st.warning("⚠️ No se puede conectar a Spring Boot. Intentando obtener token de todas formas...")
+        token_jwt = obtener_token_jwt()
+        if token_jwt:
+            st.session_state.messages[0] = {"role": "system", "content": construir_contexto_sistema(token_jwt)}
+        else:
+            st.error("❌ No se pudo establecer conexión con Spring Boot. Por favor, espera a que el servicio esté listo.")
+            st.stop()
+    
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
@@ -480,7 +560,7 @@ if prompt := st.chat_input("🌶️ Hazme una pregunta sobre Elpicantito..."):
     # Llamada a la API en streaming con manejo de errores
     try:
         stream = client.chat.completions.create(
-            model="deepseek/deepseek-r1:free",  # ajustar modelo si es necesario
+            model="google/gemini-2.0-flash-exp:free",  # Modelo con mejor límite de tokens
             messages=st.session_state.messages,
             stream=True,
         )
