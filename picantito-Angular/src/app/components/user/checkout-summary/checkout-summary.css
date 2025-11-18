@@ -3,9 +3,7 @@
 :host {
     display: block;
     background: linear-gradient(135deg, #2d1529 0%, #1a0d1f 100%);
-    background-image: 
-        linear-gradient(135deg, rgba(45, 21, 41, 0.95) 0%, rgba(26, 13, 31, 0.98) 100%),
-        url('/images/Fondo.png');
+    background-image: linear-gradient(135deg, rgba(45, 21, 41, 0.95) 0%, rgba(26, 13, 31, 0.98) 100%), url('/images/Fondo.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -54,7 +52,6 @@
 }
 
 
-
 /* Product Items */
 
 .product-item {
@@ -95,7 +92,9 @@
     color: rgba(255, 255, 255, 0.6) !important;
 }
 
+
 /* Textos pequeños con mejor visibilidad */
+
 small.text-muted {
     color: rgba(255, 255, 255, 0.7) !important;
 }
@@ -321,7 +320,9 @@ small.text-muted i {
     font-size: 0.85rem;
 }
 
+
 /* Separadores mejorados */
+
 hr.my-3 {
     border: none;
     height: 1px;
@@ -329,8 +330,10 @@ hr.my-3 {
     margin: 1rem 0;
 }
 
+
 /* Separador entre productos */
-.product-item + .product-item {
+
+.product-item+.product-item {
     border-top: 1px solid rgba(255, 86, 48, 0.3);
     margin-top: 1rem;
     padding-top: 1rem;
@@ -420,7 +423,9 @@ hr.my-3 {
     color: #dc3545;
 }
 
+
 /* Estilos para adicionales */
+
 .adicionales-section {
     margin-top: 0.5rem;
     padding: 0.5rem;
@@ -444,7 +449,9 @@ hr.my-3 {
     color: rgba(255, 255, 255, 0.85) !important;
 }
 
+
 /* Mejoras en el layout de productos con adicionales */
+
 .product-item .row {
     align-items: flex-start;
 }
@@ -453,7 +460,9 @@ hr.my-3 {
     padding-right: 1rem;
 }
 
+
 /* Alertas de validación */
+
 .alert {
     border-radius: 8px;
     margin-bottom: 1rem;
@@ -475,32 +484,37 @@ hr.my-3 {
     color: rgba(255, 255, 255, 0.9);
 }
 
+
 /* Botón de procesando */
+
 .btn:disabled {
     opacity: 0.65;
     cursor: not-allowed;
 }
 
+
 /* Responsive para adicionales */
+
 @media (max-width: 768px) {
     .adicionales-section {
         margin-top: 0.5rem;
         padding: 0.375rem;
     }
-    
     .adicional-detail small {
         font-size: 0.75rem;
     }
-    
     .product-item .col-md-5 {
         padding-right: 0.5rem;
         margin-bottom: 1rem;
     }
 }
 
+
 /* ==================== ESTILOS DEL MAPA ==================== */
 
+
 /* Sección de dirección de entrega */
+
 .delivery-address-display {
     background-color: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 86, 48, 0.3);
@@ -546,7 +560,9 @@ hr.my-3 {
     box-shadow: 0 4px 12px rgba(255, 86, 48, 0.4);
 }
 
+
 /* Lista de direcciones recientes */
+
 .direcciones-recientes-lista {
     max-height: 250px;
     overflow-y: auto;
@@ -578,7 +594,9 @@ hr.my-3 {
     color: rgba(255, 255, 255, 0.6) !important;
 }
 
+
 /* Sección de datos de contacto */
+
 .contact-info-section {
     background-color: rgba(255, 86, 48, 0.1);
     padding: 0.875rem;
@@ -639,7 +657,9 @@ hr.my-3 {
     color: rgba(255, 255, 255, 0.6) !important;
 }
 
+
 /* Modal del mapa */
+
 .map-modal-overlay {
     position: fixed;
     top: 0;
@@ -767,9 +787,23 @@ hr.my-3 {
 }
 
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
 }
 
 .map-container {
@@ -798,7 +832,9 @@ hr.my-3 {
     font-weight: 500;
 }
 
+
 /* Estilos para el mapa de Leaflet */
+
 .leaflet-container {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
@@ -813,41 +849,36 @@ hr.my-3 {
     font-size: 0.9rem;
 }
 
+
 /* Responsive del modal */
+
 @media (max-width: 768px) {
     .map-modal-content {
         max-width: 100%;
         max-height: 95vh;
         margin: 0.5rem;
     }
-
     .map-container {
         height: 350px;
     }
-
     .map-modal-header,
     .map-modal-footer {
         padding: 1rem;
     }
-
     .map-modal-body {
         padding: 1rem;
     }
-
     .map-instructions {
         font-size: 0.85rem;
         padding: 0.5rem 0.75rem;
     }
-
     .delivery-address-display {
         flex-direction: column;
         align-items: stretch;
     }
-
     .btn-edit-address {
         width: 100%;
     }
-
     .contact-info-section {
         padding: 0.75rem;
     }
@@ -857,19 +888,17 @@ hr.my-3 {
     .map-modal-header .modal-title {
         font-size: 1rem;
     }
-
     .map-container {
         height: 300px;
     }
-
     .map-modal-footer {
         flex-direction: column-reverse;
     }
-
     .map-modal-footer .btn {
         width: 100%;
     }
 }
+
 
 /* ==================== MODAL DE CONFIRMACIÓN DE PEDIDO ==================== */
 
@@ -924,8 +953,12 @@ hr.my-3 {
 }
 
 @keyframes shimmer {
-    0% { background-position: -200% center; }
-    100% { background-position: 200% center; }
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
 }
 
 .order-confirmation-icon {
@@ -941,8 +974,13 @@ hr.my-3 {
 }
 
 @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .order-confirmation-icon i {
@@ -1070,7 +1108,9 @@ hr.my-3 {
 }
 
 @keyframes loadingDot {
-    0%, 80%, 100% {
+    0%,
+    80%,
+    100% {
         transform: scale(0);
     }
     40% {
@@ -1078,33 +1118,34 @@ hr.my-3 {
     }
 }
 
+
 /* Responsive del modal de confirmación */
+
 @media (max-width: 576px) {
     .order-confirmation-modal {
         padding: 2rem 1.5rem;
     }
-
     .order-confirmation-icon {
         width: 70px;
         height: 70px;
     }
-
     .order-confirmation-icon i {
         font-size: 2.5rem;
     }
-
     .order-confirmation-title {
         font-size: 1.5rem;
     }
-
     .order-detail-value.highlight {
         font-size: 1.3rem;
     }
 }
 
+
 /* ==================== SCROLLBAR CUSTOM ==================== */
 
+
 /* Para Webkit (Chrome, Safari, Edge) */
+
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -1125,9 +1166,10 @@ hr.my-3 {
     background: #d94623;
 }
 
+
 /* Para Firefox */
+
 * {
     scrollbar-width: thin;
     scrollbar-color: #FF5630 rgba(26, 13, 31, 0.5);
 }
-

@@ -1,8 +1,21 @@
 /* Payment Container */
 
-.payment-container {
+:host {
+    display: block;
+    background: linear-gradient(135deg, #2d1529 0%, #1a0d1f 100%);
+    background-image: 
+        linear-gradient(135deg, rgba(45, 21, 41, 0.95) 0%, rgba(26, 13, 31, 0.98) 100%),
+        url('/images/Fondo.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     min-height: 100vh;
-    background-color: #2d1529;
+}
+
+.payment-container {
+    min-height: calc(100vh - 280px);
+    padding: 1rem 0;
 }
 
 
@@ -11,24 +24,38 @@
 .payment-header h2 {
     color: #ffffff;
     font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 0;
 }
 
 .payment-header .text-muted {
-    color: #e0e0e0 !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.payment-header .text-primary {
+    color: #FF5630 !important;
 }
 
 .payment-header .btn-outline-secondary {
     color: #ffffff;
-    border-color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1rem;
 }
 
 .payment-header .btn-outline-secondary:hover {
-    background-color: #ffffff;
-    color: #2d1529;
+    background-color: rgba(255, 86, 48, 0.2);
+    border-color: rgba(255, 86, 48, 0.5);
+    color: #ffffff;
 }
 
 .payment-header hr {
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 86, 48, 0.4);
+    border: none;
+    height: 1px;
+    background: rgba(255, 86, 48, 0.4);
+    margin: 1rem 0;
 }
 
 
@@ -45,44 +72,45 @@
 }
 
 .payment-option {
-    border: 2px solid #e9ecef;
+    border: 1px solid rgba(255, 86, 48, 0.3);
     border-radius: 12px;
-    padding: 1.5rem;
+    padding: 1.25rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
 }
 
 .payment-option:hover {
-    border-color: #007bff;
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
+    border-color: rgba(255, 86, 48, 0.5);
+    background-color: rgba(255, 86, 48, 0.15);
 }
 
 .payment-option.selected {
-    border-color: #007bff;
-    background-color: #f8fbff;
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    border-color: #FF5630;
+    border-left: 3px solid #FF5630;
+    background-color: rgba(255, 86, 48, 0.2);
 }
 
 .payment-option .form-check-input {
-    margin-top: 0;
+    display: none;
 }
 
 .payment-icon {
     font-size: 2rem;
-    color: #007bff;
+    color: #FF5630;
     min-width: 50px;
 }
 
 .method-name {
     font-weight: 600;
-    font-size: 1.1rem;
-    color: #000000;
+    font-size: 1rem;
+    color: #ffffff;
 }
 
 .method-description {
-    color: #333333;
-    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
     margin-top: 0.25rem;
 }
 
@@ -90,13 +118,14 @@
 /* Payment Forms */
 
 .payment-form {
-    border-top: 1px solid #e9ecef;
-    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 86, 48, 0.3);
+    padding-top: 1.25rem;
     animation: slideDown 0.3s ease;
 }
 
 .payment-form h6 {
-    color: #000000;
+    color: #ffffff;
+    font-size: 0.95rem;
 }
 
 @keyframes slideDown {
@@ -116,73 +145,93 @@
 .form-control,
 .form-select {
     border-radius: 8px;
-    border: 1px solid #ced4da;
+    border: 1px solid rgba(255, 86, 48, 0.3);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    padding: 0.75rem;
-    color: #000000;
-    background-color: #ffffff;
+    padding: 0.625rem;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .form-control:focus,
 .form-select:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    border-color: #FF5630;
+    box-shadow: 0 0 0 0.2rem rgba(255, 86, 48, 0.25);
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
 }
 
 .form-label {
     font-weight: 500;
-    color: #000000;
+    color: rgba(255, 255, 255, 0.9);
     margin-bottom: 0.5rem;
+    font-size: 0.9rem;
 }
 
 
 /* Payment Summary */
 
 .payment-summary {
-    background-color: #f8f9fa;
-    padding: 1.5rem;
+    background-color: rgba(255, 86, 48, 0.1);
+    padding: 1.25rem;
     border-radius: 8px;
     margin-bottom: 1rem;
+    border: 1px solid rgba(255, 86, 48, 0.3);
+    border-left: 3px solid rgba(255, 86, 48, 0.6);
+    backdrop-filter: blur(10px);
 }
 
 .summary-row {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     margin-bottom: 0.5rem;
-    color: #000000;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .summary-row span {
-    color: #000000;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .summary-row .fw-bold {
-    color: #000000;
+    color: #ffffff;
+}
+
+.summary-row .text-success {
+    color: #FF5630 !important;
 }
 
 
 /* Cards */
 
 .card {
-    border: none;
+    border: 1px solid rgba(255, 86, 48, 0.3);
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background-color: rgba(112, 51, 102, 0.85);
+    backdrop-filter: blur(10px);
 }
 
 .card-header {
     border-radius: 12px 12px 0 0 !important;
-    border-bottom: 1px solid #e9ecef;
-    background-color: #f8f9fa !important;
+    border-bottom: 1px solid rgba(255, 86, 48, 0.3);
+    background: rgba(112, 51, 102, 0.9) !important;
+    color: #ffffff;
+    padding: 0.875rem 1rem;
 }
 
 .card-header h5,
 .card-header h6 {
-    color: #2d1529;
+    color: #ffffff;
+    font-size: 1rem;
+    margin-bottom: 0;
 }
 
 .card-body {
-    background-color: #ffffff;
-    color: #000000;
+    background-color: transparent;
+    color: #ffffff;
 }
 
 
@@ -195,33 +244,36 @@
 }
 
 .btn-success.btn-lg {
-    padding: 1rem;
+    padding: 0.875rem;
     font-weight: 600;
     letter-spacing: 0.5px;
-    background: linear-gradient(45deg, #28a745, #20c997);
+    background: #FF5630;
     border: none;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn-success.btn-lg:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+    background: #d94623;
 }
 
 .btn-success.btn-lg:disabled {
     transform: none;
     box-shadow: none;
     opacity: 0.6;
+    background: rgba(255, 86, 48, 0.5);
 }
 
 .btn-outline-secondary {
-    border-color: #6c757d;
-    color: #6c757d;
+    border-color: rgba(255, 86, 48, 0.3);
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .btn-outline-secondary:hover {
-    background-color: #6c757d;
-    border-color: #6c757d;
+    background-color: rgba(255, 86, 48, 0.2);
+    border-color: rgba(255, 86, 48, 0.5);
     color: #ffffff;
 }
 
@@ -231,15 +283,43 @@
 .security-info {
     text-align: center;
     padding-top: 1rem;
-    border-top: 1px solid #e9ecef;
+    border-top: 1px solid rgba(255, 86, 48, 0.3);
 }
 
 .security-info i {
-    color: #28a745;
+    color: #FF5630;
 }
 
 .security-info .text-muted {
-    color: #666666 !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.security-info .text-success {
+    color: #FF5630 !important;
+}
+
+.security-info .text-primary {
+    color: #FF5630 !important;
+}
+
+.security-info .text-info {
+    color: #FF5630 !important;
+}
+
+.security-info .text-warning {
+    color: #FF5630 !important;
+}
+
+.security-info .text-secondary {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.security-info a {
+    color: #FF5630;
+}
+
+.security-info a:hover {
+    color: #d94623;
 }
 
 
@@ -247,27 +327,30 @@
 
 .alert {
     border-radius: 8px;
-    border: none;
+    border: 1px solid rgba(255, 86, 48, 0.3);
+    backdrop-filter: blur(10px);
 }
 
 .alert-info {
-    background-color: #e3f2fd;
-    color: #1565c0;
+    background-color: rgba(255, 86, 48, 0.15);
+    color: rgba(255, 255, 255, 0.95);
+    border-left: 3px solid #FF5630;
 }
 
 .alert-info strong,
 .alert-info p {
-    color: #1565c0;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .alert-success {
-    background-color: #e8f5e8;
-    color: #2e7d32;
+    background-color: rgba(255, 86, 48, 0.2);
+    color: rgba(255, 255, 255, 0.95);
+    border-left: 3px solid #FF5630;
 }
 
 .alert-success strong,
 .alert-success p {
-    color: #2e7d32;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 
@@ -350,17 +433,59 @@
 /* Payment method icons specific styles */
 
 .bi-credit-card {
-    color: #007bff;
+    color: #FF5630;
 }
 
 .bi-phone {
-    color: #ff6b35;
+    color: #FF5630;
 }
 
 .bi-bank {
-    color: #28a745;
+    color: #FF5630;
 }
 
 .bi-cash {
-    color: #ffc107;
+    color: #FF5630;
 }
+
+/* ==================== SCROLLBAR CUSTOM ==================== */
+
+/* Para Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(26, 13, 31, 0.5);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #FF5630;
+    border-radius: 10px;
+    border: 2px solid rgba(26, 13, 31, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #d94623;
+}
+
+/* Para Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #FF5630 rgba(26, 13, 31, 0.5);
+}
+
+/* Fixed dropdown styles */
+.form-select {
+    background-color: rgba(45, 21, 41, 0.95);
+    color: #ffffff;
+    border: 1px solid rgba(255, 86, 48, 0.3);
+}
+
+.form-select option {
+    background-color: rgba(45, 21, 41, 0.95);
+    color: #ffffff;
+}
+
