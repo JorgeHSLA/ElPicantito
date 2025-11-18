@@ -78,15 +78,35 @@ export class ProductoDetalleComponent implements OnInit {
   }
 
   private cargarProductosRelacionados(): void {
-    // Cargar algunos productos relacionados (excluyendo el actual)
+    // Cargar productos relacionados de la BD (solo tacos, excluyendo el actual y el taco personalizado)
     this.productoService.getProductosActivos().subscribe({
       next: (productos) => {
         this.productosRelacionados = productos
-          .filter(p => p.id !== this.producto?.id)
-          .slice(0, 3); // Solo mostrar 3 productos relacionados
+          .filter(p => {
+            // Excluir el producto actual
+            if (p.id === this.producto?.id) return false;
+            
+            const nombreLower = (p.nombre || '').toLowerCase();
+            
+            // Excluir el taco personalizado
+            if (nombreLower.includes('personalizado') || 
+                nombreLower.includes('custom') ||
+                nombreLower === 'crea tu taco') {
+              return false;
+            }
+            
+            // Solo incluir productos que tengan "taco" en el nombre
+            if (!nombreLower.includes('taco')) {
+              return false;
+            }
+            
+            return true;
+          })
+          .slice(0, 5); // Mostrar máximo 5 tacos relacionados
       },
       error: (error) => {
         console.error('Error cargando productos relacionados:', error);
+        this.productosRelacionados = [];
       }
     });
   }
@@ -269,8 +289,20 @@ export class ProductoDetalleComponent implements OnInit {
   // Método para navegar a un producto relacionado
   verProductoRelacionado(id: number | undefined): void {
     if (id) {
+      // Reiniciar el estado antes de navegar
+      this.isLoading = true;
+      this.producto = null;
+      this.productosRelacionados = [];
+      this.adicionales = [];
+      this.limpiarSeleccionAdicionales();
+      this.cantidad = 1;
+      
+      // Navegar al nuevo producto
       this.router.navigate(['/producto', id]).then(() => {
+        // Scroll al inicio
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Cargar el nuevo producto
+        this.cargarProducto(id);
       });
     }
   }
