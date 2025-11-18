@@ -477,6 +477,31 @@ hr.my-3 {
     box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
 }
 
+/* Lista de direcciones recientes */
+.direcciones-recientes-lista {
+    max-height: 250px;
+    overflow-y: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.direcciones-recientes-lista .list-group-item {
+    padding: 0.75rem 1rem;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.direcciones-recientes-lista .list-group-item:hover {
+    border-left-color: #0d6efd;
+    background-color: #f8f9fa;
+    padding-left: 1.25rem;
+}
+
+.direcciones-recientes-lista .list-group-item:active {
+    background-color: #e9ecef;
+}
+
 /* Sección de datos de contacto */
 .contact-info-section {
     background-color: #f8fdf9;

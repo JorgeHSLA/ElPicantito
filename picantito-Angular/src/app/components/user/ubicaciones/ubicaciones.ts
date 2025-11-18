@@ -44,12 +44,12 @@ export class UbicacionesComponent implements OnInit, AfterViewInit {
       const marker = L.marker([sucursal.lat, sucursal.lng]).addTo(this.map);
       
       const popupContent = `
-        <div style="color: black; min-width: 200px;">
+        <div style="color: #222; min-width: 200px;">
           <h6 style="margin: 0 0 8px 0; color: #ffc107; font-weight: bold;">🌮 El Picantito</h6>
-          <p style="margin: 4px 0; font-weight: 600;">${sucursal.nombre}</p>
-          <p style="margin: 4px 0; font-size: 0.9em;">${sucursal.direccion}</p>
-          <p style="margin: 4px 0; font-size: 0.9em;">📞 ${sucursal.telefono}</p>
-          <p style="margin: 4px 0; font-size: 0.9em;">🕐 ${sucursal.horario}</p>
+          <p style="margin: 4px 0; font-weight: 700; color: #c0392b; font-size: 1.1em;">${sucursal.nombre}</p>
+          <p style="margin: 4px 0; font-size: 0.98em; color: #333;">${sucursal.direccion}</p>
+          <p style="margin: 4px 0; font-size: 0.98em; color: #333;">📞 ${sucursal.telefono}</p>
+          <p style="margin: 4px 0; font-size: 0.98em; color: #333;">🕐 ${sucursal.horario}</p>
         </div>
       `;
       

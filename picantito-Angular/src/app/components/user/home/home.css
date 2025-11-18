@@ -5,13 +5,17 @@
   @import '../../../assets/styles/creaTaco.css';
   /* Fondo decorativo global para la página de home */
 
-  :host {
+   :host {
       display: block;
       position: relative;
       min-height: 100vh;
+      overflow-x: hidden;
+      width: 100%;
+      margin-top: -105px;
+      padding-top: 0;
   }
 
-  :host::before {
+   :host::before {
       content: '';
       position: fixed;
       top: 0;
@@ -32,6 +36,7 @@
   .recommended-carousel {
       position: relative;
       overflow: hidden;
+      max-width: 100%;
   }
 
   .recommended-carousel-container {
@@ -169,6 +174,8 @@
   .features-section {
       position: relative;
       z-index: 1;
+      overflow-x: hidden;
+      max-width: 100%;
   }
 
   .features-section::before {

@@ -146,6 +146,9 @@ body {
     /* Medium weight para mejor legibilidad */
     color: var(--neutral-text);
     min-height: 100vh;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
 }
 
 
@@ -154,6 +157,9 @@ body {
 html {
     background-color: #2d1529;
     /* Color sólido nuevo */
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
 }
 
 

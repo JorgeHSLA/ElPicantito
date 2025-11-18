@@ -21,7 +21,15 @@ export class RevisarRepartidoresComponent implements OnInit {
   private repartidorService = inject(RepartidorService);
 
   pedidosActivos = signal<PedidoCompleto[]>([]);
+  pedidosFiltrados = signal<PedidoCompleto[]>([]);
   repartidoresActivos = signal<Repartidor[]>([]);
+
+  // Filtros y búsqueda
+  searchTerm = signal('');
+  filtroEstado = signal('todos'); // 'todos', 'recibido', 'cocinando', 'enviado', 'entregado'
+  filtroRepartidor = signal('todos');
+  filtroOrden = signal('id-desc');
+
   loading = signal<boolean>(false);
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
@@ -35,6 +43,12 @@ export class RevisarRepartidoresComponent implements OnInit {
   ngOnInit(): void {
     // Cargar datos al entrar a la vista
     this.cargarDatos();
+  }
+
+  getDireccionSinCoordenadas(direccionCompleta: string | undefined): string {
+    if (!direccionCompleta) return 'Sin dirección';
+    const partes = direccionCompleta.split('|');
+    return partes[0].trim();
   }
 
   // Utils repartidor
@@ -56,6 +70,7 @@ export class RevisarRepartidoresComponent implements OnInit {
     this.gestionPedidos.getAllPedidos().subscribe({
       next: (pedidos) => {
         this.pedidosActivos.set(pedidos || []);
+        this.aplicarFiltros();
         this.loading.set(false);
       },
       error: (err) => {
@@ -77,6 +92,76 @@ export class RevisarRepartidoresComponent implements OnInit {
         this.errorMessage.set('No se pudieron cargar los repartidores activos');
       }
     });
+  }
+
+  aplicarFiltros() {
+    let resultado = [...this.pedidosActivos()];
+
+    const termino = this.searchTerm().toLowerCase();
+    if (termino) {
+      resultado = resultado.filter(p =>
+        p.id?.toString().includes(termino) ||
+        p.clienteNombre?.toLowerCase().includes(termino) ||
+        p.direccion?.toLowerCase().includes(termino)
+      );
+    }
+
+    const estado = this.filtroEstado();
+    if (estado !== 'todos') {
+      resultado = resultado.filter(p => p.estado?.toLowerCase() === estado);
+    }
+
+    const repartidor = this.filtroRepartidor();
+    if (repartidor !== 'todos') {
+      const repId = parseInt(repartidor);
+      resultado = resultado.filter(p => p.repartidorId === repId);
+    }
+
+    const orden = this.filtroOrden();
+    switch(orden) {
+      case 'id-asc':
+        resultado.sort((a, b) => a.id - b.id);
+        break;
+      case 'id-desc':
+        resultado.sort((a, b) => b.id - a.id);
+        break;
+      case 'fecha-asc':
+        resultado.sort((a, b) => new Date(a.fechaSolicitud || '').getTime() - new Date(b.fechaSolicitud || '').getTime());
+        break;
+      case 'fecha-desc':
+        resultado.sort((a, b) => new Date(b.fechaSolicitud || '').getTime() - new Date(a.fechaSolicitud || '').getTime());
+        break;
+    }
+
+    this.pedidosFiltrados.set(resultado);
+  }
+
+  onSearchChange(value: string) {
+    this.searchTerm.set(value);
+    this.aplicarFiltros();
+  }
+
+  onFiltroEstadoChange(value: string) {
+    this.filtroEstado.set(value);
+    this.aplicarFiltros();
+  }
+
+  onFiltroRepartidorChange(value: string) {
+    this.filtroRepartidor.set(value);
+    this.aplicarFiltros();
+  }
+
+  onFiltroOrdenChange(value: string) {
+    this.filtroOrden.set(value);
+    this.aplicarFiltros();
+  }
+
+  limpiarFiltros() {
+    this.searchTerm.set('');
+    this.filtroEstado.set('todos');
+    this.filtroRepartidor.set('todos');
+    this.filtroOrden.set('id-desc');
+    this.aplicarFiltros();
   }
 
   // Helpers de estado

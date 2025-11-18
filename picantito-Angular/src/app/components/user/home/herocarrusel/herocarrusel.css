@@ -41,19 +41,20 @@
    CARRUSEL PRINCIPAL
    ========================= */
 .carousel-section {
-    margin-top: -105px; 
-    padding-top: 0px;
+    margin-top: 0; 
+    padding-top: 0;
     margin-bottom: 0;
     position: relative;
     overflow: hidden;
     z-index: 1;
     opacity: 1;
+    top: 0;
 }
 
 .carousel-section::before {
     content: '';
     position: absolute;
-    top: -120px;
+    top: 0;
     left: 0;
     right: 0;
     height: 200px;
@@ -86,6 +87,7 @@
 
   padding: 8rem 0 6rem 0;
   min-height: 85vh;
+  margin-top: 0;
 }
 
 /* Overlay removido - usando imagen ya procesada */

@@ -9,6 +9,15 @@ if not exist "pom.xml" (
     exit /b 1
 )
 
+REM Cargar variables de entorno desde .env si existe
+if exist ".env" (
+    echo Cargando variables de entorno desde .env...
+    for /f "usebackq tokens=1,* delims==" %%a in (".env") do (
+        echo %%a | findstr /r "^[^#]" >nul
+        if not errorlevel 1 set %%a=%%b
+    )
+)
+
 echo Verificando Maven...
 if exist "mvnw.cmd" (
     echo Usando Maven Wrapper...

@@ -8,6 +8,19 @@ if (-not (Test-Path "pom.xml")) {
     exit 1
 }
 
+# Cargar variables de entorno desde .env si existe
+if (Test-Path ".env") {
+    Write-Host "Cargando variables de entorno desde .env..." -ForegroundColor Yellow
+    Get-Content ".env" | ForEach-Object {
+        if ($_ -match '^\s*([^#][^=]*)\s*=\s*(.*)$') {
+            $name = $matches[1].Trim()
+            $value = $matches[2].Trim()
+            [System.Environment]::SetEnvironmentVariable($name, $value, [System.EnvironmentVariableTarget]::Process)
+            Write-Host "  $name cargado" -ForegroundColor Gray
+        }
+    }
+}
+
 Write-Host "Verificando Maven..." -ForegroundColor Yellow
 try {
     if (Test-Path "mvnw.cmd") {
@@ -23,7 +36,6 @@ try {
 }
 
 Write-Host "Compilando y ejecutando Spring Boot..." -ForegroundColor Green
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "$mvnCmd spring-boot:run"
+& $mvnCmd spring-boot:run
 
-Write-Host "Spring Boot se esta iniciando en una nueva ventana..." -ForegroundColor Green
-Write-Host "API estara disponible en: http://localhost:8080" -ForegroundColor Cyan
+Write-Host "Spring Boot finalizado." -ForegroundColor Green

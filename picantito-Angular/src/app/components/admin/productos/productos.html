@@ -1,189 +1,204 @@
 <app-admin-navbar></app-admin-navbar>
 
 <div class="container-fluid">
-  <div class="row">
-    <!-- SIDEBAR -->
-    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-      <app-admin-sidebar></app-admin-sidebar>
-    </nav>
+    <div class="row">
+        <!-- SIDEBAR -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <app-admin-sidebar></app-admin-sidebar>
+        </nav>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2 text-white">Gestión de Productos</h1>
-        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#nuevoProductoModal">
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2 text-white animate__animated animate__fadeInDown">Gestión de Productos</h1>
+                <button class="btn btn-warning hvr-grow" data-bs-toggle="modal" data-bs-target="#nuevoProductoModal">
           <i class="bi bi-plus-circle me-2"></i>Nuevo Producto
         </button>
-      </div>
+            </div>
 
-      <!-- ALERTAS -->
-      <div *ngIf="successMessage()" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span>{{ successMessage() }}</span>
-        <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
-      </div>
-      
-      <div *ngIf="errorMessage()" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span>{{ errorMessage() }}</span>
-        <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
-      </div>
+            <!-- ALERTAS -->
+            <div *ngIf="successMessage()" class="alert alert-success alert-dismissible fade show animate__animated animate__slideInDown" role="alert">
+                <span>{{ successMessage() }}</span>
+                <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
+            </div>
 
-      <!-- TABLA DE PRODUCTOS -->
-      <div class="card">
-        <div class="card-header">
-          <h5 class="mb-0 text-white">Lista de Productos</h5>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Imagen</th>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Precio</th>
-                  <th>Calificación</th>
-                  <th>Disponible</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let producto of productos()">
-                  <td>{{ producto.id }}</td>
-                  <td>
-                    <img [src]="producto.imagen" alt="Producto" 
-                         style="width: 50px; height: 50px; object-fit: cover;" 
-                         class="rounded">
-                  </td>
-                  <td>{{ producto.nombre }}</td>
-                  <td>
-                    {{ producto.descripcion && producto.descripcion.length > 50 ? 
-                        (producto.descripcion.toString() | slice:0:50) + '...' : 
-                        producto.descripcion }}
-                  </td>
-                  <td>${{ producto.precioDeVenta?.toFixed(2) }}</td>
-                  <td>
-                    {{ producto.calificacion }}/5
-                    <span class="text-warning">★</span>
-                  </td>
-                  <td>
-                    <span *ngIf="producto.disponible" class="badge bg-success">Disponible</span>
-                    <span *ngIf="!producto.disponible" class="badge bg-danger">No disponible</span>
-                  </td>
-                  <td>
-                    <a [routerLink]="['/admin/productos/edit', producto.id]" 
-                       class="btn btn-sm btn-outline-primary me-1">
-                      <i class="bi bi-pencil"></i>
-                    </a>
-                    <button class="btn btn-sm btn-outline-danger"
-                            (click)="deleteProducto(producto.id!)">
+            <div *ngIf="errorMessage()" class="alert alert-danger alert-dismissible fade show animate__animated animate__slideInDown" role="alert">
+                <span>{{ errorMessage() }}</span>
+                <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+            </div>
+
+            <!-- TABLA DE PRODUCTOS -->
+            <div class="card animate__animated animate__fadeIn">
+                <div class="card-header">
+                    <h5 class="mb-0 text-white">Lista de Productos</h5>
+                </div>
+                <div class="card-body">
+                    <!-- FILTROS Y BÚSQUEDA -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label text-white">🔍 Buscar</label>
+                            <input type="text" class="form-control" placeholder="Buscar por nombre o descripción..." [value]="searchTerm()" (input)="onSearchChange($any($event.target).value)">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-white">Disponibilidad</label>
+                            <select class="form-select" [value]="filtroDisponibilidad()" (change)="onFiltroDisponibilidadChange($any($event.target).value)">
+                                <option value="todos">Todos</option>
+                                <option value="disponibles">Disponibles</option>
+                                <option value="no-disponibles">No Disponibles</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-white">Ordenar por</label>
+                            <select class="form-select" [value]="filtroOrden()" (change)="onFiltroOrdenChange($any($event.target).value)">
+                                <option value="id-asc">ID (menor a mayor)</option>
+                                <option value="id-desc">ID (mayor a menor)</option>
+                                <option value="nombre-asc">Nombre (A-Z)</option>
+                                <option value="nombre-desc">Nombre (Z-A)</option>
+                                <option value="precio-asc">Precio (menor a mayor)</option>
+                                <option value="precio-desc">Precio (mayor a menor)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label text-white">&nbsp;</label>
+                            <button class="btn btn-secondary w-100" (click)="limpiarFiltros()">
+                                <i class="bi bi-x-circle me-1"></i>Limpiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info" *ngIf="productosFiltrados().length === 0">
+                        <i class="bi bi-info-circle me-2"></i>No se encontraron productos con los filtros aplicados.
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Imagen</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>Calificación</th>
+                                    <th>Disponible</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let producto of productosFiltrados()">
+                                    <td>{{ producto.id }}</td>
+                                    <td>
+                                        <img [src]="producto.imagen" alt="Producto" style="width: 50px; height: 50px; object-fit: cover;" class="rounded">
+                                    </td>
+                                    <td>{{ producto.nombre }}</td>
+                                    <td>
+                                        {{ producto.descripcion && producto.descripcion.length > 50 ? (producto.descripcion.toString() | slice:0:50) + '...' : producto.descripcion }}
+                                    </td>
+                                    <td>${{ producto.precioDeVenta?.toFixed(2) }}</td>
+                                    <td>
+                                        {{ producto.calificacion }}/5
+                                        <span class="text-warning">★</span>
+                                    </td>
+                                    <td>
+                                        <span *ngIf="producto.disponible" class="badge bg-success">Disponible</span>
+                                        <span *ngIf="!producto.disponible" class="badge bg-danger">No disponible</span>
+                                    </td>
+                                    <td>
+                                        <a [routerLink]="['/admin/productos/edit', producto.id]" class="btn btn-sm btn-outline-primary me-1 hvr-grow">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-danger hvr-grow" (click)="deleteProducto(producto.id!)">
                       <i class="bi bi-trash"></i>
                     </button>
-                  </td>
-                </tr>
-                <tr *ngIf="productos().length === 0">
-                  <td colspan="8" class="text-center text-muted">No hay productos registrados</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="productos().length === 0">
+                                    <td colspan="8" class="text-center text-muted">No hay productos registrados</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 </div>
 
 <!-- MODAL NUEVO PRODUCTO -->
 <div class="modal fade" id="nuevoProductoModal" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Nuevo Producto</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <form (ngSubmit)="saveProducto()">
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre del Producto:</label>
-                <input type="text" class="form-control" id="nombre" 
-                       [value]="nuevoProducto().nombre"
-                       (input)="updateField('nombre', $any($event.target).value)"
-                       required>
-              </div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label for="imagen" class="form-label">URL de la Imagen:</label>
-                <input type="url" class="form-control" id="imagen"
-                       [value]="nuevoProducto().imagen"
-                       (input)="updateField('imagen', $any($event.target).value)">
-              </div>
-            </div>
-          </div>
-          
-          <div class="mb-3">
-            <label for="descripcion" class="form-label">Descripción:</label>
-            <textarea class="form-control" id="descripcion" rows="3"
-                      [value]="nuevoProducto().descripcion"
-                      (input)="updateField('descripcion', $any($event.target).value)"></textarea>
-          </div>
-          
-          <div class="row">
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label for="precioAdquisicion" class="form-label">Precio de Adquisición:</label>
-                <input type="number" step="0.01" class="form-control" id="precioAdquisicion" 
-                       [value]="nuevoProducto().precioDeAdquisicion"
-                       (input)="updateField('precioDeAdquisicion', +$any($event.target).value)">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-      <label for="precioDeVenta" class="form-label">Precio de Venta:</label>
-      <input type="number" step="0.01" class="form-control" id="precioDeVenta" 
-        [value]="nuevoProducto().precioDeVenta"
-        (input)="updateField('precioDeVenta', +$any($event.target).value)"
-        required>
-              </div>
-            </div>
-          </div>
-          
-          <div class="row">
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label for="calificacion" class="form-label">Calificación (1-5):</label>
-                <select class="form-control" id="calificacion"
-                        [value]="nuevoProducto().calificacion"
-                        (change)="updateField('calificacion', +$any($event.target).value)">
+            <form (ngSubmit)="saveProducto()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre del Producto:</label>
+                                <input type="text" class="form-control" id="nombre" [value]="nuevoProducto().nombre" (input)="updateField('nombre', $any($event.target).value)" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="imagen" class="form-label">URL de la Imagen:</label>
+                                <input type="url" class="form-control" id="imagen" [value]="nuevoProducto().imagen" (input)="updateField('imagen', $any($event.target).value)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción:</label>
+                        <textarea class="form-control" id="descripcion" rows="3" [value]="nuevoProducto().descripcion" (input)="updateField('descripcion', $any($event.target).value)"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="precioAdquisicion" class="form-label">Precio de Adquisición:</label>
+                                <input type="number" step="0.01" class="form-control" id="precioAdquisicion" [value]="nuevoProducto().precioDeAdquisicion" (input)="updateField('precioDeAdquisicion', +$any($event.target).value)">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="precioDeVenta" class="form-label">Precio de Venta:</label>
+                                <input type="number" step="0.01" class="form-control" id="precioDeVenta" [value]="nuevoProducto().precioDeVenta" (input)="updateField('precioDeVenta', +$any($event.target).value)" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="calificacion" class="form-label">Calificación (1-5):</label>
+                                <select class="form-control" id="calificacion" [value]="nuevoProducto().calificacion" (change)="updateField('calificacion', +$any($event.target).value)">
                   <option value="1">1 estrella</option>
                   <option value="2">2 estrellas</option>
                   <option value="3">3 estrellas</option>
                   <option value="4">4 estrellas</option>
                   <option value="5">5 estrellas</option>
                 </select>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="disponible"
-                         [checked]="nuevoProducto().disponible"
-                         (change)="updateField('disponible', $any($event.target).checked)">
-                  <label class="form-check-label" for="disponible">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="disponible" [checked]="nuevoProducto().disponible" (change)="updateField('disponible', $any($event.target).checked)">
+                                    <label class="form-check-label" for="disponible">
                     Producto disponible
                   </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary hvr-shrink" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-warning hvr-grow">Guardar Producto</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-warning">Guardar Producto</button>
-        </div>
-      </form>
     </div>
-  </div>
 </div>

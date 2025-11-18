@@ -38,7 +38,7 @@
 .recommended-carousel-container {
     display: flex;
     gap: 24px;
-    transition: transform 0.5s ease;
+    transition: transform 0.35s ease;
 }
 
 .recommended-carousel-container.no-transition {

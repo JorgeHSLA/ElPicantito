@@ -6,6 +6,7 @@ import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { CarritoService } from '../../../services/carrito.service';
+import { VerificationService } from '../../../services/verification.service';
 import { Usuario } from '../../../models/usuario';
 
 declare var bootstrap: any;
@@ -21,12 +22,22 @@ export class MiPerfilComponent implements OnInit, AfterViewInit {
   authService = inject(AuthService);
   router = inject(Router);
   carritoService = inject(CarritoService);
+  verificationService = inject(VerificationService);
 
   usuario: Usuario = {};
+  usuarioPendiente: Usuario = {}; // Guardar cambios pendientes de verificación
   isLoading = false;
   error: string | null = null;
   success: string | null = null;
   showDeleteModal = false;
+
+  // Variables para verificación de correo
+  showVerificationStep = false;
+  verificationCode = '';
+  codeError: string | null = null;
+  isSendingCode = false;
+  resendTimeout = 0;
+  resendInterval: any;
 
   ngOnInit(): void {
     this.error = null;
@@ -62,13 +73,77 @@ export class MiPerfilComponent implements OnInit, AfterViewInit {
     if (!this.isValidForm()) {
       return;
     }
+
+    // Guardar cambios pendientes y solicitar verificación
+    this.usuarioPendiente = { ...this.usuario };
+    this.sendVerificationCode();
+  }
+
+  // Enviar código de verificación
+  sendVerificationCode(): void {
+    this.isSendingCode = true;
+    this.error = null;
+    this.codeError = null;
+
+    this.verificationService.sendVerificationCode(this.usuario.correo!).subscribe({
+      next: (response) => {
+        console.log('Código enviado:', response);
+        this.showVerificationStep = true;
+        this.success = '¡Código enviado! Revisa tu correo electrónico';
+        this.isSendingCode = false;
+        this.startResendTimeout();
+      },
+      error: (error) => {
+        console.error('Error al enviar código:', error);
+        this.error = 'Error al enviar el código. Intenta de nuevo.';
+        this.isSendingCode = false;
+      }
+    });
+  }
+
+  // Verificar código ingresado
+  verifyEmailCode(): void {
+    if (!this.verificationCode || this.verificationCode.length !== 6) {
+      this.codeError = 'El código debe tener 6 caracteres';
+      return;
+    }
+
+    this.isLoading = true;
+    this.codeError = null;
+
+    this.verificationService.verifyCode(this.usuario.correo!, this.verificationCode).subscribe({
+      next: (response) => {
+        console.log('Código verificado:', response);
+        if (response.verified) {
+          this.success = '¡Email verificado correctamente!';
+          this.showVerificationStep = false;
+          this.isLoading = false;
+          // Proceder con la actualización del perfil
+          setTimeout(() => this.completeProfileUpdate(), 1000);
+        } else {
+          this.codeError = 'Código inválido o expirado';
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.error('Error al verificar código:', error);
+        this.codeError = 'Código inválido o expirado';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // Completar actualización del perfil después de verificar
+  completeProfileUpdate(): void {
     this.isLoading = true;
     this.error = null;
+
     // Si el campo de contraseña está vacío, no lo mandes
-    const usuarioUpdate: Usuario = { ...this.usuario };
+    const usuarioUpdate: Usuario = { ...this.usuarioPendiente };
     if (!usuarioUpdate.contrasenia && 'contrasenia' in usuarioUpdate) {
       delete usuarioUpdate.contrasenia;
     }
+
     this.authService.actualizarUsuario(this.usuario.id!, usuarioUpdate).subscribe({
       next: (usuarioActualizado) => {
         this.success = 'Perfil actualizado exitosamente';
@@ -78,12 +153,44 @@ export class MiPerfilComponent implements OnInit, AfterViewInit {
         this.authService['loggedUserSignal'].set(usuarioActualizado);
         localStorage.setItem('loggedUser', JSON.stringify(usuarioActualizado));
         this.usuario.contrasenia = '';
+        this.verificationCode = '';
+        this.usuarioPendiente = {};
       },
       error: (err) => {
         this.error = 'Error al actualizar el perfil';
         this.isLoading = false;
       }
     });
+  }
+
+  // Reenviar código
+  resendCode(): void {
+    if (this.resendTimeout > 0) return;
+    this.verificationCode = '';
+    this.sendVerificationCode();
+  }
+
+  // Temporizador para reenvío
+  private startResendTimeout(): void {
+    this.resendTimeout = 60;
+    this.resendInterval = setInterval(() => {
+      this.resendTimeout--;
+      if (this.resendTimeout <= 0) {
+        clearInterval(this.resendInterval);
+      }
+    }, 1000);
+  }
+
+  // Cancelar verificación
+  cancelVerification(): void {
+    this.showVerificationStep = false;
+    this.verificationCode = '';
+    this.codeError = null;
+    this.usuarioPendiente = {};
+    if (this.resendInterval) {
+      clearInterval(this.resendInterval);
+      this.resendTimeout = 0;
+    }
   }
 
   private isValidForm(): boolean {
@@ -162,6 +269,11 @@ export class MiPerfilComponent implements OnInit, AfterViewInit {
   navigateToAbout(): void { this.router.navigate(['/sobre-nosotros']); }
   navigateToHome(): void { this.router.navigate(['/home']); }
   navigateToAdmin(): void { if (this.usuario.rol === 'ADMIN') { this.router.navigate(['/admin']); } }
+  navigateToPedidos(): void { 
+    if (this.usuario.id) { 
+      this.router.navigate(['/cliente', this.usuario.id, 'pedidos']); 
+    } 
+  }
   logout(): void { this.authService.logout(); this.carritoService.limpiarTodoElSistema(); this.router.navigate(['/home']); }
   isAdmin(): boolean { return this.usuario.rol === 'ADMIN'; }
   clearMessages(): void { this.error = null; this.success = null; }

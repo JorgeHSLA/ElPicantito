@@ -231,3 +231,39 @@ main.container .row.g-4::before {
         gap: 1rem;
     }
 }
+
+
+/* Animaciones de scroll reveal para productos - MÁS RÁPIDAS */
+
+.scroll-reveal {
+    /* Los productos inician ocultos para la animación */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Fallback: Si JavaScript no funciona, mostrar todo después de 3s */
+.scroll-reveal {
+    animation: fallbackShow 0.3s ease forwards;
+    animation-delay: 3s;
+}
+
+@keyframes fallbackShow {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.scroll-reveal.animate__animated {
+    opacity: 1 !important;
+    transform: translateY(0);
+    animation: none; /* Cancelar fallback */
+}
+
+
+/* Hacer las animaciones más rápidas */
+
+.animate__faster {
+    animation-duration: 0.4s !important;
+}

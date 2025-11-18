@@ -10,19 +10,68 @@
         <!-- MAIN -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
             <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                <h1 class="h2 text-white">Revisar Repartidores</h1>
+                <h1 class="h2 text-white animate__animated animate__fadeInDown">Revisar Repartidores</h1>
             </div>
 
             <!-- Mensajes -->
-            <div *ngIf="errorMessage()" class="alert alert-danger">{{ errorMessage() }}</div>
-            <div *ngIf="successMessage()" class="alert alert-success">{{ successMessage() }}</div>
+            <div *ngIf="errorMessage()" class="alert alert-danger animate__animated animate__slideInDown">{{ errorMessage() }}</div>
+            <div *ngIf="successMessage()" class="alert alert-success animate__animated animate__slideInDown">{{ successMessage() }}</div>
 
             <!-- Listas -->
             <div class="row g-4">
                 <section class="col-12">
-                    <div class="card shadow-sm">
+                    <div class="card shadow-sm animate__animated animate__fadeIn">
                         <div class="card-header bg-dark text-white">
                             <h5 class="mb-0">Pedidos</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- FILTROS Y BÚSQUEDA -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-3">
+                                    <label class="form-label text-dark">🔍 Buscar</label>
+                                    <input type="text" class="form-control" placeholder="Buscar por ID, cliente..." [value]="searchTerm()" (input)="onSearchChange($any($event.target).value)">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label text-dark">Estado</label>
+                                    <select class="form-select" [value]="filtroEstado()" (change)="onFiltroEstadoChange($any($event.target).value)">
+                                        <option value="todos">Todos</option>
+                                        <option value="recibido">Recibido</option>
+                                        <option value="cocinando">Cocinando</option>
+                                        <option value="enviado">Enviado</option>
+                                        <option value="entregado">Entregado</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label text-dark">Repartidor</label>
+                                    <select class="form-select" [value]="filtroRepartidor()" (change)="onFiltroRepartidorChange($any($event.target).value)">
+                                        <option value="todos">Todos</option>
+                                        @for (rep of repartidoresActivos(); track rep.id) {
+                                            <option [value]="rep.id">{{ rep.nombreCompleto }}</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label text-dark">Ordenar</label>
+                                    <select class="form-select" [value]="filtroOrden()" (change)="onFiltroOrdenChange($any($event.target).value)">
+                                        <option value="id-desc">ID (nuevo a viejo)</option>
+                                        <option value="id-asc">ID (viejo a nuevo)</option>
+                                        <option value="fecha-desc">Fecha (reciente)</option>
+                                        <option value="fecha-asc">Fecha (antigua)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label text-dark">&nbsp;</label>
+                                    <button class="btn btn-secondary w-100" (click)="limpiarFiltros()">
+                                        <i class="bi bi-x-circle me-1"></i>Limpiar
+                                    </button>
+                                </div>
+                            </div>
+
+                            @if (pedidosFiltrados().length === 0) {
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i>No se encontraron pedidos con los filtros aplicados.
+                            </div>
+                            }
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
@@ -38,18 +87,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @for (pedido of pedidosActivos(); track pedido.id) {
+                                        @for (pedido of pedidosFiltrados(); track pedido.id) {
                                         <tr>
                                             <td>{{ pedido.id }}</td>
                                             <td>{{ pedido.clienteNombre }}</td>
-                                            <td>{{ pedido.direccion }}</td>
+                                            <td>{{ getDireccionSinCoordenadas(pedido.direccion) }}</td>
                                             <td><span class="badge bg-primary text-uppercase">{{ pedido.estado }}</span></td>
                                             <td>{{ pedido.repartidorNombre || '—' }}</td>
                                             <td>
                                                 @if (((pedido.estado || '').toLowerCase() === 'entregado') && pedido.repartidorId) {
                                                 <span class="text-dark">Repartidor ID: <strong>{{ pedido.repartidorId }}</strong></span> } @else {
                                                 <div class="d-flex gap-2 align-items-center">
-                                                                                                        <select class="form-select form-select-sm" [(ngModel)]="repartidorSeleccionado[pedido.id]">
+                                                    <select class="form-select form-select-sm" [(ngModel)]="repartidorSeleccionado[pedido.id]">
                                                                 <option [ngValue]="undefined">Seleccionar repartidor</option>
                                                                 @for (r of repartidoresActivos(); track r.id) {
                                                                     <option [ngValue]="r.id" [disabled]="isRepartidorInactivo(r)">
@@ -57,10 +106,10 @@
                                                                     </option>
                                                                 }
                                                             </select>
-                                                                                                                         <button type="button" class="btn btn-sm btn-outline-secondary" (click)="asignarRepartidorDirecto(pedido.id)" [disabled]="isAsignarDisabled(pedido.id)">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary hvr-grow" (click)="asignarRepartidorDirecto(pedido.id)" [disabled]="isAsignarDisabled(pedido.id)">
                                 Asignar
                               </button>
-                                                                                                                         <button type="button" class="btn btn-sm btn-primary" [disabled]="!puedeAvanzar(pedido.estado) || isBloqueadoAvanzar(pedido)" (click)="avanzarEstado(pedido)">
+                                                    <button type="button" class="btn btn-sm btn-primary hvr-grow" [disabled]="!puedeAvanzar(pedido.estado) || isBloqueadoAvanzar(pedido)" (click)="avanzarEstado(pedido)">
                                 Avanzar estado
                               </button>
                                                 </div>
@@ -105,10 +154,10 @@
                                             <td><span class="badge bg-success">{{ r.estado || '—' }}</span></td>
                                             <td>
                                                 <div class="d-flex gap-2">
-                                                    <button type="button" class="btn btn-sm btn-outline-success" (click)="activarRepartidor(r.id!)">
+                                                    <button type="button" class="btn btn-sm btn-outline-success hvr-grow" (click)="activarRepartidor(r.id!)">
                               Activar
                             </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="desactivarRepartidor(r.id!)">
+                                                    <button type="button" class="btn btn-sm btn-outline-danger hvr-grow" (click)="desactivarRepartidor(r.id!)">
                               Desactivar
                             </button>
                                                 </div>

@@ -4,6 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CarritoService } from '../../../services/carrito.service';
 import { PedidoManagerService } from '../../../services/tienda/pedido-manager.service';
+import { PedidoRestService } from '../../../services/tienda/pedido-rest.service';
 import { AuthService } from '../../../services/auth.service';
 import { CartItem, CartSummary } from '../../../models/cart-item';
 import * as L from 'leaflet';
@@ -32,6 +33,10 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
   };
 
   erroresValidacion: string[] = [];
+
+  // Direcciones recientes
+  direccionesRecientes = signal<string[]>([]);
+  mostrarDireccionesRecientes = signal(false);
 
   // Mapa y ubicación
   showMapModal = signal(false);
@@ -67,6 +72,7 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
   constructor(
     private carritoService: CarritoService,
     private pedidoManager: PedidoManagerService,
+    private pedidoRestService: PedidoRestService,
     private authService: AuthService,
     private router: Router
   ) {
@@ -285,7 +291,64 @@ export class CheckoutSummaryComponent implements AfterViewInit, OnDestroy {
       // Guardar valores originales
       this.telefonoOriginal = this.customerInfo.telefono;
       this.correoOriginal = this.customerInfo.correo;
+      
+      // Cargar direcciones recientes
+      this.cargarDireccionesRecientes();
     }
+  }
+
+  cargarDireccionesRecientes() {
+    const usuario = this.authService.loggedUser();
+    if (usuario?.id) {
+      this.pedidoRestService.getByCliente(Number(usuario.id)).subscribe({
+        next: (pedidos) => {
+          // Extraer direcciones únicas (sin coordenadas) de los pedidos
+          const direcciones = pedidos
+            .map(p => p.direccion || '')
+            .filter(dir => dir.trim() !== '')
+            .map(dir => this.getDireccionSinCoordenadas(dir))
+            .filter((dir, index, self) => self.indexOf(dir) === index) // Eliminar duplicados
+            .slice(0, 5); // Máximo 5 direcciones
+          
+          this.direccionesRecientes.set(direcciones);
+        },
+        error: (err) => {
+          console.error('Error al cargar direcciones recientes:', err);
+        }
+      });
+    }
+  }
+
+  seleccionarDireccionReciente(direccion: string) {
+    // Buscar el pedido con esta dirección para obtener las coordenadas
+    const usuario = this.authService.loggedUser();
+    if (usuario?.id) {
+      this.pedidoRestService.getByCliente(Number(usuario.id)).subscribe({
+        next: (pedidos) => {
+          const pedidoConDireccion = pedidos.find(p => 
+            this.getDireccionSinCoordenadas(p.direccion || '') === direccion
+          );
+          
+          if (pedidoConDireccion && pedidoConDireccion.direccion) {
+            // Usar la dirección completa con coordenadas
+            this.customerInfo.direccion = pedidoConDireccion.direccion;
+            this.customerInfo.direccionTemporal = pedidoConDireccion.direccion;
+            this.mostrarDireccionesRecientes.set(false);
+          }
+        }
+      });
+    }
+  }
+
+  toggleDireccionesRecientes() {
+    this.mostrarDireccionesRecientes.set(!this.mostrarDireccionesRecientes());
+  }
+
+  getDireccionSinCoordenadas(direccion: string): string {
+    if (!direccion) return '';
+    // Extraer solo la parte de la dirección sin coordenadas
+    const partes = direccion.split('|');
+    return partes[0].trim();
   }
 
   // ==================== MÉTODOS DE EDICIÓN DE CAMPOS ====================
