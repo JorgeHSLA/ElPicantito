@@ -66,7 +66,8 @@ CREATE TABLE Productos (
     imagen VARCHAR(255),
     disponible BOOLEAN DEFAULT TRUE,
     calificacion INTEGER,
-    activo BOOLEAN DEFAULT TRUE
+    activo BOOLEAN DEFAULT TRUE,
+    categoria VARCHAR(50)
 );
 
 -- ==========================
