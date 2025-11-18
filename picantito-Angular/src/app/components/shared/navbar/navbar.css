@@ -25,11 +25,14 @@
 
 .floating-navbar-container {
     padding: 0.75rem 12.5% 0 12.5%;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 10000;
     width: 100%;
     animation: slideDown 0.6s ease-out;
+    background: transparent;
 }
 
 @keyframes slideDown {

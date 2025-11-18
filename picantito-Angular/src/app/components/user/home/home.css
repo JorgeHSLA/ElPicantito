@@ -11,7 +11,7 @@
       min-height: 100vh;
       overflow-x: hidden;
       width: 100%;
-      margin-top: -105px;
+      margin-top: 0; /* Cambiado de -105px a 0 para compensar navbar fixed */
       padding-top: 0;
   }
 

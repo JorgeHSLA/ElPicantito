@@ -147,6 +147,7 @@ body {
     color: var(--neutral-text);
     min-height: 100vh;
     overflow-x: hidden;
+    overflow-y: auto; /* Permitir scroll vertical para que funcione position: sticky */
     width: 100%;
     max-width: 100vw;
 }
@@ -158,6 +159,7 @@ html {
     background-color: #2d1529;
     /* Color sólido nuevo */
     overflow-x: hidden;
+    overflow-y: auto; /* Permitir scroll vertical para que funcione position: sticky */
     width: 100%;
     max-width: 100vw;
 }
