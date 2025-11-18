@@ -125,53 +125,53 @@
                 </div>
             </div>
             } @else {
-            <div class="adicionales-grid">
-                <div class="row g-3">
+            <div class="adicionales-scroll-wrapper">
+                <div class="adicionales-scroll-container">
                     @for (adicional of adicionales; track adicional.id) {
-                    <div class="col-md-6 col-lg-4">
+                    <div class="adicional-card-compact">
                         <div class="card h-100 adicional-item" [class.border-warning]="isAdicionalSeleccionado(adicional.id!)" [class.bg-light]="isAdicionalSeleccionado(adicional.id!)">
-                            <div class="card-body p-3">
+                            <div class="card-body p-2">
                                 <!-- Header con nombre y precio -->
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <h6 class="card-title fw-bold mb-0">{{ adicional.nombre }}</h6>
-                                    <span class="text-warning fw-bold">
-                                                        +${{ (adicional.precioDeVenta || adicional.precio || 0) | number:'1.0-0' }}
-                                                    </span>
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <h6 class="card-title fw-bold mb-0 small">{{ adicional.nombre }}</h6>
+                                    <span class="text-warning fw-bold small">
+                                        +${{ (adicional.precioDeVenta || adicional.precio || 0) | number:'1.0-0' }}
+                                    </span>
                                 </div>
 
                                 <!-- Descripción -->
-                                <p class="card-text text-muted small mb-3">
-                                    {{ adicional.descripcion || 'Delicioso adicional para complementar tu orden' }}
+                                <p class="card-text text-muted mb-2" style="font-size: 0.7rem; line-height: 1.2;">
+                                    {{ adicional.descripcion || 'Delicioso adicional' }}
                                 </p>
 
                                 <!-- Controles de cantidad -->
                                 <div class="d-flex align-items-center justify-content-between">
                                     <!-- Botón toggle -->
-                                    <button type="button" class="btn btn-sm" [class.btn-warning]="isAdicionalSeleccionado(adicional.id!)" [class.btn-outline-warning]="!isAdicionalSeleccionado(adicional.id!)" [disabled]="!adicional.disponible" (click)="toggleAdicional(adicional)">
-                                                        <i class="bi"
-                                                           [class.bi-check-square]="isAdicionalSeleccionado(adicional.id!)"
-                                                           [class.bi-square]="!isAdicionalSeleccionado(adicional.id!)"></i>
-                                                    </button>
+                                    <button type="button" class="btn btn-sm px-2 py-1" style="font-size: 0.75rem;" [class.btn-warning]="isAdicionalSeleccionado(adicional.id!)" [class.btn-outline-warning]="!isAdicionalSeleccionado(adicional.id!)" [disabled]="!adicional.disponible" (click)="toggleAdicional(adicional)">
+                                        <i class="bi"
+                                           [class.bi-check-square]="isAdicionalSeleccionado(adicional.id!)"
+                                           [class.bi-square]="!isAdicionalSeleccionado(adicional.id!)"></i>
+                                    </button>
 
                                     <!-- Control de cantidad (solo si está seleccionado) -->
                                     @if (isAdicionalSeleccionado(adicional.id!)) {
                                     <div class="d-flex align-items-center">
-                                        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="actualizarCantidadAdicional(adicional.id!, getCantidadAdicional(adicional.id!) - 1)">
-                                                                <i class="bi bi-dash"></i>
-                                                            </button>
-                                        <span class="mx-2 fw-bold">{{ getCantidadAdicional(adicional.id!) }}</span>
-                                        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="actualizarCantidadAdicional(adicional.id!, getCantidadAdicional(adicional.id!) + 1)">
-                                                                <i class="bi bi-plus"></i>
-                                                            </button>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm px-1 py-0" style="font-size: 0.7rem;" (click)="actualizarCantidadAdicional(adicional.id!, getCantidadAdicional(adicional.id!) - 1)">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                        <span class="mx-1 fw-bold" style="font-size: 0.8rem;">{{ getCantidadAdicional(adicional.id!) }}</span>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm px-1 py-0" style="font-size: 0.7rem;" (click)="actualizarCantidadAdicional(adicional.id!, getCantidadAdicional(adicional.id!) + 1)">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
                                     </div>
                                     }
                                 </div>
 
                                 <!-- Disponibilidad -->
                                 @if (!adicional.disponible) {
-                                <small class="text-muted d-block mt-2">
-                                                        <i class="bi bi-x-circle me-1"></i>No disponible
-                                                    </small> }
+                                <small class="text-muted d-block mt-1" style="font-size: 0.65rem;">
+                                    <i class="bi bi-x-circle me-1"></i>No disponible
+                                </small> }
                             </div>
                         </div>
                     </div>
@@ -180,12 +180,12 @@
             </div>
 
             <!-- Indicador de scroll -->
-            @if (adicionales.length > 3) {
+            @if (adicionales.length > 6) {
             <div class="text-center mt-2">
                 <small class="text-muted">
-                                    <i class="bi bi-arrow-left-right me-1"></i>
-                                    Desliza para ver más adicionales
-                                </small>
+                    <i class="bi bi-arrow-left-right me-1"></i>
+                    Desliza para ver más adicionales
+                </small>
             </div>
             } }
         </section>
@@ -265,19 +265,36 @@
 
 <!-- MODAL DE LOGIN REQUERIDO -->
 @if (showLoginMessage()) {
-<div class="modal-backdrop-custom">
-    <div class="modal-custom animate__animated animate__fadeInDown">
-        <div class="modal-header-custom">
-            <h5 class="modal-title-custom">
-                <i class="bi bi-person-circle me-2" style="color: #ff6b35;"></i> Inicia sesión para continuar
-            </h5>
-            <button type="button" class="btn-close" aria-label="Cerrar" (click)="showLoginMessage.set(false)"></button>
-        </div>
-        <div class="modal-body-custom">
-            <p class="mb-3" style="color: #2c3e50; font-weight: 500; line-height: 1.5;">Debes iniciar sesión para agregar productos al carrito.</p>
-            <button class="btn btn-login-modal w-100" (click)="goToLogin()">
-          <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
-        </button>
+<div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.7);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px; overflow: hidden; border: 2px solid var(--accent-color);">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%); color: white; border: none;">
+                <h5 class="modal-title d-flex align-items-center">
+                    <i class="bi bi-lock-fill me-2"></i> Inicio de Sesión Requerido
+                </h5>
+                <button type="button" class="btn-close btn-close-white" (click)="cerrarModalLogin()"></button>
+            </div>
+            <div class="modal-body" style="padding: 2rem; background-color: rgba(45, 21, 41, 0.95);">
+                <div class="text-center py-3">
+                    <i class="bi bi-person-circle" style="font-size: 4rem; color: var(--accent-color);"></i>
+                    <h4 class="mt-3 mb-3" style="color: white;">¿Iniciar Sesión?</h4>
+                    <p class="text-muted mb-3">
+                        Necesitas iniciar sesión para agregar productos al carrito y realizar tu pedido.
+                    </p>
+                    <div class="alert" style="background: rgba(237, 126, 71, 0.1); border: 2px solid var(--accent-color); color: var(--accent-color); text-align: left;">
+                        <i class="bi bi-info-circle me-2"></i> 
+                        Después de iniciar sesión, regresarás a esta página para continuar.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="background-color: rgba(45, 21, 41, 0.95); border-top: 1px solid rgba(237, 126, 71, 0.3); padding: 1.5rem;">
+                <button type="button" class="btn btn-secondary" (click)="cerrarModalLogin()" style="padding: 0.7rem 1.5rem; border-radius: 10px; font-weight: 600;">
+                    <i class="bi bi-x-lg me-1"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" (click)="goToLogin()" style="background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%); border: none; padding: 0.7rem 1.5rem; border-radius: 10px; font-weight: 600; box-shadow: 0 4px 15px rgba(237, 126, 71, 0.4);">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+                </button>
+            </div>
         </div>
     </div>
 </div>

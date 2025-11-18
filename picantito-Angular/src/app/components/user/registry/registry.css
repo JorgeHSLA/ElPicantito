@@ -132,6 +132,34 @@
   transform: scale(1.04);
 }
 
+/* Estilo para el título "Regístrate" en negro */
+.form-panel h3 {
+    color: #000 !important;
+}
+
+/* Reducir tamaño de los campos de texto solo en registry */
+.form-dark-text input,
+.form-dark-text .form-control {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    height: auto !important;
+}
+
+.form-dark-text input::placeholder,
+.form-dark-text .form-control::placeholder {
+    font-size: 14px !important;
+}
+
+.form-dark-text .mb-3 {
+    margin-bottom: 0.75rem !important;
+}
+
+.form-dark-text .form-label,
+.form-dark-text .form-label-small {
+    margin-bottom: 0.25rem !important;
+    font-size: 13px !important;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

@@ -5,6 +5,8 @@ import { Item } from '../../../models/crearTaco/item';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
 import { ProductoService } from '../../../services/tienda/producto.service';
 import { CarritoService } from '../../../services/carrito.service';
+import { AuthService } from '../../../services/auth.service';
+import { NotificationService } from '../../../services/notification.service';
 import { CommonModule } from '@angular/common';
 import { Adicional } from '../../../models/adicional';
 import { Producto } from '../../../models/producto';
@@ -41,11 +43,14 @@ export class DragAndDrop {
   error = signal<string | null>(null);
   successMessage = signal<string | null>(null);
   productoBase = signal<Producto | null>(null);
+  showLoginModal = signal(false); // Modal para solicitar inicio de sesión
 
   constructor(
     private productoService: ProductoService,
     private adicionalService: AdicionalService,
     private carritoService: CarritoService,
+    private authService: AuthService,
+    private notificationService: NotificationService,
     private router: Router
   ) {}
 
@@ -53,6 +58,78 @@ export class DragAndDrop {
   ngOnInit() {
     // Cargar adicionales del producto "Taco Personalizado" desde el backend
     this.loadAdicionalesFromService();
+    
+    // Restaurar el taco guardado si existe
+    this.restaurarTacoGuardado();
+    
+    // Verificar si hay una compra pendiente después del login
+    this.verificarCompraPendienteTaco();
+  }
+
+  /**
+   * Verifica si hay una compra pendiente de taco y la procesa
+   */
+  private verificarCompraPendienteTaco(): void {
+    const compraPendiente = localStorage.getItem('tacoCompraPendiente');
+    if (compraPendiente && this.authService.isLoggedIn()) {
+      console.log('✅ Compra de taco pendiente detectada');
+      
+      // Limpiar el flag
+      localStorage.removeItem('tacoCompraPendiente');
+      
+      // Esperar a que todo se cargue y luego agregar al carrito
+      setTimeout(() => {
+        if (this.puedeAgregarAlCarrito) {
+          console.log('🛒 Agregando taco al carrito automáticamente...');
+          this.agregarAlCarritoDirecto();
+        }
+      }, 1500);
+    }
+  }
+
+  /**
+   * Agregar al carrito sin verificar login (uso interno)
+   */
+  private agregarAlCarritoDirecto(): void {
+    const productoBaseValue = this.productoBase();
+    if (!productoBaseValue || !this.puedeAgregarAlCarrito) {
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set(null);
+
+    try {
+      const doneItems = this.done();
+      const descripcion = this.generarDescripcionTaco(doneItems);
+      
+      const productoParaCarrito: Producto = {
+        ...productoBaseValue,
+        descripcion: descripcion,
+        precioDeVenta: 0,
+        activo: true,
+        disponible: true
+      };
+
+      const adicionalesSeleccionados: AdicionalSeleccionado[] = this.construirAdicionalesSeleccionados(doneItems);
+      
+      this.carritoService.agregarItemConAdicionales(productoParaCarrito, 1, adicionalesSeleccionados);
+
+      this.successMessage.set('¡Taco personalizado agregado al carrito exitosamente!');
+      this.loading.set(false);
+      
+      // Limpiar el taco guardado en localStorage después de agregarlo al carrito
+      this.limpiarTacoGuardado();
+
+      // Mostrar el carrito
+      this.carritoService.showCart();
+      
+      console.log('✅ Taco agregado automáticamente al carrito');
+    } catch (error) {
+      console.error('Error al agregar al carrito:', error);
+      this.error.set('Error al agregar el taco al carrito');
+      this.loading.set(false);
+    }
   }
 
   private loadAdicionalesFromService() {
@@ -315,6 +392,73 @@ export class DragAndDrop {
     const doneItems = this.done();
     const total = doneItems.reduce((sum, item) => sum + (item.precio || 0) * (item.cantidad || 1), 0);
     this.totalPrice.set(total);
+    
+    // Guardar el taco cada vez que cambie el precio (es decir, cuando cambian los items)
+    this.guardarTacoEnProgreso();
+  }
+
+  /**
+   * Guardar el taco en progreso en localStorage
+   */
+  private guardarTacoEnProgreso(): void {
+    try {
+      const tacoEnProgreso = {
+        done: this.done(),
+        currentStep: this.currentStep(),
+        totalPrice: this.totalPrice(),
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem('tacoEnProgreso', JSON.stringify(tacoEnProgreso));
+      console.log('💾 Taco guardado en localStorage');
+    } catch (error) {
+      console.error('Error guardando taco en localStorage:', error);
+    }
+  }
+
+  /**
+   * Restaurar el taco guardado desde localStorage
+   */
+  private restaurarTacoGuardado(): void {
+    try {
+      const tacoGuardado = localStorage.getItem('tacoEnProgreso');
+      if (tacoGuardado) {
+        const taco = JSON.parse(tacoGuardado);
+        console.log('📦 Taco encontrado en localStorage:', taco);
+        
+        // Esperar a que se carguen los adicionales antes de restaurar
+        setTimeout(() => {
+          this.done.set(taco.done || []);
+          this.currentStep.set(taco.currentStep || 'tortilla');
+          this.totalPrice.set(taco.totalPrice || 0);
+          
+          // Actualizar la lista de items disponibles según el step actual
+          this.loadCategoryItems(this.currentStep());
+          this.updateCanGoToNextStep();
+          
+          // Mostrar mensaje de éxito si se restauró algo
+          if (taco.done && taco.done.length > 0) {
+            this.successMessage.set('¡Tu taco personalizado ha sido restaurado! 🌮');
+            setTimeout(() => this.successMessage.set(null), 4000);
+          }
+          
+          console.log('✅ Taco restaurado exitosamente');
+        }, 500); // Delay para asegurar que los adicionales estén cargados
+      }
+    } catch (error) {
+      console.error('Error restaurando taco desde localStorage:', error);
+    }
+  }
+
+  /**
+   * Limpiar el taco guardado en localStorage
+   */
+  private limpiarTacoGuardado(): void {
+    try {
+      localStorage.removeItem('tacoEnProgreso');
+      console.log('🗑️ Taco guardado eliminado de localStorage');
+    } catch (error) {
+      console.error('Error limpiando taco de localStorage:', error);
+    }
   }
 
   drop(event: CdkDragDrop<Item[]>) {
@@ -414,6 +558,9 @@ export class DragAndDrop {
     this.loadCategoryItems('tortilla');
     this.calculateTotalPrice();
     this.updateCanGoToNextStep();
+    
+    // Limpiar el taco guardado en localStorage
+    this.limpiarTacoGuardado();
   }
 
   /**
@@ -444,6 +591,13 @@ export class DragAndDrop {
    * Agregar el taco personalizado al carrito
    */
   agregarAlCarrito(): void {
+    // Verificar si el usuario ha iniciado sesión
+    if (!this.authService.isLoggedIn()) {
+      console.log('❌ Usuario no autenticado, mostrando modal de login...');
+      this.showLoginModal.set(true);
+      return;
+    }
+
     if (!this.puedeAgregarAlCarrito) {
       this.error.set('Debes seleccionar al menos una tortilla y una proteína para crear tu taco');
       setTimeout(() => this.error.set(null), 3000);
@@ -478,6 +632,9 @@ export class DragAndDrop {
 
       this.successMessage.set('¡Taco personalizado agregado al carrito exitosamente!');
       this.loading.set(false);
+      
+      // Limpiar el taco guardado en localStorage después de agregarlo al carrito
+      this.limpiarTacoGuardado();
 
       setTimeout(() => {
         this.router.navigate(['/tienda']);
@@ -651,5 +808,30 @@ export class DragAndDrop {
    */
   cancelar(): void {
     this.router.navigate(['/tienda']);
+  }
+
+  /**
+   * Cerrar el modal de login
+   */
+  cerrarModalLogin(): void {
+    this.showLoginModal.set(false);
+  }
+
+  /**
+   * Redirigir al login con returnUrl
+   */
+  irALogin(): void {
+    this.showLoginModal.set(false);
+    
+    // Guardar flag para indicar que hay una compra pendiente
+    if (this.puedeAgregarAlCarrito) {
+      localStorage.setItem('tacoCompraPendiente', 'true');
+      console.log('💾 Marcando taco para agregarse al carrito después del login');
+    }
+    
+    console.log('🔄 Navegando a /login con returnUrl=/crear-taco');
+    this.router.navigate(['/login'], { 
+      queryParams: { returnUrl: '/crear-taco' }
+    });
   }
 }

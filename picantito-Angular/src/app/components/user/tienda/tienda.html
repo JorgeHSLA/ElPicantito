@@ -1,5 +1,5 @@
 <!-- HERO SECTION TIENDA -->
-<section class="menu-hero py-5 bg-light">
+<section class="menu-hero py-0 bg-light">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-8">
@@ -31,18 +31,76 @@
 </section>
 
 <!-- FILTROS -->
-<section class="filters-section py-4 bg-white border-bottom">
+<section class="filters-section py-2 bg-white border-bottom">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h5 class="mb-0">Filtrar por categoria:</h5>
+        <div class="row">
+            <!-- Columna izquierda: Filtros -->
+            <div class="col-lg-8">
+                <!-- Filtros por tipo de producto -->
+                <div class="mb-3">
+                    <h6 class="mb-2 fw-semibold">
+                        <i class="bi bi-filter me-2"></i>Tipo de producto:
+                    </h6>
+                    <div class="filter-buttons">
+                        @for (tipo of tiposProducto; track tipo) {
+                        <button 
+                            (click)="filtrarPorTipoProducto(tipo)" 
+                            [class]="'btn btn-outline-warning btn-sm me-2 mb-2 hvr-grow ' + (tipoProductoSeleccionado === tipo ? 'active' : '')">
+                            <i class="bi" 
+                               [class.bi-box-seam]="tipo === 'Todos los productos'"
+                               [class.bi-taco]="tipo === 'Taco'"
+                               [class.bi-cake2]="tipo === 'Postre'"
+                               [class.bi-basket]="tipo === 'Acompañamiento'"
+                               [class.bi-cup-straw]="tipo === 'Bebida'"></i>
+                            {{ tipo }}
+                        </button>
+                        }
+                    </div>
+                </div>
+                
+                <!-- Filtros por disponibilidad -->
+                <div>
+                    <h6 class="mb-2 fw-semibold">
+                        <i class="bi bi-toggle-on me-2"></i>Disponibilidad:
+                    </h6>
+                    <div class="filter-buttons">
+                        @for (categoria of categorias; track categoria) {
+                        <button 
+                            (click)="filtrarPorCategoria(categoria)" 
+                            [class]="'btn btn-outline-warning btn-sm me-2 mb-2 hvr-grow ' + (categoriaSeleccionada === categoria ? 'active' : '')">
+                            {{ categoria }}
+                        </button>
+                        }
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-6">
-                <div class="filter-buttons">
-                    @for (categoria of categorias; track categoria) {
-                    <button (click)="filtrarPorCategoria(categoria)" [class]="'btn btn-outline-warning btn-sm me-2 mb-2 hvr-grow ' + (categoriaSeleccionada === categoria ? 'active' : '')">
-                                                {{ categoria }}
-                                            </button> }
+            
+            <!-- Columna derecha: Buscador -->
+            <div class="col-lg-4">
+                <div class="search-bar-wrapper">
+                    <h6 class="mb-2 fw-semibold">
+                        <i class="bi bi-search me-2"></i>Buscar:
+                    </h6>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search text-warning"></i>
+                        </span>
+                        <input 
+                            type="text" 
+                            class="form-control border-start-0 ps-0" 
+                            placeholder="Buscar producto..."
+                            [(ngModel)]="textoBusqueda"
+                            (input)="buscarProductos(textoBusqueda)"
+                        >
+                        @if (textoBusqueda) {
+                        <button 
+                            class="btn btn-outline-secondary" 
+                            type="button"
+                            (click)="limpiarBusqueda()">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                        }
+                    </div>
                 </div>
             </div>
         </div>

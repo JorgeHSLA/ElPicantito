@@ -1,29 +1,34 @@
 /* Estilos específicos para el carrusel principal */
 
+
 /* Fondo decorativo para el carrusel */
+
 :host {
-  display: block;
-  position: relative;
+    display: block;
+    position: relative;
+    margin-top: -105px; /* Mover el hero hacia arriba para que quede debajo de la navbar */
 }
 
 :host::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('/images/Fondo.png');
-  background-size: 150%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  opacity: 0.15;
-  z-index: 0;
-  pointer-events: none;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/Fondo.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
 }
 
+
 /* Animación pulse necesaria para los efectos hover */
+
 @keyframes pulse {
     0% {
         transform: scale(1);
@@ -37,11 +42,41 @@
     }
 }
 
+
 /* =========================
    CARRUSEL PRINCIPAL
    ========================= */
+
+/* Sección de fondo independiente */
+.hero-background-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 85vh;
+    min-height: 85vh;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Capa de fondo fijo independiente del deslizamiento */
+.carousel-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/fondoMexicanosComiendoHero.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Sección del carousel con contenido */
 .carousel-section {
-    margin-top: 0; 
+    margin-top: 0;
     padding-top: 0;
     margin-bottom: 0;
     position: relative;
@@ -49,62 +84,73 @@
     z-index: 1;
     opacity: 1;
     top: 0;
-}
-
-.carousel-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 200px;
-    background-image: url('/images/fondoMexicanosComiendoHero.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: -1;
+    min-height: 85vh;
 }
 
 .carousel-section .carousel {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     border-radius: 0;
-    box-shadow: var(--shadow-heavy);
+    z-index: 2;
+}
+
+/* Inner carousel container para controlar el overflow */
+.carousel-inner {
+    overflow: hidden;
+    position: relative;
 }
 
 .carousel-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* Fondo con imagen mexicana blurreada */
-  background-image: url('/images/fondoMexicanosComiendoHero.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  position: relative;
-
-  padding: 8rem 0 6rem 0;
-  min-height: 85vh;
-  margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    position: relative;
+    padding: 8rem 0 6rem 0;
+    padding-top: calc(8rem + 105px); /* Agregar espacio para la navbar */
+    min-height: 85vh;
+    margin-top: 0;
+    z-index: 2;
 }
-
-/* Overlay removido - usando imagen ya procesada */
-
-/* Overlay de gradientes removido - usando imagen ya procesada */
 
 .carousel-item {
     background-color: transparent;
-    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
     position: relative;
-    z-index: 2; /* Por encima del overlay */
+    z-index: 2;
+    will-change: transform, opacity;
+}
+
+/* Animación de entrada desde la derecha */
+.carousel-item.carousel-item-next:not(.carousel-item-start) {
+    transform: translateX(100%);
+}
+
+/* Animación de entrada desde la izquierda */
+.carousel-item.carousel-item-prev:not(.carousel-item-end) {
+    transform: translateX(-100%);
+}
+
+/* Animación de salida hacia la izquierda */
+.carousel-item.carousel-item-start {
+    transform: translateX(-100%);
+}
+
+/* Animación de salida hacia la derecha */
+.carousel-item.carousel-item-end {
+    transform: translateX(100%);
+}
+
+/* Item activo en su posición */
+.carousel-item.active {
+    transform: translateX(0);
 }
 
 .carousel-item h2 {
     color: white;
     font-weight: 700;
-    text-shadow: 3px 3px 6px rgba(0,0,0,0.7); /* Sombra más fuerte para legibilidad */
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+    /* Sombra más fuerte para legibilidad */
     font-family: var(--font-heading);
     letter-spacing: -0.5px;
 }
@@ -113,12 +159,13 @@
     color: white;
     font-size: 1.1rem;
     line-height: 1.6;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.6); /* Sombra más fuerte para legibilidad */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    /* Sombra más fuerte para legibilidad */
 }
 
 .promo-image img {
     transition: transform 0.3s ease;
-    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.15));
+    filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
 }
 
 .carousel-indicators {
@@ -163,17 +210,21 @@
 .carousel-indicators .active::before {
     width: 100%;
     height: 100%;
-    background-color: var(--accent-color); /* Naranja sólido */
+    background-color: var(--accent-color);
+    /* Naranja sólido */
 }
 
+
 /* Botones de control rediseñados */
+
 .carousel-control-prev,
 .carousel-control-next {
     width: 60px;
     height: 60px;
     top: 50%;
     transform: translateY(-50%);
-    background-color: var(--accent-color); /* Naranja sólido */
+    background-color: var(--accent-color);
+    /* Naranja sólido */
     border: none;
     border-radius: 50%;
     opacity: 0.9;
@@ -196,7 +247,8 @@
     opacity: 1;
     transform: translateY(-50%) scale(1.1);
     box-shadow: 0 12px 35px rgba(237, 126, 71, 0.4);
-    background-color: var(--accent-hover); /* Naranja hover */
+    background-color: var(--accent-hover);
+    /* Naranja hover */
 }
 
 .carousel-control-prev:active,
@@ -245,7 +297,9 @@
     transform: translate(-50%, -50%) rotate(45deg) scale(1.2);
 }
 
+
 /* Efectos de partículas para los botones */
+
 .carousel-control-prev::after,
 .carousel-control-next::after {
     content: '';
@@ -268,11 +322,14 @@
     opacity: 0.3;
 }
 
+
 /* Estilos básicos para elementos del carrusel */
-.carousel-item .promo-text > * {
+
+.carousel-item .promo-text>* {
     opacity: 1;
     transform: translateX(0);
-    transition: none; /* Quitar animaciones de aparición */
+    transition: none;
+    /* Quitar animaciones de aparición */
 }
 
 .promo-text .badge {
@@ -302,7 +359,9 @@
     left: 100%;
 }
 
+
 /* Efecto de hover en las imágenes del carrusel */
+
 .promo-image {
     perspective: 1000px;
 }
@@ -314,16 +373,20 @@
 
 .carousel-item:hover .promo-image img {
     transform: scale(1.02);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
+
 /* Badges simplificados en el carrusel */
+
 .carousel-item .badge {
     position: relative;
     border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
+
 /* Animación para los títulos completos y badges del carrusel principal */
+
 .carousel-item h2 {
     transition: all 0.3s ease;
 }
@@ -333,7 +396,9 @@
     text-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
 }
 
+
 /* Efecto de pulse en los spans resaltados del carrusel */
+
 .carousel-item h2 .text-primary {
     transition: all 0.3s ease;
     display: inline-block;
@@ -370,7 +435,9 @@
     animation: pulse 1.5s infinite;
 }
 
+
 /* Estilos adicionales para el carrusel principal */
+
 .promo-text {
     padding: 2rem 0;
 }
@@ -378,9 +445,24 @@
 .promo-image img {
     max-height: 400px;
     object-fit: cover;
+    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.3s ease;
+    opacity: 1;
 }
 
+
+/* Transición de opacidad solo en la imagen activa para evitar parpadeo/salto */
+
+.carousel-item:not(.active) .promo-image img {
+    opacity: 0;
+}
+
+.carousel-item.active .promo-image img {
+    opacity: 1;
+}
+
+
 /* Responsive adjustments */
+
 @media (max-width: 768px) {
     .carousel-content {
         min-height: 50vh;

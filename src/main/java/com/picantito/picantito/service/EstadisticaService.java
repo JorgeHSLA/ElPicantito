@@ -8,6 +8,9 @@ public interface EstadisticaService {
     // Total de ventas por día (para graficar líneas o barras) (string el dia, float la suma del valor de las ventas)
     Map<String, Float> ventasPorDia();
 
+    // Cantidad de pedidos por día
+    Map<String, Integer> pedidosPorDia();
+
 
     // Mejores clientes (lista de ids de clientes que más han comprado)
     List<Integer> mejoresClientes();

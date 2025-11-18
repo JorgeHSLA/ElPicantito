@@ -33,8 +33,14 @@ export class RecomendadosComponent implements OnInit, AfterViewInit {
   private cargarProductosRecomendados(): void {
     this.productoService.getProductosActivos().subscribe({
       next: (productos) => {
-        // Tomar los primeros 6 productos activos como recomendados
-        this.productosRecomendados = productos.slice(0, 6).map(producto => ({
+        // Filtrar productos excluyendo la categoría "PERSONALIZADO" y nombre "Taco Personalizado"
+        const productosFiltrados = productos.filter(producto =>
+          producto.categoria?.toUpperCase() !== 'PERSONALIZADO' &&
+          !producto.nombre?.toLowerCase().includes('personalizado')
+        );
+
+        // Tomar los primeros 6 productos activos (excluyendo personalizados) como recomendados
+        this.productosRecomendados = productosFiltrados.slice(0, 6).map(producto => ({
           ...producto,
           // Asegurar compatibilidad con el componente de card
           precio: producto.precioDeVenta || producto.precio || 0,

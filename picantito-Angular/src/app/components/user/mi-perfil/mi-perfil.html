@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 mb-3">
+                            <div class="col-6 mb-3" *ngIf="!isAdmin() && !isOperador()">
                                 <div class="card profile-card info-card hvr-float" (click)="navigateToPedidos()" style="cursor: pointer;">
                                     <div class="card-body text-center">
                                         <i class="bi bi-bag-check fs-3 mb-2" style="color: var(--accent-color);"></i>

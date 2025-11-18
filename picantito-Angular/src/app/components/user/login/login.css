@@ -226,3 +226,7 @@
   border-color: #ffc107 !important;
   transform: scale(1.04);
 }
+
+.btn-link.text-muted {
+    text-decoration: underline !important;
+}

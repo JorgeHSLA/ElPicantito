@@ -173,7 +173,9 @@
                                         @for(venta of ventasPorDiaArray(); track venta.fecha) {
                                         <div class="chart-bar-wrapper">
                                             <div class="chart-value">{{ formatearMoneda(venta.monto) }}</div>
-                                            <div class="chart-bar" [style.height.%]="calcularAlturaBarra(venta.monto)" [title]="formatearMoneda(venta.monto)">
+                                            <div class="chart-bar" 
+                                                 [style.height.%]="calcularAlturaBarra(venta.monto)"
+                                                 [attr.data-tooltip]="obtenerTooltipBarra(venta)">
                                             </div>
                                             <div class="chart-label">{{ formatearFecha(venta.fecha) }}</div>
                                         </div>

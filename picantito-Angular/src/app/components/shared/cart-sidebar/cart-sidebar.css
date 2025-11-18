@@ -7,7 +7,7 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+    z-index: 10500; /* Mayor que navbar (10000) para cubrir también la barra */
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
@@ -29,7 +29,7 @@
     height: 100vh;
     background-color: white;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
-    z-index: 10000;
+    z-index: 10600; /* Mayor que overlay (10500) para estar por encima */
     display: flex;
     flex-direction: column;
     transition: right 0.3s ease;

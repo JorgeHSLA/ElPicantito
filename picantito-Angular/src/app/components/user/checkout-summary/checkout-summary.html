@@ -121,6 +121,115 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- ==================== SECCIÓN DE PRODUCTOS SUGERIDOS ==================== -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-gradient">
+                        <h5 class="mb-0">
+                            <i class="bi bi-stars me-2"></i>
+                            ¿Te gustaría agregar algo más?
+                        </h5>
+                        <p class="mb-0 mt-1 small">Postres, acompañamientos y bebidas perfectas para tu pedido</p>
+                    </div>
+                    <div class="card-body">
+                        <!-- Filtros y búsqueda -->
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-search"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           placeholder="Buscar productos..." 
+                                           [value]="searchQuery()"
+                                           (input)="onSearchChange($any($event.target).value)">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="btn-group w-100" role="group">
+                                    <button type="button" 
+                                            *ngFor="let cat of availableCategories()"
+                                            class="btn"
+                                            [class.btn-primary]="selectedCategory() === cat"
+                                            [class.btn-outline-secondary]="selectedCategory() !== cat"
+                                            (click)="onCategoryChange(cat)">
+                                        {{ cat === 'TODOS' ? 'Todos' : cat.charAt(0) + cat.slice(1).toLowerCase() }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lista de productos paginados -->
+                        <div class="row">
+                            <div class="col-12" *ngIf="paginatedProducts().length === 0">
+                                <div class="text-center py-5">
+                                    <i class="bi bi-emoji-frown display-4 text-muted mb-3"></i>
+                                    <h5>No se encontraron productos</h5>
+                                    <p class="text-muted">Intenta con otros términos de búsqueda o categoría</p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4 mb-4" *ngFor="let producto of paginatedProducts()">
+                                <div class="suggested-product-card">
+                                    <img [src]="producto.imagen || '/images/taco1.webp'" 
+                                         [alt]="producto.nombre"
+                                         class="suggested-product-image">
+                                    <div class="suggested-product-body">
+                                        <span class="suggested-product-category">
+                                            {{ producto.categoria }}
+                                        </span>
+                                        <h6 class="suggested-product-name">{{ producto.nombre }}</h6>
+                                        <p class="suggested-product-description">
+                                            {{ producto.descripcion || 'Delicioso complemento para tu pedido' }}
+                                        </p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <span class="suggested-product-price">
+                                                {{ formatearMoneda(producto.precio || 0) }}
+                                            </span>
+                                            <button class="btn btn-sm btn-add-suggested" 
+                                                    (click)="addSuggestedToCart(producto)">
+                                                <i class="bi bi-plus-circle me-1"></i>
+                                                Agregar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Paginación -->
+                        <div class="row mt-4" *ngIf="totalPages() > 1">
+                            <div class="col-12">
+                                <nav>
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item" [class.disabled]="currentPage() === 1">
+                                            <button class="page-link" (click)="goToPage(currentPage() - 1)">
+                                                <i class="bi bi-chevron-left"></i>
+                                            </button>
+                                        </li>
+                                        <li class="page-item" 
+                                            *ngFor="let page of [].constructor(totalPages()); let i = index"
+                                            [class.active]="currentPage() === i + 1">
+                                            <button class="page-link" (click)="goToPage(i + 1)">
+                                                {{ i + 1 }}
+                                            </button>
+                                        </li>
+                                        <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+                                            <button class="page-link" (click)="goToPage(currentPage() + 1)">
+                                                <i class="bi bi-chevron-right"></i>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </nav>
+                                <p class="text-center text-muted small">
+                                    Página {{ currentPage() }} de {{ totalPages() }} 
+                                    ({{ filteredSuggestedProducts().length }} productos)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Columna derecha - Resumen y datos -->
@@ -338,6 +447,87 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Recomendaciones -->
+<div class="recommendations-modal-overlay" *ngIf="showRecommendationsModal()" (click)="skipRecommendations()">
+    <div class="recommendations-modal-content" (click)="$event.stopPropagation()">
+        <div class="recommendations-modal-header">
+            <h4 class="modal-title">
+                <i class="bi bi-gift-fill me-2"></i>
+                ¡Espera! Tenemos algo especial para ti
+            </h4>
+            <button type="button" class="btn-close-modal" (click)="skipRecommendations()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        
+        <div class="recommendations-modal-body">
+            <p class="recommendations-subtitle">
+                Complementa tu pedido con estos productos seleccionados especialmente para ti:
+            </p>
+
+            <!-- Loading spinner -->
+            <div class="text-center py-5" *ngIf="isLoadingRecommendations()">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando recomendaciones...</span>
+                </div>
+            </div>
+
+            <!-- Grid de productos recomendados -->
+            <div class="recommendations-grid" *ngIf="!isLoadingRecommendations()">
+                <div class="recommendation-card" *ngFor="let producto of recommendedProducts()">
+                    <img [src]="producto.imagen || '/images/taco1.webp'" 
+                         [alt]="producto.nombre"
+                         class="recommendation-image">
+                    <div class="recommendation-body">
+                        <span class="recommendation-category">{{ producto.categoria }}</span>
+                        <h6 class="recommendation-name">{{ producto.nombre }}</h6>
+                        <p class="recommendation-price">{{ formatearMoneda(producto.precio || 0) }}</p>
+                        <button class="btn btn-sm btn-add-recommendation w-100" 
+                                (click)="addRecommendedToCart(producto)">
+                            <i class="bi bi-cart-plus me-1"></i>
+                            Agregar al carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumen del carrito en el modal -->
+            <div class="modal-cart-summary" *ngIf="!isLoadingRecommendations() && cartSummary()">
+                <div class="summary-divider"></div>
+                <h6 class="summary-title">
+                    <i class="bi bi-cart-check-fill me-2"></i>
+                    Resumen de tu compra
+                </h6>
+                <div class="summary-items">
+                    <div class="summary-row">
+                        <span class="summary-label">Productos:</span>
+                        <span class="summary-value">{{ formatearMoneda(cartSummary()!.subtotalProductos) }}</span>
+                    </div>
+                    <div class="summary-row" *ngIf="cartSummary()!.subtotalAdicionales > 0">
+                        <span class="summary-label">Adicionales:</span>
+                        <span class="summary-value">{{ formatearMoneda(cartSummary()!.subtotalAdicionales) }}</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span class="summary-label">Total a Pagar:</span>
+                        <span class="summary-value-total">{{ formatearMoneda(cartSummary()!.total) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="recommendations-modal-footer">
+            <button type="button" class="btn btn-outline-secondary" (click)="skipRecommendations()">
+                <i class="bi bi-arrow-left me-1"></i>
+                Volver
+            </button>
+            <button type="button" class="btn btn-success" (click)="closeRecommendationsModal()">
+                <i class="bi bi-credit-card me-1"></i>
+                Ir a pagar
+            </button>
         </div>
     </div>
 </div>

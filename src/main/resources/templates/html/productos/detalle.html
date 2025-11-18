@@ -179,29 +179,29 @@
                         <div class="mb-4" th:if="${adicionales != null and !adicionales.empty}">
                             <h5 class="fw-semibold mb-3">Adicionales Disponibles para este producto:</h5>
                             
-                            <!-- Contenedor con scroll horizontal -->
-                            <div class="scroll-container-horizontal position-relative">
-                                <div class="scroll-content d-flex gap-3 pb-3" style="overflow-x: auto; overflow-y: hidden;">
-                                    <div th:each="adicional : ${adicionales}" class="flex-shrink-0" style="width: 280px;">
+                            <!-- Contenedor con scroll horizontal para 6 items visibles -->
+                            <div class="adicionales-scroll-container position-relative">
+                                <div class="adicionales-scroll-content d-flex gap-2 pb-2" style="overflow-x: auto; overflow-y: hidden; scroll-behavior: smooth;">
+                                    <div th:each="adicional : ${adicionales}" class="adicional-card-item flex-shrink-0">
                                         <div class="card border-warning h-100">
-                                            <div class="card-body p-3">
-                                                <div class="form-check mb-2">
+                                            <div class="card-body p-2">
+                                                <div class="form-check mb-1">
                                                     <input class="form-check-input adicional-check" type="checkbox" 
                                                            th:id="'adicional-' + ${adicional.id}" 
                                                            th:value="${adicional.id}"
                                                            th:disabled="${!adicional.disponible}">
-                                                    <label class="form-check-label fw-semibold" th:for="'adicional-' + ${adicional.id}">
+                                                    <label class="form-check-label fw-semibold small" th:for="'adicional-' + ${adicional.id}">
                                                         <span th:text="${adicional.nombre}"></span>
                                                     </label>
                                                 </div>
-                                                <p class="text-muted small mb-2" th:text="${adicional.descripcion}"></p>
+                                                <p class="text-muted mb-1" style="font-size: 0.75rem;" th:text="${adicional.descripcion}"></p>
                                                 <div class="d-flex justify-content-between align-items-center">
-                                                    <span class="fw-bold text-success">
+                                                    <span class="fw-bold text-success small">
                                                         +$<span th:text="${#numbers.formatDecimal(adicional.precio, 1, 2)}"></span>
                                                     </span>
                                                     <div>
-                                                        <span th:if="${!adicional.disponible}" class="badge bg-danger">Agotado</span>
-                                                        <span th:if="${adicional.disponible}" class="badge bg-success">Disponible</span>
+                                                        <span th:if="${!adicional.disponible}" class="badge bg-danger" style="font-size: 0.65rem;">Agotado</span>
+                                                        <span th:if="${adicional.disponible}" class="badge bg-success" style="font-size: 0.65rem;">Disponible</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -209,6 +209,54 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <style>
+                                .adicionales-scroll-container {
+                                    width: 100%;
+                                    max-width: 100%;
+                                }
+                                
+                                .adicionales-scroll-content {
+                                    -ms-overflow-style: none;
+                                    scrollbar-width: thin;
+                                    scrollbar-color: #ffc107 #f8f9fa;
+                                }
+                                
+                                .adicionales-scroll-content::-webkit-scrollbar {
+                                    height: 8px;
+                                }
+                                
+                                .adicionales-scroll-content::-webkit-scrollbar-track {
+                                    background: #f8f9fa;
+                                    border-radius: 10px;
+                                }
+                                
+                                .adicionales-scroll-content::-webkit-scrollbar-thumb {
+                                    background: #ffc107;
+                                    border-radius: 10px;
+                                }
+                                
+                                .adicionales-scroll-content::-webkit-scrollbar-thumb:hover {
+                                    background: #ffb300;
+                                }
+                                
+                                .adicional-card-item {
+                                    width: calc((100% - 10px) / 6);
+                                    min-width: 150px;
+                                }
+                                
+                                @media (max-width: 1200px) {
+                                    .adicional-card-item {
+                                        width: calc((100% - 8px) / 4);
+                                    }
+                                }
+                                
+                                @media (max-width: 768px) {
+                                    .adicional-card-item {
+                                        width: calc((100% - 4px) / 2);
+                                    }
+                                }
+                            </style>
                         </div>
                         
                         <div class="d-grid gap-2">

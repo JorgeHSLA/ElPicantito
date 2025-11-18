@@ -37,6 +37,7 @@ export class ProductoDetalleComponent implements OnInit {
   // Signals para el manejo de estados
   isAdding = signal(false);
   showLoginMessage = signal(false);
+  private pendingAddToCart = false; // Flag para saber si debe agregar al carrito automáticamente
 
   constructor(
     private route: ActivatedRoute,
@@ -52,10 +53,90 @@ export class ProductoDetalleComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.cargarProducto(+id);
+      
+      // Verificar si hay una compra pendiente después del login
+      this.verificarCompraPendiente();
     } else {
       this.error = 'ID de producto no válido';
       this.isLoading = false;
     }
+  }
+
+  /**
+   * Verifica si hay una compra pendiente y la procesa
+   */
+  private verificarCompraPendiente(): void {
+    const compraPendiente = localStorage.getItem('compraPendiente');
+    if (compraPendiente && this.authService.isLoggedIn()) {
+      try {
+        const datos = JSON.parse(compraPendiente);
+        const currentProductId = this.route.snapshot.paramMap.get('id');
+        
+        // Verificar que sea el mismo producto
+        if (datos.productoId === Number(currentProductId)) {
+          console.log('✅ Compra pendiente detectada, agregando al carrito automáticamente...');
+          this.pendingAddToCart = true;
+          
+          // Restaurar cantidad y adicionales si existen
+          if (datos.cantidad) {
+            this.cantidad = datos.cantidad;
+          }
+          if (datos.adicionalesSeleccionados) {
+            this.adicionalesSeleccionados = new Map(datos.adicionalesSeleccionados);
+          }
+          
+          // Esperar a que el producto se cargue y luego agregar al carrito
+          setTimeout(() => {
+            if (this.producto) {
+              this.procesarCompraPendiente();
+            }
+          }, 1000);
+        }
+        
+        // Limpiar la compra pendiente
+        localStorage.removeItem('compraPendiente');
+      } catch (error) {
+        console.error('Error procesando compra pendiente:', error);
+        localStorage.removeItem('compraPendiente');
+      }
+    }
+  }
+
+  /**
+   * Procesa la compra pendiente agregando el producto al carrito
+   */
+  private procesarCompraPendiente(): void {
+    if (!this.producto || !this.authService.isLoggedIn()) {
+      return;
+    }
+
+    console.log('🛒 Agregando producto al carrito automáticamente...');
+    
+    // Preparar adicionales seleccionados
+    const adicionalesParaCarrito: AdicionalSeleccionado[] = [];
+    this.adicionalesSeleccionados.forEach((cantidad, adicionalId) => {
+      const adicional = this.adicionales.find(a => a.id === adicionalId);
+      if (adicional && cantidad > 0) {
+        const precioAdicional = adicional.precioDeVenta || adicional.precio || 0;
+        adicionalesParaCarrito.push({
+          adicional: adicional,
+          cantidad: cantidad,
+          subtotal: precioAdicional * cantidad
+        });
+      }
+    });
+
+    // Agregar al carrito
+    this.carritoService.agregarItemConAdicionales(
+      this.producto,
+      this.cantidad,
+      adicionalesParaCarrito
+    );
+
+    // Mostrar el carrito
+    this.carritoService.showCart();
+    
+    console.log('✅ Producto agregado automáticamente al carrito');
   }
 
   private cargarProducto(id: number): void {
@@ -221,13 +302,9 @@ export class ProductoDetalleComponent implements OnInit {
 
       // Verificar si el usuario está autenticado
       if (!this.authService.isLoggedIn()) {
+        console.log('❌ Usuario no autenticado, mostrando modal de login...');
         this.isAdding.set(false);
         this.showLoginMessage.set(true);
-
-        // Ocultar el mensaje después de 5 segundos
-        setTimeout(() => {
-          this.showLoginMessage.set(false);
-        }, 5000);
         return;
       }
 
@@ -276,9 +353,31 @@ export class ProductoDetalleComponent implements OnInit {
     this.adicionalesSeleccionados.clear();
   }
 
-  // Método para ir al login
+  // Método para ir al login con returnUrl
   goToLogin(): void {
-    this.router.navigate(['/login']);
+    this.showLoginMessage.set(false);
+    
+    // Guardar la intención de compra en localStorage
+    if (this.producto) {
+      const compraPendiente = {
+        productoId: this.producto.id,
+        cantidad: this.cantidad,
+        adicionalesSeleccionados: Array.from(this.adicionalesSeleccionados.entries())
+      };
+      localStorage.setItem('compraPendiente', JSON.stringify(compraPendiente));
+      console.log('💾 Intención de compra guardada:', compraPendiente);
+    }
+    
+    const currentUrl = this.router.url; // Captura la URL actual (ej: /producto/5)
+    console.log('🔄 Navegando a /login con returnUrl:', currentUrl);
+    this.router.navigate(['/login'], { 
+      queryParams: { returnUrl: currentUrl }
+    });
+  }
+
+  // Método para cerrar el modal de login
+  cerrarModalLogin(): void {
+    this.showLoginMessage.set(false);
   }
 
   // Método para volver a la tienda

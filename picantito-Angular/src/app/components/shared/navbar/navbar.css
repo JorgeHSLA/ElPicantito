@@ -25,11 +25,14 @@
 
 .floating-navbar-container {
     padding: 0.75rem 12.5% 0 12.5%;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 10000;
     width: 100%;
     animation: slideDown 0.6s ease-out;
+    background: transparent;
 }
 
 @keyframes slideDown {
@@ -345,7 +348,6 @@ header {
         max-width: calc(90% - 1rem);
         box-shadow: 0 6px 24px rgba(255, 86, 48, 0.4), 0 3px 12px rgba(0, 0, 0, 0.15);
     }
-
     .floating-navbar-container.scrolled .navBarExtra:hover {
         transform: scale(1.0);
         border-radius: 15px;

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface Estadisticas {
   ventasPorDia: { [fecha: string]: number };
+  pedidosPorDia?: { [fecha: string]: number };
   mejoresClientes: number[];
   productosMenosVendidos: number[];
   productosMasVendidos: number[];

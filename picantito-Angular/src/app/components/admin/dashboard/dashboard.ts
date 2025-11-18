@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, signal, AfterViewInit, ElementRef } from 
 import { ProductoService } from '../../../services/tienda/producto.service';
 import { AdicionalService } from '../../../services/tienda/adicional.service';
 import { AuthService } from '../../../services/auth.service';
-import { EstadisticasService, Estadisticas } from '../../../services/estadisticas.service';
+import { EstadisticasService } from '../../../services/estadisticas.service';
 import { Usuario } from '../../../models/usuario';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -22,8 +22,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   totalAdicionales = signal(0);
 
   // Estadísticas
-  estadisticas = signal<Estadisticas | null>(null);
-  ventasPorDiaArray = signal<{ fecha: string; monto: number }[]>([]);
+  estadisticas = signal<any>(null);
+  ventasPorDiaArray = signal<{ fecha: string; monto: number; pedidos?: number }[]>([]);
   maxVenta = signal(0);
 
   // Observer para animaciones
@@ -207,7 +207,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // Procesar ventas por día para la gráfica
         const ventasArray = Object.entries(stats.ventasPorDia)
-          .map(([fecha, monto]) => ({ fecha, monto }))
+          .map(([fecha, monto]) => ({
+            fecha,
+            monto,
+            pedidos: stats.pedidosPorDia?.[fecha] || undefined
+          }))
           .sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime())
           .slice(-30); // Últimos 30 días
 
@@ -305,5 +309,23 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       currency: 'COP',
       minimumFractionDigits: 0
     }).format(monto);
+  }
+
+  obtenerTooltipBarra(venta: { fecha: string; monto: number; pedidos?: number }): string {
+    const fechaFormateada = this.formatearFechaCompleta(venta.fecha);
+    const montoFormateado = this.formatearMoneda(venta.monto);
+    let tooltip = `${fechaFormateada}\n${montoFormateado}`;
+    
+    if (venta.pedidos !== undefined) {
+      tooltip += `\n${venta.pedidos} pedido${venta.pedidos !== 1 ? 's' : ''}`;
+    }
+    
+    return tooltip;
+  }
+
+  formatearFechaCompleta(fecha: string): string {
+    const [year, month, day] = fecha.split('-');
+    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    return `${parseInt(day)} ${meses[parseInt(month) - 1]} ${year}`;
   }
 }

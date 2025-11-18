@@ -6,6 +6,12 @@ import { PedidoManagerService } from '../../../services/tienda/pedido-manager.se
 import { AuthService } from '../../../services/auth.service';
 import { PedidoCompleto } from '../../../models/pedido-completo';
 import { obtenerSucursalMasCercana, Sucursal } from '../../../models/sucursal';
+import { CarritoService } from '../../../services/carrito.service';
+import { ProductoService } from '../../../services/tienda/producto.service';
+import { AdicionalService } from '../../../services/tienda/adicional.service';
+import { AdicionalSeleccionado } from '../../../models/cart-item';
+import { NotificationService } from '../../../services/notification.service';
+import { forkJoin, of } from 'rxjs';
 import * as L from 'leaflet';
 
 @Component({
@@ -21,6 +27,10 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
   private pedidoService = inject(PedidoRestService);
   private pedidoManager = inject(PedidoManagerService);
   private authService = inject(AuthService);
+  private carritoService = inject(CarritoService);
+  private productoService = inject(ProductoService);
+  private adicionalService = inject(AdicionalService);
+  private notificationService = inject(NotificationService);
 
   pedidos = signal<PedidoCompleto[]>([]);
   pedidosFiltrados = signal<PedidoCompleto[]>([]);
@@ -51,6 +61,14 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
   // Signal para mostrar mensaje de éxito
   showSuccessMessage = signal(false);
   newPedidoId = signal<number | null>(null);
+
+  // Signal para modal de confirmación de reordenar
+  showReorderConfirm = signal(false);
+  pedidoAReordenar = signal<PedidoCompleto | null>(null);
+
+  // Signal para modal de confirmación de eliminar
+  showDeleteConfirm = signal(false);
+  pedidoAEliminar = signal<number | null>(null);
 
   ngOnInit(): void {
     // Verificar autenticación
@@ -598,8 +616,18 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
   // ==================== MÉTODOS DE ACCIÓN ====================
 
   eliminarPedido(pedidoId: number): void {
-    const confirmar = confirm('¿Estás seguro de que quieres eliminar este pedido? Esta acción no se puede deshacer.');
-    if (!confirmar) return;
+    // Mostrar modal de confirmación
+    this.pedidoAEliminar.set(pedidoId);
+    this.showDeleteConfirm.set(true);
+  }
+
+  confirmarEliminar(): void {
+    const pedidoId = this.pedidoAEliminar();
+    if (!pedidoId) return;
+
+    // Cerrar modal
+    this.showDeleteConfirm.set(false);
+    this.pedidoAEliminar.set(null);
 
     this.loading.set(true);
     
@@ -615,15 +643,20 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
         this.pedidosFiltrados.set(pedidosFiltradosActuales);
         
         this.loading.set(false);
-        alert('Pedido eliminado exitosamente');
+        this.notificationService.showSuccess('Pedido cancelado exitosamente');
       },
       error: (error) => {
         console.error('Error al eliminar pedido:', error);
         this.loading.set(false);
-        const mensaje = error.error?.message || 'No se pudo eliminar el pedido. Intenta nuevamente.';
-        alert(mensaje);
+        const mensaje = error.error?.message || 'No se pudo cancelar el pedido. Intenta nuevamente.';
+        this.notificationService.showError(mensaje);
       }
     });
+  }
+
+  cancelarEliminar(): void {
+    this.showDeleteConfirm.set(false);
+    this.pedidoAEliminar.set(null);
   }
 
   // ==================== MÉTODOS DE UTILIDAD DE VISTA ====================
@@ -660,6 +693,180 @@ export class PedidosClienteComponent implements OnInit, AfterViewInit, OnDestroy
     }
     
     return subtotal;
+  }
+
+  // ==================== REORDENAR PEDIDO ====================
+
+  /**
+   * Mostrar modal de confirmación para reordenar
+   */
+  reordenarPedido(pedido: PedidoCompleto): void {
+    console.log('🔄 ===== INICIO REORDENAR PEDIDO =====');
+    console.log('📋 Pedido completo:', pedido);
+    console.log('📦 Productos en pedido:', pedido?.productos);
+    console.log('🔢 Cantidad de productos:', pedido?.productos?.length);
+
+    if (!pedido || !pedido.productos || pedido.productos.length === 0) {
+      console.error('❌ No hay productos en el pedido');
+      this.notificationService.showError('Este pedido no tiene productos para reordenar');
+      return;
+    }
+
+    // Mostrar modal de confirmación
+    this.pedidoAReordenar.set(pedido);
+    this.showReorderConfirm.set(true);
+  }
+
+  /**
+   * Confirmar y ejecutar el reordenamiento
+   */
+  confirmarReordenar(): void {
+    const pedido = this.pedidoAReordenar();
+    if (!pedido) return;
+
+    // Cerrar modal
+    this.showReorderConfirm.set(false);
+    this.pedidoAReordenar.set(null);
+
+    console.log('✅ Usuario confirmó. Iniciando proceso...');
+    this.loading.set(true);
+
+    // Crear array de observables para obtener productos y adicionales
+    console.log('🔍 Creando observables para productos...');
+    const productosObservables = pedido.productos.map((pedidoProducto, index) => {
+      console.log(`  📦 Producto ${index + 1}: ID=${pedidoProducto.productoId}, Nombre=${pedidoProducto.nombreProducto}`);
+      return this.productoService.getProductoById(pedidoProducto.productoId);
+    });
+    console.log(`✅ ${productosObservables.length} observables de productos creados`);
+
+    console.log('🔍 Creando observables para adicionales...');
+    const adicionalesObservables = pedido.productos.map((pedidoProducto, index) => {
+      console.log(`  🔧 Producto ${index + 1}: ${pedidoProducto.adicionales?.length || 0} adicionales`);
+      
+      if (!pedidoProducto.adicionales || pedidoProducto.adicionales.length === 0) {
+        console.log(`    ℹ️ Sin adicionales para producto ${index + 1}, retornando array vacío`);
+        return of([]); // Usar of([]) en lugar de forkJoin([])
+      }
+      
+      const adicionalIds = pedidoProducto.adicionales.map(a => {
+        console.log(`      🆔 Adicional ID: ${a.adicionalId} (${a.nombreAdicional})`);
+        return a.adicionalId;
+      });
+      
+      const observables = adicionalIds.map(id => this.adicionalService.getAdicionalById(id));
+      console.log(`    🔄 Creando forkJoin con ${observables.length} peticiones`);
+      
+      return forkJoin(observables);
+    });
+    console.log(`✅ ${adicionalesObservables.length} observables de adicionales creados`);
+
+    console.log('🚀 Ejecutando peticiones paralelas con forkJoin...');
+    console.log('📊 Observables de productos:', productosObservables);
+    console.log('📊 Observables de adicionales:', adicionalesObservables);
+    
+    // Ejecutar todas las peticiones en paralelo
+    const combined$ = forkJoin([
+      forkJoin(productosObservables),
+      forkJoin(adicionalesObservables)
+    ]);
+    
+    console.log('🔗 Observable combinado creado:', combined$);
+    
+    combined$.subscribe({
+      next: ([productos, adicionalesArrays]) => {
+        console.log('✅ ===== PETICIONES COMPLETADAS =====');
+        console.log('📦 Productos obtenidos:', productos);
+        console.log('🔧 Adicionales obtenidos:', adicionalesArrays);
+
+        console.log('🛒 Iniciando agregado al carrito...');
+        // Agregar cada producto al carrito con sus adicionales
+        pedido.productos.forEach((pedidoProducto, index) => {
+          console.log(`\n--- Procesando producto ${index + 1} ---`);
+          const producto = productos[index];
+          const adicionales = adicionalesArrays[index];
+          
+          console.log(`📦 Producto: ${producto.nombre} (ID: ${producto.id})`);
+          console.log(`🔢 Cantidad: ${pedidoProducto.cantidadProducto}`);
+          console.log(`🔧 Adicionales obtenidos de API:`, adicionales);
+          
+          // Construir adicionales seleccionados
+          const adicionalesSeleccionados: AdicionalSeleccionado[] = [];
+          
+          if (pedidoProducto.adicionales && pedidoProducto.adicionales.length > 0) {
+            console.log(`  🔄 Construyendo ${pedidoProducto.adicionales.length} adicionales...`);
+            pedidoProducto.adicionales.forEach((adicionalPedido, adIndex) => {
+              console.log(`    🔍 Buscando adicional ID=${adicionalPedido.adicionalId} en array obtenido...`);
+              const adicional = adicionales.find(a => a.id === adicionalPedido.adicionalId);
+              
+              if (adicional) {
+                const precioAdicional = adicional.precioDeVenta || adicional.precio || 0;
+                const adicionalSeleccionado: AdicionalSeleccionado = {
+                  adicional: adicional,
+                  cantidad: adicionalPedido.cantidadAdicional,
+                  subtotal: precioAdicional * adicionalPedido.cantidadAdicional
+                };
+                adicionalesSeleccionados.push(adicionalSeleccionado);
+                console.log(`    ✅ Adicional ${adIndex + 1}: ${adicional.nombre} x${adicionalPedido.cantidadAdicional} (subtotal: $${adicionalSeleccionado.subtotal})`);
+              } else {
+                console.warn(`    ⚠️ Adicional ID=${adicionalPedido.adicionalId} NO encontrado en array`);
+              }
+            });
+          } else {
+            console.log(`  ℹ️ Sin adicionales para este producto`);
+          }
+
+          console.log(`  📊 Total adicionales construidos: ${adicionalesSeleccionados.length}`);
+          console.log(`  🛒 Agregando al carrito...`);
+          
+          // Agregar al carrito
+          this.carritoService.agregarItemConAdicionales(
+            producto,
+            pedidoProducto.cantidadProducto,
+            adicionalesSeleccionados
+          );
+          
+          console.log(`  ✅ Producto agregado al carrito exitosamente`);
+        });
+
+        console.log('\n✅ ===== TODOS LOS PRODUCTOS AGREGADOS =====');
+        console.log('🛒 Estado final del carrito:', this.carritoService.cartItems());
+        
+        this.loading.set(false);
+        
+        // Mostrar notificación de éxito
+        this.notificationService.showSuccess(
+          `¡Pedido #${pedido.id} agregado al carrito! ${pedido.productos.length} producto(s) listos para ordenar.`
+        );
+        
+        console.log('🎨 Abriendo carrito...');
+        this.carritoService.showCart();
+        console.log('✅ Carrito abierto');
+      },
+      error: (error) => {
+        console.error('❌ ===== ERROR EN PETICIONES =====');
+        console.error('Error completo:', error);
+        console.error('Error status:', error?.status);
+        console.error('Error message:', error?.message);
+        console.error('Error error:', error?.error);
+        
+        this.loading.set(false);
+        this.notificationService.showError('Hubo un error al agregar los productos al carrito. Por favor, intenta nuevamente.');
+      },
+      complete: () => {
+        console.log('🏁 Observable completado');
+      }
+    });
+    
+    console.log('⏳ Esperando respuesta de las peticiones...');
+  }
+
+  /**
+   * Cancelar reordenamiento
+   */
+  cancelarReordenar(): void {
+    console.log('⛔ Usuario canceló el reordenamiento');
+    this.showReorderConfirm.set(false);
+    this.pedidoAReordenar.set(null);
   }
 
   // ==================== TRACKING SIMULADO DEL REPARTIDOR ====================
