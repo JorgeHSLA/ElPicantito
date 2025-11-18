@@ -9,3 +9,12 @@
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
+
+/* Título y descripción en color blanco */
+.recommended-card .card-title {
+    color: white !important;
+}
+
+.recommended-card .card-text {
+    color: white !important;
+}
