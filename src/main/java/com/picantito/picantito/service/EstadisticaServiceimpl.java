@@ -304,4 +304,31 @@ public class EstadisticaServiceimpl implements EstadisticaService {
     public Integer totalPedidos() {
         return Math.toIntExact(pedidoRepository.count());
     }
+
+    @Override
+    public Map<String, Integer> pedidosPorDia() {
+        List<Pedido> pedidos = pedidoRepository.findAll();
+        Map<String, Integer> pedidosPorDia = new LinkedHashMap<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        System.out.println("=== DEBUG pedidosPorDia ===");
+        System.out.println("Total pedidos: " + pedidos.size());
+        
+        for (Pedido pedido : pedidos) {
+            if (pedido.getFechaSolicitud() != null) {
+                String fecha = dateFormat.format(pedido.getFechaSolicitud());
+                pedidosPorDia.merge(fecha, 1, Integer::sum);
+            }
+        }
+        
+        System.out.println("Total días con pedidos: " + pedidosPorDia.size());
+
+        return pedidosPorDia.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new));
+    }
 }

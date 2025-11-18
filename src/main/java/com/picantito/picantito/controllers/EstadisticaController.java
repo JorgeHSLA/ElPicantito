@@ -143,6 +143,17 @@ public class EstadisticaController {
         }
     }
 
+    // Obtener cantidad de pedidos por día: http://localhost:9998/api/estadisticas/pedidos-por-dia
+    @GetMapping("/pedidos-por-dia")
+    public ResponseEntity<Map<String, Integer>> getPedidosPorDia() {
+        try {
+            Map<String, Integer> pedidos = estadisticaService.pedidosPorDia();
+            return ResponseEntity.ok(pedidos);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     // Obtener todas las estadísticas: http://localhost:9998/api/estadisticas/todas
     @GetMapping("/todas")
     public ResponseEntity<EstadisticaDTO> getTodasLasEstadisticas() {
@@ -152,6 +163,9 @@ public class EstadisticaController {
             
             System.out.println(">>> Calling ventasPorDia()");
             dto.setVentasPorDia(estadisticaService.ventasPorDia());
+            
+            System.out.println(">>> Calling pedidosPorDia()");
+            dto.setPedidosPorDia(estadisticaService.pedidosPorDia());
             
             System.out.println(">>> Calling mejoresClientes()");
             dto.setMejoresClientes(estadisticaService.mejoresClientes());

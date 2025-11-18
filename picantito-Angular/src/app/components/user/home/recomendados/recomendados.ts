@@ -34,11 +34,11 @@ export class RecomendadosComponent implements OnInit, AfterViewInit {
     this.productoService.getProductosActivos().subscribe({
       next: (productos) => {
         // Filtrar productos excluyendo la categoría "PERSONALIZADO" y nombre "Taco Personalizado"
-        const productosFiltrados = productos.filter(producto => 
-          producto.categoria?.toUpperCase() !== 'PERSONALIZADO' && 
+        const productosFiltrados = productos.filter(producto =>
+          producto.categoria?.toUpperCase() !== 'PERSONALIZADO' &&
           !producto.nombre?.toLowerCase().includes('personalizado')
         );
-        
+
         // Tomar los primeros 6 productos activos (excluyendo personalizados) como recomendados
         this.productosRecomendados = productosFiltrados.slice(0, 6).map(producto => ({
           ...producto,

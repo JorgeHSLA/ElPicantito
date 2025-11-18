@@ -6,6 +6,7 @@ import java.util.Map;
 public class EstadisticaDTO {
 
     private Map<String, Float> ventasPorDia;
+    private Map<String, Integer> pedidosPorDia;
     private List<Integer> mejoresClientes;
     private List<Integer> productosMenosVendidos;
     private List<Integer> productosMasVendidos;
@@ -21,12 +22,14 @@ public class EstadisticaDTO {
     public EstadisticaDTO() {}
 
     // Constructor con parámetros
-    public EstadisticaDTO(Map<String, Float> ventasPorDia, List<Integer> mejoresClientes,
+    public EstadisticaDTO(Map<String, Float> ventasPorDia, Map<String, Integer> pedidosPorDia,
+                          List<Integer> mejoresClientes,
                           List<Integer> productosMenosVendidos, List<Integer> productosMasVendidos,
                           List<Integer> adicionalesMasConsumidos, List<Integer> adicionalesMenosConsumidos,
                           List<Integer> productosNoRecomendados, List<Integer> productosRecomendados,
                           Float ingresosTotales, Float ingresosNetos, Integer totalPedidos) {
         this.ventasPorDia = ventasPorDia;
+        this.pedidosPorDia = pedidosPorDia;
         this.mejoresClientes = mejoresClientes;
         this.productosMenosVendidos = productosMenosVendidos;
         this.productosMasVendidos = productosMasVendidos;
@@ -46,6 +49,14 @@ public class EstadisticaDTO {
 
     public void setVentasPorDia(Map<String, Float> ventasPorDia) {
         this.ventasPorDia = ventasPorDia;
+    }
+
+    public Map<String, Integer> getPedidosPorDia() {
+        return pedidosPorDia;
+    }
+
+    public void setPedidosPorDia(Map<String, Integer> pedidosPorDia) {
+        this.pedidosPorDia = pedidosPorDia;
     }
 
     public List<Integer> getMejoresClientes() {

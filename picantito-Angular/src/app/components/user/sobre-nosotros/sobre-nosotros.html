@@ -1,143 +1,140 @@
 <!-- HERO SECTION -->
 <section class="about-hero py-5">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6">
-        <span class="badge bg-warning text-dark mb-3 px-3 py-2">Nuestra Historia</span>
-        <h1 class="display-4 fw-bold mb-4">
-          Conoce a <span class="text-warning">El Picantito</span>
-        </h1>
-        <p class="lead mb-4">
-          Somos más que una taquería. Somos una familia colombiana apasionada por compartir 
-          la auténtica experiencia de la comida callejera mexicana.
-        </p>
-      </div>
-      <div class="col-lg-6">
-        <div class="text-center">
-          <img src="/images/TacoColombiano.png" class="img-fluid rounded-4 shadow-lg" alt="El Picantito Team">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <span class="badge bg-warning text-dark mb-3 px-3 py-2">Nuestra Historia</span>
+                <h1 class="display-4 fw-bold mb-4">
+                    Conoce a <span class="text-warning">El Picantito</span>
+                </h1>
+                <p class="lead mb-4">
+                    Somos más que una taquería. Somos una familia colombiana apasionada por compartir la auténtica experiencia de la comida callejera mexicana.
+                </p>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <img src="/images/TacoColombiano.png" class="img-fluid rounded-4 shadow-lg" alt="El Picantito Team">
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>
 
 <!-- NUESTRA HISTORIA -->
 <section class="our-story py-5 bg-light">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mx-auto text-center">
-        <h2 class="display-5 fw-bold mb-4">Nuestra <span class="text-warning">Historia</span></h2>
-        <p class="lead text-muted mb-5">
-          Todo comenzó con un viaje a México que cambió nuestras vidas para siempre...
-        </p>
-      </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold mb-4">Nuestra <span class="text-warning">Historia</span></h2>
+                <p class="lead text-muted mb-5">
+                    Todo comenzó con un viaje a México que cambió nuestras vidas para siempre...
+                </p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 mb-4" *ngFor="let story of historias">
+                <app-story-card [story]="story"></app-story-card>
+            </div>
+        </div>
     </div>
-    <div class="row g-4">
-      <div class="col-md-6 mb-4" *ngFor="let story of historias">
-        <app-story-card [story]="story"></app-story-card>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- NUESTROS VALORES -->
 <section class="our-values py-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mx-auto text-center mb-5">
-        <h2 class="display-5 fw-bold mb-4">Nuestros <span class="text-warning">Valores</span></h2>
-        <p class="lead text-muted">
-          Estos son los principios que guían cada decisión que tomamos en El Picantito.
-        </p>
-      </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold mb-4">Nuestros <span class="text-warning">Valores</span></h2>
+                <p class="lead text-muted">
+                    Estos son los principios que guían cada decisión que tomamos en El Picantito.
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 text-center" *ngFor="let value of valores">
+                <app-value-card [value]="value"></app-value-card>
+            </div>
+        </div>
     </div>
-    
-    <div class="row g-4">
-      <div class="col-lg-4 text-center" *ngFor="let value of valores">
-        <app-value-card [value]="value"></app-value-card>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- EQUIPO -->
 <section class="team py-5 bg-light">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mx-auto text-center mb-5">
-        <h2 class="display-5 fw-bold mb-4">Nuestro <span class="text-warning">Equipo</span></h2>
-        <p class="lead text-muted">
-          Conoce a las personas apasionadas que hacen posible la experiencia El Picantito.
-        </p>
-      </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold mb-4">Nuestro <span class="text-warning">Equipo</span></h2>
+                <p class="lead text-muted">
+                    Conoce a las personas apasionadas que hacen posible la experiencia El Picantito.
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-3 text-center" *ngFor="let miembro of miembros">
+                <app-team-member-card [miembro]="miembro"></app-team-member-card>
+            </div>
+        </div>
     </div>
-    
-    <div class="row g-4">
-      <div class="col-lg-3 text-center" *ngFor="let miembro of miembros">
-        <app-team-member-card [miembro]="miembro"></app-team-member-card>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- COMPROMISO -->
 <section class="commitment py-5">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6 mb-4 mb-lg-0">
-        <h2 class="display-5 fw-bold mb-4">Nuestro <span class="text-warning">Compromiso</span></h2>
-        <p class="lead text-muted mb-4">
-          En El Picantito, no solo servimos comida. Creamos experiencias que conectan culturas 
-          y despiertan sonrisas.
-        </p>
-        
-        <ul class="list-unstyled text-muted mb-4">
-          <li class="mb-3">
-            <i class="bi bi-check-circle-fill text-warning me-3"></i>
-            <strong>Calidad Garantizada:</strong> Cada taco es preparado con los más altos estándares de calidad.
-          </li>
-          <li class="mb-3">
-            <i class="bi bi-check-circle-fill text-warning me-3"></i>
-            <strong>Innovación Constante:</strong> Siempre buscamos nuevas formas de mejorar tu experiencia.
-          </li>
-          <li class="mb-3">
-            <i class="bi bi-check-circle-fill text-warning me-3"></i>
-            <strong>Sustentabilidad:</strong> Trabajamos con proveedores locales y prácticas responsables.
-          </li>
-          <li class="mb-3">
-            <i class="bi bi-check-circle-fill text-warning me-3"></i>
-            <strong>Comunidad:</strong> Contribuimos al crecimiento y bienestar de nuestra comunidad local.
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-6">
-        <div class="text-center">
-          <img src="/images/CreateTaco.jpg" class="img-fluid rounded-4 shadow-lg" alt="Compromiso El Picantito">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="display-5 fw-bold mb-4">Nuestro <span class="text-warning">Compromiso</span></h2>
+                <p class="lead text-muted mb-4">
+                    En El Picantito, no solo servimos comida. Creamos experiencias que conectan culturas y despiertan sonrisas.
+                </p>
+
+                <ul class="list-unstyled text-muted mb-4">
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-warning me-3"></i>
+                        <strong>Calidad Garantizada:</strong> Cada taco es preparado con los más altos estándares de calidad.
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-warning me-3"></i>
+                        <strong>Innovación Constante:</strong> Siempre buscamos nuevas formas de mejorar tu experiencia.
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-warning me-3"></i>
+                        <strong>Sustentabilidad:</strong> Trabajamos con proveedores locales y prácticas responsables.
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-warning me-3"></i>
+                        <strong>Comunidad:</strong> Contribuimos al crecimiento y bienestar de nuestra comunidad local.
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <img src="/images/CreateTaco.jpg" class="img-fluid rounded-4 shadow-lg" alt="Compromiso El Picantito">
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>
 
 <!-- CTA SECTION -->
 <section class="cta-section py-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mx-auto text-center">
-        <h3 class="display-6 fw-bold mb-4">¿Listo para vivir la experiencia <span class="text-warning">El Picantito</span>?</h3>
-        <p class="lead text-muted mb-4">
-          Ven y descubre por qué somos la taquería favorita de Colombia. 
-          Tu próximo taco favorito te está esperando.
-        </p>
-        <div class="d-flex flex-wrap justify-content-center gap-3">
-          <button (click)="navigateToStore()" class="btn btn-warning btn-lg px-4 py-2 rounded-pill">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h3 class="display-6 fw-bold mb-4">¿Listo para vivir la experiencia <span class="text-warning">El Picantito</span>?</h3>
+                <p class="lead text-muted mb-4">
+                    Ven y descubre por qué somos la taquería favorita de Colombia. Tu próximo taco favorito te está esperando.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <button (click)="navigateToStore()" class="btn btn-warning btn-lg px-4 py-2 rounded-pill">
             <i class="bi bi-shop me-2"></i>Ver Nuestro Menú
           </button>
-          <button (click)="navigateToLocation()" class="btn btn-outline-warning btn-lg px-4 py-2 rounded-pill">
+                    <button (click)="navigateToLocation()" class="btn btn-outline-warning btn-lg px-4 py-2 rounded-pill">
             <i class="bi bi-geo-alt me-2"></i>Encuentra Nuestra Ubicación
           </button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>
