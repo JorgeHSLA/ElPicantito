@@ -3,9 +3,7 @@
 :host {
     display: block;
     background: linear-gradient(135deg, #2d1529 0%, #1a0d1f 100%);
-    background-image: 
-        linear-gradient(135deg, rgba(45, 21, 41, 0.95) 0%, rgba(26, 13, 31, 0.98) 100%),
-        url('/images/Fondo.png');
+    background-image: linear-gradient(135deg, rgba(45, 21, 41, 0.95) 0%, rgba(26, 13, 31, 0.98) 100%), url('/images/Fondo.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -423,8 +421,8 @@
     content: "";
 }
 
-.form-label:has(+ input[required])::after,
-.form-label:has(+ select[required])::after {
+.form-label:has(+input[required])::after,
+.form-label:has(+select[required])::after {
     content: " *";
     color: #dc3545;
 }
@@ -448,9 +446,12 @@
     color: #FF5630;
 }
 
+
 /* ==================== SCROLLBAR CUSTOM ==================== */
 
+
 /* Para Webkit (Chrome, Safari, Edge) */
+
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -471,13 +472,17 @@
     background: #d94623;
 }
 
+
 /* Para Firefox */
+
 * {
     scrollbar-width: thin;
     scrollbar-color: #FF5630 rgba(26, 13, 31, 0.5);
 }
 
+
 /* Fixed dropdown styles */
+
 .form-select {
     background-color: rgba(45, 21, 41, 0.95);
     color: #ffffff;
@@ -488,4 +493,3 @@
     background-color: rgba(45, 21, 41, 0.95);
     color: #ffffff;
 }
-

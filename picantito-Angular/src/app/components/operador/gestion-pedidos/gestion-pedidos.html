@@ -28,12 +28,12 @@
                 </div>
 
                 <!-- Mensajes de error y éxito -->
-                <div *ngIf="error" class="alert alert-danger alert-dismissible fade show animate__animated animate__slideInDown animate__faster" role="alert">
+                <div *ngIf="error" class="alert alert-danger alert-dismissible fade show animated slideInDown faster" role="alert">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}
                     <button type="button" class="btn-close" (click)="error = null"></button>
                 </div>
 
-                <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show animate__animated animate__bounceIn animate__faster" role="alert">
+                <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show animated bounceIn faster" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i> {{ successMessage }}
                     <button type="button" class="btn-close" (click)="successMessage = null"></button>
                 </div>

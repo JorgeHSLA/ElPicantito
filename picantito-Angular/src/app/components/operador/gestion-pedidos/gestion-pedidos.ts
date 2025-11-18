@@ -81,7 +81,7 @@ export class GestionPedidos implements OnInit, AfterViewInit {
     // Primero remover las clases de animación anteriores
     elements.forEach((element: Element) => {
       const htmlElement = element as HTMLElement;
-      htmlElement.classList.remove('animate__animated', 'animate__fadeInUp', 'animate__fadeInDown');
+      htmlElement.classList.remove('animated', 'fadeInUp', 'fadeInDown');
       htmlElement.style.opacity = '0';
     });
 
@@ -92,7 +92,7 @@ export class GestionPedidos implements OnInit, AfterViewInit {
             const element = entry.target as HTMLElement;
             const animation = element.dataset['animation'] || 'fadeInUp';
             element.style.opacity = '1';
-            element.classList.add('animate__animated', `animate__${animation}`);
+            element.classList.add('animated', animation);
             observer.unobserve(element);
           }
         });
@@ -112,7 +112,7 @@ export class GestionPedidos implements OnInit, AfterViewInit {
         setTimeout(() => {
           const animation = htmlElement.dataset['animation'] || 'fadeInUp';
           htmlElement.style.opacity = '1';
-          htmlElement.classList.add('animate__animated', `animate__${animation}`);
+          htmlElement.classList.add('animated', animation);
         }, index * 100);
       } else {
         observer.observe(element);
@@ -130,10 +130,8 @@ export class GestionPedidos implements OnInit, AfterViewInit {
         this.pedidosOriginales = [...pedidos]; // Guardar copia original
         this.organizarPedidosPorEstado();
         this.loading = false;
-        // Solo aplicar animaciones en la carga inicial
-        if (!this.pedidos || this.pedidos.length === 0) {
-          setTimeout(() => this.setupScrollAnimations(), 150);
-        }
+        // Aplicar animaciones después de cargar
+        setTimeout(() => this.setupScrollAnimations(), 200);
       },
       error: (err) => {
         this.error = 'Error al cargar los pedidos';
@@ -233,7 +231,7 @@ export class GestionPedidos implements OnInit, AfterViewInit {
     // Agregar clase de animación de salida al pedido que se va a mover
     const pedidoElement = document.querySelector(`[data-pedido-id="${pedidoId}"]`);
     if (pedidoElement) {
-      pedidoElement.classList.add('animate__animated', 'animate__fadeOutRight', 'animate__faster');
+      pedidoElement.classList.add('animated', 'fadeOutRight', 'faster');
     }
 
     this.gestionPedidosService.actualizarEstado(pedidoId, nuevoEstado).subscribe({
@@ -259,7 +257,9 @@ export class GestionPedidos implements OnInit, AfterViewInit {
           setTimeout(() => {
             const nuevoElement = document.querySelector(`[data-pedido-id="${pedidoId}"]`);
             if (nuevoElement) {
-              nuevoElement.classList.add('animate__animated', 'animate__fadeInLeft', 'animate__faster');
+              nuevoElement.classList.add('animated', 'fadeInLeft', 'faster');
+              // Asegurar que la animación se vea aplicando la opacidad
+              (nuevoElement as HTMLElement).style.opacity = '1';
             }
           }, 50);
         }, 400);
@@ -281,7 +281,7 @@ export class GestionPedidos implements OnInit, AfterViewInit {
 
         // Remover animación de salida si hubo error
         if (pedidoElement) {
-          pedidoElement.classList.remove('animate__animated', 'animate__fadeOutRight', 'animate__faster');
+          pedidoElement.classList.remove('animated', 'fadeOutRight', 'faster');
         }
       }
     });
@@ -350,6 +350,8 @@ export class GestionPedidos implements OnInit, AfterViewInit {
       // Si no hay término de búsqueda, mostrar todos los pedidos
       this.pedidos = [...this.pedidosOriginales];
       this.organizarPedidosPorEstado();
+      // Re-aplicar animaciones después de mostrar todos los pedidos
+      setTimeout(() => this.setupScrollAnimations(), 100);
       return;
     }
 
@@ -367,6 +369,8 @@ export class GestionPedidos implements OnInit, AfterViewInit {
     });
 
     this.organizarPedidosPorEstado();
+    // Re-aplicar animaciones después de filtrar
+    setTimeout(() => this.setupScrollAnimations(), 100);
   }
 
   limpiarBusqueda(): void {
