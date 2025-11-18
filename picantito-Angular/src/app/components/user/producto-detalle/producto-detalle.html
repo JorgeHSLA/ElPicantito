@@ -265,19 +265,36 @@
 
 <!-- MODAL DE LOGIN REQUERIDO -->
 @if (showLoginMessage()) {
-<div class="modal-backdrop-custom">
-    <div class="modal-custom animate__animated animate__fadeInDown">
-        <div class="modal-header-custom">
-            <h5 class="modal-title-custom">
-                <i class="bi bi-person-circle me-2" style="color: #ff6b35;"></i> Inicia sesión para continuar
-            </h5>
-            <button type="button" class="btn-close" aria-label="Cerrar" (click)="showLoginMessage.set(false)"></button>
-        </div>
-        <div class="modal-body-custom">
-            <p class="mb-3" style="color: #2c3e50; font-weight: 500; line-height: 1.5;">Debes iniciar sesión para agregar productos al carrito.</p>
-            <button class="btn btn-login-modal w-100" (click)="goToLogin()">
-          <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
-        </button>
+<div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.7);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px; overflow: hidden; border: 2px solid var(--accent-color);">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%); color: white; border: none;">
+                <h5 class="modal-title d-flex align-items-center">
+                    <i class="bi bi-lock-fill me-2"></i> Inicio de Sesión Requerido
+                </h5>
+                <button type="button" class="btn-close btn-close-white" (click)="cerrarModalLogin()"></button>
+            </div>
+            <div class="modal-body" style="padding: 2rem; background-color: rgba(45, 21, 41, 0.95);">
+                <div class="text-center py-3">
+                    <i class="bi bi-person-circle" style="font-size: 4rem; color: var(--accent-color);"></i>
+                    <h4 class="mt-3 mb-3" style="color: white;">¿Iniciar Sesión?</h4>
+                    <p class="text-muted mb-3">
+                        Necesitas iniciar sesión para agregar productos al carrito y realizar tu pedido.
+                    </p>
+                    <div class="alert" style="background: rgba(237, 126, 71, 0.1); border: 2px solid var(--accent-color); color: var(--accent-color); text-align: left;">
+                        <i class="bi bi-info-circle me-2"></i> 
+                        Después de iniciar sesión, regresarás a esta página para continuar.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="background-color: rgba(45, 21, 41, 0.95); border-top: 1px solid rgba(237, 126, 71, 0.3); padding: 1.5rem;">
+                <button type="button" class="btn btn-secondary" (click)="cerrarModalLogin()" style="padding: 0.7rem 1.5rem; border-radius: 10px; font-weight: 600;">
+                    <i class="bi bi-x-lg me-1"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" (click)="goToLogin()" style="background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%); border: none; padding: 0.7rem 1.5rem; border-radius: 10px; font-weight: 600; box-shadow: 0 4px 15px rgba(237, 126, 71, 0.4);">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+                </button>
+            </div>
         </div>
     </div>
 </div>

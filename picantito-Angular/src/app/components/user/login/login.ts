@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthNavbarComponent } from '../../shared/auth-navbar/auth-navbar';
 import { AuthService } from '../../../services/auth.service';
 import { PasswordResetService } from '../../../services/password-reset.service';
@@ -31,12 +31,17 @@ export class LoginComponent {
   isSendingCode = signal(false);
   resendTimeout = signal(0);
   private resendInterval: any;
+  private returnUrl: string = '/home';
 
   constructor(
     private authService: AuthService,
     private passwordResetService: PasswordResetService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    // Capturar el returnUrl de los query params si existe
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+  }
 
   onSubmit() {
     if (!this.nombreUsuario() || !this.password()) {
@@ -51,8 +56,13 @@ export class LoginComponent {
     this.authService.login(this.nombreUsuario(), this.password()).subscribe({
       next: (success) => {
         if (success) {
-          // Redirigir según el rol del usuario usando el método del servicio
-          this.authService.redirectByRole();
+          // Si hay returnUrl, redirigir allí, sino usar redirectByRole
+          if (this.returnUrl && this.returnUrl !== '/home') {
+            this.router.navigate([this.returnUrl]);
+          } else {
+            // Redirigir según el rol del usuario usando el método del servicio
+            this.authService.redirectByRole();
+          }
         } else {
           this.errorMessage.set('Credenciales incorrectas');
         }
