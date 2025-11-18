@@ -1,3 +1,10 @@
+
+/* Agregar padding-top solo para esta página */
+:host {
+    display: block;
+    padding-top: 105px;
+}
+
 /* Fondo decorativo para ubicaciones - removido del host general */
 .ubicaciones-container {
   min-height: 100vh;

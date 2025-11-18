@@ -5,6 +5,12 @@
 
 /* Estilos específicos para producto detalle */
 
+/* Agregar padding-top solo para esta página */
+:host {
+    display: block;
+    padding-top: 105px;
+}
+
 .breadcrumb-section {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }

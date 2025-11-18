@@ -1,6 +1,13 @@
 /* Importar estilos base */
 @import '../../../assets/styles/styles.css';
 
+/* Agregar padding-top solo para esta página */
+:host {
+    display: block;
+    padding-top: 105px;
+}
+
+
 .taco-builder-container {
     max-width: 1400px;
     margin: 0 auto;

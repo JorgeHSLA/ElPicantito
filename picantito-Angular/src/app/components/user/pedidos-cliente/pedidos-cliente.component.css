@@ -14,6 +14,7 @@
     display: block;
     position: relative;
     background: linear-gradient(135deg, #2d1529 0%, #1a0d1f 100%);
+    padding-top: 105px;
 }
 
 :host::before {
