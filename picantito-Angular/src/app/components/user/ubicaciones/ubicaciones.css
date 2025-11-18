@@ -163,6 +163,19 @@
   color: #000000 !important;
 }
 
+/* Forzar color oscuro en la X de los popups de Leaflet */
+.leaflet-popup-close-button {
+  color: #222 !important;
+  font-weight: bold !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #c0392b !important;
+  background: none !important;
+}
+
 /* Asegurar que Leaflet no se sobreponga a la navbar */
 .leaflet-container,
 .leaflet-pane,
