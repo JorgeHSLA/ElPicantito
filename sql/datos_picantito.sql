@@ -61,11 +61,11 @@ INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDe
 
 -- los extras q puso el marica de jorge
 INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
-(39, 'Aguacate', 'Rebanadas de aguacate fresco', 3000, 2000, 50, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
-(40, 'Jalapeños', 'Jalapeños en escabeche', 1750, 1000, 80, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
+(39, 'Aguacate', 'Rebanadas de aguacate fresco', 3000, 2000, 50, true, true, 'https://i.imgur.com/EgbZ8iw.png', 'EXTRAS'),
+(40, 'Jalapeños', 'Jalapeños en escabeche', 1750, 1000, 80, true, true, 'https://i.imgur.com/ifcbU2y.png', 'EXTRAS'),
 (41, 'Salsa Picante', 'Salsa picante casera', 1250, 700, 200, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
-(42, 'Cebolla Caramelizada', 'Cebolla caramelizada al sartén', 1500, 900, 30, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
-(43, 'Queso Extra', 'Queso cheddar adicional', 2500, 1500, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS');
+(42, 'Cebolla Caramelizada', 'Cebolla caramelizada al sartén', 1500, 900, 30, true, true, 'https://i.imgur.com/nlc4uDe.png', 'EXTRAS'),
+(43, 'Queso Extra', 'Queso cheddar adicional', 2500, 1500, 100, true, true, 'https://i.imgur.com/c1blL0q.png', 'EXTRAS');
 
 
 INSERT INTO public.usuarios (id, nombreCompleto, nombreUsuario, telefono, correo, contrasenia, estado, activo) VALUES (1, 'Administrador Principal', 'admin', '3001234567', 'admin@elpicantito.com', 'admin123', NULL, true);
@@ -403,41 +403,68 @@ INSERT INTO public.pedido_producto_adicional (pedido_producto_id, adicional_id, 
 -- Data for Name: productos_adicionales; Type: TABLE DATA; Schema: public; Owner: taquito
 --
 
--- Relaciones del producto "Taco Personalizado" (ID=1) con sus adicionales
--- Tortillas
+-- ==========================
+-- TACO PERSONALIZADO (ID=1) - Todos los adicionales disponibles
+-- ==========================
+-- Tortillas (solo para personalizado)
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (1, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (2, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (3, 1, 1);
--- Proteínas
+-- Proteínas (solo para personalizado)
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (10, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (11, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (12, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (13, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (14, 1, 1);
--- Salsas
+-- Salsas (para personalizado)
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (20, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (21, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (22, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (23, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (24, 1, 1);
--- Extras
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (41, 1, 1);
+-- Extras (para personalizado)
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (30, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (31, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (32, 1, 1);
--- Extras adicionales (IDs 39-43)
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (40, 1, 1);
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (41, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (42, 1, 1);
 INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (43, 1, 1);
 
--- Relaciones de otros productos con adicionales generales
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 2, 1);
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 3, 1);
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (40, 2, 1);
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (41, 2, 1);
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (42, 2, 1);
-INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (43, 2, 1);
+-- ==========================
+-- SALSAS DISPONIBLES PARA TODOS LOS TACOS (IDs 2-13)
+-- ==========================
+-- Salsa Verde (ID=20)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (20, 2, 1), (20, 3, 1), (20, 4, 1), (20, 5, 1), (20, 6, 1), (20, 7, 1), (20, 8, 1), (20, 9, 1), (20, 10, 1), (20, 11, 1), (20, 12, 1), (20, 13, 1);
+-- Salsa Roja (ID=21)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (21, 2, 1), (21, 3, 1), (21, 4, 1), (21, 5, 1), (21, 6, 1), (21, 7, 1), (21, 8, 1), (21, 9, 1), (21, 10, 1), (21, 11, 1), (21, 12, 1), (21, 13, 1);
+-- Salsa Habanera (ID=22)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (22, 2, 1), (22, 3, 1), (22, 4, 1), (22, 5, 1), (22, 6, 1), (22, 7, 1), (22, 8, 1), (22, 9, 1), (22, 10, 1), (22, 11, 1), (22, 12, 1), (22, 13, 1);
+-- Salsa Chipotle (ID=23)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (23, 2, 1), (23, 3, 1), (23, 4, 1), (23, 5, 1), (23, 6, 1), (23, 7, 1), (23, 8, 1), (23, 9, 1), (23, 10, 1), (23, 11, 1), (23, 12, 1), (23, 13, 1);
+-- Pico de Gallo (ID=24)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (24, 2, 1), (24, 3, 1), (24, 4, 1), (24, 5, 1), (24, 6, 1), (24, 7, 1), (24, 8, 1), (24, 9, 1), (24, 10, 1), (24, 11, 1), (24, 12, 1), (24, 13, 1);
+-- Salsa Picante (ID=41)
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (41, 2, 1), (41, 3, 1), (41, 4, 1), (41, 5, 1), (41, 6, 1), (41, 7, 1), (41, 8, 1), (41, 9, 1), (41, 10, 1), (41, 11, 1), (41, 12, 1), (41, 13, 1);
+
+-- ==========================
+-- EXTRAS COMUNES PARA VARIOS TACOS
+-- ==========================
+-- Aguacate (ID=39) - Popular en todos
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (39, 2, 1), (39, 3, 1), (39, 4, 1), (39, 5, 1), (39, 6, 1), (39, 7, 1), (39, 8, 1), (39, 9, 1), (39, 10, 1), (39, 11, 1), (39, 12, 1), (39, 13, 1);
+-- Jalapeños (ID=40) - Para los que quieren picante
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (40, 2, 1), (40, 3, 1), (40, 4, 1), (40, 6, 1), (40, 7, 1), (40, 8, 1), (40, 9, 1), (40, 10, 1), (40, 11, 1), (40, 13, 1);
+-- Cebolla Caramelizada (ID=42) - Buena con carnes
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (42, 2, 1), (42, 3, 1), (42, 6, 1), (42, 7, 1), (42, 9, 1), (42, 10, 1), (42, 13, 1);
+-- Queso Extra (ID=43) - Popular en varios
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (43, 2, 1), (43, 3, 1), (43, 5, 1), (43, 6, 1), (43, 7, 1), (43, 9, 1), (43, 10, 1), (43, 11, 1), (43, 12, 1), (43, 13, 1);
+-- Queso Oaxaca (ID=30) - Para algunos tacos
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (30, 2, 1), (30, 6, 1), (30, 7, 1), (30, 10, 1), (30, 13, 1);
+-- Queso Cotija (ID=31) - Para algunos tacos
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (31, 2, 1), (31, 3, 1), (31, 6, 1), (31, 9, 1), (31, 11, 1), (31, 13, 1);
+-- Lechuga (ID=32) - Para tacos más frescos
+INSERT INTO public.productos_adicionales (adicional_id, producto_id, cantidadProducto) VALUES (32, 3, 1), (32, 4, 1), (32, 5, 1), (32, 8, 1), (32, 11, 1), (32, 12, 1);
 
 
 --
