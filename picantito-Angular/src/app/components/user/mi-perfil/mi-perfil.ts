@@ -269,6 +269,11 @@ export class MiPerfilComponent implements OnInit, AfterViewInit {
   navigateToAbout(): void { this.router.navigate(['/sobre-nosotros']); }
   navigateToHome(): void { this.router.navigate(['/home']); }
   navigateToAdmin(): void { if (this.usuario.rol === 'ADMIN') { this.router.navigate(['/admin']); } }
+  navigateToPedidos(): void { 
+    if (this.usuario.id) { 
+      this.router.navigate(['/cliente', this.usuario.id, 'pedidos']); 
+    } 
+  }
   logout(): void { this.authService.logout(); this.carritoService.limpiarTodoElSistema(); this.router.navigate(['/home']); }
   isAdmin(): boolean { return this.usuario.rol === 'ADMIN'; }
   clearMessages(): void { this.error = null; this.success = null; }

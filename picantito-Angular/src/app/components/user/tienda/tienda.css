@@ -236,23 +236,29 @@ main.container .row.g-4::before {
 /* Animaciones de scroll reveal para productos - MÁS RÁPIDAS */
 
 .scroll-reveal {
-    /* Remover opacity: 0 inicial para evitar que las cards sean invisibles */
-    opacity: 1;
-    transform: translateY(0);
+    /* Los productos inician ocultos para la animación */
+    opacity: 0;
+    transform: translateY(20px);
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Solo aplicar la animación inicial si el navegador soporta IntersectionObserver */
-@supports (animation: fadeIn) {
-    .scroll-reveal:not(.animate__animated) {
-        opacity: 0;
-        transform: translateY(20px);
+/* Fallback: Si JavaScript no funciona, mostrar todo después de 3s */
+.scroll-reveal {
+    animation: fallbackShow 0.3s ease forwards;
+    animation-delay: 3s;
+}
+
+@keyframes fallbackShow {
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
 .scroll-reveal.animate__animated {
     opacity: 1 !important;
     transform: translateY(0);
+    animation: none; /* Cancelar fallback */
 }
 
 

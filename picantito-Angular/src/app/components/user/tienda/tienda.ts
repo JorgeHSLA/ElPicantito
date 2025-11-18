@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ProductCardComponent } from '../../shared/product-card/product-card.component';
@@ -12,9 +12,9 @@ declare var bootstrap: any;
   standalone: true,
   imports: [CommonModule, RouterModule, ProductCardComponent],
   templateUrl: './tienda.html',
-  styleUrls: ['./tienda.css']
+  styleUrls: ['./tienda.css', './pagination.css']
 })
-export class TiendaComponent implements OnInit, AfterViewInit {
+export class TiendaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Datos de productos de la API
   productos: Producto[] = [];
@@ -28,8 +28,17 @@ export class TiendaComponent implements OnInit, AfterViewInit {
   isLoading = true;
   error: string | null = null;
 
+  // Paginación nativa
+  paginaActual: number = 1;
+  productosPorPagina: number = 9;
+  totalPaginas: number = 0;
+  productosPaginados: Producto[] = [];
+
   // Estado del usuario (simulado por ahora)
   loggedUser: any = null; // Aquí integrarás con tu servicio de autenticación
+
+  // Mantener referencia al observer para poder desconectarlo
+  private scrollObserver: IntersectionObserver | null = null;
 
   constructor(
     private productoService: ProductoService,
@@ -39,6 +48,9 @@ export class TiendaComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.cargarProductos();
+    
+    // Agregar clase al body para habilitar animaciones solo si JS está funcionando
+    document.documentElement.classList.add('js-enabled');
   }
 
   ngAfterViewInit(): void {
@@ -51,6 +63,17 @@ export class TiendaComponent implements OnInit, AfterViewInit {
     }, 100);
   }
 
+  ngOnDestroy(): void {
+    // Limpiar el observer para evitar memory leaks
+    if (this.scrollObserver) {
+      this.scrollObserver.disconnect();
+      this.scrollObserver = null;
+    }
+    
+    // Remover clase del documento
+    document.documentElement.classList.remove('js-enabled');
+  }
+
   private initializeBootstrapComponents(): void {
     // Inicializar tooltips
     const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -60,6 +83,11 @@ export class TiendaComponent implements OnInit, AfterViewInit {
   }
 
   private setupScrollAnimations(): void {
+    // Desconectar observer anterior si existe
+    if (this.scrollObserver) {
+      this.scrollObserver.disconnect();
+    }
+
     const revealElements = this.elementRef.nativeElement.querySelectorAll('.scroll-reveal');
 
     if (revealElements.length === 0) {
@@ -79,7 +107,7 @@ export class TiendaComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const observer = new IntersectionObserver((entries) => {
+    this.scrollObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry: IntersectionObserverEntry, index: number) => {
         if (entry.isIntersecting) {
           const element = entry.target as HTMLElement;
@@ -92,7 +120,7 @@ export class TiendaComponent implements OnInit, AfterViewInit {
             element.classList.add('animate__animated', animation, 'animate__faster');
           }, index * 30); // Delay más corto entre elementos
 
-          observer.unobserve(element);
+          this.scrollObserver?.unobserve(element);
         }
       });
     }, {
@@ -101,7 +129,7 @@ export class TiendaComponent implements OnInit, AfterViewInit {
     });
 
     revealElements.forEach((element: Element) => {
-      observer.observe(element);
+      this.scrollObserver?.observe(element);
     });
 
     // Timeout de seguridad: Si después de 2 segundos hay elementos invisibles, mostrarlos
@@ -115,6 +143,22 @@ export class TiendaComponent implements OnInit, AfterViewInit {
         }
       });
     }, 2000);
+  }
+
+  private mostrarTodosLosProductos(): void {
+    const revealElements = this.elementRef.nativeElement.querySelectorAll('.scroll-reveal');
+    revealElements.forEach((element: Element) => {
+      const htmlElement = element as HTMLElement;
+      const computedStyle = window.getComputedStyle(htmlElement);
+      
+      // Si el elemento está invisible o con opacidad muy baja
+      if (parseFloat(computedStyle.opacity) < 0.5) {
+        console.warn('Forzando visibilidad de producto después del timeout final:', element);
+        htmlElement.style.opacity = '1';
+        htmlElement.style.transform = 'translateY(0)';
+        htmlElement.classList.add('animate__animated', 'animate__fadeIn', 'animate__faster');
+      }
+    });
   }
 
   private cargarProductos(): void {
@@ -162,6 +206,7 @@ export class TiendaComponent implements OnInit, AfterViewInit {
   // Métodos de filtrado
   filtrarPorCategoria(categoria: string): void {
     this.categoriaSeleccionada = categoria;
+    this.paginaActual = 1; // Resetear a la primera página al cambiar filtro
     this.filtrarProductos();
   }
 
@@ -184,6 +229,76 @@ export class TiendaComponent implements OnInit, AfterViewInit {
     }
 
     console.log('Productos filtrados resultado:', this.productosFiltrados);
+    
+    // Actualizar paginación después de filtrar
+    this.actualizarPaginacion();
+  }
+
+  // Métodos de paginación nativa
+  private actualizarPaginacion(): void {
+    this.totalPaginas = Math.ceil(this.productosFiltrados.length / this.productosPorPagina);
+    this.cargarProductosPaginados();
+  }
+
+  private cargarProductosPaginados(): void {
+    const inicio = (this.paginaActual - 1) * this.productosPorPagina;
+    const fin = inicio + this.productosPorPagina;
+    this.productosPaginados = this.productosFiltrados.slice(inicio, fin);
+    
+    // Reinicializar animaciones después de cambiar los productos
+    // Usar múltiples intentos para asegurar que el DOM esté listo
+    setTimeout(() => {
+      this.setupScrollAnimations();
+    }, 50);
+    
+    // Fallback adicional por si el primero falla
+    setTimeout(() => {
+      this.setupScrollAnimations();
+    }, 200);
+    
+    // Fallback final: Mostrar todo si no se han animado después de 3 segundos
+    setTimeout(() => {
+      this.mostrarTodosLosProductos();
+    }, 3000);
+  }
+
+  cambiarPagina(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.totalPaginas) {
+      this.paginaActual = pagina;
+      this.cargarProductosPaginados();
+      
+      // Scroll suave al inicio de los productos
+      const productosSection = document.querySelector('.row.g-4');
+      if (productosSection) {
+        productosSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
+
+  paginaAnterior(): void {
+    this.cambiarPagina(this.paginaActual - 1);
+  }
+
+  paginaSiguiente(): void {
+    this.cambiarPagina(this.paginaActual + 1);
+  }
+
+  getPaginasArray(): number[] {
+    const paginas: number[] = [];
+    const maxPaginasVisibles = 5;
+    
+    let inicio = Math.max(1, this.paginaActual - Math.floor(maxPaginasVisibles / 2));
+    let fin = Math.min(this.totalPaginas, inicio + maxPaginasVisibles - 1);
+    
+    if (fin - inicio < maxPaginasVisibles - 1) {
+      inicio = Math.max(1, fin - maxPaginasVisibles + 1);
+    }
+    
+    for (let i = inicio; i <= fin; i++) {
+      paginas.push(i);
+    }
+    
+    return paginas;
   }
 
   // Métodos helper para las estrellas
