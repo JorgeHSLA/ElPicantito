@@ -37,6 +37,9 @@ export class TiendaComponent implements OnInit, AfterViewInit, OnDestroy {
   // Estado del usuario (simulado por ahora)
   loggedUser: any = null; // Aquí integrarás con tu servicio de autenticación
 
+  // Estado del chatbot flotante
+  showChatbot = false;
+
   // Mantener referencia al observer para poder desconectarlo
   private scrollObserver: IntersectionObserver | null = null;
 
@@ -333,5 +336,9 @@ export class TiendaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/crear-taco']).then(() => {
       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     });
+  }
+
+  toggleChatbot(): void {
+    this.showChatbot = !this.showChatbot;
   }
 }

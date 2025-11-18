@@ -339,23 +339,23 @@ if is_connected:
 else:
     st.info(f"{connection_msg}. El chatbot funcionará con información limitada hasta que Spring Boot esté listo.")
 
-# Configuración de DeepSeek / OpenAI: primero st.secrets, fallback a variables de entorno
-deepseek_api_key = None
+# Configuración de OpenRouter Admin API: primero st.secrets, fallback a variables de entorno
+admin_api_key = None
 try:
-    deepseek_api_key = st.secrets.get("DEEPSEEK_API_KEY")
+    admin_api_key = st.secrets.get("ADMIN_API")
 except Exception:
-    deepseek_api_key = None
+    admin_api_key = None
 
-if not deepseek_api_key:
-    deepseek_api_key = os.environ.get("DEEPSEEK_API_KEY") or os.environ.get("OPENAI_API_KEY")
+if not admin_api_key:
+    admin_api_key = os.environ.get("ADMIN_API")
 
-if not deepseek_api_key or deepseek_api_key.strip() == "":
+if not admin_api_key or admin_api_key.strip() == "":
     st.error(
-        "🔑 API key faltante. Configure DEEPSEEK_API_KEY en .streamlit/secrets.toml para desarrollo o pase la variable DEEPSEEK_API_KEY/OPENAI_API_KEY al contenedor."
+        "🔑 API key faltante. Configure ADMIN_API en .streamlit/secrets.toml para desarrollo o pase la variable ADMIN_API al contenedor."
     )
     st.stop()
 
-deepseek_base_url = "https://openrouter.ai/api/v1"  # ajustar si usa otro endpoint
+openrouter_base_url = "https://openrouter.ai/api/v1"
 
 # === CONFIGURACIÓN DE LA API DE SPRING BOOT ===
 SPRINGBOOT_API_BASE = os.environ.get("SPRINGBOOT_API_BASE", "http://localhost:9998")
@@ -512,9 +512,9 @@ if "messages" not in st.session_state:
         {"role": "system", "content": construir_contexto_sistema(token_jwt)}
     ]
 
-# Crear cliente de DeepSeek/OpenAI (capturar fallo de autenticación temprano)
+# Crear cliente de OpenRouter (capturar fallo de autenticación temprano)
 try:
-    client = OpenAI(api_key=deepseek_api_key, base_url=deepseek_base_url)
+    client = OpenAI(api_key=admin_api_key, base_url=openrouter_base_url)
 except Exception as e:
     st.error(f"❌ No se pudo inicializar cliente de API: {e}")
     st.stop()

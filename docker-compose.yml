@@ -2,11 +2,21 @@
 services:
     chatbot:
       build:
-        context: chatbot/          # ruta donde está tu Dockerfile
+        context: chatbot/          # ruta donde está tu Dockerfile de admin
         dockerfile: Dockerfile
-      container_name: elpicantito-chat
-      ports:
-        - "8501:8501"
+      container_name: elpicantito-chat-admin
+      # NO exponemos puertos - solo acceso interno vía iframe desde Angular
+      env_file:
+      - .env
+      depends_on:
+        - springboot
+
+    chatbot2:
+      build:
+        context: chatbot2/         # ruta donde está tu Dockerfile de usuario
+        dockerfile: Dockerfile
+      container_name: elpicantito-chat-user
+      # NO exponemos puertos - solo acceso interno vía iframe desde Angular
       env_file:
       - .env
       depends_on:

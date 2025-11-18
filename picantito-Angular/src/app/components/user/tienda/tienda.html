@@ -136,3 +136,25 @@
         </div>
     </div>
 </main>
+
+<!-- Botón flotante de chatbot para usuarios -->
+<button class="floating-chatbot-button" (click)="toggleChatbot()" [class.active]="showChatbot">
+    <i class="bi bi-chat-dots-fill"></i>
+</button>
+
+<!-- Modal de Chatbot Usuario -->
+<div class="chatbot-modal" *ngIf="showChatbot" (click)="toggleChatbot()">
+    <div class="chatbot-container" (click)="$event.stopPropagation()">
+        <div class="chatbot-header">
+            <h5><i class="bi bi-robot me-2"></i>Asistente Virtual</h5>
+            <button class="btn-close-chatbot" (click)="toggleChatbot()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <iframe 
+            src="http://chatbot2:8502" 
+            class="chatbot-iframe"
+            [attr.frameborder]="0"
+        ></iframe>
+    </div>
+</div>
