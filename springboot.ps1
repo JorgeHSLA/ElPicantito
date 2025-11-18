@@ -8,18 +8,8 @@ if (-not (Test-Path "pom.xml")) {
     exit 1
 }
 
-# Cargar variables de entorno desde .env.local (prioridad) o .env
-if (Test-Path ".env.local") {
-    Write-Host "Cargando variables de entorno desde .env.local..." -ForegroundColor Yellow
-    Get-Content ".env.local" | ForEach-Object {
-        if ($_ -match '^\s*([^#][^=]*)\s*=\s*(.*)$') {
-            $name = $matches[1].Trim()
-            $value = $matches[2].Trim()
-            [System.Environment]::SetEnvironmentVariable($name, $value, [System.EnvironmentVariableTarget]::Process)
-            Write-Host "  $name cargado" -ForegroundColor Gray
-        }
-    }
-} elseif (Test-Path ".env") {
+# Cargar variables de entorno desde .env si existe
+if (Test-Path ".env") {
     Write-Host "Cargando variables de entorno desde .env..." -ForegroundColor Yellow
     Get-Content ".env" | ForEach-Object {
         if ($_ -match '^\s*([^#][^=]*)\s*=\s*(.*)$') {
