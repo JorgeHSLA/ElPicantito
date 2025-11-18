@@ -161,11 +161,49 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
+      (event.currentTarget as HTMLElement)?.blur();
     }
+
+    // Eliminar tooltips y cerrar dropdown
+    const tooltipTriggers = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]')) as HTMLElement[];
+    tooltipTriggers.forEach(el => {
+      const Tooltip = (window as any).bootstrap?.Tooltip;
+      if (Tooltip) {
+        let instance = Tooltip.getInstance(el);
+        if (instance) {
+          instance.hide();
+          instance.dispose();
+        }
+        const orphan = document.querySelector('.tooltip');
+        if (orphan && orphan.parentElement) {
+          orphan.parentElement.removeChild(orphan);
+        }
+      }
+      el.removeAttribute('aria-describedby');
+    });
+
+    // Cerrar dropdown
+    const dropdownElements = document.querySelectorAll('.dropdown-menu.show');
+    dropdownElements.forEach(el => {
+      const Dropdown = (window as any).bootstrap?.Dropdown;
+      if (Dropdown) {
+        const dropdownInstance = Dropdown.getInstance(el.previousElementSibling);
+        if (dropdownInstance) {
+          dropdownInstance.hide();
+        }
+      }
+      el.classList.remove('show');
+    });
+
     const id = this.userId();
     if (!id) {
       return;
     }
-    this.onNavItemClick(`/cliente/${id}/pedidos`);
+
+    setTimeout(() => {
+      this.router.navigate([`/cliente/${id}/pedidos`]).then(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      });
+    }, 0);
   }
 }
