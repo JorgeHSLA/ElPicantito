@@ -345,7 +345,6 @@ header {
         max-width: calc(90% - 1rem);
         box-shadow: 0 6px 24px rgba(255, 86, 48, 0.4), 0 3px 12px rgba(0, 0, 0, 0.15);
     }
-
     .floating-navbar-container.scrolled .navBarExtra:hover {
         transform: scale(1.0);
         border-radius: 15px;
