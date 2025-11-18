@@ -79,8 +79,6 @@ picantito-Angular/.vscode/*
 .DS_Store
 Thumbs.db
 
-# Spring Boot sensitive config
-src/main/resources/application.properties
 
 # Environment variables
 .env

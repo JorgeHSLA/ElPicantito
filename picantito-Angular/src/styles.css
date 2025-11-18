@@ -994,6 +994,8 @@ small,
     background: transparent;
     padding: 0;
     margin: 0;
+    position: relative;
+    z-index: 2; /* Asegurar que aparezca encima del hero-background-section */
 }
 
 .luchadores-container-full {
