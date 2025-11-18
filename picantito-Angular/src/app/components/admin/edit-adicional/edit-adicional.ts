@@ -24,7 +24,13 @@ export class EditAdicionalComponent implements OnInit {
     nombre: '',
     descripcion: '',
     precio: 0,
-    disponible: true
+    precioDeVenta: 0,
+    precioDeAdquisicion: 0,
+    cantidad: 0,
+    disponible: true,
+    activo: true,
+    imagen: '',
+    categoria: undefined
   });
 
   productos = signal<Producto[]>([]);

@@ -35,7 +35,9 @@ export class AdicionalesComponent implements OnInit {
     precioDeAdquisicion: 0,
     cantidad: 0,
     disponible: true,
-    activo: true
+    activo: true,
+    imagen: '',
+    categoria: undefined
   });
 
   selectedAdicionalId = signal<number | null>(null);
@@ -206,7 +208,9 @@ export class AdicionalesComponent implements OnInit {
       precioDeAdquisicion: 0,
       cantidad: 0,
       disponible: true,
-      activo: true
+      activo: true,
+      imagen: '',
+      categoria: undefined
     });
   }
 

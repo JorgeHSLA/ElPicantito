@@ -21,3 +21,16 @@ main h1,
 .badge {
   font-size: 0.75rem;
 }
+
+/* Estilos para el modal de nuevo usuario - textos en blanco */
+#nuevoUsuarioModal .modal-title {
+  color: #ffffff !important;
+}
+
+#nuevoUsuarioModal .form-label {
+  color: #ffffff !important;
+}
+
+#nuevoUsuarioModal .form-check-label {
+  color: #ffffff !important;
+}

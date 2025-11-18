@@ -21,6 +21,7 @@ export class ProductosComponent implements OnInit {
   // Filtros y búsqueda
   searchTerm = signal('');
   filtroDisponibilidad = signal('todos'); // 'todos', 'disponibles', 'no-disponibles'
+  filtroCategoria = signal('todos'); // 'todos', 'PERSONALIZADO', 'TACO', 'BEBIDA', 'ACOMPAÑAMIENTO', 'POSTRE', 'sin-categoria'
   filtroOrden = signal('id-asc'); // 'id-asc', 'id-desc', 'nombre-asc', 'nombre-desc', 'precio-asc', 'precio-desc'
 
   nuevoProducto = signal<Producto>({
@@ -30,7 +31,9 @@ export class ProductosComponent implements OnInit {
     precioDeAdquisicion: 0,
     imagen: '',
     calificacion: 5,
-    disponible: true
+    disponible: true,
+    activo: true,
+    categoria: undefined
   });
 
   successMessage = signal('');
@@ -74,6 +77,16 @@ export class ProductosComponent implements OnInit {
         p.nombre?.toLowerCase().includes(termino) ||
         p.descripcion?.toLowerCase().includes(termino)
       );
+    }
+
+    // Filtrar por categoría
+    const categoria = this.filtroCategoria();
+    if (categoria !== 'todos') {
+      if (categoria === 'sin-categoria') {
+        resultado = resultado.filter(p => !p.categoria);
+      } else {
+        resultado = resultado.filter(p => p.categoria === categoria);
+      }
     }
 
     // Filtrar por disponibilidad
@@ -120,6 +133,11 @@ export class ProductosComponent implements OnInit {
     this.aplicarFiltros();
   }
 
+  onFiltroCategoriaChange(value: string) {
+    this.filtroCategoria.set(value);
+    this.aplicarFiltros();
+  }
+
   onFiltroOrdenChange(value: string) {
     this.filtroOrden.set(value);
     this.aplicarFiltros();
@@ -128,6 +146,7 @@ export class ProductosComponent implements OnInit {
   limpiarFiltros() {
     this.searchTerm.set('');
     this.filtroDisponibilidad.set('todos');
+    this.filtroCategoria.set('todos');
     this.filtroOrden.set('id-asc');
     this.aplicarFiltros();
   }
@@ -169,7 +188,9 @@ export class ProductosComponent implements OnInit {
       precioDeAdquisicion: 0,
       imagen: '',
       calificacion: 5,
-      disponible: true
+      disponible: true,
+      activo: true,
+      categoria: undefined
     });
   }
 

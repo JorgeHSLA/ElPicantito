@@ -104,3 +104,20 @@ td span {
 :host ::ng-deep main h1 {
   color: #ffffff !important;
 }
+
+/* Estilos para el modal de nuevo adicional - textos en blanco */
+#nuevoAdicionalModal .modal-title {
+  color: #ffffff !important;
+}
+
+#nuevoAdicionalModal .form-label {
+  color: #ffffff !important;
+}
+
+#nuevoAdicionalModal small {
+  color: #ffffff !important;
+}
+
+#nuevoAdicionalModal .form-check-label {
+  color: #ffffff !important;
+}

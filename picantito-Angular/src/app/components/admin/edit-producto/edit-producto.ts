@@ -21,9 +21,12 @@ export class EditProductoComponent implements OnInit {
     descripcion: '',
     precio: 0,
     precioDeAdquisicion: 0,
+    precioDeVenta: 0,
     imagen: '',
     calificacion: 5,
-    disponible: true
+    disponible: true,
+    activo: true,
+    categoria: undefined
   });
 
   constructor(

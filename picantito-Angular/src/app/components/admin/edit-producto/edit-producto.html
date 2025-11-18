@@ -73,6 +73,24 @@
                   </div>
                   <div class="col-md-6">
                     <div class="mb-3">
+                      <label for="categoria" class="form-label">Categoría:</label>
+                      <select class="form-control" id="categoria"
+                              [value]="producto().categoria || ''"
+                              (change)="updateField('categoria', $any($event.target).value || undefined)">
+                        <option value="">Sin categoría</option>
+                        <!-- <option value="PERSONALIZADO">Personalizado</option>  ESTO NO VA PORQUE PERSONALIZADO ES SOLO PARA EL TACO PERSONALIZADO POR AHORA-->
+                        <option value="TACO">Taco</option>
+                        <option value="BEBIDA">Bebida</option>
+                        <option value="ACOMPAÑAMIENTO">Acompañamiento</option>
+                        <option value="POSTRE">Postre</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
                       <label for="calificacion" class="form-label">Calificación (1-5):</label>
                       <select class="form-control" id="calificacion"
                               [value]="producto().calificacion"
@@ -87,14 +105,30 @@
                   </div>
                 </div>
                 
-                <div class="mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="disponible"
-                           [checked]="producto().disponible"
-                           (change)="updateField('disponible', $any($event.target).checked)">
-                    <label class="form-check-label" for="disponible">
-                      Producto disponible
-                    </label>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="disponible"
+                               [checked]="producto().disponible"
+                               (change)="updateField('disponible', $any($event.target).checked)">
+                        <label class="form-check-label" for="disponible">
+                          Producto disponible
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="activo"
+                               [checked]="producto().activo"
+                               (change)="updateField('activo', $any($event.target).checked)">
+                        <label class="form-check-label" for="activo">
+                          Producto activo
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 

@@ -9,6 +9,21 @@ main h1,
 }
 
 /* =========================
+   ESTILOS DEL MODAL
+   ========================= */
+#nuevoProductoModal .modal-title {
+  color: #ffffff !important;
+}
+
+#nuevoProductoModal .form-label {
+  color: #ffffff !important;
+}
+
+#nuevoProductoModal .form-check-label {
+  color: #ffffff !important;
+}
+
+/* =========================
    CARDS Y PRODUCTOS
    ========================= */
 .recommended-section .card {

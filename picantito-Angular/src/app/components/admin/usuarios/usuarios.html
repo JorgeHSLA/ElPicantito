@@ -139,44 +139,53 @@
     <div class="modal-dialog">
         <div class="modal-content animate__animated animate__zoomIn">
             <div class="modal-header">
-                <h5 class="modal-title">Nuevo Usuario</h5>
+                <h5 class="modal-title text-white">Nuevo Usuario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form (ngSubmit)="saveUsuario()">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="nombreCompleto" class="form-label">Nombre Completo:</label>
+                        <label for="nombreCompleto" class="form-label text-white">Nombre Completo:</label>
                         <input type="text" class="form-control" id="nombreCompleto" [value]="nuevoUsuario().nombreCompleto" (input)="updateUsuarioField('nombreCompleto', $any($event.target).value)" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="nombreUsuario" class="form-label">Nombre de Usuario:</label>
+                        <label for="nombreUsuario" class="form-label text-white">Nombre de Usuario:</label>
                         <input type="text" class="form-control" id="nombreUsuario" [value]="nuevoUsuario().nombreUsuario" (input)="updateUsuarioField('nombreUsuario', $any($event.target).value)" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="telefono" class="form-label">Teléfono:</label>
+                        <label for="telefono" class="form-label text-white">Teléfono:</label>
                         <input type="tel" class="form-control" id="telefono" [value]="nuevoUsuario().telefono" (input)="updateUsuarioField('telefono', $any($event.target).value)" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="correo" class="form-label">Correo:</label>
+                        <label for="correo" class="form-label text-white">Correo:</label>
                         <input type="email" class="form-control" id="correo" [value]="nuevoUsuario().correo" (input)="updateUsuarioField('correo', $any($event.target).value)" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="contrasenia" class="form-label">Contraseña:</label>
+                        <label for="contrasenia" class="form-label text-white">Contraseña:</label>
                         <input type="password" class="form-control" id="contrasenia" [value]="nuevoUsuario().contrasenia" (input)="updateUsuarioField('contrasenia', $any($event.target).value)" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="rol" class="form-label">Rol:</label>
+                        <label for="rol" class="form-label text-white">Rol:</label>
                         <select class="form-select" id="rol" [value]="nuevoUsuario().rol || 'CLIENTE'" (change)="updateUsuarioField('rol', $any($event.target).value)" required>
               <option value="CLIENTE">Cliente</option>
               <option value="ADMIN">Administrador</option>
               <option value="OPERADOR">Operador</option>
               <option value="REPARTIDOR">Repartidor</option>
             </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="activo" [checked]="nuevoUsuario().activo" (change)="updateUsuarioField('activo', $any($event.target).checked)">
+                            <label class="form-check-label text-white" for="activo">
+                                Usuario activo
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
