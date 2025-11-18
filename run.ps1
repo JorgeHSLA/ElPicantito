@@ -1,8 +1,22 @@
 #!/usr/bin/env pwsh
 # Script "run" para PowerShell: Base de datos (Docker) -> Spring Boot -> Angular
-# ⚠️ NO OLVIDES PONER EL ARCHIVO .env EN LA RAIZ DEL PROYECTO
+# ⚠️ NO OLVIDES PONER EL ARCHIVO .env.local EN LA RAIZ DEL PROYECTO
 
 Write-Host "Ejecutando secuencia: Base de datos -> Spring Boot -> Angular..." -ForegroundColor Green
+
+# Cargar variables de entorno desde .env.local
+if (Test-Path ".env.local") {
+    Write-Host "Cargando variables de entorno desde .env.local..." -ForegroundColor Cyan
+    Get-Content .env.local | ForEach-Object {
+        if ($_ -match '^\s*([^#][^=]+)=(.*)$') {
+            $key = $matches[1].Trim()
+            $value = $matches[2].Trim()
+            [Environment]::SetEnvironmentVariable($key, $value, "Process")
+        }
+    }
+} else {
+    Write-Host "Advertencia: .env.local no encontrado. Usando valores por defecto." -ForegroundColor Yellow
+}
 
 # 1) Iniciar Base de datos (Docker)
 Write-Host "Iniciando Base de datos con Docker..." -ForegroundColor Cyan

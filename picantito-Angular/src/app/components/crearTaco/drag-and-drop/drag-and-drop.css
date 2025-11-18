@@ -5,22 +5,11 @@
 :host {
     display: block;
     padding-top: 105px;
-}
-
-
-.taco-builder-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem;
-    padding-bottom: 3rem;
-    background: transparent;
-    min-height: 100vh;
-    margin-bottom: 3rem;
     position: relative;
 }
 
-/* Fondo decorativo */
-.taco-builder-container::before {
+/* Fondo decorativo - aplicado al :host para cubrir todo incluyendo el padding-top */
+:host::before {
     content: '';
     position: fixed;
     top: 0;
@@ -35,6 +24,17 @@
     opacity: 0.2;
     z-index: -1;
     pointer-events: none;
+}
+
+.taco-builder-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-bottom: 3rem;
+    background: transparent;
+    min-height: 100vh;
+    margin-bottom: 3rem;
+    position: relative;
 }
 
 .header {
