@@ -31,8 +31,6 @@
                         "styles": [
                             "src/styles.css",
                             "node_modules/leaflet/dist/leaflet.css",
-                            "animate.css/animate.min.css",
-                            "hover.css/css/hover-min.css"
                         ],
                     },
                     "configurations": {
