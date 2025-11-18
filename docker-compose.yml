@@ -5,7 +5,8 @@ services:
         context: chatbot/          # ruta donde está tu Dockerfile de admin
         dockerfile: Dockerfile
       container_name: elpicantito-chat-admin
-      # NO exponemos puertos - solo acceso interno vía iframe desde Angular
+      ports:
+        - "8501:8501"  # Puerto para Streamlit chatbot admin
       env_file:
       - .env
       depends_on:
@@ -16,11 +17,27 @@ services:
         context: chatbot2/         # ruta donde está tu Dockerfile de usuario
         dockerfile: Dockerfile
       container_name: elpicantito-chat-user
-      # NO exponemos puertos - solo acceso interno vía iframe desde Angular
+      ports:
+        - "8502:8502"  # Puerto para Streamlit chatbot usuario
       env_file:
       - .env
       depends_on:
         - springboot 
+
+    angular:  # Servicio para Angular frontend
+      build:
+        context: picantito-Angular/  # ruta donde está el proyecto Angular
+        dockerfile: Dockerfile
+      container_name: elpicantito-angular
+      ports:
+        - "4200:4200"  # Puerto para ng serve
+      volumes:
+        - ./picantito-Angular:/app  # Hot reload - cambios en tiempo real
+        - /app/node_modules  # Evitar sobrescribir node_modules
+      depends_on:
+        - springboot  # Espera a que Spring Boot esté listo
+        - chatbot     # Espera a que el chatbot admin esté listo
+        - chatbot2    # Espera a que el chatbot usuario esté listo
 
     springboot:  # Nuevo servicio para Spring Boot
       build:

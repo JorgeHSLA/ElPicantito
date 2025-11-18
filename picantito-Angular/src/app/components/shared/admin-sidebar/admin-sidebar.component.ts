@@ -12,6 +12,8 @@ import { SidebarOptionsComponent } from './sidebar-options.component';
 })
 export class AdminSidebarComponent {
   @Input() activeRoute: string = '';
+  showChatbot = false;
+
   options = [
     { label: 'Dashboard', icon: 'bi bi-speedometer2 me-2', route: '/admin/dashboard' },
     { label: 'Productos', icon: 'bi bi-box me-2', route: '/admin/productos' },
@@ -19,4 +21,8 @@ export class AdminSidebarComponent {
     { label: 'Usuarios', icon: 'bi bi-people me-2', route: '/admin/usuarios' },
     { label: 'Revisar repartidores', icon: 'bi bi-truck me-2', route: '/admin/revisar-repartidores' }
   ];
+
+  toggleChatbot() {
+    this.showChatbot = !this.showChatbot;
+  }
 }

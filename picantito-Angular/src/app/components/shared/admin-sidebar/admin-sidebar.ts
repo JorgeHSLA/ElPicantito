@@ -36,7 +36,7 @@ import { RouterModule } from '@angular/router';
           </li>
           <li class="nav-item">
             <button class="nav-link btn-chatbot" (click)="toggleChatbot()">
-              <i class="bi bi-chat-dots me-2"></i>Chatbot Admin
+              <i class="bi bi-robot me-2"></i>Chatbot Admin
             </button>
           </li>
         </ul>

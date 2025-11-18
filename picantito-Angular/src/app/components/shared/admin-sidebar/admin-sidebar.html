@@ -1,3 +1,25 @@
 <div class="position-sticky pt-3">
   <app-sidebar-options [options]="options"></app-sidebar-options>
+  
+  <!-- Botón de Chatbot -->
+  <button class="btn btn-outline-primary w-100 mt-3" (click)="toggleChatbot()">
+    <i class="bi bi-robot me-2"></i>Chatbot Admin
+  </button>
+</div>
+
+<!-- Modal de Chatbot Admin -->
+<div class="chatbot-modal" *ngIf="showChatbot" (click)="toggleChatbot()">
+  <div class="chatbot-container" (click)="$event.stopPropagation()">
+    <div class="chatbot-header">
+      <h5><i class="bi bi-robot me-2"></i>Chatbot Administrativo</h5>
+      <button class="btn-close-chatbot" (click)="toggleChatbot()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <iframe 
+      src="http://localhost:8501" 
+      class="chatbot-iframe"
+      [attr.frameborder]="0">
+    </iframe>
+  </div>
 </div>

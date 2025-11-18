@@ -1,0 +1,20 @@
+{
+  "/chatbot-admin": {
+    "target": "http://chatbot:8501",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/chatbot-admin": ""
+    },
+    "logLevel": "debug"
+  },
+  "/chatbot-user": {
+    "target": "http://chatbot2:8501",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/chatbot-user": ""
+    },
+    "logLevel": "debug"
+  }
+}

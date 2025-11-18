@@ -139,7 +139,7 @@
 
 <!-- Botón flotante de chatbot para usuarios -->
 <button class="floating-chatbot-button" (click)="toggleChatbot()" [class.active]="showChatbot">
-    <i class="bi bi-chat-dots-fill"></i>
+    <i class="bi bi-robot"></i>
 </button>
 
 <!-- Modal de Chatbot Usuario -->
@@ -152,7 +152,7 @@
             </button>
         </div>
         <iframe 
-            src="http://chatbot2:8502" 
+            src="http://localhost:8502" 
             class="chatbot-iframe"
             [attr.frameborder]="0"
         ></iframe>
