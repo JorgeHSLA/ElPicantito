@@ -5,7 +5,7 @@
     </div>
 
     <div class="builder-wrapper">
-        <!-- Columna izquierda: Ingredientes + Resumen -->
+        <!-- Columna izquierda: Ingredientes -->
         <div class="left-column">
             <!-- Panel de ingredientes disponibles -->
             <div class="ingredients-panel">
@@ -75,38 +75,11 @@
                     }
                 </div>
             </div>
-
-            <!-- Panel de Resumen -->
-            <div class="summary-panel">
-                <div class="panel-header">
-                    <h2>Resumen del Pedido</h2>
-                    <span class="total-price">Total: ${{totalPrice()}}</span>
-                </div>
-                <div class="summary-content">
-                    @if(done().length === 0) {
-                        <div class="empty-summary">
-                            <p style="color: #ff6b35;">Aún no has agregado ingredientes</p>
-                        </div>
-                    } @else {
-                        <div class="summary-list">
-                            @for(item of done(); track item.idAdcional) {
-                                <div class="summary-item">
-                                    <span class="summary-item-name">• {{item.nombre}}</span>
-                                    <div class="summary-item-actions">
-                                        <span class="summary-item-price">${{(item.precio || 0) * (item.cantidad || 1)}}</span>
-                                        <button class="btn-remove" (click)="removeItemFromDone(item)" title="Eliminar">
-                                            ✕
-                                        </button>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    }
-                </div>
-            </div>
         </div>
 
-        <!-- Panel del taco en construcción -->
+        <!-- Columna derecha: Tu Taco + Resumen -->
+        <div class="right-column">
+            <!-- Panel del taco en construcción -->
         <div class="taco-panel">
             <div class="panel-header">
                 <h2>Tu Taco</h2>
@@ -204,5 +177,35 @@
                 </div>
             }
         </div>
+
+        <!-- Panel de Resumen -->
+        <div class="summary-panel">
+            <div class="panel-header">
+                <h2>Resumen del Pedido</h2>
+                <span class="total-price">Total: ${{totalPrice()}}</span>
+            </div>
+            <div class="summary-content">
+                @if(done().length === 0) {
+                    <div class="empty-summary">
+                        <p style="color: #ff6b35;">Aún no has agregado ingredientes</p>
+                    </div>
+                } @else {
+                    <div class="summary-list">
+                        @for(item of done().slice().reverse(); track item.idAdcional) {
+                            <div class="summary-item">
+                                <span class="summary-item-name">• {{item.nombre}}</span>
+                                <div class="summary-item-actions">
+                                    <span class="summary-item-price">${{(item.precio || 0) * (item.cantidad || 1)}}</span>
+                                    <button class="btn-remove" (click)="removeItemFromDone(item)" title="Eliminar">
+                                        ✕
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
     </div>
 </div>

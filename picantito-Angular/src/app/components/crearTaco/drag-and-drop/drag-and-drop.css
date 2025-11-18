@@ -72,12 +72,19 @@
     min-height: 600px;
 }
 
-/* Columna izquierda */
+/* Columna izquierda - solo ingredientes */
 .left-column {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     min-height: 600px;
+}
+
+/* Columna derecha - Tu Taco + Resumen */
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 /* Panel de ingredientes */
