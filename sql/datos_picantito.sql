@@ -39,25 +39,25 @@ INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDe
 
 -- PROTEÍNAS (IDs: 10-14)
 INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
-(10, 'Carne Asada', 'Tiras de res a la parrilla sazonadas', 2500, 1500, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'PROTEINA'),
-(11, 'Pollo', 'Pollo marinado y asado jugoso', 2000, 1200, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'PROTEINA'),
-(12, 'Pastor', 'Cerdo adobado estilo pastor', 2200, 1300, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'PROTEINA'),
-(13, 'Carnitas', 'Cerdo cocinado lentamente', 2300, 1400, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'PROTEINA'),
-(14, 'Chorizo', 'Chorizo ligeramente picante', 2100, 1250, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'PROTEINA');
+(10, 'Carne Asada', 'Tiras de res a la parrilla sazonadas', 2500, 1500, 100, true, true, 'https://i.imgur.com/GIdgR7K.png', 'PROTEINA'),
+(11, 'Pollo', 'Pollo marinado y asado jugoso', 2000, 1200, 100, true, true, 'https://i.imgur.com/g0l8Dtg.png', 'PROTEINA'),
+(12, 'Pastor', 'Cerdo adobado estilo pastor', 2200, 1300, 100, true, true, 'https://i.imgur.com/EkccMuL.png', 'PROTEINA'),
+(13, 'Carnitas', 'Cerdo cocinado lentamente', 2300, 1400, 100, true, true, 'https://i.imgur.com/FOIpMin.png', 'PROTEINA'),
+(14, 'Chorizo', 'Chorizo ligeramente picante', 2100, 1250, 100, true, true, 'https://i.imgur.com/aqxwq7S.png', 'PROTEINA');
 
 
 INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
-(20, 'Salsa Verde', 'Salsa verde picante', 300, 150, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
-(21, 'Salsa Roja', 'Salsa roja tradicional', 300, 150, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
-(22, 'Salsa Habanera', 'Salsa habanera muy picante', 400, 200, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
-(23, 'Salsa Chipotle', 'Salsa chipotle ahumada', 400, 200, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA'),
-(24, 'Pico de Gallo', 'Pico de gallo fresco', 500, 250, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'SALSA');
+(20, 'Salsa Verde', 'Salsa verde picante', 300, 150, 100, true, true, 'https://i.imgur.com/2xSgcXW.png', 'SALSA'),
+(21, 'Salsa Roja', 'Salsa roja tradicional', 300, 150, 100, true, true, 'https://i.imgur.com/v48eivm.png', 'SALSA'),
+(22, 'Salsa Habanera', 'Salsa habanera muy picante', 400, 200, 100, true, true, 'https://i.imgur.com/gtH3rYc.png', 'SALSA'),
+(23, 'Salsa Chipotle', 'Salsa chipotle ahumada', 400, 200, 100, true, true, 'https://i.imgur.com/nhqGFjY.png', 'SALSA'),
+(24, 'Pico de Gallo', 'Pico de gallo fresco', 500, 250, 100, true, true, 'https://i.imgur.com/b3jK5g5.png', 'SALSA');
 
 
 INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
-(30, 'Queso Oaxaca', 'Queso Oaxaca derretido', 800, 500, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
-(31, 'Queso Cotija', 'Queso Cotija rallado', 700, 450, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS'),
-(32, 'Lechuga', 'Lechuga fresca picada', 200, 100, 100, true, true, 'https://i1.sndcdn.com/artworks-TqYy1Xj4yGBz2zJK-VBVLSw-t500x500.jpg', 'EXTRAS');
+(30, 'Queso Oaxaca', 'Queso Oaxaca derretido', 800, 500, 100, true, true, 'https://i.imgur.com/Kg3M2J3.png', 'EXTRAS'),
+(31, 'Queso Cotija', 'Queso Cotija rallado', 700, 450, 100, true, true, 'https://i.imgur.com/yddJMTB.png', 'EXTRAS'),
+(32, 'Lechuga', 'Lechuga fresca picada', 200, 100, 100, true, true, 'https://i.imgur.com/SkZAcgn.png', 'EXTRAS');
 
 -- los extras q puso el marica de jorge
 INSERT INTO public.adicionales (id, nombre, descripcion, precioDeVenta, precioDeAdquisicion, cantidad, disponible, activo, imagen, categoria) VALUES 
