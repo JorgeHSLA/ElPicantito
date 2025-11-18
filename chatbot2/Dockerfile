@@ -11,8 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Instalar streamlit
 RUN pip install --no-cache-dir streamlit
 
-# Copiar configuración de Streamlit
-COPY .streamlit /app/.streamlit
+
 
 # Copiar el resto del proyecto
 COPY . /app
