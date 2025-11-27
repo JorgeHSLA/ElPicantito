@@ -151,3 +151,32 @@ router-outlet ~ * {
     transform: translateY(0);
   }
 }
+
+/* =========================
+   MEDIA QUERIES RESPONSIVE - APP.CSS
+   ========================= */
+
+/* Móviles pequeños */
+@media (max-width: 575px) {
+    .team-avatar {
+        width: 80px !important;
+        height: 80px !important;
+    }
+    
+    .social-links a {
+        font-size: 1.2rem;
+        padding: 0.5rem;
+    }
+    
+    .team-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Tablets */
+@media (min-width: 768px) and (max-width: 991px) {
+    .team-avatar {
+        width: 100px !important;
+        height: 100px !important;
+    }
+}

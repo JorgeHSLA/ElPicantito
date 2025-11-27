@@ -237,23 +237,394 @@
     color: #ea868f;
 }
 
+/* ===========================
+   RESPONSIVE DESIGN
+   =========================== */
+
+/* Large Laptops & Desktops (1200px - 1399px) */
+@media (max-width: 1399.98px) {
+    .operador-content {
+        padding: 0 0.75rem;
+    }
+    
+    .stat-card {
+        height: 130px;
+        padding: 1.25rem;
+    }
+    
+    .stat-icon {
+        font-size: 2.75rem;
+    }
+    
+    .stat-value {
+        font-size: 2.25rem;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+    }
+    
+    .repartidor-avatar {
+        font-size: 2.25rem;
+    }
+}
+
+/* Medium Laptops (992px - 1199px) */
+@media (max-width: 1199.98px) {
+    .operador-content {
+        padding: 0 0.5rem;
+    }
+    
+    .stat-card {
+        height: auto;
+        min-height: 120px;
+        padding: 1.25rem;
+        gap: 0.75rem;
+    }
+    
+    .stat-icon {
+        font-size: 2.5rem;
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
+    
+    .stat-detail {
+        font-size: 0.75rem;
+    }
+    
+    .repartidores-card .card-header {
+        padding: 0.875rem 1.25rem;
+    }
+    
+    .repartidores-card .card-body {
+        padding: 1.25rem;
+    }
+    
+    .repartidor-item {
+        padding: 0.875rem;
+    }
+    
+    .repartidor-avatar {
+        font-size: 2rem;
+    }
+    
+    .repartidor-nombre {
+        font-size: 0.95rem;
+    }
+}
+
+/* Tablets & Small Laptops (768px - 991px) */
 @media (max-width: 991.98px) {
     .operador-content {
         margin-left: 0;
         width: 100%;
+        padding: 0;
     }
+    
     .stat-card {
         height: auto;
-        min-height: 120px;
+        min-height: 110px;
+        padding: 1rem;
+        flex-direction: row;
     }
+    
+    .stat-icon {
+        font-size: 2.25rem;
+    }
+    
     .stat-value {
-        font-size: 2rem;
+        font-size: 1.875rem;
+    }
+    
+    .stat-label {
+        font-size: 0.7rem;
+        margin-bottom: 0.375rem;
+    }
+    
+    .stat-detail {
+        font-size: 0.7rem;
+    }
+    
+    .repartidores-card .card-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .repartidores-card .card-header h5 {
+        font-size: 1rem;
+    }
+    
+    .repartidores-card .card-body {
+        padding: 1rem;
+    }
+    
+    .repartidor-item {
+        padding: 0.75rem;
+        gap: 0.75rem;
+    }
+    
+    .repartidor-avatar {
+        font-size: 1.875rem;
+    }
+    
+    .repartidor-nombre {
+        font-size: 0.9rem;
+    }
+    
+    .repartidor-estado-badge {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.6rem;
     }
 }
 
+/* Mobile Devices (576px - 767px) */
+@media (max-width: 767.98px) {
+    .operador-content {
+        min-height: calc(100vh - 70px);
+    }
+    
+    .stat-card {
+        min-height: 100px;
+        padding: 0.875rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .stat-icon {
+        font-size: 2rem;
+    }
+    
+    .stat-value {
+        font-size: 1.75rem;
+    }
+    
+    .stat-label {
+        font-size: 0.65rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .stat-detail {
+        font-size: 0.65rem;
+    }
+    
+    .repartidores-card {
+        border-radius: 10px;
+    }
+    
+    .repartidores-card .card-header {
+        padding: 0.625rem 0.875rem;
+        border-radius: 10px 10px 0 0;
+    }
+    
+    .repartidores-card .card-header h5 {
+        font-size: 0.95rem;
+    }
+    
+    .repartidores-card .card-body {
+        padding: 0.875rem;
+    }
+    
+    .repartidor-item {
+        padding: 0.625rem;
+        gap: 0.625rem;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .repartidor-avatar {
+        font-size: 2.5rem;
+    }
+    
+    .repartidor-info {
+        width: 100%;
+    }
+    
+    .repartidor-nombre {
+        font-size: 0.875rem;
+    }
+    
+    .repartidor-estado-badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+        display: inline-flex;
+        justify-content: center;
+    }
+}
+
+/* Small Mobile Devices (375px - 575px) */
+@media (max-width: 575.98px) {
+    .operador-content {
+        min-height: calc(100vh - 60px);
+    }
+    
+    .stat-card {
+        min-height: 90px;
+        padding: 0.75rem;
+        border-radius: 10px;
+    }
+    
+    .stat-icon {
+        font-size: 1.75rem;
+    }
+    
+    .stat-value {
+        font-size: 1.5rem;
+    }
+    
+    .stat-label {
+        font-size: 0.6rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .stat-detail {
+        font-size: 0.6rem;
+    }
+    
+    .repartidores-card {
+        border-radius: 8px;
+    }
+    
+    .repartidores-card .card-header {
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    .repartidores-card .card-header h5 {
+        font-size: 0.875rem;
+    }
+    
+    .repartidores-card .card-body {
+        padding: 0.75rem;
+    }
+    
+    .repartidor-item {
+        padding: 0.5rem;
+        gap: 0.5rem;
+        border-radius: 8px;
+    }
+    
+    .repartidor-avatar {
+        font-size: 2.25rem;
+    }
+    
+    .repartidor-nombre {
+        font-size: 0.8rem;
+    }
+    
+    .repartidor-estado-badge {
+        font-size: 0.65rem;
+        padding: 0.15rem 0.4rem;
+        letter-spacing: 0.3px;
+    }
+}
+
+/* Extra Small Mobile Devices (320px - 374px) */
+@media (max-width: 374.98px) {
+    .stat-card {
+        min-height: 80px;
+        padding: 0.625rem;
+    }
+    
+    .stat-icon {
+        font-size: 1.5rem;
+    }
+    
+    .stat-value {
+        font-size: 1.375rem;
+    }
+    
+    .stat-label {
+        font-size: 0.55rem;
+    }
+    
+    .stat-detail {
+        font-size: 0.55rem;
+    }
+    
+    .repartidores-card .card-header {
+        padding: 0.5rem;
+    }
+    
+    .repartidores-card .card-header h5 {
+        font-size: 0.8rem;
+    }
+    
+    .repartidores-card .card-body {
+        padding: 0.625rem;
+    }
+    
+    .repartidor-item {
+        padding: 0.5rem;
+    }
+    
+    .repartidor-avatar {
+        font-size: 2rem;
+    }
+    
+    .repartidor-nombre {
+        font-size: 0.75rem;
+    }
+    
+    .repartidor-estado-badge {
+        font-size: 0.6rem;
+        padding: 0.15rem 0.35rem;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .stat-card {
+        cursor: default;
+    }
+    
+    .stat-card:hover {
+        transform: none;
+    }
+    
+    .stat-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+    
+    .repartidor-item {
+        cursor: default;
+    }
+    
+    .repartidor-item:hover {
+        transform: none;
+    }
+    
+    .repartidor-item:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+}
+
+/* Landscape Orientation for Mobile */
+@media (max-width: 767.98px) and (orientation: landscape) {
+    .stat-card {
+        flex-direction: row;
+        text-align: left;
+        min-height: 80px;
+    }
+    
+    .repartidor-item {
+        flex-direction: row;
+        text-align: left;
+    }
+    
+    .repartidor-info {
+        width: auto;
+    }
+}
 
 /* Animaciones de scroll reveal */
-
 .scroll-reveal {
     opacity: 0;
     transform: translateY(20px);

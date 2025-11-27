@@ -683,78 +683,425 @@
 }
 
 
-/* Responsive Design */
+/* =========================
+   RESPONSIVE DESIGN - CREAR TACO MEJORADO
+   ========================= */
 
+/* Tablets grandes y portátiles pequeños */
+@media (max-width: 1200px) {
+    .builder-content {
+        grid-template-columns: 1fr 350px;
+        gap: 25px;
+    }
+    
+    .preview-panel {
+        padding: 25px;
+    }
+}
+
+/* Tablets */
 @media (max-width: 1024px) {
     .builder-content {
         grid-template-columns: 1fr;
         gap: 20px;
     }
+    
     .preview-panel {
         position: static;
+        top: auto;
+    }
+    
+    .protein-grid,
+    .tortilla-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
 }
 
+/* Tablets pequeñas */
 @media (max-width: 768px) {
+    .crear-taco-container {
+        padding: 15px;
+    }
+    
+    .taco-header h1 {
+        font-size: 2rem;
+    }
+    
+    .subtitle {
+        font-size: 1.1rem;
+    }
+    
     .builder-navigation {
         padding: 8px;
     }
+    
     .nav-tab {
         padding: 10px 15px;
         font-size: 0.8rem;
     }
+    
     .nav-tab span {
         display: none;
     }
+    
+    .nav-tab i {
+        font-size: 1.1rem;
+    }
+    
     .protein-grid,
     .tortilla-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
     }
-    .taco-header h1 {
-        font-size: 2rem;
-    }
+    
     .ingredients-panel,
     .preview-panel {
         padding: 20px;
     }
+    
+    .ingredient-section h2,
+    .taco-preview h2 {
+        font-size: 1.5rem;
+    }
+    
+    .section-description {
+        font-size: 0.9rem;
+    }
+    
+    .protein-image,
+    .tortilla-image {
+        height: 130px;
+    }
+    
     .adicional-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
     }
+    
     .adicional-controls {
         align-self: stretch;
         justify-content: space-between;
     }
+    
     .progress-indicators {
         grid-template-columns: 1fr;
     }
+    
+    .taco-image-container {
+        height: 180px;
+    }
+    
+    .total-section h3 {
+        font-size: 1.5rem;
+    }
+    
+    .btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
 }
 
-@media (max-width: 480px) {
+/* Móviles */
+@media (max-width: 576px) {
     .crear-taco-container {
-        padding: 15px;
+        padding: 12px;
     }
+    
+    .taco-header {
+        margin-bottom: 20px;
+    }
+    
     .taco-header h1 {
-        font-size: 1.8rem;
+        font-size: 1.75rem;
     }
+    
+    .taco-header h1 i {
+        margin-right: 10px;
+        font-size: 1.5rem;
+    }
+    
     .subtitle {
         font-size: 1rem;
     }
+    
+    .builder-navigation {
+        padding: 6px;
+        gap: 3px;
+    }
+    
+    .nav-tab {
+        padding: 8px 10px;
+        font-size: 0.75rem;
+    }
+    
+    .nav-tab i {
+        font-size: 1rem;
+    }
+    
+    .ingredients-panel,
+    .preview-panel {
+        padding: 15px;
+        border-radius: 15px;
+    }
+    
+    .ingredient-section h2,
+    .taco-preview h2 {
+        font-size: 1.3rem;
+    }
+    
+    .section-description {
+        font-size: 0.85rem;
+        margin-bottom: 15px;
+    }
+    
+    .protein-card,
+    .tortilla-card {
+        padding: 15px;
+        border-radius: 12px;
+    }
+    
+    .protein-image {
+        height: 120px;
+    }
+    
+    .tortilla-image {
+        height: 100px;
+    }
+    
+    .protein-info h3,
+    .tortilla-info h3 {
+        font-size: 1.1rem;
+    }
+    
+    .protein-description,
+    .tortilla-description {
+        font-size: 0.8rem;
+    }
+    
+    .protein-price,
+    .tortilla-price {
+        font-size: 1rem;
+    }
+    
+    .adicional-card {
+        padding: 15px;
+        border-radius: 10px;
+    }
+    
+    .adicional-info h4 {
+        font-size: 1rem;
+    }
+    
+    .adicional-description {
+        font-size: 0.85rem;
+    }
+    
+    .adicional-price {
+        font-size: 0.9rem;
+    }
+    
+    .taco-image-container {
+        height: 160px;
+    }
+    
+    .summary-section {
+        padding: 12px;
+    }
+    
+    .summary-section h4 {
+        font-size: 1rem;
+    }
+    
+    .summary-item {
+        font-size: 0.9rem;
+    }
+    
+    .total-section {
+        padding: 15px;
+    }
+    
+    .total-section h3 {
+        font-size: 1.4rem;
+    }
+    
+    .btn {
+        padding: 12px 18px;
+        font-size: 0.95rem;
+    }
+    
+    .btn i {
+        margin-right: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .warning-message {
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 375px) {
+    .crear-taco-container {
+        padding: 10px;
+    }
+    
+    .taco-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .builder-navigation {
+        padding: 5px;
+    }
+    
+    .nav-tab {
+        padding: 7px 8px;
+        font-size: 0.7rem;
+    }
+    
+    .nav-tab i {
+        font-size: 0.9rem;
+    }
+    
+    .ingredients-panel,
+    .preview-panel {
+        padding: 12px;
+        border-radius: 12px;
+    }
+    
+    .ingredient-section h2,
+    .taco-preview h2 {
+        font-size: 1.2rem;
+    }
+    
+    .protein-card,
+    .tortilla-card,
+    .adicional-card {
+        padding: 12px;
+    }
+    
+    .protein-image {
+        height: 100px;
+    }
+    
+    .tortilla-image {
+        height: 90px;
+    }
+    
+    .taco-image-container {
+        height: 140px;
+    }
+    
+    .selected-indicator {
+        font-size: 1.2rem;
+        top: 10px;
+        right: 10px;
+    }
+    
+    .total-section {
+        padding: 12px;
+    }
+    
+    .total-section h3 {
+        font-size: 1.2rem;
+    }
+    
+    .btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .btn i {
+        margin-right: 6px;
+        font-size: 0.85rem;
+    }
+    
+    .quantity-controls {
+        gap: 6px;
+    }
+    
+    .btn-quantity {
+        min-width: 30px;
+        padding: 4px 8px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Altura de pantalla baja */
+@media (max-height: 700px) {
+    .preview-panel {
+        position: static;
+        top: auto;
+    }
+    
+    .taco-header {
+        margin-bottom: 20px;
+    }
+    
+    .ingredients-panel,
+    .preview-panel {
+        padding: 20px;
+    }
+}
+
+/* Landscape en móviles */
+@media (max-width: 991px) and (orientation: landscape) {
+    .builder-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .preview-panel {
+        position: sticky;
+        top: 20px;
+    }
+    
+    .taco-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
     .ingredients-panel,
     .preview-panel {
         padding: 15px;
     }
+    
+    .protein-grid,
+    .tortilla-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Touch devices - mejorar áreas táctiles */
+@media (hover: none) and (pointer: coarse) {
+    .nav-tab {
+        min-height: 44px;
+        padding: 12px 18px;
+    }
+    
+    .btn {
+        min-height: 44px;
+    }
+    
+    .btn-quantity,
+    .btn-add-adicional,
+    .btn-remove {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
     .protein-card,
     .tortilla-card,
     .adicional-card {
-        padding: 15px;
-    }
-    .builder-navigation {
-        gap: 2px;
-    }
-    .nav-tab {
-        padding: 8px 12px;
-        font-size: 0.75rem;
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(255, 107, 53, 0.1);
     }
 }

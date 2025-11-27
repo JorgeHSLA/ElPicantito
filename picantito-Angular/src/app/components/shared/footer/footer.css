@@ -1,0 +1,178 @@
+/* =========================
+   FOOTER STYLES
+   ========================= */
+
+.footer-new {
+    background-color: var(--primary-color);
+    color: var(--neutral-text);
+    border-top: 2px solid var(--accent-color);
+    padding: 2rem 0 1rem;
+    margin-top: 3rem;
+}
+
+.footer-new a {
+    color: var(--neutral-text-light);
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.footer-new a:hover {
+    color: var(--accent-color);
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-section h5 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section li {
+    margin-bottom: 0.5rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.social-links a {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-links a:hover {
+    transform: translateY(-2px) scale(1.1);
+    color: var(--accent-color) !important;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+}
+
+/* =========================
+   RESPONSIVE - FOOTER
+   ========================= */
+
+/* Tablets */
+@media (max-width: 991px) {
+    .footer-new {
+        padding: 1.5rem 0 0.75rem;
+        margin-top: 2rem;
+    }
+    
+    .footer-content {
+        gap: 1.5rem;
+    }
+    
+    .footer-section {
+        min-width: 180px;
+    }
+}
+
+/* Tablets pequeñas */
+@media (max-width: 768px) {
+    .footer-new {
+        padding: 1.25rem 0 0.5rem;
+        margin-top: 1.5rem;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+    
+    .footer-section {
+        min-width: 100%;
+        text-align: center;
+    }
+    
+    .footer-section h5 {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .social-links {
+        justify-content: center;
+    }
+    
+    .footer-bottom {
+        font-size: 0.85rem;
+        padding-top: 0.75rem;
+    }
+}
+
+/* Móviles */
+@media (max-width: 576px) {
+    .footer-new {
+        padding: 1rem 0.5rem 0.5rem;
+        margin-top: 1rem;
+    }
+    
+    .footer-content {
+        gap: 1rem;
+    }
+    
+    .footer-section h5 {
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .footer-section li {
+        margin-bottom: 0.4rem;
+        font-size: 0.9rem;
+    }
+    
+    .social-links a {
+        font-size: 1.3rem;
+    }
+    
+    .footer-bottom {
+        font-size: 0.8rem;
+        padding-top: 0.5rem;
+    }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 375px) {
+    .footer-new {
+        padding: 0.75rem 0.25rem 0.25rem;
+    }
+    
+    .footer-section h5 {
+        font-size: 0.9rem;
+    }
+    
+    .footer-section li {
+        font-size: 0.85rem;
+    }
+    
+    .social-links a {
+        font-size: 1.2rem;
+    }
+    
+    .footer-bottom {
+        font-size: 0.75rem;
+    }
+}

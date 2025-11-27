@@ -300,3 +300,174 @@
       animation: pulse 1.5s infinite;
   }
   /* Steps badges en build taco section - movido a creataco.css */
+
+/* =========================
+   RESPONSIVE - HOME
+   ========================= */
+
+/* Tablets */
+@media (max-width: 991px) {
+    .features-section {
+        padding-bottom: 2rem;
+    }
+    
+    .feature-card {
+        padding: 1.5rem 0.75rem;
+    }
+    
+    .carousel-control-recommended {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .carousel-control-recommended.prev {
+        left: 10px;
+    }
+    
+    .carousel-control-recommended.next {
+        right: 10px;
+    }
+}
+
+/* Tablets pequeñas */
+@media (max-width: 768px) {
+    :host {
+        margin-top: 0;
+        padding-top: 75px;
+    }
+    
+    .carousel-content {
+        min-height: 50vh;
+    }
+    
+    .promo-text {
+        text-align: center;
+        padding: 1rem 0;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .features-section {
+        padding-bottom: 1.5rem;
+    }
+    
+    .feature-card {
+        padding: 1.25rem 0.5rem;
+    }
+    
+    .card-img-container {
+        height: 180px;
+    }
+    
+    .recommended-card-carousel {
+        width: 100%;
+    }
+    
+    .carousel-control-recommended {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .carousel-control-recommended i {
+        font-size: 1rem;
+    }
+    
+    .carousel-control-recommended.prev {
+        left: 5px;
+    }
+    
+    .carousel-control-recommended.next {
+        right: 5px;
+    }
+}
+
+/* Móviles */
+@media (max-width: 576px) {
+    :host {
+        padding-top: 70px;
+    }
+    
+    .carousel-content {
+        min-height: 40vh;
+    }
+    
+    .display-4 {
+        font-size: 1.75rem;
+    }
+    
+    .promo-text {
+        padding: 0.75rem 0;
+    }
+    
+    .features-section {
+        padding-bottom: 1rem;
+    }
+    
+    .feature-card {
+        padding: 1rem 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .card-img-container {
+        height: 160px;
+    }
+    
+    .card-body {
+        padding: 0.75rem;
+    }
+    
+    .price {
+        font-size: 1.1rem;
+    }
+    
+    .carousel-control-recommended {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .carousel-control-recommended i {
+        font-size: 0.9rem;
+    }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 375px) {
+    .display-4 {
+        font-size: 1.5rem;
+    }
+    
+    .feature-card {
+        padding: 0.75rem 0.25rem;
+    }
+    
+    .card-img-container {
+        height: 140px;
+    }
+    
+    .carousel-control-recommended {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .carousel-control-recommended.prev {
+        left: 2px;
+    }
+    
+    .carousel-control-recommended.next {
+        right: 2px;
+    }
+}
+
+/* Landscape en móviles */
+@media (max-width: 991px) and (orientation: landscape) {
+    .carousel-content {
+        min-height: 70vh;
+    }
+    
+    .features-section {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+}

@@ -319,13 +319,34 @@
 
 /* Responsive */
 
+/* Tablets */
+@media (max-width: 991px) {
+    .cart-sidebar {
+        width: 380px;
+    }
+}
+
+/* Tablets pequeñas */
 @media (max-width: 768px) {
     .cart-sidebar {
         width: 100vw;
         right: -100vw;
     }
+    
     .cart-sidebar.show {
         right: 0;
+    }
+    
+    .cart-header {
+        padding: 1.25rem;
+    }
+    
+    .cart-content {
+        padding: 0.875rem;
+    }
+    
+    .cart-footer {
+        padding: 1.25rem;
     }
 }
 
