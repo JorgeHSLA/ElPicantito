@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PedidoCompleto } from '../models/pedido-completo';
+import { environment } from '../../environments/environment';
 
 export interface AsignarRepartidorDTO {
   pedidoId: number;
@@ -18,7 +19,7 @@ export interface ActualizarEstadoPedidoDTO {
 })
 export class GestionPedidosService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:9998/api/pedidos';
+  private apiUrl = `${environment.apiUrl}/api/pedidos`;
 
   /**
    * Obtiene todos los pedidos

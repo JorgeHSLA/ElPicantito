@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PedidoCompleto, CrearPedidoRequest } from '../../models/pedido-completo';
+import { environment } from '../../../environments/environment';
 
 export interface PedidoDto {
   id: number;
@@ -16,7 +17,7 @@ export interface PedidoDto {
 
 @Injectable({ providedIn: 'root' })
 export class PedidoRestService {
-  private readonly API_URL = 'http://localhost:9998/api/pedidos';
+  private readonly API_URL = `${environment.apiUrl}/api/pedidos`;
 
   constructor(private http: HttpClient) {}
 

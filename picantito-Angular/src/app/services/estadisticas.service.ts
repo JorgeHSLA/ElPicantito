@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Estadisticas {
   ventasPorDia: { [fecha: string]: number };
@@ -21,7 +22,7 @@ export interface Estadisticas {
   providedIn: 'root'
 })
 export class EstadisticasService {
-  private readonly API_URL = 'http://localhost:9998/api/estadisticas';
+  private readonly API_URL = `${environment.apiUrl}/api/estadisticas`;
 
   constructor(private http: HttpClient) {}
 

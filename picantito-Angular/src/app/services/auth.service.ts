@@ -4,6 +4,7 @@ import { Observable, catchError, map, of, tap } from 'rxjs';
 import { Usuario } from '../models/usuario';
 import { Router } from '@angular/router';
 import { NotificationService } from './notification.service';
+import { environment } from '../../environments/environment';
 
 interface LoginResponse {
   token: string;
@@ -20,7 +21,7 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:9998/api/usuarios';
+  private readonly API_URL = `${environment.apiUrl}/api/usuarios`;
   
   // Signal para el usuario logueado (público para permitir actualizaciones externas)
   loggedUserSignal = signal<Usuario | null>(null);

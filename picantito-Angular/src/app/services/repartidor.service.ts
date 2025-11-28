@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Repartidor } from '../models/repartidor';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RepartidorService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:9998/api/usuarios'; // Endpoint base
+  private apiUrl = `${environment.apiUrl}/api/usuarios`; // Endpoint base
 
   /**
    * Obtiene todos los repartidores

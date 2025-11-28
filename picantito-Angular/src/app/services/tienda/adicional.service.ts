@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Adicional } from '../../models/adicional';
 import { ProductoAdicional } from '../../models/producto-adicional';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdicionalService {
-  private readonly API_URL = 'http://localhost:9998/api/adicional';
+  private readonly API_URL = `${environment.apiUrl}/api/adicional`;
 
   constructor(private http: HttpClient) {}
 
