@@ -9,14 +9,20 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   // Obtener token del localStorage
   const token = localStorage.getItem('token');
   
-  // Si existe token, clonar request y añadir header Authorization
+  // Preparar headers a añadir
+  const headers: { [key: string]: string } = {
+    'ngrok-skip-browser-warning': 'true' // Header para evitar la página de advertencia de ngrok
+  };
+  
+  // Si existe token, añadir header Authorization
   if (token) {
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    headers['Authorization'] = `Bearer ${token}`;
   }
+  
+  // Clonar request y añadir headers
+  req = req.clone({
+    setHeaders: headers
+  });
   
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
