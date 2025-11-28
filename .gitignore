@@ -84,3 +84,6 @@ Thumbs.db
 .env
 env
 .env.local
+
+# ngrok
+ngrok-url.txt

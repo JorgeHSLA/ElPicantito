@@ -13,12 +13,11 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Usar allowedOriginPatterns en lugar de allowedOrigin para permitir "*"
+        // Permitir todos los orígenes de Vercel y localhost
         configuration.addAllowedOriginPattern("*");
-        
-        // O específicos:
-        // configuration.addAllowedOrigin("http://localhost:4200");
-        // configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("https://el-picantito.vercel.app");
+        configuration.addAllowedOrigin("http://localhost:4200");
+        configuration.addAllowedOrigin("http://localhost:3000");
         
         configuration.addAllowedMethod("*"); // GET, POST, PUT, DELETE, etc.
         configuration.addAllowedHeader("*"); // Todos los headers (incluyendo Authorization)

@@ -1,0 +1,38 @@
+# Docker Compose para Backend y Base de Datos únicamente
+# Para uso con ngrok y frontend en Vercel
+services:
+  springboot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: elpicantito-spring
+    ports:
+      - "9998:9998"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    environment:
+      - DB_URL=jdbc:postgresql://db:5432/picantitodb
+      - DB_USERNAME=taquito
+      - DB_PASSWORD=taquito123
+
+  db:
+    image: postgres:16.1
+    container_name: ElPicantitoDB
+    restart: always
+    volumes:
+      - ./sql/schema_completo.sql:/docker-entrypoint-initdb.d/1_create_schema.sql:ro
+      - ./sql/datos_picantito.sql:/docker-entrypoint-initdb.d/2_datos_picantito.sql:ro
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: 'picantitodb'
+      POSTGRES_USER: 'taquito'
+      POSTGRES_PASSWORD: 'taquito123'
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:
